@@ -64,16 +64,16 @@ class ParseError(Exception):
 	
 	def __str__(self):
 		str=""
-		if hasattr(self, filename):
-			str+=filename
-			if hasattr(self, linenumber):
+		if hasattr(self, "filename"):
+			str+=self.filename
+			if hasattr(self, "linenumber"):
 				str+="(%d)" % self.linenumber
 			str+=": "
 		str+="Parse error"
 		if self.msg:
 			str+=": %s" % self.msg
 
-		return msg
+		return str
 
 
 class Attribute:
