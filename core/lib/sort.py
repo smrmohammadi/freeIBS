@@ -60,7 +60,7 @@ class SortedDic:
 	    dic value in second index
 	    summary: {x:y,z:c}->[[x,y],[z,c]]
 	"""
-	return map(lambda x:[x,dic[x]])
+	return map(lambda x:[x,dic[x]],dic)
 
     def sortByKey(self,desc):
 	self.sortByPostText("[0]",desc)

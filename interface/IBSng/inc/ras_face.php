@@ -72,4 +72,5 @@ function intSetRasAndPorts(&$smarty)
     $smarty->assign("rases",$rases);
 }	
 
+
 ?>

@@ -52,7 +52,14 @@ class RasLoader:
 	    return a list of all ras_ips that is loaded into object
 	"""
 	return self.rases_ip.keys()
-	
+
+    def runOnAllRases(self,method):
+	"""
+	    run "method" multiple times with each ras_obj as argument
+	    method should accept one argument (ras_obj)
+	"""
+	return map(method,self.rases_id.values())
+
     def loadAllRases(self):
 	ras_ids=self.__getAllActiveRasIDs()
 	map(self.loadRas,ras_ids)
@@ -64,7 +71,8 @@ class RasLoader:
 	ras_info=self.__getRasInfoDB(ras_id)
 	ras_attrs=self.__getRasAttrs(ras_id)
 	ports=self.__getRasPorts(ras_id)
-	ras_obj=self.__createRasObj(ras_info,ras_attrs,ports)
+	ippools=self.__getRasIPpools(ras_id)
+	ras_obj=self.__createRasObj(ras_info,ras_attrs,ports,ippools)
 	self.__keepObj(ras_obj)
 
     def unloadRas(self,ras_id):
@@ -83,6 +91,19 @@ class RasLoader:
 	ras_ids=db_main.getHandle().get("ras","active='t'",0,-1,"",["ras_id"])
 	return [m["ras_id"] for m in ras_ids]
 	    
+    def __getRasIPpools(self,ras_id):
+	"""
+	    return a list of ras ippool ids in format [pool_id1,pool_id2,..]
+	"""
+	ras_ippools_db=self.__getRasIPpoolsDB(ras_id)
+	return [m["ippool_id"] for m in ras_ippools_db]
+	
+    def __getRasIPpoolsDB(self,ras_id):
+	"""
+	    return a list of ras ippool names from table ras_ippools
+	"""
+	return db_main.getHandle().get("ras_ippools","ras_id=%s"%ras_id)	
+
     def __getRasPorts(self,ras_id):
 	"""
 	    return a dic of ports of ras with id "ras_id" in format 
@@ -122,12 +143,12 @@ class RasLoader:
 	"""
 	return db_main.getHandle().get("ras_attrs","ras_id=%s"%ras_id)
 
-    def __createRasObj(self,ras_info,ras_attrs,ports):
+    def __createRasObj(self,ras_info,ras_attrs,ports,ippools):
 	"""
 	    create a ras object, using ras_info and ras_attrs
 	"""
 	return ras_main.getFactory().getClassFor(ras_info["ras_type"])(ras_info["ras_ip"],ras_info["ras_id"],
-						ras_info["ras_type"],ras_info["radius_secret"],ports,ras_attrs)
+						ras_info["ras_type"],ras_info["radius_secret"],ports,ippools,ras_attrs)
 
     def __keepObj(self,ras_obj):
 	"""

@@ -37,6 +37,18 @@
     </h2>
 {/if}
 
+{if isset($add_ippool_success) and $add_ippool_success}
+    <h2>
+	IP Pool Added To Ras Successfully
+    </h2>
+{/if}
+
+{if isset($del_ippool_success) and $del_ippool_success}
+    <h2>
+	IP Deleted From Ras Successfully
+    </h2>
+{/if}
+
 </center>
 
 
@@ -157,8 +169,33 @@
 		{/foreach}
 
 	    </table>
+    <tr>
+	<td>
+
+	    <table border=1>
+		<tr>
+		    <td colspan=2 align=center>
+			Ras IP Pools
+		<tr>
+		    <td align=center>
+			IP Pool Name
+	    
+		{foreach from=$ras_ippools item=ras_ippool_name}
+		    <tr>
+			<td>
+			    {$ras_ippool_name}
+			<td>
+			    {if not $is_editing and not $attr_editing and $can_change}
+				<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip|escape:"url"}&del_ip_pool={$ras_ippool_name|escape:"url"}">
+				    del
+				</a>
+			    {/if}
+		{/foreach}
+	    </table>
 	    
 </table>
+
+
 <table>
 {if not $is_editing and not $attr_editing and $can_change}
     <table>
@@ -186,11 +223,11 @@
 		</a>
 	<tr>
 	    <td>
-				<form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
+			<form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
 				<input type=hidden name=ras_ip value="{$info.ras_ip}">
 		    Del Port(s): <input type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}
 				<input type=submit value=del {jsconfirm msg="Are you sure?"}>
-				</form>
+			</form>
 
 	<tr>
 	    <td>
@@ -200,6 +237,16 @@
 				<input type=submit value=edit>
 				</form>
 
+	<tr>
+	    <td>
+
+		    <form method=POST action="/IBSng/admin/ras/ras_info.php">
+			<input type=hidden name=ras_ip value="{$info.ras_ip}">
+			Add IP pool To Ras: <select name="add_ip_pool">
+						{html_options values=$ippool_names output=$ippool_names}
+					    </select>
+				<input type=submit value=add>					    
+		    </form>
 
     </table>
 {else}

@@ -342,14 +342,14 @@ class RasActions:
 	    add an ippool to ras
 	"""
 	self.__addIPpoolToRasCheckInput(ras_ip,ippool_name)
-	ras_obj=ras_main.getRasByIP(ras_ip)
-	ippool_obj=ippool_main.getIPpoolByName(ippool_name)
+	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__addIPpoolToRasDB(ras_obj.getRasID(),ippool_obj.getIPpoolID())
 	ras_main.getLoader().loadRas(ras_obj.getRasID())    
 	
     def __addIPpoolToRasCheckInput(self,ras_ip,ippool_name):
-        ippool_main.getLoader().checkIPpoolName(ippool_name)
-        if ras_main.getLoader().getRasByIP(ras_ip).hasIPpool(ippool_name):
+        ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+        if ras_main.getLoader().getRasByIP(ras_ip).hasIPpool(ippool_obj.getIPpoolID()):
 	    raise GeneralException(errorText("RAS","RAS_ALREADY_HAVE_IPPOOL")%ippool_name)
 	
     def __addIPpoolToRasDB(self,ras_id,ippool_id):
@@ -365,14 +365,14 @@ class RasActions:
 	    delete ippool with name "ippool_name" from ras with ip "ras_ip"
 	"""
 	self.__delIPpoolFromRasCheckInput(ras_ip,ippool_name)
-	ras_obj=ras_main.getRasByIP(ras_ip)
-	ippool_obj=ippool_main.getIPpoolByName(ippool_name)
-	self.__addIPpoolToRasDB(ras_obj.getRasID(),ippool_obj.getIPpoolID())
+	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	self.__delIPpoolFromRasDB(ras_obj.getRasID(),ippool_obj.getIPpoolID())
 	ras_main.getLoader().loadRas(ras_obj.getRasID())    
 	
     def __delIPpoolFromRasCheckInput(self,ras_ip,ippool_name):
-        ippool_main.getLoader().checkIPpoolName(ippool_name)
-        if not ras_main.getLoader().getRasByIP(ras_ip).hasIPpool(ippool_name):
+        ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+        if not ras_main.getLoader().getRasByIP(ras_ip).hasIPpool(ippool_obj.getIPpoolID()):
 	    raise GeneralException(errorText("RAS","RAS_DONT_HAVE_IPPOOL")%ippool_name)
 	
     def __delIPpoolFromRasDB(self,ras_id,ippool_id):

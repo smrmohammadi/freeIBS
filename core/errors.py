@@ -164,7 +164,8 @@ IPPOOL_ERRORS={
     "BAD_IP_POOL_NAME":"Bad IP Pool name %s. IP Pool name should only contain alphanumeric and _(underline)",
     "IP_POOL_NAME_ALREADY_EXISTS":"IP Pool name %s already exists",
     "IP_ALREADY_IN_POOL":"IP %s already exists in ippool",
-    "IP_NOT_IN_POOL":"IP %s is not exists in ippool"
+    "IP_NOT_IN_POOL":"IP %s is not exists in ippool",
+    "IP_POOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
 }
 
 PLUGIN_ERRORS={

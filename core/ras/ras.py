@@ -12,7 +12,7 @@ class Ras:
 	    ras_id(integer): unique id of ras
 	    ras_type(string): type of ras, a string that represent ras type. ex. cisco, quintum tenor...
 	    port(dic): dic of ports in format    {port_name:{"phone":phone_no,"type":type,"comment":comment}
-	    ippools(list): list of IPpool names that this ras uses
+	    ippools(list): list of IPpool ids that this ras uses
 	    attributes(dic): a dictionary of key=>values that show ras specific attributes
 			     attributes are diffrent for various rases. for each type, 
 			     we have a type_default_attributes that are default values for each type,
@@ -40,8 +40,8 @@ class Ras:
     def hasPort(self,port_name):
 	return self.ports.has_key(port_name)
 	
-    def hasIPpool(self,ippool_name):
-	return self.ippools.has_key(ippool_name)
+    def hasIPpool(self,ippool_id):
+	return ippool_id in self.ippools
 
     def getIPpools(self):
 	return self.ippools

@@ -3,6 +3,7 @@ from core.ras import ras_main,ras
 from core.lib.sort import SortedList
 from core.lib.general import *
 from core.lib.multi_strs import MultiStr
+from core.ippool import ippool_main
 
 
 class RasHandler(handler.Handler):
@@ -25,6 +26,9 @@ class RasHandler(handler.Handler):
 	self.registerHandlerMethod("deActiveRas")
 	self.registerHandlerMethod("reActiveRas")
 	self.registerHandlerMethod("getRasPortInfo")
+	self.registerHandlerMethod("getRasIPpools")
+	self.registerHandlerMethod("addIPpoolToRas")
+	self.registerHandlerMethod("delIPpoolFromRas")
 
 
     def addNewRas(self,request):
@@ -160,18 +164,36 @@ class RasHandler(handler.Handler):
 	return ras_main.getActionManager().getRasPortInfo(request["ras_ip"],MultiStr(request["port_name"]))
 
     def getRasIPpools(self,request):    
+	"""
+	    return a sorted list of ip pool names
+	"""
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("GET RAS INFORMATION")
     	request.checkArgs("ras_ip")
-	return ras_main.getLoader().getRasByIP(request["ras_ip"]).getIPpools()
+	ippool_ids=ras_main.getLoader().getRasByIP(request["ras_ip"]).getIPpools()
+	ippool_names=map(lambda ippool_id:ippool_main.getLoader().getIPpoolByID(ippool_id).getIPpoolName(),ippool_ids)
+	sorted=SortedList(ippool_names)
+	sorted.sort(0)
+	return sorted.getList()
 
 	
-    def addPort(self,request):
+    def addIPpoolToRas(self,request):
+	"""
+	    Add an IP pool to ras
+	"""
 	request.needAuthType(request.ADMIN)
-    	request.checkArgs("ras_ip","port_name","phone","type","comment")
+    	request.checkArgs("ras_ip","ippool_name")
 	request.getAuthNameObj().canDo("CHANGE RAS")
-	return ras_main.getActionManager().addPort(request["ras_ip"],
-						   MultiStr(request["port_name"]),
-						   request["type"],
-						   MultiStr(request["phone"]),
-						   MultiStr(request["comment"]))
+	return ras_main.getActionManager().addIPpoolToRas(request["ras_ip"],
+							  request["ippool_name"])
+
+    def delIPpoolFromRas(self,request):
+	"""
+	    Del an IP pool from ras
+	"""
+	request.needAuthType(request.ADMIN)
+    	request.checkArgs("ras_ip","ippool_name")
+	request.getAuthNameObj().canDo("CHANGE RAS")
+	return ras_main.getActionManager().delIPpoolFromRas(request["ras_ip"],
+							  request["ippool_name"])
+    

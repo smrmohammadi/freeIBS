@@ -160,7 +160,33 @@ class ReActiveRas extends Request
     }
 }
 
+class GetRasIPpools extends Request
+{
+    function GetRasIPpools($ras_ip)
+    {
+	parent::Request("ras.getRasIPpools",array("ras_ip"=>$ras_ip));
+    }
+}
 
+class AddIPpoolToRas extends Request
+{
+    function AddIPpoolToRas($ras_ip,$ippool_name)
+    {
+	parent::Request("ras.addIPpoolToRas",array("ras_ip"=>$ras_ip,
+						   "ippool_name"=>$ippool_name
+						   ));
+    }
+}
+
+class DelIPpoolFromRas extends Request
+{
+    function DelIPpoolFromRas($ras_ip,$ippool_name)
+    {
+	parent::Request("ras.delIPpoolFromRas",array("ras_ip"=>$ras_ip,
+						     "ippool_name"=>$ippool_name
+						     ));
+    }
+}
 
 function getAllActiveRasInfos()
 {

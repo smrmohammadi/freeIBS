@@ -2,6 +2,7 @@
 require_once("../../inc/init.php");
 require_once(IBSINC."ras.php");
 require_once(IBSINC."ras_face.php");
+require_once(IBSINC."ippool_face.php");
 require_once(IBSINC."perm.php");
 
 needAuthType(ADMIN_AUTH_TYPE);
@@ -13,8 +14,11 @@ $smarty->assign("attr_editing",FALSE);
 
 
 
-
-if(isInRequest("ras_ip","del_port"))
+if (isInRequest("ras_ip","add_ip_pool"))
+    intAddIPpoolToRas($smarty,$_REQUEST["ras_ip"],$_REQUEST["add_ip_pool"]);
+else if (isInRequest("ras_ip","del_ip_pool"))
+    intDelIPpoolFromRas($smarty,$_REQUEST["ras_ip"],$_REQUEST["del_ip_pool"]);
+else if(isInRequest("ras_ip","del_port"))
     intDelPort($smarty,$_REQUEST["ras_ip"],$_REQUEST["del_port"]);
 else if(isInRequest("ras_ip","reset_attrs"))
     intResetAttrs($smarty,$_REQUEST["ras_ip"]);
@@ -33,6 +37,32 @@ else
     $err=new error("INVALID_INPUT");
     redirectToRasList($err->getErrorMsg());
 }
+
+function intAddIPpoolToRas(&$smarty,$ras_ip,$ippool_name)
+{
+    $add_ippool_req=new AddIPpoolToRas($ras_ip,$ippool_name);
+    list($success,$err)=$add_ippool_req->send();
+    if($success)
+	$smarty->assign("add_ippool_success",TRUE);
+    else
+	$smarty->set_page_error($err->getErrorMsgs());
+
+    intRasInfo($smarty,$ras_ip);	
+}
+
+function intDelIPpoolFromRas(&$smarty,$ras_ip,$ippool_name)
+{
+    $del_ippool_req=new DelIPpoolFromRas($ras_ip,$ippool_name);
+    list($success,$err)=$del_ippool_req->send();
+    if($success)
+	$smarty->assign("del_ippool_success",TRUE);
+    else
+	$smarty->set_page_error($err->getErrorMsgs());
+
+    intRasInfo($smarty,$ras_ip);
+}
+
+
 
 function intDelPort(&$smarty,$ras_ip,$port_name)
 {
@@ -132,30 +162,39 @@ function intRasInfo(&$smarty,$ras_ip)
     $ras_attrs_req=new GetRasAttributes($ras_ip);
     list($success,$attrs)=$ras_attrs_req->send();
     if(!$success)
-	interface($smarty,$info,array(),array(),$attrs);
+	interface($smarty,$info,array(),array(),array(),$attrs);
 
     $ras_ports_req=new GetRasPorts($ras_ip);
     list($success,$ports)=$ras_ports_req->send();
     if(!$success)
-	interface($smarty,$info,$attrs,array(),$ports);
+	interface($smarty,$info,$attrs,array(),array(),$ports);
+
+    $ras_ippool_req=new GetRasIPpools($ras_ip);
+    list($success,$ippools)=$ras_ippool_req->send();
+    if(!$success)
+	interface($smarty,$info,$attrs,$ports,array(),$ippools);
     
-    interface($smarty,$info,$attrs,$ports,null);
+    interface($smarty,$info,$attrs,$ports,$ippools,null);
 
 }
 
-function interface(&$smarty,$info,$attrs,$ports,$err=null,$is_editing=FALSE)
+function interface(&$smarty,$info,$attrs,$ports,$ippools,$err=null,$is_editing=FALSE)
 {
-    intAssignValues($smarty,$info,$attrs,$ports,$err,$is_editing);
+    intAssignValues($smarty,$info,$attrs,$ports,$ippools,$err,$is_editing);
     $smarty->display("admin/ras/ras_info.tpl");
     exit();
 }
 
-function intAssignValues(&$smarty,$info,$attrs,$ports,$err)
+function intAssignValues(&$smarty,$info,$attrs,$ports,$ippools,$err)
 {
-    $smarty->assign_array(array("info"=>$info,"attrs"=>$attrs,"ports"=>$ports,"can_change"=>canDo("CHANGE RAS")));
+    $smarty->assign_array(array("info"=>$info,
+				"attrs"=>$attrs,
+				"ports"=>$ports,
+				"ras_ippools"=>$ippools,
+				"can_change"=>canDo("CHANGE RAS")));
+    intSetAllIPpoolNames($smarty);
     if (!is_null($err))
 	$smarty->set_page_error($err->getErrorMsgs());
-	
 }
 
 ?>

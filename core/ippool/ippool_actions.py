@@ -68,7 +68,7 @@ class IPpoolActions:
     def deletePool(self,ippool_name):
 	"""
 	    delete a pool using it's "ippool_name"
-	    WARNING: currently we don't check if ip pool is used in any ras or user
+	    WARNING: currently we don't check if ip pool is used in  user
 		     it's user duty to check it and remove that
 		     if a pool is used but not defined, it should be ignored with a error message in log files
 	"""	
@@ -78,7 +78,13 @@ class IPpoolActions:
 	ippool_main.getLoader().unloadIPpoolByID(ippool_obj.getIPpoolID())
     
     def __deletePoolCheckInput(self,ippool_name):
-	ippool_main.getLoader().checkIPpoolName(ippool_name)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+
+	def checkIPpoolInRas(ras_obj):
+	    if ras_obj.hasIPpool(ippool_obj.getIPpoolID()):
+		raise GeneralException(errorText("IPPOOL","IPPOOL_USED_IN_RAS")%ras_obj.getRasIP())
+
+	ras_main.getLoader().runOnAllRases(checkIPpoolInRas)
 	
     def __deletePoolDB(self,ippool_id):
 	query=self.__deletePoolIPsQuery(ippool_id)
