@@ -67,6 +67,9 @@ class CreditSearchHelper(SearchHelper):
 	return credit_changes
 	
     def __convertUserIDsToDic(self,user_ids):
+	"""
+	    convert user ids to dic in format {credit_change_id:list of user_ids}
+	"""
 	dic={}
 	last_id=None
 	for row in user_ids:
@@ -144,7 +147,6 @@ class CreditSearcher:
 	credit_table.ltgtSearch(self.search_helper,"admin_credit","admin_credit_op","admin_credit")
 
 	self.search_helper.setCondValue("change_time_from_op",">=")	
-
 	credit_table.dateSearch(self.search_helper,"change_time_from","change_time_from_unit","change_time_from_op","change_time")
 
 	self.search_helper.setCondValue("change_time_to_op","<")
@@ -155,11 +157,11 @@ class CreditSearcher:
     def __addUserIDAndAdminCondition(self):
 	admin_restricted=not self.search_helper.getAdminObj().isGod() and self.search_helper.getAdminObj().getPerms()["SEE CREDIT CHANGES"].isRestricted()
 	if admin_restricted:
-	    self.search_helper.getTable("credit_change").getRootGroup().addGroup("admin_id=%s"%self.search_helper.getAdminObj.getAdminID())
+	    self.search_helper.getTable("credit_change").getRootGroup().addGroup("admin_id=%s"%self.search_helper.getAdminObj().getAdminID())
 	    sub_query=self.__userOwnersConditionQuery(admin_id)
 	    self.search_helper.getTable("credit_change_userid").getRootGroup().addGroup(sub_query)	    
 	else:
-	    self.search_helper.getTable("credit_change").exactSearch(self.search_helper,"admin","admin_id",MultiStr)
+	    self.search_helper.getTable("credit_change").exactSearch(self.search_helper,"admin","admin_id",lambda admin_username:admin_main.getLoader().getAdminByName(admin_username).getAdminID())
 	    
 	self.search_helper.getTable("credit_change_userid").exactSearch(self.search_helper,"user_ids","user_id",MultiStr)
 
@@ -169,7 +171,7 @@ class CreditSearcher:
     #################################################
     def getCreditChanges(self,_from,to,order_by,desc,date_type):
 	"""
-
+	    return a list of credit changes
 	"""
 	self.__getCreditChangesCheckInput(_from,to,order_by,desc)
 	self.applyConditions()

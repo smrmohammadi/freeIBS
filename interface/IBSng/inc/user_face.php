@@ -37,4 +37,12 @@ function intSetSingleUserGroupAttrs(&$smarty,$user_info)
     intSetGroupInfo($smarty,$user_info["basic_info"]["group_name"]);
 }
 
+function redirectToSearchAddUserSaves($msg="")
+{
+    $redirect_str="/IBSng/admin/user/search_add_user_saves.php";
+    if($msg!="")
+	$redirect_str.="?msg={$msg}";
+    redirect($redirect_str);
+}
+
 ?>

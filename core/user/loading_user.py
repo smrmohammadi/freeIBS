@@ -21,15 +21,15 @@ class LoadingUser:
 	    try:
 		if user in self.__loading:
 		    if self.__loading[user][0]==None:
-			self.__loading[user]=UserEvent(self.__loading[user][1])
-		    wait=self.__loading[user].requestWait()
+			self.__loading[user][0]=UserEvent(self.__loading[user][1])
+		    wait=self.__loading[user][0].requestWait()
 		else:
-		    self.__loading[user]=(None,threading.currentThread())
+		    self.__loading[user]=[None,threading.currentThread()]
 	    finally:
 		self.lock.release()
 
 	    if wait!=None:
-		self.__loading[user].wait(wait)
+		self.__loading[user][0].wait(wait)
 	    
 	def loadingEnd(self,user):
 	    """

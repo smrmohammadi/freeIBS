@@ -30,6 +30,20 @@ class SearchHelper:
     def getTable(self,table):
 	return self.tables[table]
 
+    def createGetIDQuery(self,if_empty_query):
+	"""
+	    create a select query, by intersecting all table queries.
+	    If none of tables has a query, it will return "if_empty_query"
+	"""
+	queries=self.getTableQueries()
+	queries=apply(self.filterNoneQueries,queries.values())
+	if len(queries)==0:
+	    query=if_empty_query
+	else:
+	    query=self.intersectQueries(queries)
+	return query
+	
+
     def getTableQueries(self):
 	table_query={}
 	for table_name in self.tables:

@@ -1,0 +1,28 @@
+## CHANGE TO SUIT YOUR SYSTEM
+lock
+debug
+name pptpd
+proxyarp
+nobsdcomp 
+nodeflate
+
+# These options apply if you use ppp with mppe patch
+# NB! You should also apply the ChapMS-V2 patch
+#chap
+#chapms
++mschap-v2
+#require-mppe
+#+mschap
+#-chap
+#-pap
+
+# These options will tell ppp to pass on these to your clients
+# To use ms-wins or ms-dns in options.pptpd it must exist in /etc/resolv.conf
+#ms-wins your.server.here
+ms-dns 192.168.1.1
+
+
+plugin radius.so
+
+lcp-echo-interval 5
+lcp-echo-failure 3

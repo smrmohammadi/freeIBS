@@ -73,7 +73,7 @@ class Scheduler:
                 
 	return t
 
-    def removeEvent(self,method,args): #inefficient way
+    def removeEvent(self,method,args,suppress_error=False): #inefficient way
 	self.tlock.acquire()
 	entry_found=0
 	try:
@@ -85,8 +85,8 @@ class Scheduler:
 	finally:
 	    self.tlock.release()
 	
-	if not entry_found:
-	    toLog("event.removeEvent: Couldn't found event to delete %s %s"%(method,args),LOG_DEBUG,defs.DEBUG_ALL)
+	if not entry_found and not suppress_error:
+	    toLog("event.removeEvent: Can't find event to delete %s %s"%(method,args),LOG_DEBUG,defs.DEBUG_ALL)
 	
     def doEvent(self):
 	self.tlock.acquire()
@@ -120,8 +120,8 @@ def initSched():
 def addEvent(secsFromNow,method,args,priority=0):
     sched.addEvent(secsFromNow,method,args,priority)
 
-def removeEvent(method,args):
-    sched.removeEvent(method,args)
+def removeEvent(method,args,suppress_error=False):
+    sched.removeEvent(method,args,suppress_error)
 
 def startLoop():
     sched.loop()

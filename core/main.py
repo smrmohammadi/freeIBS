@@ -11,6 +11,7 @@ def init():
     ibs_exceptions.init()
     ibs_exceptions.toLog("IBS starting...",ibs_exceptions.LOG_DEBUG)
     unSetShutdownFlag()
+    setStartingFlag()
 
     from core.threadpool import thread_main
     thread_main.init()
@@ -82,6 +83,8 @@ def init():
     unSetNoLoginFlag()
     ibs_exceptions.toLog("IBS successfully started.",ibs_exceptions.LOG_DEBUG)
     sys.excepthook=sys_except_hook
+
+    unsetStartingFlag()
     
 ############################################
 post_init_methods=[]
@@ -139,6 +142,16 @@ def unSetNoLoginFlag():
     global NO_LOGIN
     NO_LOGIN=False
 
+def isStarting():
+    return STARTING
+
+def setStartingFlag():
+    global STARTING
+    STARTING=True
+
+def unsetStartingFlag():
+    global STARTING
+    STARTING=False
 
 def sys_except_hook(_type,value,tback):
     ibs_exceptions.toLog("Unhandled sys exception :%s %s " %(_type,value),ibs_exceptions.LOG_ERROR)

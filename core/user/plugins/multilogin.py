@@ -13,13 +13,20 @@ def init():
 class MultiLogin(user_plugin.UserPlugin): 
     def __init__(self,user_obj):
 	user_plugin.UserPlugin.__init__(self,user_obj)
+	self.__setMultiLogin()
+
+
+    def __setMultiLogin(self):
 	self.multi_login=1
-	if user_obj.getUserAttrs().hasAttr("multi_login"):
-	    self.multi_login=int(user_obj.getUserAttrs()["multi_login"])
+	if self.user_obj.getUserAttrs().hasAttr("multi_login"):
+	    self.multi_login=int(self.user_obj.getUserAttrs()["multi_login"])
 	
     def login(self,args):
 	if self.user_obj.instances>self.multi_login:
 	    raise LoginException(errorText("USER_LOGIN","MAX_CONCURRENT"))
+
+    def _reload(self):
+	self.__setMultiLogin()
 	
 class MultiLoginAttrUpdater(AttrUpdater):
     def __init__(self):

@@ -71,7 +71,7 @@ class PPPDRas(GeneralUpdateRas):
     def getInOutBytes(self, user_msg):
 	try:
 	    port=user_msg["port"]
-	    if port in self.onlines.keys():
+	    if port in self.onlines:
 	    	return (self.onlines[port]["in_bytes"],self.onlines[port]["out_bytes"])
 	    else:
 		return (0,0)
@@ -79,27 +79,38 @@ class PPPDRas(GeneralUpdateRas):
 	    logException(LOG_ERROR)
 	    return (-1,-1)
 ####################################
-    def handleRadAuthPacket(self,ras_msg):
+    def __addUniqueIdToRasMsg(self,ras_msg):
 	ras_msg["unique_id"]="port"
-	ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port"})
+	ras_msg["port"]=str(ras_msg.getRequestPacket()["NAS-Port"][0])
+
+    def handleRadAuthPacket(self,ras_msg):
+	self.__addUniqueIdToRasMsg(ras_msg)
+	ras_msg.setInAttrs({"User-Name":"username"})
 	ras_msg.setInAttrsIfExists({"User-Password":"pap_password",
 				    "CHAP-Password":"chap_password",
 				    "MS-CHAP-Response":"ms_chap_response",
 				    "MS-CHAP2-Response":"ms_chap2_response",
+				    "Calling-Station-Id":"station_ip"
 				    })
+	if self.onlines.has_key(ras_msg["port"]):
+	        self.onlines[ras_msg["port"]]["in_bytes"],self.onlines[ras_msg["port"]]["out_bytes"]=0,0
 	ras_msg.setAction("INTERNET_AUTHENTICATE")
 
 ####################################
     def handleRadAcctPacket(self,ras_msg):
 	status_type=ras_msg.getRequestAttr("Acct-Status-Type")[0]
-	ras_msg["unique_id"]="port"
+	self.__addUniqueIdToRasMsg(ras_msg)
 	if status_type=="Start":
-	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
+	    ras_msg.setInAttrs({"User-Name":"username","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
 	    ras_msg["start_accounting"]=True
 	    ras_msg["update_attrs"]=["remote_ip","start_accounting"]
 	    ras_msg.setAction("INTERNET_UPDATE")
 	elif status_type=="Stop":
-	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})
+	    ras_msg.setInAttrs({"User-Name":"username","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})
+	    try:
+	        self.onlines[ras_msg["port"]]["in_bytes"],self.onlines[ras_msg["port"]]["out_bytes"]=ras_msg["in_bytes"],ras_msg["out_bytes"]
+	    except KeyError:
+		logException(LOG_DEBUG)
 	    ras_msg.setAction("INTERNET_STOP")
 	else:
 	    toLog("PPPDRas: handleRadAcctPacket: invalid status_type %s"%status_type,LOG_ERROR)

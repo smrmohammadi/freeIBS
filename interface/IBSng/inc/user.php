@@ -75,6 +75,18 @@ class KillUser extends Request
     }    
 }
 
+class SearchAddUserSaves extends Request
+{
+    function SearchAddUserSaves(&$conds,$from,$to,$order_by,$desc)
+    {
+	parent::Request("addUserSave.searchAddUserSaves",array("conds"=>$conds,
+					    		       "from"=>$from,
+					    		       "to"=>$to,
+							       "order_by"=>$order_by,
+							       "desc"=>$desc));
+    }    
+}
+
 function getUsersInfoByUserID(&$smarty,$user_ids)
 {/*return a list of user_infos of users with id in $user_ids
  */ 

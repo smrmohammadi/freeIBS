@@ -1,7 +1,9 @@
 <?php
-$GLOBALS["IBSngMenu"]=Array("user"=>array("User Information"=>"/IBSng/admin/user/user_info.php",
-					  "User Search"=>"/IBSng/admin/user/search_user.php",
-					  "Add User"=>"/IBSng/admin/user/add_new_users.php"),
+$GLOBALS["IBSngMenu"]=Array(
+		"user"=>array("User Information"=>"/IBSng/admin/user/user_info.php",
+			      "User Search"=>"/IBSng/admin/user/search_user.php",
+			      "Add User"=>"/IBSng/admin/user/add_new_users.php",
+			      "Add User Saves"=>"/IBSng/admin/user/search_add_user_saves.php"),
 		"group"=>array("Group List"=>"/IBSng/admin/group/group_list.php",
 			       "Add Group"=>"/IBSng/admin/group/add_new_group.php"),
 		"report"=>array("Online Users"=>"/IBSng/admin/report/online_users.php",

@@ -1,0 +1,67 @@
+IBSng Quick Installation Guide
+
+This has been checked on Fedora Core 3.
+Please send your corrections to farshad@parspooyesh.com. 
+
+
+I. Downloading
+    Latest version can be downloaded from http://ibs.sourceforge.net/
+
+II. Extracting
+    Extract the bz2 tarbal in /usr/local/. A sample Command can be
+
+    tar xjf IBSng-alpha-2005-02-27.tar.bz2 -C /usr/local
+
+III. Change pg_hba.conf
+    You should allow IBSng to connect postgresql database. It's done by changing pg_hba.conf located in
+    normally in /var/lib/pgsql/data/pg_hba.conf.
+    
+    For example, if database and ibs are on same box and you want to allow everyone on localhost to
+    connect to IBSng database without password, put this line on --TOP-- of pg_hba.conf.
+    
+    local  IBSng   ibs            trust
+    
+    You must restart postgresql service after changing pg_hba.conf.(ex. service postgresql restart)
+    
+    NOTE: if /var/lib/pgsql directory is empty, try starting postgresql service, and it will
+	  initialize database.
+
+
+IV. Creating Postgresql Database/User
+    IBSng, database name is IBSng and default user is ibs.
+    
+    Try these commands if you don't plan to do an special install.
+
+    su - postgres
+    createdb IBSng
+    createuser ibs
+
+V. Run setup.py script
+    run /usr/local/IBSng/scripts/setup.py
+    These are options you should choose if you want an straight install.
+    1 Install
+    2 Test DB Connection and Continue
+    2 Compile Configuration and Continue
+    1 Import Tables and Continue
+    Enter System password
+    1 Copy ibs.conf to '/etc/httpd/conf.d'
+    2 Chown apache directories to 'apache'
+    5 Countinue
+    1 Copy Redhat init file to /etc/init.d
+    2 Set IBSng to start on reboot
+    b Back to main menu
+    x Exit
+    
+    None of above stages should report ERROR on log history.
+    
+VI. Reload apache
+    service httpd reload
+    
+
+VII. Run IBSng
+    either by "service IBSng start" or "/usr/local/IBSng/ibs.py"
+
+IX. 
+    Now fire up a browser and go for http://ibs_server_ip/IBSng/admin
+
+

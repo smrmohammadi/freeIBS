@@ -26,8 +26,8 @@ class IPpoolUserPlugin(user_plugin.UserPlugin):
 	    self.__setRemoteIP(ras_msg)
 
     def logout(self,instance,ras_msg):
-	if self.user_obj.getInstanceInfo(instance).has_key("ippool_id"):
-	    ippool_main.getLoader().getIPpoolByID(self.user_obj.getInstanceInfo(instance)["ippool_id"]).freeIP(self.user_obj.getInstanceInfo(instance)["ippool_assigned_ip"])
+	if self.user_obj.getInstanceInfo(instance)["attrs"].has_key("ippool_id"):
+	    ippool_main.getLoader().getIPpoolByID(self.user_obj.getInstanceInfo(instance)["attrs"]["ippool_id"]).freeIP(self.user_obj.getInstanceInfo(instance)["attrs"]["ippool_assigned_ip"])
 	
     def update(self,ras_msg):
 	if "ippool_id" in ras_msg["update_attrs"]:

@@ -77,8 +77,8 @@ class InternetCharge(ChargeWithRules):
 	if not user_obj.charge_info.accounting_started[instance-1]:
 	    return 0
 	
-	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	now=time.time()
+	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	in_out=user_obj.getTypeObj().getInOutBytes(instance)
 	credit_used=0
 	if effective_rule.cpm>0:

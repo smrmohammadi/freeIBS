@@ -25,8 +25,17 @@ class RasActions:
 	"""
 	return db_main.getHandle().getCount("ras","ras_ip=%s"%dbText(ras_ip))
 
-    def __reloadRas(self,ras_obj,unload=False):
-	if ras_obj.handle_reload:
+    def __reloadRas(self,ras_obj,unload=False,force_reload=False):
+	"""
+	    reload ras_obj
+	    if ras_obj.handle_reload is True and force_reload is False, reloading
+	    in done by calling _reload method of ras_obj
+	    else it will be done by unloading/reloading ras_obj
+	    
+	    if force_reload is True, it'll unload/reload ras always
+	    
+	"""	
+	if ras_obj.handle_reload and not force_reload:
 	    ras_obj._reload()
 	else:
 	    if unload:
@@ -110,7 +119,11 @@ class RasActions:
 	"""
 	self.__updateRasCheckInput(ras_id,ras_ip,ras_type,radius_secret)
 	self.__updateRasDB(ras_id,ras_ip,ras_type,radius_secret)
-	self.__reloadRas(ras_main.getLoader()[ras_id],True)
+	ras_obj=ras_main.getLoader()[ras_id]
+	if ras_obj.getType()==ras_type:
+	    self.__reloadRas(ras_main.getLoader()[ras_id],True)
+	else:
+	    self.__reloadRas(ras_main.getLoader()[ras_id],True,True)
 	
     def __updateRasCheckInput(self,ras_id,ras_ip,ras_type,radius_secret):
 	ras_obj=ras_main.getLoader()[ras_id]

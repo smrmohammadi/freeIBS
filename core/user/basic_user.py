@@ -35,7 +35,7 @@ class BasicUser:
 
     def getInitialCredit(self):
 	return self.credit
-	
+
     def getCredit(self):
 	user_obj=user_main.getOnline().getUserObj(self.getUserID())
 	if user_obj==None:

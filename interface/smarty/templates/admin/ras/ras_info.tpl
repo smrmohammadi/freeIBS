@@ -61,7 +61,7 @@ Ras Info
 	    {/addEditTD}
 	    {addEditTD type="right1" double="TRUE"}
 	        <select name=ras_type>
-		    {html_options output=$ras_types values=$ras_types default=$info.ras_type}
+		    {html_options output=$ras_types values=$ras_types selected=`$info.ras_type`}
 		</select>
 	    {/addEditTD}
 	    {addEditTD type="left2" double="TRUE"} 

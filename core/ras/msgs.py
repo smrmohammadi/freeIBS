@@ -30,7 +30,10 @@ class Msg:
 	return self.time
 
     def getUniqueIDValue(self):
-	return str(self[self["unique_id"]])
+	"""
+	    WARNING: unique_id values must be string!
+	"""
+	return self[self["unique_id"]]
 
     def send(self):
 	assert(self.action!=None)

@@ -19,11 +19,11 @@ IBS_CORE="%s/core"%IBS_ROOT
 IBS_ADDONS="%s/addons/"%IBS_ROOT
 
 #######  DATABASE
+
 DB_POOL_DEFAULT_CONNECTIONS=3
 DB_POOL_MAX_CONNECTIONS=20
 DB_POOL_MAX_RELEASE_TIME=60
 DB_POOL_CHECK_INTERVAL=60 #seconds
-DB_PASSWORD="ibsdbpass"
 
 #######  THREAD POOL
 THREAD_POOL_DEFAULT_SIZE=7
@@ -44,7 +44,3 @@ def init():
     
 def getDefsLoader():
     return defs_loader
-
-def getDBHandle():
-    from core.db import db_pg
-    return db_pg.db_pg("IBSng",None,5432,"ibs",DB_PASSWORD)

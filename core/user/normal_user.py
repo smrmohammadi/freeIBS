@@ -52,11 +52,11 @@ class NormalUser:
 	instance_info=self.user_obj.getInstanceInfo(instance)
 	return user_main.getConnectionLogManager().logConnectionQuery(self.user_obj.getUserID(),
 							       used_credit,
-							       dbTimeFromEpoch(instance_info["auth_ras_msg"].getTime()),
+							       dbTimeFromEpoch(instance_info["login_time"]),
 							       dbTimeFromEpoch(self.__getLogoutTime(instance_info)),
 							       instance_info["successful_auth"],
 							       "internet",
-							       instance_info["auth_ras_msg"].getRasID(),
+							       instance_info["ras_id"],
 							       self.__filter(instance,instance_info["attrs"])
 							      )
 							       
@@ -64,7 +64,7 @@ class NormalUser:
 	if instance_info.has_key("logout_ras_msg"):
 	    return instance_info["logout_ras_msg"].getTime()
 	elif not instance_info["successful_auth"]: #Failed Authentication
-	    return instance_info["auth_ras_msg"].getTime()
+	    return instance_info["login_time"]
 	else:
 	    return time.time()
 

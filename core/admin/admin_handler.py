@@ -34,7 +34,10 @@ class AdminHandler(handler.Handler):
 
     def getAllAdminUsernames(self,request):
 	request.needAuthType(request.ADMIN)
-	request.getAuthNameObj().canDo("SEE ADMIN INFO")
+	try:	
+	    request.getAuthNameObj().canDo("SEE ADMIN INFO")
+	except PermissionException:
+	    return [request.getAuthNameObj().getUsername()]
 	usernames=admin_main.getLoader().getAllUsernames()
 	sorted=SortedList(usernames)
 	sorted.sort(0)

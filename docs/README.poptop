@@ -1,0 +1,41 @@
+IBSng/Poptop Quick Install
+Please send corrections/updates to farshad@parspooyesh.com.
+
+I.
+Download ppp-2.4.3-3.src.rpm and pptpd-1.2.1.tar.gz from http://www.poptop.org/
+
+II. Compile poptop
+[farshad@farshad ~]$ ll pptpd-1.2.1.tar.gz
+-rw-rw-r--  1 farshad farshad 180974 Feb 27 15:46 pptpd-1.2.1.tar.gz
+[farshad@farshad ~]$ tar xzf pptpd-1.2.1.tar.gz
+[farshad@farshad ~]$ cd pptpd-1.2.1
+[farshad@farshad pptpd-1.2.1]$ ./configure; make
+[farshad@farshad pptpd-1.2.1]$ sudo make install
+[farshad@farshad pptpd-1.2.1]$ sudo cp /usr/local/IBSng/addons/poptop/pptpd.conf /etc
+[farshad@farshad pptpd-1.2.1]$ sudo cp /usr/local/IBSng/addons/poptop/options.pptpd /etc/ppp
+[farshad@farshad pptpd-1.2.1]$ sudo /usr/local/sbin/pptpd
+
+III. Compile pppd
+[farshad@farshad ~]$ sudo rpm -ivh ppp-2.4.3-3.src.rpm
+[farshad@farshad ~]$ cd /usr/src/redhat/SPECS/
+[farshad@farshad SPECS]$ sudo rpmbuild -bb ppp.spec
+[farshad@farshad SPECS]$ cd ../RPMS/i386/
+[farshad@farshad i386]$ sudo rpm -Uvh ppp-2.4.3-3.fc3.i386.rpm
+[farshad@farshad i386]$ cd ../../BUILD/ppp-2.4.3/pppd/plugins/radius/
+[farshad@farshad radius]$ sudo cp -rf etc /usr/local/etc/radiusclient
+[farshad@farshad radius]$ su
+[root@farshad radius]# echo 'localhost my_rad_secret' >>/etc/radiusclient/servers
+
+then you should edit /usr/local/etc/radiusclient/dictionary and change the last line to
+INCLUDE /usr/local/etc/radiusclient/dictionary.microsoft
+
+IV. Add Ras
+    Add a new ras, with type pppd in settings->ras. ras ip is 127.0.0.1 if poptop and ibs are on same machine.
+    And radius secret is "my_rad_secret"
+
+
+Note 1: IBSng supports pap/chap/ms-chap/mschap-v2 password authentication, and also 
+	supports MPPE with ms-chap and ms-chapv2.
+        You can find kernel module for MPPE support on poptop download page.
+
+Note 2: You can Download a nice client freely at http://www.parspooyesh.com/download.php?product=ibsngdialer

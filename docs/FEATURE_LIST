@@ -22,7 +22,6 @@ GnuGK authentication
 Nocat support
 Ras supports
 Ras/Port based charges
-PySNMP support
 Periodic Accounting
 Carrier Based Origination VoIP
 Save Online User States/Update users when crash
@@ -205,5 +204,5 @@ User Attributes:
     Multilogin					DONE
     Credit					DONE
     Charge					DONE
-    Change Radius Attrs				----
-    Assign IP Address				----
+    Change Radius Attrs				DONE
+    Assign IP Address				DONE

@@ -8,22 +8,13 @@
 . /etc/rc.d/init.d/functions
 
 prog="ibs.py"
-ibs_check="ibs_check.py"
 ibs_root="/usr/local/IBSng"
 export LD_ASSUME_KERNEL=2.4.1 #prevent python deadlocks
 
-startibs_check() {
-    echo "Starting IBS Checker process:"
-    daemon $ibs_root/sc/$ibs_check
-    RETVAL=$?
-    echo
-    return $RETVAL
-}
-
 startibs() {
-    echo -n $"Starting IBS Core: " 
+    echo -n $"Starting IBSng Core: " 
     /sbin/modprobe sch_tbf >/dev/null 2>&1
-    ulimit -n 8000
+    ulimit -n 2000
     daemon -1 $ibs_root/$prog
     echo
     return $RETVAL
@@ -40,7 +31,6 @@ stop() {
 	c=$((c+1))
     done
     /usr/bin/killall -9 ibs.py >/dev/null 2>&1
-    /usr/bin/killall ibs_check.py
     if [ $RETVAL = 0 ]; then
 	success
     else
@@ -53,7 +43,6 @@ stop() {
 case "$1" in
 	start)
 	    startibs
-	    startibs_check
 	    ;;
 	
 	stop)
@@ -67,7 +56,6 @@ case "$1" in
 	    stop
 	    sleep 1
 	    startibs
-	    startibs_check
 	    ;;
 	
 	startibs)
@@ -75,7 +63,7 @@ case "$1" in
 	    ;;
 
 	*)
-	    echo $"Usage: $0 {start|startibs|stop|restart|status}"
+	    echo $"Usage: $0 {start|stop|restart|status}"
 	    exit 1
 
 esac

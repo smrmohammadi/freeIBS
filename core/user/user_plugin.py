@@ -44,9 +44,9 @@ class UserPlugin(BaseUserPlugin):
     def canStayOnline(self):
 	"""
 	    called during user_obj.canStayOnline
-	    we must return instance of CanStayOnlineResult
+	    we must return instance of CanStayOnlineResult, or None if we don't want to involve
 	"""
-	return self.createCanStayOnlineResult()
+	pass
 
     def _reload(self):
 	"""
@@ -94,7 +94,7 @@ class AttrCheckUserPlugin(BaseUserPlugin):
 	pass
     
     def s_canStayOnline(self):
-	return self.createCanStayOnlineResult()
+	pass
 
     def s_update(self,ras_msg):
 	pass
@@ -110,7 +110,7 @@ class AttrCheckUserPlugin(BaseUserPlugin):
 	pass
     
     def has_not_attr_canStayOnline(self):
-	return self.createCanStayOnlineResult()
+	pass
 
     def has_not_attr_update(self,ras_msg):
 	pass

@@ -131,13 +131,15 @@ class User:
 	instance_info["attrs"]=self.__filterRasAttrs(ras_msg.getAttrs())
 	instance_info["ras_id"]=ras_msg.getRasID()
 	instance_info["check_online_fails"]=0
+	instance_info["login_time"]=time.time()
 	try:
 	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
 	except Exception,e:
 	    instance_info["successful_auth"]=False
 	    self.setKillReason(self.instances,str(e))
-	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
-	    self.instances-=1
+#	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
+#	    self.instances-=1
+	    self.logout(self.instances,ras_msg)
 	    raise
 	instance_info["successful_auth"]=True
 	
@@ -151,8 +153,7 @@ class User:
 	used_credit=self.charge.calcInstanceCreditUsage(instance)
 	query=self.getTypeObj().logout(instance,ras_msg,used_credit)
 	if self.instances==1:
-	    query+=self.commit(used_credit)
-	    self.getLoadedUser().setOnlineFlag(False)
+	    query+=self.commit(self.charge.calcCreditUsage())
 	query.runQuery()
 	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,[instance,ras_msg])
 	self.instances-=1
@@ -160,7 +161,7 @@ class User:
 
     def update(self,ras_msg):
 	"""
-	    plugins can update themeselved whenever we recieved an update packet, with updated info 
+	    plugins can update themeselves whenever we recieved an update packet, with updated info 
 	    from radius server
 	    They can return True to cause a recalcEvent for user
 	"""
@@ -170,7 +171,8 @@ class User:
 	return False
 
     def canStayOnline(self):
-	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))
+	results=filter(lambda x:x!=None,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))
+	return reduce(operator.add,results)
 
     def commit(self,used_credit):
 	"""

@@ -1,4 +1,4 @@
-#!/usr/bin/python -OO
+#!/usr/bin/python -W ignore::: -OO 
 print "importing required files ..."
 import signal
 import sys

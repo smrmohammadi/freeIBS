@@ -12,13 +12,17 @@ class Def2Sql:
 	self.createDefsVarObjList()
 
     def importPYFile(self):
-	module_name=self.__getModuleName()
+	dir_name,module_name=self.__getModuleName()
 	self.module_obj=__import__(module_name)
 
     def __getModuleName(self):
 	if not self.python_file.endswith(".py"):
 	    raise Exception("Python modules should be .py")
-	return self.python_file[:-3]
+	last_slash=self.python_file.rfind("/")
+	if last_slash==-1:
+	    return None,self.python_file[:-3]
+	else:
+	    return self.python_file[:last_slash],self.python_file[last_slash+1:-3]
     
     def listVars(self):
 	self.members=dir(self.module_obj)

@@ -10,7 +10,7 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
     def __init__(self,user_obj):
 	user_plugin.UserPlugin.__init__(self,user_obj)
 	self.charge_defined=True
-	self.charge_initialized=False
+	self.charge_initialized=0 #number of instances with initialized charge
 	try:
 	    if user_obj.isNormalUser():
 	    	self.charge_id=int(user_obj.getUserAttrs()["normal_charge"])
@@ -32,7 +32,7 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	    
     def __initCharge(self):
 	self.charge_obj.initUser(self.user_obj)
-	self.charge_initialized=True
+	self.charge_initialized+=1
 	
     def __startAccounting(self,ras_msg):
 	self.charge_obj.startAccounting(self.user_obj,self.user_obj.getInstanceFromRasMsg(ras_msg))
@@ -43,13 +43,13 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	    return True
 
     def logout(self,instance,ras_msg):
-	if self.charge_initialized:
+	if instance<=self.charge_initialized:
 	    self.charge_obj.logout(self.user_obj,instance)
+	    self.charge_initialized-=1
 
     def canStayOnline(self):
 	if self.charge_initialized:
 	    return self.charge_obj.checkLimits(self.user_obj)
-	return self.createCanStayOnlineResult()
 
     def calcCreditUsage(self):
 	if self.charge_initialized:
@@ -57,6 +57,6 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	return 0
 
     def calcInstanceCreditUsage(self,instance):
-	if self.charge_initialized:
+	if instance<=self.charge_initialized:
     	    return self.charge_obj.calcInstanceCreditUsage(self.user_obj,instance)
 	return 0

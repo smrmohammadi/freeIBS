@@ -4,12 +4,12 @@ require_once("init.php");
 
 class ReportHelper
 {
-    function ReportHelper()
+    function ReportHelper($default_from=0,$default_to=30,$default_order_by="",$default_desc=TRUE)
     {
-	$this->from=0;
-	$this->to=30;
-	$this->order_by="";
-	$this->desc=True;
+	$this->from=$default_from;
+	$this->to=$default_to;
+	$this->order_by=$default_order_by;
+	$this->desc=$default_desc;
 	$this->updateToRequest();
     }
 
@@ -32,7 +32,6 @@ class ReportHelper
     {
 	return $this->desc;
     }
-
 
     function updateToRequest()
     {

@@ -15,7 +15,7 @@
 
 {include file="refresh_header.tpl" title="Online Users"}
 
-{listTable title="Internet Online Users" cols_num=9}
+{listTable title="Internet Online Users" cols_num=10}
     {listTableHeaderIcon action="kick"}
     {listTableHeaderIcon action="details" close_tr=TRUE}
     {listTR type="header"}
@@ -34,6 +34,12 @@
 	{listTD}
 	    {sortableHeader name="login_time_epoch" default=TRUE default_desc=TRUE}
 		Login Time
+	    {/sortableHeader}
+	{/listTD}
+
+	{listTD}
+	    {sortableHeader name="duration_secs"}
+		Duration
 	    {/sortableHeader}
 	{/listTD}
 
@@ -90,6 +96,10 @@
 	    {/listTD}
 
 	    {listTD}
+		{$info_dic.duration_secs|duration}
+	    {/listTD}
+
+	    {listTD}
 		{$info_dic.current_credit|price}
 	    {/listTD}
 
@@ -120,24 +130,24 @@
 		    </a>
 	    {/listTD}
 
-	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'"}
+	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'" cycle_color="TRUE"}
 		    
-		<a onClick="showReportLayer('{$info_dic.user_id}',this); return false;" href="#">
-		    {listTableBodyIcon action="details" cycle_color="TRUE"}
+		<a onClick="showReportLayer('{$info_dic.ras_ip}_{$info_dic.unique_id_val}',this); return false;" href="#">
+		    {listTableBodyIcon action="details" }
 		</a>
-		{reportDetailLayer name=`$info_dic.user_id` title="Report Details"}
-		    <table>
+		{reportDetailLayer name=`$info_dic.ras_ip`_`$info_dic.unique_id_val` title="Report Details"}
+		    {layerTable}
 		    {foreach from=`$info_dic.attrs` key=key item=item}
-			<tr>
-			    <td>
+    			{layerTR cycle_color=TRUE}
+			    {listTD}
 				{$key}
-			    </td>
-			    <td>
+	    		    {/listTD}
+			    {listTD}
 				{$item}
-			    </td>
-			</tr>
+	    		    {/listTD}
+			{/layerTR}
 		    {/foreach}
-		    </table>
+		    {/layerTable}
 		{/reportDetailLayer}
 	    {/listTD}
 	{/listTR}

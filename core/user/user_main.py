@@ -32,8 +32,9 @@ def init():
     connection_log_manager=ConnectionLogActions()
 
     global add_user_save_actions
-    from core.user.add_user_save import AddUserSaveActions
+    from core.user.add_user_save import AddUserSaveActions,AddUserSaveHandler
     add_user_save_actions=AddUserSaveActions()
+    handlers_manager.getManager().registerHandler(AddUserSaveHandler())
 
     global ras_msg_dispatcher
     from core.user.ras_msg_dispatcher import RasMsgDispatcher

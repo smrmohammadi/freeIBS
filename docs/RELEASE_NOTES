@@ -1,0 +1,21 @@
+-- IBSng-alpha-2005-02-28
+   This is first alpha release of IBSng. This version supports PPPD, Persistent Lan and Cisco Ras.
+   Main Features of this release are:
+    -chap/mschap/mschap2
+    -mppe
+    -transfer accounting
+    -attribute based users
+    -action on group of users
+    -IP pools
+
+    PPPd ras has been tested with poptop, and is in "works for me" state. This release is mostly useful
+	for poptop users.
+
+    Plan ras needs more testings, but it works for me again.
+    
+    Cisco ras has dialup support and hasn't been tested yet. If you have dialup lines on cisco, and
+	can offer us testing platform please send me a mail at farshad@parspooyesh.com.
+
+    This is an early alpha release, so there'll be updated releases with bug fixes and features soon.
+    
+    Thanks for testing IBSng.

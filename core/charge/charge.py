@@ -133,7 +133,7 @@ class ChargeWithRules(Charge):
 
 	if user_obj.instances==1: #this is a new user_obj
 	    if user_obj.initial_credit<=0:
-		raise LoginException(errorText("USER_LOGIN","CREDIT_FINISHED"))
+		raise LoginException(errorText("USER_LOGIN","CREDIT_FINISHED",False))
 
 	    user_obj.charge_info=UserCharge()
 
@@ -146,8 +146,8 @@ class ChargeWithRules(Charge):
 
     def logout(self,user_obj,instance):
 	Charge.logout(self,user_obj,instance)
-	user_obj.charge_info.effective_rules[instance-1].end(user_obj,instance)
 	user_obj.charge_info.credit_prev_usage+=user_obj.calcInstanceCreditUsage(instance)
+	user_obj.charge_info.effective_rules[instance-1].end(user_obj,instance)
 	user_obj.charge_info.logout(instance)
 
     def getEffectiveRule(self,user_obj,instance):
@@ -167,7 +167,7 @@ class ChargeWithRules(Charge):
 		max_applicable_rule=rule
 		
 	if max_priority==-1:
-	    raise LoginException(errorText("USER_LOGIN","NO_APPLICABLE_RULE"))
+	    raise LoginException(errorText("USER_LOGIN","NO_APPLICABLE_RULE",False))
 
 	return max_applicable_rule
 	
@@ -182,7 +182,6 @@ class ChargeWithRules(Charge):
 	
 	earliest_more_applicable_rule = None
 	cur_rule=user_obj.charge_info.effective_rules[instance-1]
-	
 
 	now=secondsFromMorning()
 	
@@ -197,7 +196,7 @@ class ChargeWithRules(Charge):
 
 
     def calcInstanceCreditUsage(self,user_obj,instance):
-#	toLog("Instance:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
+#	toLog("user_obj.Instances:%s Instance:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(user_obj.instances,instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
 	return user_obj.charge_info.credit_prev_usage_instance[instance-1] + self.calcInstanceRuleCreditUsage(user_obj,instance)
 
     def calcCreditUsage(self,user_obj):

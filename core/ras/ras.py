@@ -241,8 +241,10 @@ class Ras:
     def _reload(self):
 	"""
 	    reload ras_obj only if self.handle_reload==True
+	    if it has been set to False, reloading is done by unloading/reloading the object
 	"""
 	(ras_info,ras_attrs,ports,ippools)=ras_main.getLoader().getRasInfo(self.getRasID())
+
 	if self.ras_ip!=ras_info["ras_ip"]:
 	    ras_main.getLoader().unKeepObj(self)
 	    ras_ip_changed=True

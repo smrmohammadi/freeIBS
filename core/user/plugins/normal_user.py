@@ -97,7 +97,7 @@ class NormalUserAttrUpdater(AttrUpdater):
 							 self.passwords,
 							 admin_obj.getAdminID(),
 							 "Normal",
-							 self.normal_save)
+							 "")
 	return ibs_query
 
     def deleteQuery(self,ibs_query,src,action,**args):

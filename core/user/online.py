@@ -1,6 +1,7 @@
 from core.user import user_main,normal_user,loading_user,user
 from core.event import event,periodic_events
 from core.ibs_exceptions import *
+from core.errors import errorText
 import copy
 
 class OnlineUsers:
@@ -25,6 +26,9 @@ class OnlineUsers:
 ############################################
     def getOnlineUsers(self):
 	return copy.copy(self.user_onlines)
+    
+    def getOnlineUsersByRas(self):
+	return copy.copy(self.ras_onlines)
 
 ############################################
     def isUserOnline(self,user_id):
@@ -98,11 +102,11 @@ class OnlineUsers:
 	    self.loading_user.loadingEnd(user_id)
 
     def __removePrevUserEvent(self,user_id):
-	event.removeEvent(self.recalcNextUserEvent,[user_id,False])
+	event.removeEvent(self.recalcNextUserEvent,[user_id,False],True)
 
     def __setNextUserEvent(self,result,user_id):
 	next_evt=result.getEventTime()
-	toLog("Next Evt:%s"%next_evt,LOG_DEBUG)
+#	toLog("Next Evt:%s"%next_evt,LOG_DEBUG)
 	if next_evt!=0:
 	    event.addEvent(next_evt,self.recalcNextUserEvent,[user_id,False])
 
@@ -123,7 +127,7 @@ class OnlineUsers:
 		    user_obj=self.user_onlines[user_id]
 		    for instance in range(1,user_obj.instances+1):
 			instance_info=user_obj.getInstanceInfo(instance)
-			user_msg=user_obj.createUserMsg(instance,"CHECK_ONLINE")
+			user_msg=user_obj.createUserMsg(instance,"IS_ONLINE")
 			if user_msg.send():
 			    instance_info["check_online_fails"]=0
 			else:
@@ -174,6 +178,7 @@ class OnlineUsers:
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"],True)
 	self.loading_user.loadingStart(loaded_user.getUserID())
 	try:
+	    user_obj=None
 	    try:
 	        user_obj=self.getUserObj(loaded_user.getUserID())
 		if user_obj==None:
@@ -181,7 +186,8 @@ class OnlineUsers:
 	        user_obj.login(ras_msg)
 		self.__authenticateSuccessfull(user_obj,ras_msg)
 	    except:
-		loaded_user.setOnlineFlag(False)
+		if user_obj!=None and user_obj.instances==0:
+	    	    loaded_user.setOnlineFlag(False)
 		raise
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
@@ -201,7 +207,7 @@ class OnlineUsers:
 	        return
 	    instance=user_obj.getInstanceFromRasMsg(ras_msg)
 	    if instance==None:
-		toLog(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()))
+		toLog(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()),LOG_DEBUG)
 		return
 
 	    global_unique_id=user_obj.getGlobalUniqueID(user_obj.instances)
@@ -213,9 +219,10 @@ class OnlineUsers:
 
     def __logoutRecalcEvent(self,user_obj,global_unique_id):
 	    if user_obj.instances==0:
-		self.__removeFromOnlines(user_obj,global_unique_id)
 		self.__removePrevUserEvent(user_obj.getUserID())
 		user_obj.getLoadedUser().setOnlineFlag(False)
+		user_main.getUserPool().userChanged(user_obj.getUserID())
+		self.__removeFromOnlines(user_obj,global_unique_id)
 	    else:
 		self.recalcNextUserEvent(user_obj.getUserID(),True)
 
@@ -224,11 +231,17 @@ class OnlineUsers:
 	loaded_user=user_main.getUserPool().getUserByID(ras_msg["user_id"],True)
 	self.loading_user.loadingStart(loaded_user.getUserID())
 	try:
-	    user_obj=self.getUserObj(loaded_user.getUserID())
-	    if user_obj==None:
-	        user_obj=self.__loadUserObj(loaded_user,"Normal")
-	    user_obj.login(ras_msg)
-	    self.__authenticateSuccessfull(user_obj,ras_msg)
+	    user_obj=None
+	    try:
+	        user_obj=self.getUserObj(loaded_user.getUserID())
+		if user_obj==None:
+	    	    user_obj=self.__loadUserObj(loaded_user,"Normal")
+	        user_obj.login(ras_msg)
+		self.__authenticateSuccessfull(user_obj,ras_msg)
+	    except:
+		if user_obj!=None and user_obj.instances==0:
+	    	    loaded_user.setOnlineFlag(False)
+		raise
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
 

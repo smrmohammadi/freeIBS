@@ -322,7 +322,9 @@ create table voip_charge_rule_countries (
     prefix text,
     name text,
     cpm numeric(12,2),
-    billing_type smallint
+    free_seconds smallint,
+    min_duration smallint,
+    round_to smallint
 );
 
 -- ********************* TO BE CHECKED!

@@ -20,7 +20,10 @@ class PersistentLanRas(GeneralUpdateRas):
 	self.onlines={}#mac:{"in_bytes":i,"out_bytes":o}
 	self.waitings={}#user_id:ras_msg
 	self.waiting_lock=threading.Lock()
-	main.registerPostInitMethod(self.__postInitMethod)
+	if main.isStarting():
+	    main.registerPostInitMethod(self.__postInitMethod)
+	else:
+	    self.__postInitMethod()
 
 	self.handle_reload=True
 

@@ -1,0 +1,22 @@
+
+GENERAL
+1. What to do if I found a bug?
+    Please report it on forum(http://ibs.sf.net). Please include /var/log/IBSng/* 
+    outputs related to problem and how you triggered it.
+
+2. I want feature X.
+    Take a look at TODO file and if your requested feature isn't there, post a message on forum.
+
+3. Where are helps/manuals/documentations?
+    Documentations are developing slowly, so if you want them, help us with them.
+    We are really looking forward documentation authors and maintainers.
+
+4. How can I Help?
+    1. Write Documentations.
+    2. Give us access to your ras.
+    3. Help us develop features, we aren't GnuGK/Asterisk/Cisco/... gurus, so we need help of
+       experts.
+    4. Report Errors.
+    5. Develop Code!
+
+

@@ -39,10 +39,15 @@
 </form> 
 
 
+{addRelatedLink}
+    <a href="/IBSng/admin/report/connections.php?user_ids={$user_id}" class="RightSide_links">
+	Connection Logs of user <b>{$user_id}</b>
+    </a>
+{/addRelatedLink}
 
 {addRelatedLink}
-    <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
-	Seach User 
+    <a href="/IBSng/admin/report/credit_change.php?user_ids={$user_id}" class="RightSide_links">
+	Credit Changes of user <b>{$user_id}</b>
     </a>
 {/addRelatedLink}
 
@@ -54,10 +59,21 @@
     {/addRelatedLink}
 {/if}
 
-
 {addRelatedLink}
     <a href="/IBSng/admin/group/group_info.php?group_name={$user_info.basic_info.group_name|escape:"url"}" class="RightSide_links">
 	Group <b>{$user_info.basic_info.group_name}</b> Info
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/user/search_add_user_saves.php?user_id={$user_id}&order_by=add_date&desc=1&show=1" class="RightSide_links">
+	Add User Saves Of User
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
+	Seach User 
     </a>
 {/addRelatedLink}
 

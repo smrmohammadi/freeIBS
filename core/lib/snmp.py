@@ -20,7 +20,7 @@ class Snmp:
 	try:
 	    self.module=eval('v%s'%version)
 	except:
-	    toLog("Unknown snmp version %s, using v1"%version)
+	    toLog("Unknown snmp version %s, using v1"%version,LOG_ERROR)
 	    self.module=v1
 	
 	self.client=role.manager((ip, port))

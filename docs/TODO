@@ -81,3 +81,4 @@ Attributes:
 
 - Templates for web interface
 
+- Making Logout time sync on all methods. This prevent from contradiction in reports/user credit.

@@ -124,13 +124,7 @@ class ConnectionSearchHelper(SearchHelper):
 	return -1
     
     def __createConnectionLogIDsQuery(self):
-	queries=self.getTableQueries()
-	queries=apply(self.filterNoneQueries,queries.values())
-	if len(queries)==0:
-	    query="select connection_log_id from connection_log"
-	else:
-	    query=self.intersectQueries(queries)
-	return query
+	return self.createGetIDQuery("select connection_log_id from connection_log")
 
 class ConnectionSearcher:
     def __init__(self,conds,admin_obj):

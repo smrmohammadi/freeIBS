@@ -9,7 +9,7 @@ def init():
     ras_main.getFactory().register(CiscoRas,"Cisco")
 
 class CiscoRas(GeneralUpdateRas):
-    type_attrs={"cisco_rsh_command":"%scisco/rsh -lroot"%defs.IBS_ADDONS,"cisco_update_accounting_interval":1,"cisco_snmp_community":"public","cisco_update_inout_with_snmp":1,"csco_snmp_version":"2c","cisco_snmp_timeout":10,"cisco_snmp_retries":3}
+    type_attrs={"cisco_rsh_command":"%scisco/rsh -lroot"%defs.IBS_ADDONS,"cisco_update_accounting_interval":1,"cisco_snmp_community":"public","cisco_update_inout_with_snmp":1,"cisco_snmp_version":"2c","cisco_snmp_timeout":10,"cisco_snmp_retries":3}
 
     async_port_match=re.compile("(Async[0-9/])")
 

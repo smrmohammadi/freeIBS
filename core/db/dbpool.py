@@ -1,7 +1,7 @@
 import time
 import threading
 
-from core import defs
+from core import defs,db_handle
 from core.ibs_exceptions import *
 from core.event import event
 from core import main
@@ -36,7 +36,7 @@ class DBPool:
 	self.__total_handles+=1
 	    
     def __createNewHandle(self):
-	return defs.getDBHandle()
+	return db_handle.getDBHandle()
 
     ######################################
     def getHandle(self):
