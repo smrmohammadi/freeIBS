@@ -22,7 +22,7 @@ class RadiusAttrsUserPlugin(user_plugin.AttrCheckUserPlugin):
 	if self.hasAttr():
 	    self.rad_attrs=pickle.loads(self.user_obj.getUserAttrs()["radius_attrs"])
  
-    def login(self,ras_msg):
+    def s_login(self,ras_msg):
 	reply_pkt=ras_msg.getReplyPacket()
 	for attr_name in self.rad_attrs:
 	    reply_pkt[attr_name]=self.rad_attrs[attr_name]

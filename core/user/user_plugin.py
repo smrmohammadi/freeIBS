@@ -71,9 +71,11 @@ class AttrCheckUserPlugin(BaseUserPlugin):
 	self._setHasAttr(attr_name)
 	
     def __getattr__(self,name):
-	if self.hasAttr() and name in ("update","login","logout","commit","canStayOnline"):
-	    return getattr(self,"s_%s"%name)
-	
+	if  name in ("update","login","logout","commit","canStayOnline"):
+	    if self.hasAttr():
+		return getattr(self,"s_%s"%name)
+	    else:
+		return getattr(self,"has_not_attr_%s"%name)
     	    
     def _setHasAttr(self,attr_name):
 	self.has_attr=self.user_obj.getLoadedUser().hasAttr(attr_name)
@@ -81,6 +83,7 @@ class AttrCheckUserPlugin(BaseUserPlugin):
     def hasAttr(self):
 	return self.has_attr
     
+##############################
     def s_login(self,ras_msg):
 	pass
 
@@ -93,11 +96,31 @@ class AttrCheckUserPlugin(BaseUserPlugin):
     def s_canStayOnline(self):
 	return self.createCanStayOnlineResult()
 
+    def s_update(self,ras_msg):
+	pass
+
+##############################
+    def has_not_attr_login(self,ras_msg):
+	pass
+
+    def has_not_attr_commit(self):
+	pass
+
+    def has_not_attr_logout(self,instance,ras_msg):
+	pass
+    
+    def has_not_attr_canStayOnline(self):
+	return self.createCanStayOnlineResult()
+
+    def has_not_attr_update(self,ras_msg):
+	pass
+
+###############################
     def _reload(self):
 	self._setHasAttr(self.has_attr_name)
 
-    def s_update(self,ras_msg):
-	pass
+
+    
 
 class UserPluginManager:
     def __init__(self):
