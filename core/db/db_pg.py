@@ -33,7 +33,7 @@ class db_pg (ibs_db):
 	    return self._runQuery(command)
         except pg.error,e:
 	    try:
-		connection.query("ABORT;")
+		self._runQuery("ABORT;")
 	    except:
 		pass
 	
@@ -41,7 +41,7 @@ class db_pg (ibs_db):
 
         except Exception,e:
 	    try:
-		connection.query("ABORT;")
+		self._runQuery("ABORT;")
 	    except:
 		pass
 
@@ -73,3 +73,4 @@ class db_pg (ibs_db):
                 raise ibs_exceptions.DBException("check function on reseting connection %s"%e)
             except pg.error,e:
                 raise ibs_exceptions.DBException("check function on reseting connection %s"%e)
+    

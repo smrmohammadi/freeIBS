@@ -755,7 +755,7 @@ td.List_Title_End{
 td.List_Title_Top_Line{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #c0c0c0; 
+	color: #909090; 
 	font-weight:bold;
 	height:17;
 	background-color:#FFFFFF
@@ -813,6 +813,16 @@ input.small_text{
 	width:30px
 }
 
+input.medium_text{
+	border:1px solid #c0c0c0; 
+	font-weight:bold; 
+	font-size: 8pt;
+	font-family:Tahoma;
+	color: #800000;
+	height:18px;
+	width:50px
+}
+
 input.Num{
 	border-style:solid; 
 	border-width:1;
@@ -825,12 +835,10 @@ input.Num{
 }
 
 input.checkbox{
-	border:1px solid #c0c0c0; 
-	font-weight:bold; 
-	font-size: 8pt;
-	font-family:Tahoma;
+	border:0px solid #c0c0c0; 
 	color: #800000;
 	height:13px;
+	padding:0px
 }
 
 /*----------------------------------------------------*/

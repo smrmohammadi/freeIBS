@@ -103,8 +103,7 @@ function intSetFieldErrors(&$smarty,$err_keys)
 				  "rule_end_err"=>array("INVALID_RULE_END_TIME","RULE_END_LESS_THAN_START"),
 				  "dow_err"=>array("INVALID_DAY_OF_WEEK"),
 				  "cpm_err"=>array("CPM_NOT_NUMERIC","CPM_NOT_POSITIVE"),
-				  "cpm_err"=>array("CPK_NOT_NUMERIC","CPK_NOT_POSITIVE"),
-				  "cpm_err"=>array("CPK_NOT_NUMERIC","CPK_NOT_POSITIVE"),
+				  "cpk_err"=>array("CPK_NOT_NUMERIC","CPK_NOT_POSITIVE"),
 				  "assumed_kps_err"=>array("ASSUMED_KPS_NOT_INTEGER","ASSUMED_KPS_NOT_POSITIVE"),
 				  "bw_limit_err"=>array("BANDWIDTH_LIMIT_NOT_INTEGER","BANDWIDTH_LIMIT_NOT_POSITIVE")
 				  ),$err_keys);

@@ -58,8 +58,7 @@
 	    	    Visible To All
 	    {/addEditTD}
 	    {addEditTD type="right2" double="TRUE"}
-		    <input class="checkbox" type=checkbox name=visible_to_all {$visible_to_all_checked}>
-	    {/addEditTD}
+		    <input class="checkbox" type=checkbox name=visible_to_all {$visible_to_all_checked}>{/addEditTD}
 	    {addEditTD type="left1" double="TRUE"}
 		    Creator Admin
 	    {/addEditTD}
@@ -140,7 +139,7 @@
     {/addRelatedLink}
     {addRelatedLink}
         <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}" class="RightSide_links">
-        	Add Charge Rule
+        	Add Internet Charge Rule
         </a>
     {/addRelatedLink}
 

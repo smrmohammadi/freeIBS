@@ -3,8 +3,6 @@ require_once("init.php");
 require_once(XMLRPCINC."xmlrpc.inc");
 require_once(IBSINC."auth.php");
 
-
-
 class Request
 { /* This is class for all requests
      other requests may inherit from this class but don't forget to call parent::Request() in constructor
@@ -36,7 +34,8 @@ class Request
     }
 
     function send()
-    {/* send request, and return the response in format ($success(bool),$msg(mix))
+    {/* Warning: Deprecated, use sendAndRecv instead, just here for backward compatiblity
+	send request, and return the response in format ($success(bool),$msg(mix))
         it will call $this->check(), this function should be override by children in case 
 	of they need some checking before sending request
      */
@@ -46,7 +45,23 @@ class Request
 	else
 	    return $this->ibs_rpc->sendRequest($this->server_method,$this->params_arr);
     }
-
+    
+    function sendAndRecv()
+    {/*	send request, and return an Response instance.
+        it will call $this->check(), this function should be override by children in case 
+	of they need some checking before sending request
+     */
+	list($success,$ret_val)=$this->__check();
+	if($success)
+	    list($success,$ret_val)=$this->ibs_rpc->sendRequest($this->server_method,$this->params_arr);
+	return $this->createResponse($success,$msg);
+    }
+    
+    
+    function createResponse($success,$ret_val)
+    {
+	return new Response($success,$ret_val);
+    }
     
     function __check()
     {/*Children can override this function to check inputs before sending the request
@@ -57,5 +72,44 @@ class Request
 
 }
 
+class Response
+{
+    function Response($success,$ret_val)
+    {
+	$this->result=null;
+	$this->error=null;
+	$this->success=$success;
+	if($success)
+	    $this->result=$ret_val;
+	else
+	    $this->error=$ret_val;
+    }
+    
+    function isSuccessfull()
+    {/*	return True if request was successfull
+    
+    */
+	return $this->success;
+    }
+    
+    function getResult()
+    {/*	return result of request. IF request was failed, return null
+    */
+	return $this->result;
+    }
+    
+    function getError()
+    {/* return error of a failed request. Null if request was successfull	
+    */
+	return $this->error;
+    }
+    
+    function setErrorInSmarty(&$smarty)
+    {/* 
+    */
+	if(!is_null($this->error))
+	    $smarty->set_page_error($this->error->getErrorMsgs());
+    }
+}
 
 ?>

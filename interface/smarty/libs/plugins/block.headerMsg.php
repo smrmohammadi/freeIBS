@@ -20,9 +20,12 @@ END;
     }
     else
     {
-	$var_name=$params["var_name"];
-    	if(!($smarty->is_assigned($var_name) and $smarty->get_assigned_value($var_name)))
-	    $repeat=False;
+	if(isset($params["var_name"]))
+	{
+	    $var_name=$params["var_name"];
+	    if(!($smarty->is_assigned($var_name) and $smarty->get_assigned_value($var_name)))
+		$repeat=False;
+	}
     }
 }
 ?>

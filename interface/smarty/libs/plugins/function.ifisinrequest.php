@@ -9,8 +9,8 @@ function smarty_function_ifisinrequest($params,&$smarty)
     param default(string,optional): default value, if name is not in request, and default var is not set in smarty
 				    default is returned.
 				    if this param is not available , return an empty string
-    param value(string,optional): if this param is available , and name is in request , this param value
-				  will be returned. default behaviour is return value of name in $_REQUEST
+    param value(string,optional): if this param is available , and name is in request or default_var was available
+				 , this param value will be returned. default behaviour is return value of name in $_REQUEST
 				  when this param is not available
 */
     if(isset($_REQUEST[$params["name"]]))
@@ -23,7 +23,12 @@ function smarty_function_ifisinrequest($params,&$smarty)
     else
     {
 	if(isset($params["default_var"]) and $smarty->is_assigned($params["default_var"]))
-	    return $smarty->get_assigned_value($params["default_var"]);
+	{
+	    if (isset($params["value"]))
+		return $params["value"];
+	    else
+	        return $smarty->get_assigned_value($params["default_var"]);
+	}
 	else
 	    return isset($params["default"])?$params["default"]:"";
     }
