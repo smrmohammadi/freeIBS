@@ -1,6 +1,7 @@
 from core.server import handler
 from core.group import group_main
 from core.admin import admin_main
+from core.user	import user_main
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.general import *
@@ -52,7 +53,8 @@ class GroupHandler(handler.Handler):
 		"comment":group_obj.getComment(),
 		"owner_id":group_obj.getOwnerID(),
 		"owner_name":admin_main.getLoader().getAdminByID(group_obj.getOwnerID()).getUsername(),
-		"attrs":group_obj.getAttrs()
+		"raw_attrs":group_obj.getAttrs(),
+		"attrs":user_main.getAttributeManager().parseAttrs(group_obj.getAttrs())
 	       }
 
     def updateGroup(self,request):

@@ -119,7 +119,7 @@ class UpdateAttrsHelper
 	    $this->showEditInterface($group_info);
     }
 
-    function addToDelAttr($attr_name)
+    function addToDelAttrs($attr_name)
     {
 	$this->to_del_attrs[]=$attr_name;
     }

@@ -1,12 +1,12 @@
 from core.user import user_plugin,user_main,attribute
-from core.user.info_holder import InfoHolder
+from core.user.attr_updater import AttrUpdater
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.general import *
 
-info_holder_name="multi login"
+attr_handler_name="multi login"
 def init():
-    user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"],["multi_login"])
+    user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"],["multi_login"],[])
 
 class MultiLogin(user_plugin.UserPlugin): ### XXX To ChecK!
     def __init__(self,user_obj):
@@ -25,9 +25,9 @@ class MultiLogin(user_plugin.UserPlugin): ### XXX To ChecK!
 	
 	raise loginException(error_text)
 
-class MultiLoginInfoHolder(InfoHolder):
+class MultiLoginAttrUpdater(AttrUpdater):
     def __init__(self):
-	InfoHolder.__init__(self,info_holder_name)
+	AttrUpdater.__init__(self,attr_handler_name)
 
     def changeInit(self,multi_login):
 	try:
@@ -45,6 +45,6 @@ class MultiLoginInfoHolder(InfoHolder):
 
 class MultiLoginAttrHandler(attribute.AttributeHandler):
     def __init__(self):
-	attribute.AttributeHandler.__init__(self,info_holder_name)
-	self.registerInfoHandlerClass(MultiLoginInfoHolder,["multi_login"])
+	attribute.AttributeHandler.__init__(self,attr_handler_name)
+	self.registerAttrUpdaterClass(MultiLoginAttrUpdater,["multi_login"])
 

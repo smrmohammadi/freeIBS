@@ -2,26 +2,26 @@ from core.db import ibs_db,ibs_query
 from core.lib.general import *
 from core.group import group_main
 
-class InfoHolderContainer:
+class AttrUpdaterContainer:
     def __init__(self):
-	self.info_holders={}
+	self.attr_updaters={}
 
     def __iter__(self):
-	return self.info_holders.itervalues()
+	return self.attr_updaters.itervalues()
 
-    def addNew(self,info_holder_obj):
+    def addNew(self,attr_updater_obj):
 	"""
-	    add new info holder to container
+	    add new attr updater to container
 	"""
-	self.info_holders[info_holder_obj.getName()]=info_holder_obj
+	self.attr_updaters[attr_updater_obj.getName()]=attr_updater_obj
 
-    def hasName(self,info_holder_name):
-	return self.info_holders.has_key(info_holder_name)
+    def hasName(self,attr_updater_name):
+	return self.attr_updaters.has_key(attr_updater_name)
     
-    def mustHave(self,*info_holder_names):
-	for name in info_holder_names:
+    def mustHave(self,*attr_updater_names):
+	for name in attr_updater_names:
 	    if not self.hasName(name):
-		raise GeneralException(errorText("USERS","INCOMPLETE_INFO_HOLDER_SET"%name))
+		raise GeneralException(errorText("USERS","INCOMPLETE_attr_updater_SET"%name))
 
     def getQuery(self,ibs_query,src,action,dic_args):
 	"""
@@ -36,19 +36,19 @@ class InfoHolderContainer:
 
     def callOnAll(self,method_name,args,dargs):
 	"""
-	    call "method_name" of all info_holders, with argument "args" and "dargs"
+	    call "method_name" of all attr_updaters, with argument "args" and "dargs"
 	    args are list arguments and dargs are dic arguments
 	"""
 	ret=[]
-	for info_holder_name in self.info_holders:
-	    info_holder_obj=self.info_holders[info_holder_name]
-	    ret.append(apply(getattr(info_holder_obj,method_name),args,dargs))
+	for attr_updater_name in self.attr_updaters:
+	    attr_updater_obj=self.attr_updaters[attr_updater_name]
+	    ret.append(apply(getattr(attr_updater_obj,method_name),args,dargs))
 	return ret
 		
-class InfoHolder:
+class AttrUpdater:
     def __init__(self,name):
 	"""
-	    name(str): info holder name, this should be unique between info holders, and should be same
+	    name(str): attribute handler name, this should be unique between attribute handlers, and should be same
 	    as the name relevant attribute handler return
 	"""
 	self.name=name
@@ -76,7 +76,7 @@ class InfoHolder:
 
     def checkInput(self,src,action,arg_dic):
 	"""
-	    this method must check info holder properties, and check their validity
+	    this method must check attr updater properties, and check their validity
 	    "action" is one of self.actions that show what action is getting done
 	    arg_dic are extra arguments, that maybe necessary for checkings.
 	    arg_dic contents differs on diffrent actions
@@ -96,7 +96,7 @@ class InfoHolder:
     
 	    src(string): "group" or "user"
 	    action(string):"change" or "delete"
-	    args(dic): extra arguments, for group src, group_obj and for user src
+	    args(dic): extra arguments, for group src, group_obj and for user src "users" objs are passed with requester admin_obj s
 	    users list and admin_obj would be there always
 	"""
 	self.checkInput(src,action,args)
@@ -107,7 +107,7 @@ class InfoHolder:
 
 
     def __callQueryFunc(self,ibs_query,src,action,args):
-	args["info_holder_attrs"]=self.query_attrs[src+"_"+action]
+	args["attr_updater_attrs"]=self.query_attrs[src+"_"+action]
         return apply(self.query_funcs[src+"_"+action],[ibs_query,src,action],args)
 
     def registerQuery(self,src,action,query_function,attrs): 
@@ -117,7 +117,9 @@ class InfoHolder:
 	    query_function must accept **args and use this dictionary for it's arguments
 	    string query_function(IBSQuery ibs_query,string src,string action,dic **args)
 
-	    attrs(dic): this dictionary is passed to query_function as "info_holder_attrs" in dict arguments (**args)
+	    attrs(dic or list): update actions: this dictionary is passed to query_function as "attr_updater_attrs" in dict arguments (**args)
+				delete actions: the list is a list of attrs that should be deleted
+		
 	"""
 	self.query_funcs[src+"_"+action]=query_function
 	self.query_attrs[src+"_"+action]=attrs
@@ -140,14 +142,14 @@ class InfoHolder:
 	"""
 	if action=="delete":
 	    if src=="user":
-		return self.__deleteUserAttr(ibs_query,args["info_holder_attrs"],args["users"])
+		return self.__deleteUserAttr(ibs_query,args["attr_updater_attrs"],args["users"])
 	    elif src=="group":
-		return self.__deleteGroupAttr(ibs_query,args["info_holder_attrs"],args["group_obj"])
+		return self.__deleteGroupAttr(ibs_query,args["attr_updater_attrs"],args["group_obj"])
 	elif action=="change":
 	    if src=="user":
-		return self.__changeUserAttr(ibs_query,args["info_holder_attrs"],args["users"])
+		return self.__changeUserAttr(ibs_query,args["attr_updater_attrs"],args["users"])
 	    elif src=="group":
-		return self.__changeGroupAttr(ibs_query,args["info_holder_attrs"],args["group_obj"])
+		return self.__changeGroupAttr(ibs_query,args["attr_updater_attrs"],args["group_obj"])
 
     def __changeGroupAttr(self,ibs_query,attrs,group_obj):
 	for attr_name in attrs:

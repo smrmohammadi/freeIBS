@@ -1,17 +1,20 @@
 from core.user import user_plugin,user_main,attribute
-from core.user.info_holder import InfoHolder
+from core.user.attr_updater import AttrUpdater
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.general import *
 from core.lib.multi_strs import MultiStr
 from core.lib.password_lib import Password,getPasswords
 
-info_holder_name="normal user"
+attr_handler_name="normal user"
 def init():
-    user_main.getAttributeManager().registerHandler(NormalUserAttrHandler(),["normal_username","normal_password","normal_generate_password","normal_generate_password_len","normal_save_usernames"])
+    user_main.getAttributeManager().registerHandler(NormalUserAttrHandler(),["normal_username","normal_password","normal_generate_password","normal_generate_password_len","normal_save_usernames"],["normal_username"],[])
 
-class NormalUserInfoHolder(InfoHolder):
-    def __init__(self,normal_username,normal_password,generate_password,password_len,normal_save):
+class NormalUserAttrUpdater(AttrUpdater):
+    def __init__(self):
+	AttrUpdater.__init__(self,attr_handler_name)
+
+    def changeInit(self,normal_username,normal_password,generate_password,password_len,normal_save):
 	"""
 	    generate_passwd is an integer, 0 means don't generate password and use normal_passwords instead
 	    positive values are same as password_lib.getPasswords _type, see function comments
@@ -23,12 +26,14 @@ class NormalUserInfoHolder(InfoHolder):
 	    NOTE: For delete action none of arguments are necessary, 
 		  so just pass some empty values and it will be trashed when deleting
 	"""
-	InfoHolder.__init__(self,info_holder_name)
 	self.normal_username=normal_username
 	self.normal_password=normal_password
 	self.generate_password=generate_password
 	self.password_len=password_len
 	self.normal_save=normal_save
+
+    def deleteInit(self):
+	pass
 
     def __parseNormalAttrs(self):
 	self.usernames=MultiStr(self.normal_username)
@@ -81,6 +86,6 @@ class NormalUserInfoHolder(InfoHolder):
 
 class NormalUserAttrHandler(attribute.AttributeHandler):
     def __init__(self):
-	attribute.AttributeHandler.__init__(self,info_holder_name)
-	self.registerInfoHandlerClass(NormalUserInfoHolder,["normal_username","normal_password","normal_generate_password","normal_generate_password_len","normal_save_usernames"])
+	attribute.AttributeHandler.__init__(self,attr_handler_name)
+	self.registerAttrUpdaterClass(NormalUserAttrUpdater,["normal_username","normal_password","normal_generate_password","normal_generate_password_len","normal_save_usernames"])
 

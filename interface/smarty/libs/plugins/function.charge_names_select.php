@@ -25,7 +25,7 @@ function smarty_function_charge_names_select($params,&$smarty)
     list($success,$charge_names)=$charge_names->send();
     if(!$success)
 	$charge_names=array();
-    $selected=getSelectedAttrFromSmartyParams(&$smarty,&$params);
+    $selected=getSelectedAttrFromSmartyParams($smarty,$params);
 
     $select_arr=array("selected"=>$selected,"output"=>$charge_names,"values"=>$charge_names,"name"=>$params["name"]);
 

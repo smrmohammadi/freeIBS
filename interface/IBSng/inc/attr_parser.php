@@ -5,7 +5,13 @@ require_once("attrs.php");
 /*
     Add your attribute parser function name here
 */
-$ATTR_PARSER_FUNCTIONS=array("relExpParser","multiLoginParser","normalChargeParser");
+$ATTR_PARSER_FUNCTIONS=array();
+
+
+function parseAttrs(&$smarty,&$attrs)
+{
+    return array_merge($attrs,callAttrParsers($smarty,$attrs));
+}
 
 function callAttrParsers(&$smarty,&$attrs)
 {/*

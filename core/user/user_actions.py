@@ -203,12 +203,12 @@ class UserActions:
     def updateUserAttrs(self,user_id,admin_obj,attrs,to_del_attrs):
 	user_ids=MultiStr(user_id)
 	self.__updateUserAttrsCheckInput(user_ids,admin_obj,attrs,to_del_attrs)
-	changed_info_holders=user_main.getAttributeManager().getInfoHolders(attrs)
-	deleted_info_holders=user_main.getAttributeManager().getInfoHolders(to_del_attrs)
+	changed_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(attrs)
+	deleted_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(to_del_attrs)
 	users=self.__getUsers(user_ids)
 	ibs_query=IBSQuery()
-	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_info_holders)
-	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_info_holders)
+	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_attr_updaters)
+	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters)
 	ibs_query.runQuery()
 	self.__broadcastChange(users)
 
@@ -227,13 +227,13 @@ class UserActions:
 	pass #nothing to check here for now, everything is checked or will be checked
 	
     
-    def __getChangedQuery(self,ibs_query,users,admin_obj,changed_info_holders):
-	return changed_info_holders.getQuery("user","change",{"users":users,
+    def __getChangedQuery(self,ibs_query,users,admin_obj,changed_attr_updaters):
+	return changed_attr_updaters.getQuery("user","change",{"users":users,
 							      "admin_obj":admin_obj})
 	
     
-    def __getDeletedQuery(ibs_query,users,admin_obj,deleted_info_holders):
-	return deleted_info_holders.getQuery("user","delete",{"users":users,
+    def __getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters):
+	return deleted_attr_updaters.getQuery("user","delete",{"users":users,
 							      "admin_obj":admin_obj})
 
     def __broadcastChange(self,users):

@@ -107,29 +107,6 @@ function unEscapeIP($ip)
     return preg_replace("/\!/",".",$ip);
 }
 
-function calcRelativeDateFromHours($rel_date)
-{/*
-    calculate relative date unit from an hour unir relative date, this is useful to show cleaner output
-    ex. 1 days is more clear that 24 hours
-    return an array of ($rel_date,$rel_date_unit)
-*/
-
-
-    if ($rel_date>=24*30 and $rel_date%(24*30)==0)
-    {
-	$rel_date=$rel_date/(24*30);
-	$rel_date_unit="Months";
-    }
-    else if($rel_date>=24 and $rel_date%24==0)
-    {
-	$rel_date=$rel_date/(24);
-	$rel_date_unit="Days";
-    }
-    else
-	$rel_date_unit="Hours";
-    return array($rel_date,$rel_date_unit);
-    
-}
 
 function getTRColor($swap=FALSE)
 {/*
@@ -202,6 +179,33 @@ function getSelectedAttrFromSmartyParams(&$smarty,&$params)
 			      $params["default_request"],
 			      $selected);
     return $selected;
+}
+
+
+
+################################## NOT USED
+function calcRelativeDateFromHours($rel_date)
+{/*
+    calculate relative date unit from an hour unir relative date, this is useful to show cleaner output
+    ex. 1 days is more clear that 24 hours
+    return an array of ($rel_date,$rel_date_unit)
+*/
+
+
+    if ($rel_date>=24*30 and $rel_date%(24*30)==0)
+    {
+	$rel_date=$rel_date/(24*30);
+	$rel_date_unit="Months";
+    }
+    else if($rel_date>=24 and $rel_date%24==0)
+    {
+	$rel_date=$rel_date/(24);
+	$rel_date_unit="Days";
+    }
+    else
+	$rel_date_unit="Hours";
+    return array($rel_date,$rel_date_unit);
+    
 }
 
 ?>

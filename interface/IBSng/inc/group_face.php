@@ -38,7 +38,7 @@ function intSetGroupInfo(&$smarty,$group_name)
     if($success)
     {
 	$smarty->assign_array($group_info);
-	$smarty->assign("group_attrs",callAttrParsers($smarty,$group_info["attrs"]));
+	$smarty->assign("group_attrs",parseAttrs($smarty,$group_info["attrs"]));
     }
     else
 	$smarty->set_page_error($group_info->getErrorMsgs());

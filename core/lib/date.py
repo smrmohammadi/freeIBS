@@ -30,6 +30,21 @@ class RelativeDate:
 	else:
 	    raise GeneralException(errorText("GENERAL","INVALID_REL_DATE_UNIT")%unit)
 
+    def __findUnit(self,date_hours):
+	"""
+	    find which unit is suitable for "date_hours"
+	    date_hours is an integer containing relative date with unit "Hours"
+	"""
+	if date_hours==0 or date_hours%24:
+	    return "Hours"
+	elif date_hours%(24*30):
+	    return "Days"
+	elif date_hours%(24*365):
+	    return "Months"
+	else:
+	    return "Years"
+    
+
     def check(self):
 	"""
 	    check the value of date, raise an exception on error
@@ -44,6 +59,16 @@ class RelativeDate:
 	"""
 	return self.date_hours
 	
+    def getFormattedDate(self):
+	"""
+	    return tuple of (rel_date,rel_date_units) ex. (14,"Hours")
+	    Automatcally choose best unit for date
+	"""
+	unit=self.__findUnit(self.date_hours)
+	factor=self.__getUnitFactor(unit)
+	return (self.date_hours/factor,unit)
+	
+
 class AbsDate:
     def __init__(self,date,date_type):
 	"""

@@ -1,15 +1,16 @@
 from core.user import user_plugin,user_main,attribute
-from core.user.info_holder import InfoHolder
+from core.user.attr_updater import AttrUpdater
+from core.user.attr_holder import AttrHolder
 from core.ibs_exceptions import *
 from core.lib.date import *
 from core.errors import errorText
 import time
 
-info_holder_name="rel exp date"
+attr_handler_name="rel exp date"
 
 def init():
     user_main.getUserPluginManager().register("rel_exp_date",RelExpDate)
-    user_main.getAttributeManager().registerHandler(RelExpDateAttrHandler(),["rel_exp_date","rel_exp_date_unit"],["rel_exp_date"])
+    user_main.getAttributeManager().registerHandler(RelExpDateAttrHandler(),["rel_exp_date","rel_exp_date_unit"],["rel_exp_date"],["rel_exp_date"])
 
 class RelExpDate(user_plugin.UserPlugin):#XXX TO CHECK
     def __init__(self,user_obj):
@@ -58,9 +59,9 @@ class RelExpDate(user_plugin.UserPlugin):#XXX TO CHECK
 	else:
 	    return (next_event,{})
 
-class RelExpInfoHolder(InfoHolder):
+class RelExpAttrUpdater(AttrUpdater):
     def __init__(self):
-	InfoHolder.__init__(self,info_holder_name)
+	AttrUpdater.__init__(self,attr_handler_name)
 	
     def changeInit(self,rel_exp_date,rel_exp_date_unit):
 	self.rel_exp_date=rel_exp_date
@@ -78,8 +79,17 @@ class RelExpInfoHolder(InfoHolder):
 	self.useGenerateQuery(["rel_exp_date"])
 
 
+class RelExpAttrHolder(AttrHolder):
+    def __init__(self,rel_exp_hours):
+	self.rel_exp_hours=rel_exp_hours
+	self.rel_date_obj=RelativeDate(rel_exp_hours,"Hours")
+
+    def getParsedDic(self):
+	(rel_exp_date,unit)=self.rel_date_obj.getFormattedDate()
+	return {"rel_exp_date":rel_exp_date,"rel_exp_date_unit":unit}
+
 class RelExpDateAttrHandler(attribute.AttributeHandler):
     def __init__(self):
-	attribute.AttributeHandler.__init__(self,info_holder_name)
-	self.registerInfoHandlerClass(RelExpInfoHolder,["rel_exp_date","rel_exp_date_unit"])
-
+	attribute.AttributeHandler.__init__(self,attr_handler_name)
+	self.registerAttrUpdaterClass(RelExpAttrUpdater,["rel_exp_date","rel_exp_date_unit"])
+	self.registerAttrHolderClass(RelExpAttrHolder,["rel_exp_date"])

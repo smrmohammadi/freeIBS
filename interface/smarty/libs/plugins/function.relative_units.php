@@ -17,7 +17,7 @@ function smarty_function_relative_units($params,&$smarty)
     if(isset($params["id"]))
 	$select_arr["id"]=$params["id"];
     
-    $selected=getSelectedAttrFromSmartyParams(&$smarty,&$params);
+    $selected=getSelectedAttrFromSmartyParams($smarty,$params);
     $select_arr["selected"]=$selected;
     return smarty_function_html_options($select_arr,$smarty);
 }
