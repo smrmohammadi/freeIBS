@@ -17,7 +17,7 @@
 		Add New IPPOOL {helpicon subject="add new ippool" category="ippool"}
 	<tr {ifibserr varname="ippool_name_err" add="bgcolor=red"} >
 	    <td>
-		Ras IP:
+		IPpool Name:
 	    <td>
 		<input type=text name=ippool_name value="{$ippool_name}">
 	    <td>

@@ -19,7 +19,7 @@ class IPPool:
 	"""
 	self.ippool_id=ippool_id
 	self.ippool_name=ippool_name
-        self.comment=coment
+        self.comment=comment
         self.ip_list=ip_list
         self.free=ip_list #list of free ip addresses
         self.used=[] #list of currently used ip addresses

@@ -24,7 +24,6 @@ function interface($err=NULL)
 {
     $smarty=new IBSSmarty();
     intAssignValues($smarty);
-    intSetRasTypes($smarty);
     if(!is_null($err))
     {
 	intSetErrors($smarty,$err->getErrorKeys());

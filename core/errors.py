@@ -159,7 +159,7 @@ IPPOOL_ERRORS={
     "IP_NOT_IN_USED_POOL":"IP %s is not in used list of IPPOOL %s",
     "INVALID_IP_POOL_ID":"Invalid IP pool id %s",
     "INVALID_IP_POOL_NAME":"Invalid IP pool name %s",
-    "BAD_IP_POOL_NAME":"IP Pool name should only contain alphanumeric and _(underline)",
+    "BAD_IP_POOL_NAME":"Bad IP Pool name %s. IP Pool name should only contain alphanumeric and _(underline)",
     "IP_POOL_NAME_ALREADY_EXISTS":"IP Pool name %s already exists",
     "IP_ALREADY_IN_POOL":"IP %s already exists in ippool",
     "IP_NOT_IN_POOL":"IP %s is not exists in ippool"

@@ -7,4 +7,5 @@
 <a href="misc">Misc</a>
 <a href="ras">Ras</a>
 <a href="user">User</a>
+<a href="ippool">IPpool</a>
 </html>

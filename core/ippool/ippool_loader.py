@@ -87,7 +87,7 @@ class IPpoolLoader:
 	"""
 	    return a dic of ippool informations from ippool table
 	"""
-	return db_main.getHandle().get("ippool","ippool_id=%s"%ippool_id)
+	return db_main.getHandle().get("ippool","ippool_id=%s"%ippool_id)[0]
 
     def __getIPpoolIPs(self,ippool_id):
 	"""

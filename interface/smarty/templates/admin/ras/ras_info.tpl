@@ -184,7 +184,6 @@
 		<a href="/IBSng/admin/ras/add_port.php?ras_ip={$info.ras_ip}">
 		    Add Port(s)
 		</a>
-
 	<tr>
 	    <td>
 				<form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
@@ -192,7 +191,6 @@
 		    Del Port(s): <input type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}
 				<input type=submit value=del {jsconfirm msg="Are you sure?"}>
 				</form>
-
 
 	<tr>
 	    <td>

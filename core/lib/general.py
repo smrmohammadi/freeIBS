@@ -13,9 +13,9 @@ from core.errors import errorText
 def isValidName(name):
     """
 	check if "name" is valid, names can contain alphanumerics and "_" character
-	return 1 if name is valid and 0 if it's not
+	return True if name is valid and False if it's not
     """
-    return re.search("[^a-zA-Z0-9_]",name)==None
+    return len(name)!=0 and re.search("[^a-zA-Z0-9_]",name)==None 
 
 ###############################
 def escapeStr(_str):
