@@ -16,6 +16,17 @@ def getLoader():
 class UserLoader:
     def __init__(self):
 	pass
+
+    def normalUsername2UserID(self,normal_username):
+	"""
+	    return user_id of user with normal username "normal_username"
+	"""
+	normal_attrs=self.__fetchNormalUserAttrsByNormalUsername(normal_username)
+	if normal_attrs==None:
+	    raise GeneralException(errorText("USER","NORMAL_USERNAME_DOESNT_EXISTS")%normal_username)
+	else:
+	    return normal_attrs["user_id"]
+	
 	
     def getLoadedUserByUserID(self,user_id):
 	"""
@@ -98,11 +109,29 @@ class UserLoader:
 	    return a dic of attributes in format {attr_name:attr_value}
 	"""
 	normal_attrs={}
-	normal_db_attrs=db_main.getHandle().get("normal_users")
+	normal_db_attrs=db_main.getHandle().get("normal_users","user_id=%s"%user_id)
 	if len(normal_db_attrs)==1:
 	    normal_attrs["normal_username"]=normal_db_attrs[0]["normal_username"]
 	    normal_attrs["normal_password"]=normal_db_attrs[0]["normal_password"]
 	return normal_attrs
+
+    def __fetchNormalUserAttrsByNormalUsername(self,normal_username):
+	"""
+	    fetch normal user info from "normal_users" table, using normal username of user
+	    return a dic of attributes in format {attr_name:attr_value} or None if normal_username
+	    doesn't exists
+	"""
+	normal_attrs={}
+	normal_db_attrs=db_main.getHandle().get("normal_users","normal_username=%s"%dbText(normal_username))
+	if len(normal_db_attrs)==1:
+	    normal_attrs["user_id"]=normal_db_attrs[0]["user_id"]
+	    normal_attrs["normal_username"]=normal_db_attrs[0]["normal_username"]
+	    normal_attrs["normal_password"]=normal_db_attrs[0]["normal_password"]
+	    return normal_attrs
+	else:
+	    return None
+	
+
 
 
     def __fetchVoipUserAttrsByUserID(self,user_id):

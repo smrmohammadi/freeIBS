@@ -78,7 +78,7 @@ class Request:
 	"""
 	for arg in args:
 	    if not self.params.has_key(arg):
-		raise HandlerException("Incomplete request, argument %s not found"%arg)
+		raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%arg)
 
     
     def needAuthType(self,*args):
@@ -102,9 +102,9 @@ class Request:
 	    raise HandlerException(errorText("GENERAL","INVALID_AUTH_TYPE"))
 
 	if self.auth_type == auth_type:
-	    return 1
+	    return True
 	else:
-	    return 0
+	    return Fakse
 
     def getRemoteAddr(self):
 	"""

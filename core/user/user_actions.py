@@ -243,3 +243,21 @@ class UserActions:
 	"""
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,users.keys())
+#######################################################
+    def getUserInfoByUserID(self,user_id):
+	"""
+	    return a dic of user information from user with id "user_id"
+	"""
+	loaded_user=user_main.getUserPool().getUserByUserID(user_id)
+    	return self.__getUserInfoFromLoadedUser(loaded_user)
+	
+#######################################################
+    def getUserInfoByNormalUsername(self,normal_username):
+	"""
+	    return a dic of user information from user with normal username "normal_username"
+	"""
+	loaded_user=user_main.getUserPool().getUserByNormalUsername(normal_username)
+	return self.__getUserInfoFromLoadedUser(loaded_user)
+    
+
+        

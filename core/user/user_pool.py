@@ -209,8 +209,13 @@ class UserPool:
 	    self.loading_users.loadingEnd(user_id)
 	
 #################################
-    def getUserByNormalUsername(self,username):
-	pass	
+    def getUserByNormalUsername(self,normal_username,online_flag=False):
+	"""
+	    XXX: current implemention can be optimized by not querying normal_users table twice
+	    return a LoadedUser instance of user with normal username "normal_username"
+	"""
+	user_id=user_main.getUserLoader().getLoadedUserByUserID(normal_username)
+	return self.getUserByID(user_id)
 
 #################################
     def userChanged(self,user_id):

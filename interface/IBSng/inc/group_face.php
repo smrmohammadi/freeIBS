@@ -31,6 +31,18 @@ function getGroupNames(&$smarty)
     }
 }
 
+function intSetGroupInfo(&$smarty,$group_name)
+{
+    $group_info_req=new GetGroupInfo($group_name);
+    list($success,$group_info)=$group_info_req->send();
+    if($success)
+    {
+	$smarty->assign_array($group_info);
+	$smarty->assign("group_attrs",callAttrParsers($smarty,$group_info["attrs"]));
+    }
+    else
+	$smarty->set_page_error($group_info->getErrorMsgs());
+}
 
 
 ?>

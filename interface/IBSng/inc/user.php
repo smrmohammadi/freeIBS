@@ -14,4 +14,18 @@ class AddNewUsers extends Request
     }
 }
 
+class GetUserInfo extends Request
+{
+    function GetUserInfo($user_id=null,$normal_username=null)
+    {
+	if (!is_null($user_id))
+	    $request=array("user_id"=>$user_id);
+	else if (!is_null($normal_username))
+	    $request=array("normal_username"=>$normal_username);
+	parent::Request("user.getUserInfo",$request);
+    }
+}
+
+
+
 ?>

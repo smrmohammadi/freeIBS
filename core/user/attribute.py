@@ -52,3 +52,6 @@ class UserAttributes:
     def hasAttribute(self,attr_name):
 	return self.attributes.has_key(attr_name)
 	
+    
+    def getAllAttributes(self):
+	return self.attributes

@@ -22,7 +22,8 @@ GENERAL_ERRORS={
     "INVALID_REL_DATE":"Invalid Relative Date %s",
     "INVALID_TIME_STRING":"Invalid Time String %s",
     "TIME_OUT_OF_RANGE":"Time Out of Range",
-    "INVALID_DAY_OF_WEEK":"\"%s\" is not a valid day of week"
+    "INVALID_DAY_OF_WEEK":"\"%s\" is not a valid day of week",
+    "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found"
 }
 
 USER_ACTIONS_ERRORS={
@@ -45,13 +46,14 @@ USER_ERRORS={
     "DUPLICATE_ATTR_REGISTRATION":"Duplicate registration of attribute %s",
     "UNREGISTERED_ATTRIBUTE":"Attribute %s not registered",
     "UNKNOWN_ATTRIBUTE_ACTION":"Unknown attribute action %s",
-    "USERID_DOESNT_EXITS":"User with user id %s does not exists"
+    "USERID_DOESNT_EXITS":"User with user id %s does not exists",
+    "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
+    "ACCESS_TO_USER_DENIED":"You have not access to user id %s"
 }
 
 NORMAL_USER_LOGIN_ERRORS={
     "WRONG_PASSWORD":"505:Wrong password",
     "LOCKED":"647:User is locked",
-    "USER_NOT_FOUND":"691:user \"%s\" not found " , #argument is username
     "MAX_CONCURRENT":"502:Maximum number of concurrent logins reached",
     "NO_APPLICABLE_RULE":"646: No rule can be applied",
     "REL_EXP_DATE_REACHED":"708:relative expiration date has reached",
@@ -172,7 +174,7 @@ PLUGIN_ERRORS={
     "INVALID_HOOK":"Invalid Hook name %s"
 }
 
-def errorText(event,error,add_error_key=1):
+def errorText(event,error,add_error_key=True):
     """
 	return "error" text representation in "event"
 	event is a text that shows which dictionary we use for errors
@@ -235,4 +237,4 @@ def errorText(event,error,add_error_key=1):
     except:
 	logException(LOG_ERROR,"errorText: can't find error for %s,%s"%(event,error))
 	raise GeneralException(GENERAL_ERRORS["ERROR_TEXT"])
-	
+

@@ -398,7 +398,7 @@ class AuthPacket(Packet):
 		except KeyError:
 		    return False
 
-	    	if self.has_key("CHAP-Challenge")
+	    	if self.has_key("CHAP-Challenge"):
 		    chap_challenge=self["CHAP-Challenge"][0]
 		else:
 		    chap_challenge=self.authenticator
@@ -409,8 +409,6 @@ class AuthPacket(Packet):
 		hash.update(chap_challenge)
 		return hash.digest()==chap_password[1:]
 	
-
-
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password
 

@@ -164,6 +164,9 @@ class Admin:
 	self.canLogin(remote_addr)
 
     def canUseCharge(self,charge_name):
+	"""
+	    return True if admin can use charge with name "charge_name"
+	"""
 	if charge_main.getLoader().getChargeByName(charge_name).isVisibleToAll() or self.isGod() or self.hasPerm("ACCESS ALL CHARGES"):
 	    return True
 
@@ -176,6 +179,9 @@ class Admin:
 	return False
 
     def canUseGroup(self,group_name):
+	"""
+	    return True if admin can use group with name "group_name"
+	"""
 	if self.isGod() or self.hasPerm("ACCESS ALL GROUPS"):
 	    return True
 
@@ -187,61 +193,10 @@ class Admin:
 		return False
 	return False
 
-##############
-    def canAddUser(self,username): #this don't check for ADD_NEW_USER permission, now it's just check for prefix, usable in voip
-	ret=self.hasSuchPerm("USER_PREFIX_LIMIT")
-	if ret==0:
-	    return 1
-	else:
-	    prefixes=perms.getMultiValues(ret[1])
-	    for prefix in prefixes:
-		if prefix != "" and re.search("^%s"%prefix,username) != None:
-		    return 1
-	    return 0
+    def canAccessUser(self,loaded_user):
+	"""
+	    raise an PermissionException if admin can not access and get information of  user loaded in "loaded_user"
+	    or return if admin has access to the user. Checking is done with admin permission GET USER INFORMATION
+	"""
+	self.checkPerm("GET USER INFORMATION",loaded_user)
 
-    def canUseVoipGroup(self,group_id):
-	import voip_groups
-	group_id=integer(group_id)
-	voip_groups.checkGroupID(group_id)
-	if voip_groups.voip_groups[group_id].visible_default=="t" or self.isGod():
-	    return 1
-	ret=self.hasSuchPerm("VOIP_VISIBLE_GROUPS")
-	if ret!=0:
-	    visibleGroups=perms.getMultiValues(ret[1])
-	    if voip_groups.groupIDtoName(group_id) in visibleGroups:
-		return 1
-	return 0
-	
-    def canUseChargeList(self, chargelist):
-	if self.isGod() or self.hasSuchPerm("VOIP_LIST_ALL_CHARGELISTS"):
-	    return 1
-	import voip_groups
-	for i in voip_groups.voip_groups:
-	    if "rules" in dir(voip_groups.voip_groups[i]) and self.canUseVoipGroup(i):
-		for r in voip_groups.voip_groups[i].rules:
-		    if voip_groups.voip_groups[i].rules[r].charge_group == chargelist:
-			return 1
-	return 0
-	
-
-    def canAddVoipUser(self,username): #this don't check for ADD_NEW_USER permission, now it's just check for prefix, usable in voip
-	ret=self.hasSuchPerm("VOIP_USER_PREFIX_LIMIT")
-	if ret==0:
-	    return 1
-	else:
-	    prefixes=perms.getMultiValues(ret[1])
-	    for i in prefixes:
-		if i != "" and re.search("^"+str(i),username) != None:
-		    return 1
-	    return 0
-
-    def canChangeUser(self,userObj,permType):
-	ret=self.hasSuchPerm(permType)
-	if ret == 0 :
-	    return 0
-	elif ret[1]=="ALL":
-	    return 1
-	elif ret[1]=="RESTRICTED" and userObj.user_info["admin_id"] == self.admin_id:
-	    return 1
-	else:
-	    return 0

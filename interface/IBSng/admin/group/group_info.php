@@ -20,17 +20,7 @@ else
 
 function intGroupInfo(&$smarty,$group_name)
 {
-    $charge_info_req=new GetGroupInfo($group_name);
-    list($success,$group_info)=$charge_info_req->send();
-    if($success)
-    {
-	$smarty->assign_array($group_info);
-	$smarty->assign_array(callAttrParsers($smarty,$group_info["attrs"]));
-	$smarty->assign("target","group");
-	$smarty->assign("target_id",$group_info["group_name"]);
-    }
-    else
-	$smarty->set_page_error($group_info->getErrorMsgs());
+    intSetGroupInfo($smarty,$group_name);    
     interface($smarty);
 }
 

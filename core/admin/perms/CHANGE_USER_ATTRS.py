@@ -12,6 +12,6 @@ class ChangeUserAttrs (AllRestrictedSingleValuePermission,UserCatPermission,Perm
 		Related Permissions: ADD NEW USER, CHANGE USER OWNER, CHANGE NORMAL USER ATTRIBUTES
 	       """)
 	self.addAffectedPage("User->Edit Attributes")
-	
+	self.addDependency("GET USER INFORMATION")	
 
 	

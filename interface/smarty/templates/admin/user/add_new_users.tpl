@@ -13,63 +13,57 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add New Users {helpicon subject="add new users" category="user"}
-	<tr {ifibserr varname="count_err" add="bgcolor=red"} >
-	    <td>
-		Count:
-	    <td>
-		<input type=text name=count value="{$count}">
-	    <td>
-		{helpicon subject="count" category="user"}
+	{addEditTable title="Add New Users"}
+	{addEditTD type="left" err="count_err"}
+	    Count
+	{/addEditTD}
 
-	<tr {ifibserr varname="credit_err" add="bgcolor=red"} >
-	    <td>
-		Credit:
-	    <td>
-		<input type=text name=credit value="{$credit}">
-	    <td>
-		{helpicon subject="credit" category="user"}
+	{addEditTD type="right"}
+	    <input type=text name=count value="{$count}" class=text>
+	    {helpicon subject="count" category="user"}
+	{/addEditTD}
 
-	<tr {ifibserr varname="credit_comment_err" add="bgcolor=red"} >
-	    <td>
-		Credit Change Comment:
-	    <td>
-		<input type=text name=credit_comment value="{$credit_comment}">
-	    <td>
-		{helpicon subject="credit_comment" category="user"}
+	{addEditTD type="left" err="credit_err"}
+	    Credit
+	{/addEditTD}
 
-	<tr {ifibserr varname="owner_err" add="bgcolor=red"} >
-	    <td>
-		Owner:
-	    <td>
+	{addEditTD type="right"}
+	    <input type=text name=credit value="{$credit}" class=text>
+	    {helpicon subject="credit" category="user"}
+	{/addEditTD}
+
+	{addEditTD type="left" err="credit_comment_err"}
+	    Credit Change Comment
+	{/addEditTD}
+
+	{addEditTD type="right"}
+	    <input type=text name=credit_comment value="{$credit_comment}" class=text>
+	    {helpicon subject="credit_comment" category="user"}
+	{/addEditTD}
+
+	{addEditTD type="left" err="credit_comment_err"}
+	    Owner
+	{/addEditTD}
+
+	{addEditTD type="right"}
 		{if canDo("CHANGE_USER_OWNER")}
 		    {admin_names_select name="owner_name" default="owner_name"}
 		{else}
 		    {$auth_name}
-		    <input type=hidden name="owner_name" value="{$auth_name}">
+		    <input type=hidden name="owner_name" value="{$auth_name}" class=text>
 		{/if}
-	    	
-	    <td>
 		{helpicon subject="owner" category="user"}
-
+	{/addEditTD}
 	    
-	<tr {ifibserr varname="group_err" add="bgcolor=red"}>
-	    <td>
-		Group:
-	    <td>
-		    {group_names_select name="group_name" default="group_name"}
-	    <td>
-		{helpicon subject="group" category="user"}
+	{addEditTD type="left" err="credit_comment_err"}
+	    Group
+	{/addEditTD}
 
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
-
-    </table>
-</center>
+	{addEditTD type="right"}
+	    {group_names_select name="group_name" default="group_name"}
+	    {helpicon subject="group" category="user"}
+	
+	{/addEditTD}
+    {/addEditTable}
 </form>
 {include file="admin_footer.tpl"}
