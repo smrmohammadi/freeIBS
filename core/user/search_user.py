@@ -199,8 +199,9 @@ class SearchGroupAttrsTable(SearchAttrsTable):
 	return group.getConditionalClause()
     
 class SearchUserHelper:
-    def __init__(self,conds):
+    def __init__(self,conds,admin_obj):
 	self.conds=conds
+	self.admin_obj=admin_obj
 	self.tables={"users":SearchUsersTable(),
 		     "user_attrs":SearchUserAttrsTable(),
 		     "normal_users":SearchNormalUsersTable(),

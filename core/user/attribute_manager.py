@@ -87,11 +87,11 @@ class AttributeManager:
 	map(lambda x:attrs.update(x.getParsedDic()),attr_holders)
 	return attrs
 #############################################
-    def runAttrSearchers(self,conditions):
+    def runAttrSearchers(self,conditions,admin_obj):
 	"""
 	    create attr searcher instances and execute their "run" method
 	"""
-	search_helper=SearchUserHelper(conditions)
+	search_helper=SearchUserHelper(conditions,admin_obj)
 	attr_searchers=self.__getAllAttrSearchers(search_helper)
 	map(lambda x:apply(getattr(x,"run")),attr_searchers)
 	return search_helper

@@ -78,6 +78,9 @@ class AdminPermission:
     def getValue(self):
 	return self.value
 
+    def isRestricted(self):
+	return self.getValue()=="Restricted"
+
     def getPermObj(self):
 	return self.perm_obj
 	

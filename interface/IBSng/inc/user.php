@@ -46,4 +46,19 @@ class CheckNormalUsernameForAdd extends Request
 }
 
 
+class SearchUser extends Request
+{
+    function SearchUser($conds,$from,$to,$order_by,$desc)
+    {
+	parent::Request("user.searchUser",array("conds"=>$conds,
+						"from"=>$from,
+						"to"=>$to,
+						"order_by"=>$order_by,
+						"desc"=>$desc));
+    }
+}
+
+
+
+
 ?>

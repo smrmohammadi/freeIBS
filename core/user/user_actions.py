@@ -263,20 +263,21 @@ class UserActions:
 	where_clause=" or ".join(map(lambda username:"normal_username=%s"%dbText(username),normal_username))
 	users_db=db_main.getHandle().get("normal_users",where_clause)
 	return [m["normal_username"] for m in users_db]
+
 ##########################################################
-    def searchUsers(self,conds,_from,to,order_by,desc):
+    def searchUsers(self,conds,_from,to,order_by,desc,admin_obj):
 	"""
 	    search in users based on conditions in "conds" and return user_ids result from "_from" to "to"
+	    admin_obj(Admin Instance): requester admin object
 	"""
 	self.__searchUsersCheckInput(conds,_from,to,order_by,desc)
-	search_helper=user_main.getAttributeManager().runAttrSearchers(conds)
+	search_helper=user_main.getAttributeManager().runAttrSearchers(conds,admin_obj)
 	return search_helper.getUserIDs()
 
-    def __searchUsersCheckInput(self,conds,_from,to,order_by,desc):
+    def __searchUsersCheckInput(self,conds,_from,to,order_by,desc,admin_obj):
 	if not isInt(_from) or _from<0 or _from>1024*1024:
 	    raise GeneralException(errorText("GENERAL","FROM_VALUE_INVALID")%_from)
 
 	if not isInt(to) or to<0 or to>1024*1024:
 	    raise GeneralException(errorText("GENERAL","TO_VALUE_INVALID")%to)
 
-	    

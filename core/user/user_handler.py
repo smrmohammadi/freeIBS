@@ -13,6 +13,7 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("getUserInfo")
 	self.registerHandlerMethod("updateUserAttrs")
 	self.registerHandlerMethod("checkNormalUsernameForAdd")
+	self.registerHandlerMethod("searchUser")	
 	
     def addNewUsers(self,request):
 	request.needAuthType(request.ADMIN)
@@ -110,4 +111,19 @@ class UserHandler(handler.Handler):
 	    ret[errorText("USER_ACTIONS","NORMAL_USERNAME_EXISTS",False)]=exist_usernames
 	return ret
 ############################################################
-    
+    def searchUser(self,request):
+	"""
+	    return (count_of_result,user_id_lists)
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("conds","from","to","order_by","desc")
+	admin_obj=request.getAuthNameObj()
+	conds=request["conds"]
+	if admin_obj.hasPerm("GET USER INFORMATION"):
+	    if admin_obj.getPerms()["GET USER INFORMATION"].isRestricted():
+		conds["owner_name"]=[admin_obj.getAdminID()]
+	else:
+	    raise PermissionException(errorText("GENERAL","ACCESS_DENIED"))
+		
+	return user_main.getActionManager().searchUsers(conds,request["from"],request["to"],request["desc"],admin_obj)
+	
