@@ -169,8 +169,10 @@ function getTargetAttrsFromSmarty(&$smarty,$target)
 {
     if($target=="user")
 	$target_attrs=$smarty->get_assigned_value("user_attrs");
-    else
+    else if ($target=="group")
 	$target_attrs=$smarty->get_assigned_value("group_attrs");
+
+    return $target_attrs;
 }
 
 ?>

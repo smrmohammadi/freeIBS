@@ -6,7 +6,7 @@ from core.lib.general import *
 
 info_holder_name="multi login"
 def init():
-    user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"])
+    user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"],["multi_login"])
 
 class MultiLogin(user_plugin.UserPlugin): ### XXX To ChecK!
     def __init__(self,user_obj):
@@ -26,8 +26,10 @@ class MultiLogin(user_plugin.UserPlugin): ### XXX To ChecK!
 	raise loginException(error_text)
 
 class MultiLoginInfoHolder(InfoHolder):
-    def __init__(self,multi_login):
+    def __init__(self):
 	InfoHolder.__init__(self,info_holder_name)
+
+    def changeInit(self,multi_login):
 	try:
 	    self.multi_login=int(multi_login)
 	except:
@@ -38,7 +40,8 @@ class MultiLoginInfoHolder(InfoHolder):
 
 	self.useGenerateQuery({"multi_login":self.multi_login})
 
-	
+    def deleteInit(self):
+	self.useGenerateQuery(["multi_login"])	
 
 class MultiLoginAttrHandler(attribute.AttributeHandler):
     def __init__(self):

@@ -16,6 +16,7 @@ function smarty_function_attrDefault($params,&$smarty)
     param default(string,optional): optional string that will be returned if none of other default values matched
 
 */
+
     $target_attrs=getTargetAttrsFromSmarty($smarty,$params["target"]);
     $default=isset($params["default"])?$params["default"]:"";
     return attrDefault($target_attrs,$params["default_var"],$params["default_request"],$default);

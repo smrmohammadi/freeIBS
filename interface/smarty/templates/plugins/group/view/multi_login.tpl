@@ -5,7 +5,7 @@
     {/groupInfoTD}
     {groupInfoTD type="right"}
 		{ifHasAttr object="group" var_name="multi_login"}
-		    {$multi_login} instances 
+		    {$group_attrs.multi_login} instances 
 		{/ifHasAttr} 
 		{helpicon subject="multi login" category="user"}
     {/groupInfoTD}

@@ -27,7 +27,6 @@ function intUpdateAttrs(&$smarty,$edit_tpl_name,$target,$target_id,$update_metho
 }
 
 
-
 function intEditGroup(&$smarty,$group_name,$edit_tpl_name)
 {
     checkTplFileName($edit_tpl_name);

@@ -115,9 +115,8 @@ class GroupActions:
 						      "attr_value":dbText(attr_value)})
 
     def updateGroupAttrQuery(self,group_id,attr_name,attr_value):
-	return ibs_db.createUpdateQuery("group_attrs",{"attr_name":dbText(attr_name),
-						      "attr_value":dbText(attr_value)},
-						      "group_id=%s"%to_int(group_id,"group id"))
+	return ibs_db.createUpdateQuery("group_attrs",{"attr_value":dbText(attr_value)},
+						      "group_id=%s and attr_name=%s"%(to_int(group_id,"group id"),dbText(attr_name)))
 
     def deleteGroupAttrQuery(self,group_id,attr_name):
 	return ibs_db.createDeleteQuery("group_attrs","attr_name=%s and group_id=%s"%

@@ -1,9 +1,6 @@
 {include file="admin_header.tpl" title="Group Multi Login" selected="group list"}
 {include file="err_head.tpl"}
 
-{literal}
-{/literal}
-
 {editTemplate target="group" target_id=$group_name update_method="multiLogin" edit_tpl_name="multi_login.tpl"}
 
   {addEditTable title="Expiration Dates" table_width=300}
@@ -31,9 +28,9 @@
 	multi_login_select.disable_unselected=true;
 	multi_login_select.addByID("multi_login");
 {if attrDefault($group_attrs,"multi_login","has_multi_login")!=""}
-    multi_login_select.select("has_multi_login");
+    multi_login_select.select("multi_login");
 {else}
-    rel_exp_select.select(null);
+    multi_login_select.select(null);
 {/if}
 </script>
 
@@ -50,11 +47,10 @@
     </a>
 {/addRelatedLink}
 
-{setAboutPage title="Expiration Date Edit"}
+{setAboutPage title="Multi Login Edit"}
 You can set multi login, for users who are member of this group.
 Multi login limits maximum instances of user that can be online.
 {/setAboutPage}
-
 
 
 {include file="admin_footer.tpl"}

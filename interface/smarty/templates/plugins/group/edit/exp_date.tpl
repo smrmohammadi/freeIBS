@@ -60,5 +60,4 @@ You can set expiration date, for users who are member of this group.
 {/setAboutPage}
 
 
-
 {include file="admin_footer.tpl"}
