@@ -1,6 +1,7 @@
 		</td>
 		<td width="180" align="center">		
-		&nbsp;</td>
+		    {include file="admin_right_sidebar.tpl"}
+		</td>
 	</tr>
 </table>
 <!-- End Main Table -->

@@ -1,7 +1,7 @@
 {* Admin List
     
 *}
-{include file="admin_header.tpl" title="Admin List"}
+{include file="admin_header.tpl" title="Admin List" selected="Admin List"}
 {include file="err_head.tpl"}
 {listTable title="Admin List" cols_num=4}
 	{listTableHeaderIcon action="view" close_tr=TRUE}
@@ -43,5 +43,20 @@
 	    {/listTR}
 	{/section}
 {/listTable}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_list.php" class="RightSide_links">
+	Admin List
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/add_new_admin.php" class="RightSide_links">
+	Add New Admin
+    </a>
+{/addRelatedLink}
+{setAboutPage title="Admin List"}
+A list of all admins are shown here.
+{/setAboutPage}
+
 
 {include file="admin_footer.tpl"}

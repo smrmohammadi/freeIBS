@@ -31,15 +31,20 @@
 		<table border="0" width="320" cellspacing="0" cellpadding="0">
 			<tr>
 				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
+				    {menuIcon name="user"}	
+				</td>
 				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
+				    {menuIcon name="group"}
+				</td>
 				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
+				    {menuIcon name="report"}
+				</td>
 				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
+				    {menuIcon name="admin"}	
+				</td>
 				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
+				    {menuIcon name="setting"}	
+				</td>
 			</tr>
 		</table>
 		<!-- End Links Button -->
@@ -49,14 +54,7 @@
 		<td align="right" colspan="4" class="Header_Submenu">
 			<table align="right" border="0" cellspacing="0" cellpadding="0" class="Header_Submenu">
 				<tr>
-					<td>
-						<a class="Header_Submenu" href="list_tpl.htm">Home</a></td>
-					<td class="Header_Line_Between_Submenus"><img border="0" src="/IBSng/images/line_between_submenus.gif"></td>
-					<td>
-						Add new user </td>
-					<td class="Header_Line_Between_Submenus"><img border="0" src="/IBSng/images/line_between_submenus.gif"></td>
-					<td>
-						User Info</td>
+					{secondLvlMenu}
 					<td width=10></td>
 				</tr>
 			</table>

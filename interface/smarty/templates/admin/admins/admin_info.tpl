@@ -52,33 +52,30 @@
 		{/if}
     </table>
 </center>
-<table>
-{if not $is_editing}
-    <tr>
-	<td>
-	    {canDo perm_name="CHANGE USER INFO" username=$username}
-    		<a href="/IBSng/admin/admins/admin_info.php?edit=1&admin_username={$username}">    
-		    Edit
-		</a>
-	    {/canDo}
-    <tr>
-	<td>
-	    {canDo perm_name="SEE ADMIN PERMISSIONS" username=$username}
-    		<a href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$username}">    
-		    Permissions List
-		</a>
-	    {/canDo}
-
-    <tr>
-	<td>
-	    {canDo perm_name="CHANGE ADMIN PASSWORD" username=$username}
-    		<a href="/IBSng/admin/admins/change_password.php?username={$username}">    
-		    Change Password
-		</a>
-	    {/canDo}
-{else}
+{if $is_editing}
     <input type=submit name=submit>
     </form>
 {/if}
+{canDo perm_name="CHANGE USER INFO" username=$username}
+	{addRelatedLink}
+    		<a class="RightSide_links" href="/IBSng/admin/admins/admin_info.php?edit=1&admin_username={$username}">    
+		    Edit
+		</a>
+	{/addRelatedLink}
+{/canDo}
+{canDo perm_name="SEE ADMIN PERMISSIONS" username=$username}
+	{addRelatedLink}
+    		<a class="RightSide_links" href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$username}">    
+		    Permissions List
+		</a>
+	{/addRelatedLink}
+{/canDo}
 
+{canDo perm_name="CHANGE ADMIN PASSWORD" username=$username}
+	{addRelatedLink}
+    		<a class="RightSide_links" href="/IBSng/admin/admins/change_password.php?username={$username}">    
+		    Change Password
+		</a>
+	{/addRelatedLink}
+{/canDo}
 {include file="admin_footer.tpl"}

@@ -812,3 +812,62 @@ td.error_messages{
 	direction:ltr ;
 	background-color:#FFFFFF
 }
+
+
+/*----------------------------------------------------*/
+/*  Right Side Bar					  */
+/*   Classes:						  */									  
+/*   	1.td.RightSide_Color_dark	                  */									  
+/*   	2.td.RightSide_Color_light	                  */									  
+/*   	3.td.RightSide_seperator	                  */									  
+/*   	4.td.RightSide_Links		                  */									  
+/*   	5.td.RightSide_Arrow		                  */									  
+/*   	6.a:link.RightSide_Links	                  */
+/*   	7.a:visited.RightSide_Links			  */
+/*   	8.a:hover.RightSide_Links			  */
+/*----------------------------------------------------*/
+
+td.RightSide_Color_dark{ 
+	background-color:#DFDDDD
+}
+
+td.RightSide_Color_light{ 
+	background-color:#EFEFEF
+}
+
+td.RightSide_seperator{ 
+	width:100%:
+	height:1;
+	background-image:url('dash_line.gif') 
+}
+
+td.RightSide_Links{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #990000; 
+	height:19;
+	width:130
+}
+
+td.RightSide_Arrow{ 
+	font-family: Tahoma; 
+	font-size: 8.2pt; 
+	color: #990000; 
+	height:19;
+	width:8
+}
+
+a:link.RightSide_Links{
+    color: #990000;;
+    text-decoration:none
+}
+
+a:visited.RightSide_Links{
+	color: #990000;
+	text-decoration:none
+}
+
+a:hover.RightSide_Links{ 
+    color: #CC6600
+}
+

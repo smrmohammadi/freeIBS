@@ -1,18 +1,18 @@
 <?php
-$IBSngMenu=Array("user"=>array(),
+$GLOBALS["IBSngMenu"]=Array("user"=>array(),
 		"group"=>array(),
 		"report"=>array(),
-		"admin"=>array("list_admin"=>"/IBSng/admin/admins/admin_list.php"),
+		"admin"=>array("Admin List"=>"/IBSng/admin/admins/admin_list.php",
+			       "Add Admin"=>"/IBSng/admin/admins/add_new_admin.php"),
 		"setting"=>array()
 		);
 
-
-$IBSngMenuLinks=Array("user"=>"/IBSng/admin/user",
-		"group"=>"/IBSng/admin/group",
-		"report"="/IBSng/admin/report",
-		"admin"=>"/IBSng/admin/admin",
-		"setting"="/IBSng/admin/setting"
-		);
+$GLOBALS["IBSngMenuLinks"]=Array("user"=>"/IBSng/admin/user",
+		      "group"=>"/IBSng/admin/group",
+		      "report"=>"/IBSng/admin/report",
+		      "admin"=>"/IBSng/admin/admins",
+	    	      "setting"=>"/IBSng/admin/setting"
+		      );
 
 
 function get1stLvlLink($menu_name)
@@ -24,7 +24,7 @@ function get1stLvlLink($menu_name)
 }
 
 function get1stLvlSelected($second_lvl_selected)
-{/*	return 1st lvl selected tag based on second level selected
+{/*	return 1st level selected tag based on second level selected
 */
     global $menu_selected;
     if(!isset($menu_selected))
@@ -33,13 +33,19 @@ function get1stLvlSelected($second_lvl_selected)
 }
 
 function find1stLvlSelected($second_lvl_selected)
-{/*	finds 1st lvl selected tag based on second level selected
+{/*	finds 1st level selected tag based on second level selected
 */
     global $IBSngMenu;
-    foreach($IBSngMenu as $1st_lvl_name=>$2nd_lvl_arr)
-	foreach($2nd_lvl_arr as $2nd_lvl_name=>$link)
-	    if ($2nd_lvl_name == $second_lvl_selected)
-		return $1st_lvl_name;
+    foreach($IBSngMenu as $first_lvl_name=>$second_lvl_arr)
+	foreach($second_lvl_arr as $second_lvl_name=>$link)
+	    if ($second_lvl_name == $second_lvl_selected)
+		return $first_lvl_name;
+}
+
+function get2ndLvlMenu($first_lvl_name)
+{/* return second level menu array from first level selected */
+    global $IBSngMenu;
+    return $IBSngMenu[$first_lvl_name];
 }
 
 ?>

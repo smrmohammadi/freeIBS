@@ -13,7 +13,7 @@ function smarty_block_canDo($params,$content,&$smarty,&$repeat)
 */
     if(is_null($content))
     {
-	if(isset($params["self_username"]) and getAuthName()==$params["username"])
+	if(isset($params["username"]) and getAuthUsername()==$params["username"])
 	    return;
 	    
 	if(canDo($params["perm_name"]))
