@@ -3,6 +3,7 @@ from core.event import event,periodic_events
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.ras.msgs import RasMsg
+from core.ras import ras_main
 import copy
 
 class OnlineUsers:
@@ -146,10 +147,11 @@ class OnlineUsers:
 	    This is done by creating a fake ras_msg and send it to appropiate logout method
 	"""
 	ras_msg=self.__createForceLogoutRasMsg(user_obj,instance)
-	method=self.__populateRasMsg(ras_msg)
+	method=self.__populateRasMsg(user_obj,instance,ras_msg)
 	if method==None:
 	    toLog("Don't know how to force logout user %s instance %s"%(self.user_obj.getUserID(),instance),LOG_ERROR|LOG_DEBUG)
 	    return
+	user_obj.setKillReason(instance,kill_reason)
 	return apply(method,[ras_msg])
 
     def __createForceLogoutRasMsg(self,user_obj,instance):
@@ -163,11 +165,11 @@ class OnlineUsers:
 	"""
 	instance_info=user_obj.getInstanceInfo(instance)
 	ras_msg["unique_id"]=instance_info["unique_id"]
-	ras_msg[instance["unique_id"]]=instance_info[instance_info["unique_id"]]
+	ras_msg[instance_info["unique_id"]]=instance_info["unique_id_val"]
 	ras_msg["user_id"]=user_obj.getUserID()
 	if user_obj.isNormalUser():
 	    ras_msg["username"]=user_obj.getUserAttrs()["normal_username"]
-	    if user_obj.getUserType().isPersistentLanClient(instance):
+	    if user_obj.getTypeObj().isPersistentLanClient(instance):
 		ras_msg.setAction("PERSISTENT_LAN_STOP")
 		return self.persistentLanStop
 	    else:

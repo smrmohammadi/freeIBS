@@ -72,25 +72,36 @@ class SnmpException (Exception):
 class IBSError(Exception):
     pass
 
-class GeneralException (IBSError):
-    def __init__(self,strError):
+    def __init__(self,str_error):
+	self.str_error=str_error
+
 	if(defs.DEBUG_LEVEL>=defs.DEBUG_ALL):
 	    last_stack = traceback.extract_stack()[-2]
-    	    toLog("GeneralException: in (%s,%s,%s) : %s"%
-		(last_stack[0],last_stack[2],last_stack[1],strError),LOG_DEBUG)
-        self.strError=strError
+    	    toLog("%s: in (%s,%s,%s) : %s"%
+		(self.__class__.__name__,last_stack[0],last_stack[2],last_stack[1],str_error),LOG_DEBUG)
 
     def __str__(self):
-        return self.strError
+	return self.str_error
+
+    def getErrorKey(self):
+	try:
+	    return self.str_error[:self.str_error.index("|")]
+	except ValueError:
+	    return ""
+
+    def getErrorText(self):
+	try:
+	    return self.str_error[self.str_error.index("|")+1:]
+	except ValueError:
+	    return self.str_error
+	
+    
+class GeneralException (IBSError):
+    pass
 
 class LoginException (IBSError):
-    def __init__(self,str_error):
-	if(defs.DEBUG_LEVEL>=defs.DEBUG_ALL):
-	    toLog("loginException: %s"%str_error,LOG_DEBUG)
-        self.str_error=str_error
+    pass
 
-    def __str__(self):
-        return self.str_error
 
 class IPpoolFullException(Exception):
     def __init__(self,_str):

@@ -28,7 +28,10 @@ def parse(lines):
 def printOut(ips):
     for ip in ips:
 	info=ips[ip]
-	print "%s %s %s"%(info["mac"],info["in_bytes"],info["out_bytes"])
+	try:
+	    print "%s %s %s"%(info["mac"],info["in_bytes"],info["out_bytes"])
+	except KeyError:
+	    continue
 
 def main():
     lines=getOutput()

@@ -136,7 +136,10 @@ class User:
 	try:
 	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
 	except Exception,e:
-	    self.setKillReason(self.instances,str(e))
+	    if isinstance(e,IBSError):
+	        self.setKillReason(self.instances,e.getErrorText())
+	    else:
+		self.setKillReason(self.instances,str(e))
 #	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
 #	    self.instances-=1
 	    self.logout(self.instances,ras_msg)

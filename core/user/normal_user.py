@@ -12,7 +12,7 @@ class NormalUser:
 	self.user_obj=user_obj
 #############################################
     def isPersistentLanClient(self,instance):
-	return self.user_obj.getUserAttrs().has_key("persistent_lan") and self.user_obj.getUserAttrs()["persistent_lan"]
+	return self.user_obj.getUserAttrs().hasAttr("persistent_lan") and self.user_obj.getUserAttrs()["persistent_lan"]
 
 ##############################################
     def getInOutBytes(self,instance):
