@@ -229,7 +229,7 @@ def createLogDir(stdscr,menu,log):
 	log.write("".join(lines).strip())
     else:
 	log.write("SUCCESS: /var/log/IBSng created.")
-    lines=callAndGetLines("chown 770 /var/log/IBSng")
+    lines=callAndGetLines("chmod 770 /var/log/IBSng")
 
     if lines:
 	log.write("ERROR: Counldn't chown log dir.")
@@ -284,7 +284,7 @@ def copyApacheConfig(stdscr,menu,log):
     return
     
 def changeApacheDirectoryOwners(stdscr,menu,log):
-    lines=callAndGetLines("chown root.%s /var/log/IBSng"%apache_username)
+    lines=callAndGetLines("chown root:%s /var/log/IBSng"%apache_username)
     if lines:
 	log.write("ERROR: Couldn't change owner of /var/log/IBSng to %s"%apache_username)
 	log.write("".join(lines).strip())

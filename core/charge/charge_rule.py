@@ -142,7 +142,7 @@ class ChargeRule:
 	if self.ras_id==self.ALL and self.ALL in self.ports:
 	    return True
 	
-	(ras_id,port)=user_obj.getRasIDAndPort(instance)
+	(ras_id,port)=user_obj.getGlobalUniqueID(instance)
 	if self.ras_id==ras_id or self.ras_id==self.ALL:
 	    if port in self.ports or self.ALL in self.ports:
 		return True
