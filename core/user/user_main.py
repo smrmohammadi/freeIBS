@@ -26,6 +26,10 @@ def init():
     from core.user.credit_change_log import CreditChangeLogActions
     credit_change_log_actions=CreditChangeLogActions()
 
+    global connection_log_manager
+    from core.user.connection_log import ConnectionLogActions
+    connection_log_manager=ConnectionLogActions()
+
     global add_user_save_actions
     from core.user.add_user_save import AddUserSaveActions
     add_user_save_actions=AddUserSaveActions()
@@ -60,6 +64,9 @@ def getUserPool():
 
 def getCreditChangeLogActions():
     return credit_change_log_actions
+
+def getConnectionLogManager():
+    return connection_log_manager
 
 def getAddUserSaveActions():
     return add_user_save_actions

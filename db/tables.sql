@@ -239,7 +239,6 @@ create table ibs_states(
 
 -- *********************** LOGS
 
-create sequence credit_change_id;
 
 create table credit_change (
     credit_change_id bigint primary key,
@@ -258,14 +257,19 @@ create table credit_change_userid (
 );
 
 create index credit_change_userid_index on credit_change_userid (user_id);
+create sequence credit_change_id;
+
+
 
 
 create table connection_log (
-    connection_log_id bigint,
+    connection_log_id bigint primary key,
     user_id integer,
-    credit_used integer,
+    credit_used numeric(12,2),
     login_time timestamp,
-    logout_time	timestamp
+    logout_time	timestamp,
+    successful bool,
+    service smallint,--1 internet , 2- voip
     ras_id integer
 );
 
@@ -274,6 +278,9 @@ create table connection_log_details (
     name text, 
     value text
 );
+
+create index connection_log_details_userid_index on connection_log_details (user_id);
+create sequence connection_log_id;
 
 
 -- ********************* TO BE CHECKED!
@@ -301,43 +308,4 @@ create table internet_connection_log (
     reason text
 );
 
-
-create table saved_user_adds (
-    user_add_id integer primary key,
-    creator_id integer references admins,
-    owner_id integer references admins,
-    credit numeric(12,2),
-    name text,
-    tel text,
-    comment text,
-    email_address text,
-    abs_exp_date timestamp without time zone,
-    creation_date timestamp without time zone default CURRENT_TIMESTAMP,
-    count integer,
-    raw_normal_username text,
-    normal_charge_id integer,
-    raw_voip_username text,
-    voip_charge_id integer
-);
-
-create sequence saved_user_adds_id_seq;
-
-create table saved_user_adds_users (
-    user_add_id integer references saved_user_adds,
-    username text,
-    password text,
-    type integer --1=normal user , 2=voip user
-);
-
-create table country_lists(
-    country_id integer primary key,
-    prefix text,
-    name text,
-    cpm numeric(12,2)
-);
-
-create table voip_charge_rules (
-    country_list_id integer references country_lists,
-    formula text
-) inherits (charge_rules);
 

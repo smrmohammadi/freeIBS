@@ -1,10 +1,14 @@
 import threading
 from core.lib.general import *
+from core.lib.time_lib import *
 from core import defs
 from core.errors import errorText
 from core.db import db_main
 from core.charge.user_charge import UserCharge
 from core.admin import admin_main
+from core.ibs_exceptions import *
+from core.errors import errorText
+
 
 
 #-----------------------------------------------------------------------------------------------------------
@@ -117,12 +121,17 @@ class ChargeWithRules(Charge):
     
     def initUser(self,user_obj):
 	Charge.initUser(self,user_obj)
+
 	if user_obj.instances==1: #this is a new user_obj
+	    if user_obj.initial_credit<=0:
+		raise LoginException(errorText("USER_LOGIN","CREDIT_FINISHED"))
+
 	    user_obj.charge_info=UserCharge()
 
 	effective_rule=self.getEffectiveRule(user_obj,user_obj.instances)
 	user_obj.charge_info.login(effective_rule,user_obj.instances)
 	effective_rule.start(user_obj,user_obj.instances)
+	
 
     def logout(self,user_obj,instance):
 	Charge.logout(self,user_obj,instance)
@@ -160,8 +169,8 @@ class ChargeWithRules(Charge):
 	    
 	"""
 	
-	earliest_more_appliacable_rule = None
-	cur_rule=user_obj.effective_rules[instance-1]
+	earliest_more_applicable_rule = None
+	cur_rule=user_obj.charge_info.effective_rules[instance-1]
 	
 
 	now=secondsFromMorning()
@@ -177,6 +186,7 @@ class ChargeWithRules(Charge):
 
 
     def calcInstanceCreditUsage(self,user_obj,instance):
+#	toLog("Instace:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
 	return user_obj.charge_info.credit_prev_usage_instance[instance-1] + self.calcInstanceRuleCreditUsage(user_obj,instance)
 
     def calcCreditUsage(self,user_obj):

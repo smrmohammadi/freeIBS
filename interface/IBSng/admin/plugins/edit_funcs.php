@@ -71,7 +71,7 @@ function editUserAssignValues(&$smarty,$user_id,$edit_tpls,$edit_tpl_files)
 
     if(!$is_multi)
     {
-	$resp=intSetSingleUserInfo(&$smarty,$user_id);
+	$resp=intSetSingleUserInfo($smarty,$user_id);
 	if(!$resp->isSuccessful())
 	    intShowSingleUserInfoInput($smarty);
 	$user_info=array_values($resp->getResult());

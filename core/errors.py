@@ -55,11 +55,7 @@ USER_ERRORS={
     "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
     "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
     "ACCESS_TO_USER_DENIED":"You have not access to user id %s",
-    "CANT_FIND_INSTANCE":"User %s is not online on %s %s",
-    "REL_EXP_DATE_REACHED":"Relative expiration date has reached",
-    "WRONG_PASSWORD":"Wrong password",
-    "CREDIT_FINISHED":"Credit has finished",
-    "MAX_CONCURRENT":"Maximum number of concurrent logins reached"
+    "CANT_FIND_INSTANCE":"User %s is not online on %s %s"
 }
 
 USER_LOGIN_ERRORS={
@@ -67,7 +63,12 @@ USER_LOGIN_ERRORS={
     "NO_APPLICABLE_RULE":"No rule can be applied",
     "ABS_EXP_DATE_REACHED":"absoloute expiration date has reached",
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
-    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
+    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
+    "CREDIT_FINISHED":"Credit has finished",
+    "REL_EXP_DATE_REACHED":"Relative expiration date has reached",
+    "WRONG_PASSWORD":"Wrong password",
+    "MAX_CONCURRENT":"Maximum number of concurrent logins reached"
+
 }
 
 ADMIN_LOGIN_ERRORS={

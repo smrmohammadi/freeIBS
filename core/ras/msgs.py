@@ -1,5 +1,6 @@
 import time
 from core.user import user_main
+from core.ras import ras_main
 
 class Msg:
     def __init__(self):
@@ -26,7 +27,10 @@ class Msg:
 	return self.action
 
     def getTime(self):
-	return self.time()
+	return self.time
+
+    def getUniqueIDValue(self):
+	return self[self["unique_id"]]
 
     def send(self):
 	assert(self.action!=None)
@@ -44,15 +48,12 @@ class RasMsg(Msg):
     def getReplyPacket(self):
 	return self.reply_pkt
 
-
     def getRequestAttr(self,attr_name):
 	return self.request_pkt[attr_name]
 
     def getRasID(self):
 	return self.ras_obj.getRasID()
 
-    def getUniqueIDValue(self):
-	return self[self["unique_id"]]
     
     def setRequestToAttr(self,request_key,attr_name):
 	"""
@@ -106,6 +107,8 @@ class RasMsg(Msg):
 
 class UserMsg(Msg):
     def __init__(self):
+	"""
+	"""
 	Msg.__init__(self)
 
     def send(self):
@@ -113,3 +116,5 @@ class UserMsg(Msg):
 	    send this message to User Message Dispatcher
 	"""
 	Msg.send(self)
+	return ras_main.getUserMsgDispatcher().dispatch(self)
+	

@@ -28,6 +28,7 @@ class PeriodicEvent:
 				      completely start until it finishes
 	    
 	"""
+	self.name=name
 	self.interval=interval
 	self.args=args
 	self.run_at_startup=run_at_startup

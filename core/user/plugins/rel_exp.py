@@ -69,6 +69,7 @@ class RelExpDate(user_plugin.AttrCheckUserPlugin):
 								    "rel_exp_date_time",
 								    self.rel_exp_date_time
 								    )
+	    self.commit_first_login=False
 	return query
 	
     def _reload(self):

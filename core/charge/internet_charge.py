@@ -1,6 +1,9 @@
 from core.charge.charge import ChargeWithRules
 from core.user.can_stay_online_result import CanStayOnlineResult
+from core import defs
+from core.lib.time_lib import *
 import time
+CHARGE_DEBUG=True
 
 class InternetCharge(ChargeWithRules):
     def checkLimits(self,user_obj):
@@ -8,20 +11,23 @@ class InternetCharge(ChargeWithRules):
 
 	credit=user_obj.calcCurrentCredit()
 	if credit<=0: #now set reasons for all instances to credit finished
- 	    result.setKillForAllInstances(errorText("NORMAL_USER_LOGIN","CREDIT_FINISHED"),user_obj.instances)
+ 	    result.setKillForAllInstances(errorText("USER_LOGIN","CREDIT_FINISHED",False),user_obj.instances)
 	    return result
 
 	credit_usage_per_second=0
-	earliest_rule_end=0
+	earliest_rule_end=defs.MAXLONG
 	next_more_applicable=defs.MAXLONG
 	seconds_from_morning=secondsFromMorning()
-	kill_users={}
 	
 	for _index in range(user_obj.instances):
 	    cur_rule = user_obj.charge_info.effective_rules[_index]
 	    
 	    # find new rule
-	    effective_rule = self.getEffectiveRule(user_obj,_index+1)
+	    try:
+		effective_rule = self.getEffectiveRule(user_obj,_index+1)
+	    except LoginException,e:
+		result.addInstanceToKill(instance,str(e))
+		continue
 	    
 	    if cur_rule != effective_rule:
 
@@ -33,7 +39,7 @@ class InternetCharge(ChargeWithRules):
 	    if effective_rule.priority < 3: 
 		#check if a more applicable rule (ras or ports are specified) 
 	        #can be used before this rule ends
-		next_more_applicable_rule=self.nextMoreApplicableRule(user_obj,_index+1) 
+		next_more_applicable_rule=self.getNextMoreApplicableRule(user_obj,_index+1) 
 		if next_more_applicable_rule!=None:
 		    next_more_applicable=min(next_more_applicable_rule.interval.getStartSeconds()-seconds_from_morning,next_more_applicable)
 		    
@@ -48,7 +54,16 @@ class InternetCharge(ChargeWithRules):
 	#endfor
 	
 	remained_time = credit / credit_usage_per_second
-	result.newRemainingTime(min(remained_time,earliest_rule_end,next_more_applicable,seconds_from_morning))
+
+	if CHARGE_DEBUG:
+	    toLog("user_id: %s remained_time: %s earliest_rule_end: %s next_more_applicable: %s seconds_from_morning: %s"%
+	    (user_obj.getUserID(),remained_time,earliest_rule_end,next_more_applicable,seconds_from_morning),LOG_DEBUG)
+
+
+	if remained_time<=0: 
+ 	    result.setKillForAllInstances(errorText("USER_LOGIN","CREDIT_FINISHED"),user_obj.instances)
+	else:
+	    result.newRemainingTime(min(remained_time,earliest_rule_end,next_more_applicable,seconds_from_morning))
 	return result
 	
     def calcInstanceRuleCreditUsage(self,user_obj,instance):

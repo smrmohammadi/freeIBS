@@ -74,7 +74,7 @@ def init():
     unSetNoLoginFlag()
     ibs_exceptions.toLog("IBS successfully started.",ibs_exceptions.LOG_DEBUG)
     sys.excepthook=sys_except_hook
-
+    
 
 #######################
 def mainThreadShutdown(): 

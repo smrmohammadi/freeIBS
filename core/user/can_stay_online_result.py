@@ -1,14 +1,27 @@
 from core import defs
+import sys
 
 class CanStayOnlineResult:
     def __init__(self):
-	self.remaining_time=defs.MAXLONG
+	self.remaining_time=sys.maxint
 	self.kill_dic={}#{instance:"kill_reason"}
+
+    def getRemainingTime(self):
+	return self.remaining_time
+
+    def getEventTime(self):
+	remaining_time=self.getRemainingTime()
+	if remaining_time!=0 and remaining_time<3:
+	    return 3
+	return remaining_time
+
+    def getKillDic(self):
+	return self.kill_dic
 
     def __add__(self,can_stay_online_result):
 	"""
 	    merge this object with another can_stay_online object.
-	    this is done, by choosing minimum remaining_time and merge kill_dics
+	    this is done, by choosing minimum remaining_time and merge kill_dic
 	"""
 	self.setNew(can_stay_online_result.getRemainingTime(),can_stay_online_result.getKillDic())
 	return self
@@ -28,15 +41,8 @@ class CanStayOnlineResult:
 	self.newRemainingTime(0)
 	def createReasonList(_index): 
 	    self.addInstanceToKill(_index+1,kill_reason)
-	map(creadteReasonList,range(user_obj.instances))
-	
+	map(createReasonList,range(instances))
 
-    def getRemainingTime(self):
-	return remaining_time
-
-    def getKillDics(self):
-	return kill_dic
-    
     def newRemainingTime(self,new_remaining_time):
 	"""
 	    new_remaining_time(integer): new calculated remaining time in seconds
@@ -51,10 +57,10 @@ class CanStayOnlineResult:
 	    kill_reason(text): reason of killing user
 	    add a new instance to kill.
 	"""
-	if self.kill_dics.has_key(instance):
-	    self.kill_dics[instance]="%s, %s"%(self.kill_dics[instance],kill_reason)
+	if self.kill_dic.has_key(instance):
+	    self.kill_dic[instance]="%s, %s"%(self.kill_dic[instance],kill_reason)
 	else:
-	    self.kill_dics[instance]=kill_reason
+	    self.kill_dic[instance]=kill_reason
     
     
     def __mergeKillDic(self,kill_dic):

@@ -51,7 +51,7 @@ class UserPlugin:
 
     ########################
     def createCanStayOnlineResult(self):
-	return can_stay_online.CanStayOnlineResult()
+	return can_stay_online_result.CanStayOnlineResult()
 
 
 

@@ -21,7 +21,7 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	self.charge_obj.logout(self.user_obj,instance)
 
     def canStayOnline(self):
-	return self.charge_obj.check
+	return self.charge_obj.checkLimits(self.user_obj)
 
     def calcCreditUsage(self):
 	return self.charge_obj.calcCreditUsage(self.user_obj)

@@ -21,4 +21,4 @@ class PasswordUserPlugin(user_plugin.UserPlugin):
 	    self.__raiseIncorrectPassword()
 
     def __raiseIncorrectPassword(self):
-	raise LoginException(errorText("USER","WRONG_PASSWORD"))
+	raise LoginException(errorText("USER_LOGIN","WRONG_PASSWORD"))

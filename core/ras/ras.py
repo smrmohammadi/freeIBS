@@ -146,9 +146,8 @@ class Ras:
 	    except IPpoolFullException:
 		pass
 	else:
-	    return
+	    toLog("All IP Pools are full for ras %s"%self.getRasIP(),LOG_ERROR)
 
-	toLog("All IP Pools are full for ras %s"%self.getRasIP(),LOG_ERROR)
 
 #################
 #
@@ -208,7 +207,6 @@ class GeneralUpdateRas(Ras):
 	    def run(my_self):
 		self.updateInOutBytes()
 	
-
 	periodic_events.getManager().register(UpdateInOutEvent())
     
     def updateInOutBytes(self):

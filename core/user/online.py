@@ -1,4 +1,5 @@
 from core.user import user_main,normal_user,loading_user,user
+from core.event import event
 from core.ibs_exceptions import *
 import copy
 
@@ -70,6 +71,7 @@ class OnlineUsers:
 	    
     def internetAuthenticateSuccessfull(self,user_obj):
 	self.__addToOnlines(user_obj)
+	self.recalcNextUserEvent(user_obj.getUserID(),user_obj.instances>1)
 ############################################
     def internetStop(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"])
@@ -87,8 +89,45 @@ class OnlineUsers:
 	    user_obj.logout(instance,ras_msg)
 	    if user_obj.instances==0:
 		self.__removeFromOnlines(user_obj,global_unique_id)
+		self.__removePrevUserEvent(user_obj.getUserID())
+	    else:
+		self.recalcNextUserEvent(user_obj.getUserID(),True)
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
     
 ############################################
-    	
+    def recalcNextUserEvent(self,user_id,remove_prev_event=False):
+	"""
+	    recalculates user next event.
+	    user_id(int): id of user we recalculate event
+	    remove_prev_event(bool): Remove user previous event. This flag should be set by reload method
+	"""
+	self.loading_user.loadingStart(user_id)
+	try:
+	    user_obj=self.getUserObj(user_id)
+	    if user_obj==None:
+		toLog("recalcNextUserEvent Called for user id %s while he's not online"%user_id,LOG_DEBUG)
+		return
+	    if remove_prev_event:
+		self.__removePrevUserEvent(user_id)
+	    result=user_obj.canStayOnline()
+	    self.__killUsersInCanStayOnlineResult(user_obj,result)
+	    self.__setNextUserEvent(result,user_id)
+	finally:
+	    self.loading_user.loadingEnd(user_id)
+
+    def __removePrevUserEvent(self,user_id):
+	event.removeEvent(self.recalcNextUserEvent,[user_id,False])
+
+    def __setNextUserEvent(self,result,user_id):
+	next_evt=result.getEventTime()
+	toLog("Next Evt:%s"%next_evt,LOG_DEBUG)
+	if next_evt!=0:
+	    event.addEvent(next_evt,self.recalcNextUserEvent,[user_id,False])
+
+    def __killUsersInCanStayOnlineResult(self,user_obj,result):
+	kill_dic=result.getKillDic()
+	for instance in kill_dic:
+	    user_obj.setKillReason(instance,kill_dic[instance])
+	    user_obj.getTypeObj().killInstance(instance)
+	

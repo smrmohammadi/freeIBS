@@ -21,7 +21,7 @@ class PPPDRas(GeneralUpdateRas):
 	    with user ppp interface numbers as argument
 	"""
 	try:
-	    return os.system("%s %s"%(self.getAttribute("kill_port_command"),user_msg["port"]))
+	    return os.system("%s %s"%(self.getAttribute("pppd_kill_port_command"),user_msg["port"]))
 	except:
 	    logException(LOG_ERROR)
 
@@ -37,7 +37,7 @@ class PPPDRas(GeneralUpdateRas):
 
 	"""
 	lines=self.__getOnlinesFromCLI()
-	return self.__parseCLIOnline(self,lines)
+	return self.__parseCLIOnlines(lines)
     
     def __getOnlinesFromCLI(self):
 	fd=os.popen(self.getAttribute("pppd_list_users_command"))
@@ -53,13 +53,13 @@ class PPPDRas(GeneralUpdateRas):
 		if len(sp)!=4:
 		    toLog("PPPd getOnlines: Can't line %s"%line,LOG_ERROR)
 		    continue
-		online_list[sp[0]]={"username":None,"in_bytes":sp[2],"out_bytes":sp[3]}
+		online_list[int(sp[0])]={"username":None,"in_bytes":long(sp[2]),"out_bytes":long(sp[3])}
 	except:
 	    logException(LOG_ERROR)
 	return online_list
 ####################################
     def updateOnlines(self):
-	self.online=self.getOnlines()
+	self.onlines=self.getOnlines()
 	
 ####################################    
     def updateInOutBytes(self):
@@ -76,7 +76,7 @@ class PPPDRas(GeneralUpdateRas):
 	    else:
 		return (0,0)
 	except:
-	    logException(LOG_ERRROR)
+	    logException(LOG_ERROR)
 	    return (-1,-1)
 ####################################
 

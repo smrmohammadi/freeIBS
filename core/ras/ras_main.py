@@ -22,6 +22,10 @@ def init():
 
     from core.ras.ras_handler import RasHandler
     handlers_manager.getManager().registerHandler(RasHandler())
+    
+    from core.ras.user_msg_dispatcher import UserMsgDispatcher
+    global user_msg_dispatcher
+    user_msg_dispatcher=UserMsgDispatcher()
 
     
 def getFactory():
@@ -32,4 +36,7 @@ def getLoader():
 
 def getActionManager():
     return ras_actions
+
+def getUserMsgDispatcher():
+    return user_msg_dispatcher
     

@@ -1,8 +1,9 @@
 from core.ibs_exceptions import *
 from core.lib.general import *
 from core.errors import errorText
-from core.db import db_main
+from core.db import db_main,ibs_db
 from core.user import normal_user,user_main
+from core.ras.msgs import UserMsg
 import operator
 
 class User:
@@ -71,12 +72,14 @@ class User:
     def getInstanceFromRasMsg(self,ras_msg):
 	ras_id=ras_msg.getRasID()
 	unique_id_val=ras_msg.getUniqueIDValue()
-	for instance in range(self.instances):
+	return self.getInstanceFromUniqueID(ras_id,unique_id_val)
+	
+    def getInstanceFromUniqueID(self,ras_id,unique_id_val):
+	for instance in range(1,self.instances+1):
 	    instance_info=self.getInstanceInfo(instance)
 	    if instance_info["ras_id"]==ras_id and instance_info["unique_id_val"]==unique_id_val:
 		return instance
-	return None
-	
+    	return None
 ##################################################
     def calcCurrentCredit(self):
 	return self.initial_credit - self.charge.calcCreditUsage()
@@ -84,7 +87,30 @@ class User:
     def calcInstanceCreditUsage(self,instance):
 	return self.charge.calcInstanceCreditUsage(instance)
 ##################################################
+    def createUserMsg(self,instance,action):
+	"""
+	    create a UserMsg ready to send to a ras.
+	    Information necessary for ras will be set from user "instance" information
+	"""
+	instance_info=self.getInstanceInfo(instance)
+	msg=UserMsg()
+	msg["ras_id"]=instance_info["ras_id"]
+	msg["unique_id"]=instance_info["unique_id"]
+	msg[instance_info["unique_id"]]=instance_info["unique_id_val"]
+	msg["user_obj"]=self
+	msg["instance"]=instance
+	msg.setAction(action)
+	return msg
 
+##################################################
+    def setKillReason(self,instance,reason):
+	instance_info=self.getInstanceInfo(instance)
+	if instance_info["attrs"].has_key("kill_reason"):
+	    instance_info["attrs"]["kill_reason"]+=", %s"%reason
+	else:
+	    instance_info["attrs"]["kill_reason"]=reason
+
+##################################################
     def login(self,ras_msg):
 	self.instances+=1
 	self.__instance_info.append({})
@@ -92,9 +118,16 @@ class User:
 	instance_info["auth_ras_msg"]=ras_msg
 	instance_info["unique_id"]=ras_msg["unique_id"]
 	instance_info["unique_id_val"]=ras_msg.getUniqueIDValue()
-	instance_info["ras_attrs"]=ras_msg.getAttrs()
+	instance_info["attrs"]=ras_msg.getAttrs()
 	instance_info["ras_id"]=ras_msg.getRasID()
-	user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
+	try:
+	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
+	except Exception,e:
+	    instance_info["successful_auth"]=False
+	    self.setKillReason(self.instances,str(e))
+	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
+	    raise
+	instance_info["successful_auth"]=True
 	
     def logout(self,instance,ras_msg):
 	"""
@@ -102,10 +135,16 @@ class User:
 	    we call plugins now, so they'll see the correct user object
 	    that not changed for logout
 	"""
+	self.getInstanceInfo(instance)["logout_ras_msg"]=ras_msg
+	used_credit=self.charge.calcInstanceCreditUsage(instance)
+	query=self.getTypeObj().logout(instance,ras_msg,used_credit)
+	if self.instances==1:
+	    query+=self.commit(used_credit)
+	    self.getLoadedUser().setOnlineFlag(False)
+	query.runQuery()
 	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,[instance,ras_msg])
 	self.instances-=1
-	_index=self.instances
-	del(self.__instance_info[_index])
+	del(self.__instance_info[self.instances])
 
     def update(self,ras_msg):
 	"""
@@ -117,13 +156,17 @@ class User:
     def canStayOnline(self):
 	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))
 
-    def commit(self):
+    def commit(self,used_credit):
 	"""
 	    saves all changed user info from memory into DB
 	"""
 	query=reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_COMMIT",self))
+	query+=self.__commitCreditQuery(used_credit)
 	return query
 	
+    def __commitCreditQuery(self,used_credit):
+	return ibs_db.createUpdateQuery("users",{"credit":"credit - %s"%used_credit},"user_id=%s"%self.getUserID())
+    
     def _reload(self):
 	self.__setInitialCredit()
 	user_main.getUserPluginManager().callHooks("USER_RELOAD",self)
