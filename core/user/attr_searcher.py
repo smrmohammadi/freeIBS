@@ -20,7 +20,7 @@ class AttrSearcher:
 	
 
     def exactSearchOnUserAndGroupAttrs(self,cond_key,attr_db_name,value_parser_method=None):
-	for table in self.getUserAndGroupTable():
+	for table in self.getUserAndGroupAttrsTable():
 	    table.exactSearch(self.getSearchHelper(),
 			      cond_key,
 			      attr_db_name,
@@ -28,7 +28,7 @@ class AttrSearcher:
 			     )
 	
     def ltgtSearchOnUserAndGroupAttrs(self,cond_key,cond_op_key,attr_db_name,value_parser_method=None):
-	for table in self.getUserAndGroupTable():
+	for table in self.getUserAndGroupAttrsTable():
 	    table.ltgtSearch(self.getSearchHelper(),
 			      cond_key,
 			      cond_op_key,

@@ -2,6 +2,7 @@ import copy
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.user.attr_updater import AttrUpdaterContainer
+from core.user.search_user import SearchUserHelper
 
 class AttributeManager:
     def __init__(self):
@@ -91,7 +92,7 @@ class AttributeManager:
 	    create attr searcher instances and execute their "run" method
 	"""
 	search_helper=SearchUserHelper(conditions)
-	attr_searchers=__getAllAttrSearchers(search_helper)
+	attr_searchers=self.__getAllAttrSearchers(search_helper)
 	map(lambda x:apply(getattr(x,"run")),attr_searchers)
 	return search_helper
 
@@ -101,6 +102,7 @@ class AttributeManager:
 	    attr_searcher_class=handler_obj.getAttrSearcher()
 	    if attr_searcher_class!=None:
 		attr_searchers.append(attr_searcher_class(search_helper))
-	return map(createAttrSearcher,self.all_handlers)
+	map(createAttrSearcher,self.all_handlers)
+	return attr_searchers
     
     

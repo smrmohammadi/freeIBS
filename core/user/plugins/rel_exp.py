@@ -1,6 +1,7 @@
 from core.user import user_plugin,user_main,attribute
 from core.user.attr_updater import AttrUpdater
 from core.user.attr_holder import AttrHolder
+from core.user.attr_searcher import AttrSearcher
 from core.ibs_exceptions import *
 from core.lib.date import *
 from core.errors import errorText

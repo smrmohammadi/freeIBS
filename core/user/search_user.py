@@ -12,7 +12,6 @@ intersect
 """
 from core.lib.general import *
 
-
 class Condition:
     def __init__(self,cond_dic):
 	self.cond_dic=self.__fix(cond_dic)
@@ -45,21 +44,23 @@ class SearchTable:
 	if type(value)==types.StringType:
 	    value=(value,)
 	if value_parser_method!=None:
-	    value=map(lambda val:apply(value_parser_method,val),value)
+	    value=map(lambda val:apply(value_parser_method,[val]),value)
+	
+	return value
 
     def createColGroup(self,col_name,value,op):
-	return "%s %s %s"%(col_name,dbText(value),op)
+	return "%s.%s %s %s"%(self.getTableName(),col_name,dbText(value),op)
 
     def searchOnConds(self,search_helper,cond_key,attr_db_name,value_parser_method,op):
 	values=self.getParsedValue(search_helper,cond_key,value_parser_method)
 	self.search(attr_db_name,values,op)
 
-    def search(self,db_name,value,op):
+    def search(self,db_name,values,op):
 	group=SearchUserGroup("or")
 	groups=map(lambda value:group.addGroup(self.createColGroup(db_col_name,dbText(value),op)),values)
 	self.addGroups(groups)
 
-    def ltgtSearch(self,cond_key,cond_op_key.attr_db_name,value_parser_method=None):
+    def ltgtSearch(self,cond_key,cond_op_key,attr_db_name,value_parser_method=None):
 	"""
 	"""
 	if search_helper.hasCondFor(cond_key,cond_op_key):
@@ -106,23 +107,26 @@ class SearchTable:
 	
     def createQuery(self):
 	if not self.getRootGroup().isEmpty():
-	    query="select user_id from %s where %s"%(self.getTableName(),self.getRootGroup().getConditionalClause())
+	    table_name=self.getTableName()
+	    query="select %s.user_id from %s where %s"% \
+		(table_name,table_name,self.getRootGroup().getConditionalClause())
+	    return query
 
 class SearchUsersTable(SearchTable):
     def __init__(self):
-	SerachTable.__init__(self,"users")
+	SearchTable.__init__(self,"users")
 
 class SearchNormalUsersTable(SearchTable):
     def __init__(self):
-	SerachTable.__init__(self,"normal_users")
+	SearchTable.__init__(self,"normal_users")
 
 class SearchVoIPUsersTable(SearchTable):
     def __init__(self):
-	SerachTable.__init__(self,"voip_users")
+	SearchTable.__init__(self,"voip_users")
 
 class SearchAttrsTable(SearchTable):
     def __init__(self,table_name):
-	SerachTable.__init__(self,table_name)
+	SearchTable.__init__(self,table_name)
 	self.attrs=[]
     
     def exactSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
@@ -140,17 +144,15 @@ class SearchAttrsTable(SearchTable):
 	"""
 	"""
 	self.addAttr(attr_db_name)
-
-	group=SearchUserGroup("or")
-	groups=map(lambda value:group.addGroup(self.createAttrGroup(attr_db_name,value,op)),values)
-	self.addGroups(groups)
+	group=self.createAttrGroup(attr_db_name,values,op)
+	self.addGroup(group)
 
     def createAttrGroup(self,attr_name,attr_values,op):
 	"""
 	    attr_values(list or iterable object): list of values
 	"""
 	group=SearchUserGroup("and")
-	group.addGroup("%s.attr_name = %s"%(self.getTableName(),dbtext(attr_name))
+	group.addGroup("%s.attr_name = %s"%(self.getTableName(),dbText(attr_name)))
 	sub_group=SearchUserGroup("or")
 	map(lambda value:sub_group.addGroup("%s.attr_value %s %s"%(self.getTableName(),op,dbText(value))),attr_values)
 	group.addGroup(sub_group)
@@ -164,25 +166,26 @@ class SearchAttrsTable(SearchTable):
 
 class SearchUserAttrsTable(SearchAttrsTable):
     def __init__(self):
-	SerachAttrsTable.__init__(self,"user_attrs")
+	SearchAttrsTable.__init__(self,"user_attrs")
 
     def createQuery(self):
 	if not self.getRootGroup().isEmpty():
-	    return "select user_id,count(user_id) from user_attrs where %s group by user_id"%(self.getRootGroup().getConditionalClause())
+	    return "select user_attrs.user_id,count(user_attrs.user_id) from user_attrs where %s group by user_id"%\
+		    (self.getRootGroup().getConditionalClause())
 
 class SearchGroupAttrsTable(SearchAttrsTable):
     def __init__(self):
-	SerachAttrsTable.__init__(self,"group_attrs")
+	SearchAttrsTable.__init__(self,"group_attrs")
 
     def createQuery(self):
 	if not self.getRootGroup().isEmpty():
 	    attr_not_in_user=self.__createNotInUserAttrsClause()
-	    return "select user_attrs.user_id,count(user_attrs.user_id) from users,user_attrs,groups,group_attrs 
-		    users.group_id = groups.group_id and users.user_id = user_attrs.user_id and 
-		    groups.group_id = group_attrs.group_id and
-	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and %s)
-		    and %s group by user_attrs.user_id
-		   "%(attr_not_in_user,self.getRootGroup().getConditionalClause())
+	    return "select users.user_id,count(users.user_id) from users,groups,group_attrs \
+		    where users.group_id = groups.group_id and \
+		    groups.group_id = group_attrs.group_id and \
+	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and %s) \
+		    and %s group by users.user_id "% \
+		    (attr_not_in_user,self.getRootGroup().getConditionalClause())
 
     def __createNotInUserAttrsClause(self):
 	group=SearchUserGroup("or")
@@ -213,6 +216,37 @@ class SearchUserHelper:
 
     def getTable(self,table):
 	return self.tables[table]
+
+    def createQuery(self):
+	table_query=self.__getTableQueries()
+	attrs_query=self.__createAttrsQuery(table_query["user_attrs"],table_query["group_attrs"])
+	queries=self.__filterNoneQueries(attrs_query,table_query["users"],table_query["normal_users"],table_query["voip_users"])
+	return self.__intersectQueries(queries)
+
+
+    def __filterNoneQueries(self,*args):
+	return filter(lambda x:x!=None,args)
+
+    def __intersectQueries(self,queries):
+	return " intersect ".join(queries)
+
+    def __getTableQueries(self):
+	table_query={}
+	for table_name in self.tables:
+	    table_query[table_name]=self.tables[table_name].createQuery()
+	return table_query
+    
+    def __createAttrsQuery(self,user_attrs,group_attrs):
+	if user_attrs!= None and group_attrs!=None:
+	    sub_query="select count(user_id) as count,user_id from (%s union %s) as all_attrs group by user_id"%(user_attrs,group_attrs)
+	elif user_attrs!=None:
+	    sub_query="select count(user_id) as count,user_id from (%s) as all_attrs group by user_id"%(user_attrs)
+	elif group_attrs!=None:
+	    sub_query="select count(user_id) as count,user_id from (%s) as all_attrs group by user_id"%(group_attrs)
+	else:
+	    return None
+
+	return "select user_id from (%s) as filtered_attrs where count=%s"%(sub_query,len(self.getTable("user_attrs").getAttrs()))
     
 class SearchUserGroup:
     def __init__(self,op=""):

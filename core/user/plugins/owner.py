@@ -4,6 +4,7 @@
 """
 from core.user import user_plugin,user_main,attribute
 from core.user.attr_updater import AttrUpdater
+from core.user.attr_searcher import AttrSearcher
 from core.admin import admin_main
 from core.db import ibs_db
 
