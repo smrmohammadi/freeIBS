@@ -36,22 +36,8 @@ function smarty_block_userInfoTable($params,$content,&$smarty,&$repeat)
 
 END;
 	$footer=<<<END
-	<tr>
-		<td colspan="7">
-			<!-- Foot Table -->
-			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
-				<tr>
-					<td class="Form_Foot_Begin_Line_red"></td>
-					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons">
-					<img border="0" src="/IBSng/images/edit.gif" width="45" height="20"></td>
-				</tr>
-				<tr>
-					<td class="Form_Foot_Below_Line_red"></td>
-				</tr>
-			</table>
-			<!-- End Foot Table -->
-		</td>
+	<tr class="List_Foot_Line_red">
+		<td colspan=25></td>
 	</tr>
 </table>
 END;

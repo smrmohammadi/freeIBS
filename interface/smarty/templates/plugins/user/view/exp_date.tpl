@@ -1,5 +1,4 @@
-{userViewTemplate edit_tpl_name="exp_date.tpl"}
-  {userInfoTable title="User Expiration Date"} 
+{userInfoTable title="User Expiration Date"} 
     {userInfoTD type="user_left"}
 	Relative Expiration Date:
     {/userInfoTD}
@@ -15,6 +14,4 @@
 	    {$group_attrs.rel_exp_date} {$group_attrs.rel_exp_date_unit}
 	{/ifHasAttr}
     {/userInfoTD}
-
-  {/userInfoTable}
-{/userViewTemplate}
+{/userInfoTable}

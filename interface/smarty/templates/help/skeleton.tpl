@@ -1,17 +1,17 @@
 {include file="help_header.tpl"}
 
-{viewTable title="Help " table_width=450 double="TRUE"}
+{viewTable title="Help " table_width=450 double="TRUE" id="help_table"}
     {addEditTD type="left1" double="TRUE"}
 	Subject
     {/addEditTD}
     {addEditTD type="right1" double="TRUE"}
-	{$subject|capitalize}
+	<nobr>{$subject|capitalize}
     {/addEditTD}
     {addEditTD type="left2" double="TRUE"}
     	Category
     {/addEditTD}
     {addEditTD type="right2" double="TRUE"}
-	{$category|capitalize}
+	<nobr>{$category|capitalize}
     {/addEditTD}
 
 <tr>
@@ -54,7 +54,7 @@
 	    element=null;
     }
 //    alert(height);
-//    window.resizeTo(window.outerWidth,height-100);
+    window.resizeTo(window.outerWidth,height-100);
 </script>
 {/literal}
 

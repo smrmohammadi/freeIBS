@@ -126,7 +126,7 @@ class Logger:
     	    except IOError,(errNo,errStr):
         	if self.re_open!=1:
             	    self.re_open=1
-            	    self.write(str,level)
+            	    self.write(str)
         
 	finally:
 	    self.tlock.release()

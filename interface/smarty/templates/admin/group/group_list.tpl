@@ -2,7 +2,7 @@
    $group_infos: array of associative arrays containing group infos
 *}
 
-{include file="admin_header.tpl" title="Group List"}
+{include file="admin_header.tpl" title="Group List" select="Group List"}
 {include file="err_head.tpl"}
 
 {listTable title="Group  List" cols_num=3}

@@ -1,5 +1,4 @@
 {* 
-    
     Add New Group
     group_name: new group
     comment: 

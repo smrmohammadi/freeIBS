@@ -16,7 +16,7 @@
 <form method=POST action="/IBSng/admin/user/user_info.php">
     {addEditTable title="Normal Username"}
 	{addEditTD type="left"}
-	    User ID
+	    Normal Username
 	{/addEditTD}
 
 	{addEditTD type="right"}

@@ -9,6 +9,7 @@ function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
     parameter double(boolean,optional): Set Double table, double tables has two usable areas in 
 			each row. Also Double TR s should be used for content
     parameter color(string,optional): Set color of table header, default is red
+    parameter id(string,optional): set id of table
 
 */
     if(!is_null($content))
@@ -36,9 +37,10 @@ function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
 
 	$table_width=isset($params["table_width"])?$params["table_width"]:$table_width_default;
 
+	$id=isset($params["id"])?"id={$params["id"]}":"";
 	$header=<<<END
 
-<table class="Form_Main" width="{$table_width}" border="0" cellspacing="0" bordercolor="#000000" cellpadding="0">
+<table class="Form_Main" width="{$table_width}" border="0" cellspacing="0" bordercolor="#000000" cellpadding="0" {$id}>
 	<tr>
 		<td colspan="{$colspans}">
 		<!-- Form Title Table -->

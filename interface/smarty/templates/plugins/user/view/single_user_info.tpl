@@ -1,5 +1,4 @@
-{userViewTemplate edit_tpl_name="user_info.tpl"}
-  {addEditTable title="Basic User Informations" action_icon="edit"} 
+{viewTable title="Basic User Informations"} 
     {addEditTD type="left"}
 	User ID:
     {/addEditTD}
@@ -40,5 +39,4 @@
 	{$user_info.basic_info.creation_date}
     {/addEditTD}
 
-  {/addEditTable}
-{/userViewTemplate}
+{/viewTable}
