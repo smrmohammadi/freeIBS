@@ -120,13 +120,13 @@ function createLeafHtml(&$smarty,$leaf_info,$line)
 {
     $total_limit=price($leaf_info["total_limit_kbits"]);
     $default_limit=price($leaf_info["default_limit_kbits"]);
-    $n_table="<table cellspacing=0 cellpadding=0 align=center>";
+    $n_table="<table cellspacing=0 cellpadding=0 align=center border=0 width=100%>";
     $n_table.="<tr><td align=center>".getLine($line)."</td></tr>";
     $n_table.="<tr><td align=center>".verticalLineImage()."</td>";
     $n_table.="<tr><td>";
     $color="blue";
     $n_table.=<<<END
-		<table border="0" cellspacing="0" cellpadding="0" >
+		<table border="0" cellspacing="0" cellpadding="0" align=center>
 			<tr>
 				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/form/begin_form_title_{$color}.gif"></td>
 				<td class="Form_Title_{$color}">
