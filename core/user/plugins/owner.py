@@ -35,9 +35,13 @@ class OwnerNameAttrUpdater(AttrUpdater):
         self.admin_name=owner_name
 	self.registerQuery("user","change",self.updateQuery,[])
 
+class OwnerNameAttrSearcher(AttrSearcher):
+    def run(self):
+	self.exactSearchForBasicInfo("owner_name","owner_id",lambda x:admin_main.getLoader().getAdminByName(x).getAdminID())
 
 class OwnerNameAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
 	self.registerAttrUpdaterClass(OwnerNameAttrUpdater,["owner_name"])
+	self.registerAttrSearcherClass(OwnerNameAttrSearcher)
 

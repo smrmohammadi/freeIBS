@@ -80,10 +80,7 @@
 	    </table>
 	
     {/foreach}
-	<!-- view table Foot -->
-	<tr class="List_Foot_Line_orange">
-		<td colspan=100></td>
-	</tr>
+
 	<tr>
 		<td height=2 colspan=100></td>
 	</tr>

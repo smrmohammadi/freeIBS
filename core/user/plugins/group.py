@@ -29,9 +29,12 @@ class GroupNameAttrUpdater(AttrUpdater):
         self.group_name=group_name
 	self.registerQuery("user","change",self.updateQuery,[])
 
+class GroupNameAttrSearcher(AttrSearcher):
+    def run(self):
+	self.exactSearchForBasicInfo("group_name","group_id",lambda x:group_main.getLoader().getGroupByName(x).getGroupID())
 
 class GroupNameAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
 	self.registerAttrUpdaterClass(GroupNameAttrUpdater,["group_name"])
-
+	self.registerAttrSearcherClass(GroupNameAttrSearcher)

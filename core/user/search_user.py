@@ -22,9 +22,6 @@ class SearchUserHelper:
     def getConditionValue(self,key):
 	return self.cond_dic[key]
 
-    def getDBConditionValue(self,key):
-	return dbText(self.getConditionValue(key))
-	
 class SearchUserGroup:
     def __init__(self):
 	self.__groups=[]

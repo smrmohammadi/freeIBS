@@ -43,6 +43,11 @@ class MultiLoginAttrUpdater(AttrUpdater):
     def deleteInit(self):
 	self.useGenerateQuery(["multi_login"])	
 
+class MultiLoginAttrSearcher(AttrSearcher):
+    def run(self):
+	self.exactSearchForAttr("multi_login","normal_charge",lambda x:charge_main.getLoader().getChargeByName(x).getChargeID())
+
+
 class MultiLoginAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
