@@ -1,7 +1,7 @@
 <?php
 require_once("init.php");
 require_once("attr_parser.php");
-
+require_once(INTERFACE_ROOT."IBSng/admin/user/user_info_funcs.php");
 
 function redirectToUserInfo($user_id)
 {

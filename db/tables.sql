@@ -295,8 +295,8 @@ create table internet_connection_log (
     end_time timestamp without time zone,
     caller_id text,
     credit_used numeric(12,2),
-    in_bytes	integer,
-    out_bytes   integer,
+    in_bytes	bigint,
+    out_bytes   bigint,
     reason text
 );
 

@@ -11,5 +11,15 @@
 	</tr>
     {/foreach}
 {/if}
+{if isInRequest("err_msg")}
+	<tr>
+	    <td align=left>
+		<img border="0" src="/IBSng/images/msg/before_error_message.gif">
+	    </td>
+	    <td align=left class="error_messages">	    
+		{$smarty.request.err_msg|escape:"html"}
+	    </td>
+	</tr>
+{/if}
 </table>
 <br>

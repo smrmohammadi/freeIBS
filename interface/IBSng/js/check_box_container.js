@@ -8,6 +8,7 @@ function CheckBoxContainer(name)
     this.add=add
     this.addByName=addByName
     this.allChecked=allChecked
+    this.allUnChecked=allUnChecked
     this.checkAll=checkAll
     this.unCheckAll=unCheckAll
     this.setCheck=setCheck
@@ -42,6 +43,18 @@ function CheckBoxContainer(name)
 	for (index in this.check_box_objs)
 	    if (this.check_box_objs[index].checked==false)
 		return false;	    
+	return true;
+    }
+
+    function allUnChecked()
+    {/*
+	return True if all check boxes in container is unchecked now
+    */	
+	if (this.check_box_objs.length==0)
+	    return true;
+	for (index in this.check_box_objs)
+	    if (this.check_box_objs[index].checked==true)
+		return false;
 	return true;
     }
     

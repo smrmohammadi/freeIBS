@@ -91,7 +91,6 @@ class IBSSmarty extends Smarty
 	    $this->assign("err_msgs",$errs);
     }
 
-
 }
 
 function stripPostFilter($tpl_source,&$smarty)

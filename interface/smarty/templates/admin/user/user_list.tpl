@@ -1,4 +1,3 @@
-<script language="javascript" src="/IBSng/js/check_box_container.js"></script>
 <script language="javascript">
     var user_ids=new CheckBoxContainer();
 </script>
@@ -6,12 +5,14 @@
 Total Results: <b> {$result_count} </b>
 {listTable title="List of Users" cols_num=20}
     {listTR type="header" }
+    {if $can_change}
 	{listTD}
 	    <input type=checkbox name="check_all_users"> 
 	    <script language="javascript">
 		user_ids.setCheckAll("search_user","check_all_users");
 	    </script>
 	{/listTD}
+    {/if}	
 
 	{listTD}
 	    User ID
@@ -66,14 +67,17 @@ Total Results: <b> {$result_count} </b>
 
     {/listTR}
 
-    {foreach from=$user_infos item=user_info key=user_id}
+    {foreach from=$user_ids item=user_id}
+	{assign var="user_info" value=`$user_infos.$user_id`}
 	{listTR type="body" cycle_color=TRUE hover_color="red" hover_location="/IBSng/admin/user/user_info.php?user_id=`$user_id`"}
-	    {listTD extra="onClick='event.cancelBubble=true;'"}
-		<input type=checkbox name="edit_user_id_{$user_id}"> 
-		<script language="javascript">
-		    user_ids.addByName("search_user","edit_user_id_{$user_id}");
-		</script>
-	    {/listTD}	
+	    {if $can_change}
+		{listTD extra="onClick='event.cancelBubble=true;'"}
+	    	    <input type=checkbox name="edit_user_id_{$user_id}" value="{$user_id}"> 
+		    <script language="javascript">
+			user_ids.addByName("search_user","edit_user_id_{$user_id}");
+		    </script>
+	        {/listTD}	
+	    {/if}
 	    {listTD}
 		{$user_id}
 	    {/listTD}	

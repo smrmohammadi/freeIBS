@@ -20,14 +20,19 @@ class DBPool:
 	self.__createHandles()
 
     def __createHandles(self):
+	retries=3
         for i in range(defs.DB_POOL_DEFAULT_CONNECTIONS):
             while not main.isShuttingDown(): #this make ibs don't quit on startup when database doesn't still started. (it takes some time to start esp. after a server crash)
 		try:                          #ibs will wait until it can create the connection
 		    db_obj=defs.getDBHandle() #this raises some risks, for ex. when DB_POOL_DEFAULT_CONNECTIONS is too high
 		except:			      #and database can't create this amount of connection, ibs won't start/quit
 		    logException(LOG_ERROR,"Can't connect to database")
-		    time.sleep(5)
-		    continue
+		    retries-=1
+		    if retries==0:
+			raise
+		    else:
+	    	        time.sleep(5)
+			continue
 		self.__addToPool(db_obj)
 		break
 
