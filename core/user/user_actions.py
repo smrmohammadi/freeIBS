@@ -7,7 +7,6 @@ from core.errors import errorText
 from core.admin import admin_main
 from core.lib import password_lib,iplib
 from core.group import group_main
-from core.lib.multi_strs import MultiStr
 from core.user import user_main
 import re
 
@@ -201,38 +200,37 @@ class UserActions:
 	return db_main.getHandle().seqNextVal("users_user_id_seq")
 
 ######################################################
-    def updateUserAttrs(self,user_id,admin_obj,attrs,to_del_attrs):
-	user_ids=MultiStr(user_id)
+    def updateUserAttrs(self,loaded_users,admin_obj,attrs,to_del_attrs):
+	"""
+	    loaded_users(list of LoadedUser instances):
+	    
+	"""
 	self.__updateUserAttrsCheckInput(user_ids,admin_obj,attrs,to_del_attrs)
 	changed_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(attrs)
 	deleted_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(to_del_attrs)
-	users=self.__getUsers(user_ids)
+	users=self.__createUsersDic(loaded_users)
 	ibs_query=IBSQuery()
 	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_attr_updaters)
 	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters)
 	ibs_query.runQuery()
 	self.__broadcastChange(users)
 
-    def __getUsers(self,user_ids):
-	"""
-	    return a dic of user_attribute dictionaries in format
-	    {user_id:LoadedUser}
-	"""
-	users={}
-	for user_id in user_ids:
-	    user_id=to_int(user_id,"user_id")
-	    users_attrs[user_id]=user_main.getUserPool().getUserByID(user_id)
-	return users
-    
     def __updateUserAttrsCheckInput(self,user_ids,admin_obj,attrs,to_del_attrs):
 	pass #nothing to check here for now, everything is checked or will be checked
-	
     
+    def __createUsersDic(self,loaded_users):
+	"""
+	    create a dic of {user_id:loaded_user,user_id:loaded_user,...} from loaded_users
+	"""
+	users={}
+	for loaded_user in loaded_users:
+	    users[loaded_user.getUserID()]=loaded_user
+	return users
+
     def __getChangedQuery(self,ibs_query,users,admin_obj,changed_attr_updaters):
 	return changed_attr_updaters.getQuery("user","change",{"users":users,
 							      "admin_obj":admin_obj})
 	
-    
     def __getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters):
 	return deleted_attr_updaters.getQuery("user","delete",{"users":users,
 							      "admin_obj":admin_obj})
@@ -244,37 +242,72 @@ class UserActions:
 	"""
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,users.keys())
+
+
+######################################################
+    def updateUsers(self,loaded_users,user_ids,group_name,owner_name=""):
+	"""
+	    update "loaded_users", set owner to "owner_name" and group to "group_name"
+	"""
+	self.__updateUsersCheckInput(loaded_users,group_name,owner_name)
+	if owner_name=="":
+	    owner_id=admin_main.getLoader().getAdminByName(owner_name).getAdminID()
+	else:
+	    owner_id=""
+	group_obj=group_main.getLoader().getGroupByName(group_name)
+	self.__updateUsersDB(user_ids,group_obj.getGroupID(),owner_id)
+	
+    def __updateUsersCheckInput(self,loaded_users,group_name,owner_name):
+	group_main.getLoader().checkGroupName(group_name)
+
+    def __updateUsersDB(self,user_ids,group_id,owner_id=""):
+	ibs_query=IBSQuery()
+	for user_id in user_ids:
+	    ibs_query+=self.__updateUsersQuery(user_id,group_id,owner_id)
+	ibs_query.runQuery()
+
+    def __updateUsersQuery(self,user_id,group_id,owner_id=""):
+	if owner_id=="":
+	    return ibs_db.createUpdateQuery("users",{"group_id":group_id})
+	else:
+	    return ibs_db.createUpdateQuery("users",{"owner_id":owner_id,
+						 "group_id":group_id})
+
 #######################################################
-    def getLoadedUsersByUserID(self,user_id):
-	user_ids=MultiStr(user_id)
+    def getLoadedUsersByUserID(self,user_ids):
+	"""
+	    return a list of LoadedUser instances for users with ids "user_ids"
+	"""
 	user_ids=map(lambda x:to_int(x,"user id"),user_ids)
 	loaded_users=map(user_main.getUserPool().getUserByID,user_ids)
 	return loaded_users
 
-    def getUserInfoByUserID(self,user_id):
+    def getUserInfoByUserID(self,user_id,date_type):
 	"""
 	    return a list of user info dics with user_id in multi string user_id
 	    return dic is in format {user_id=>user_info dic}
 	"""
 	loaded_users=self.getLoadedUsersByUserID(user_id)
-	return self.getUserInfosFromLoadedUsers(loaded_users)
+	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
 	
 #######################################################
-    def getLoadedUsersByUsername(self,normal_username):
-	usernames=MultiStr(normal_username)
-	loaded_users=map(user_main.getUserPool().getUserByNormalUsername,usernames)
+    def getLoadedUsersByUsername(self,normal_usernames):
+	"""
+	    return a list of LoadedUser instances for users with normal_usernames "normal_usernames"
+	"""
+	loaded_users=map(user_main.getUserPool().getUserByNormalUsername,normal_usernames)
 	return loaded_users
     
-    def getUserInfoByNormalUsername(self,normal_username,admin_obj):
+    def getUserInfoByNormalUsername(self,normal_username,date_type):
 	"""
 	    return a list of user info dics with normal_username in multi string user_id
 	    return dic is in format {user_id=>user_info dic}
 	"""
 	loaded_users=self.getLoadedUsersByUsername(normal_username)
-	return self.getUserInfosFromLoadedUsers(loaded_users)
+	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
 
 #########################################################
-    def getUserInfosFromLoadedUsers(self,loaded_users):
+    def getUserInfosFromLoadedUsers(self,loaded_users,date_type):
 	"""
 	    return a list of user info dics, from loaded_users list
 	    return dic is in format {user_id=>user_info dic}
@@ -282,8 +315,9 @@ class UserActions:
 	"""
 	user_infos={}
 	def addToUserInfo(loaded_user):
-	    user_infos[str(loaded_user.getUserID())]=loaded_user.getUserInfo() #python xmlrpc required keys not to be integers
+	    user_infos[str(loaded_user.getUserID())]=loaded_user.getUserInfo(date_type) #python xmlrpc required keys not to be integers
 	    
     	map(addToUserInfo,loaded_users)
 	return user_infos
 
+##########################################################

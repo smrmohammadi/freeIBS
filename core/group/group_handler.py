@@ -54,7 +54,7 @@ class GroupHandler(handler.Handler):
 		"owner_id":group_obj.getOwnerID(),
 		"owner_name":admin_main.getLoader().getAdminByID(group_obj.getOwnerID()).getUsername(),
 		"raw_attrs":group_obj.getAttrs(),
-		"attrs":user_main.getAttributeManager().parseAttrs(group_obj.getAttrs())
+		"attrs":user_main.getAttributeManager().parseAttrs(group_obj.getAttrs(),request.getDateType())
 	       }
 
     def updateGroup(self,request):

@@ -80,7 +80,7 @@ class UserLoader:
 			 basic_user_info["owner_id"],
 			 basic_user_info["credit"],
 			 basic_user_info["group_id"],
-			 basic_user_info["credit"])
+			 basic_user_info["creation_date"])
 			 
 			 
     def __mergeDics(self,dic_base,dic_merge):

@@ -50,7 +50,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 			<tr>
 				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_{$color}.gif"></td>
 				<td class="Form_Title_{$color}">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
-				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_of_form_title_{$color}.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_form_title_{$color}.gif"></td>
 			</tr>
 			</table>
 		<!-- End Form Title Table  -->

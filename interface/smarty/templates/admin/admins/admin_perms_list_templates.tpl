@@ -1,21 +1,22 @@
-
-<table align=center border=1>
-    <tr>
-	<td>
-	    <form method=POST action="admin_perms_list.php">
+<form method=POST action="admin_perms_list.php">
+    {addEditTable title="Save Permission Template" table_width="400"}
+        {addEditTD type="left"}
 	    Save This Admin Permissions into template:
-	<td>
-	    <input type=text name=template_name>
+        {/addEditTD}
+	{addEditTD type="right"}
+	    <input class="text" type=text name=template_name>
 	    <input type=hidden name=action value=save>
 	    <input type=hidden name=admin_username value={$admin_username}>
-	<td>
-	    <input type=submit value=save>
-	    </form>
-    <tr>
-	<td>
-	    <form method=POST action="admin_perms_list.php" name="load_template">
+	{/addEditTD}
+    {/addEditTable} 
+</form>
+<form method=POST action="admin_perms_list.php" name="load_template">
+    {addEditTable title="Load Permission Template Into $admin_username" table_width="400"}
+        {addEditTD type="left"}
 	    Load Permission Template into admin:
-	<td>
+        {/addEditTD}
+	{addEditTD type="right"}
+	    <nobr>
 	    {literal}
 	    <script language="javascript">
 		function showTemplatePerms(){
@@ -26,26 +27,26 @@
 	    {/literal}
 	    <select name=template_name>
 		{html_options values=$templates_list output=$templates_list}
-	    </select> <a href="javascript:showTemplatePerms();">Show Permissions</a>
+	    </select> <a class="link_in_body" href="javascript:showTemplatePerms();">Show Permissions</a>
 	    <input type=hidden name=action value=load>
 	    <input type=hidden name=admin_username value={$admin_username}>
-	<td>
-	    <input type=submit value=load 
-	    {jsconfirm raw_msg='"Are you sure you want to load permission template "+getSelectedOption("load_template","template_name")+" to admin `$admin_username` ? \\nWarning: Loading template will delete --ALL-- of current admin permissions."'}>
-	    </form>
-    <tr>
-	<td>
-	    <form method=POST action="admin_perms_list.php" name="del_template">
+
+	{/addEditTD}
+    {/addEditTable} 
+</form>
+<form method=POST action="admin_perms_list.php" name="del_template">
+    {addEditTable title="Delete Permission Template" table_width="400" action_icon="delete"}
+        {addEditTD type="left"}
 	    Delete Permission Template
-	<td>
+        {/addEditTD}
+	{addEditTD type="right"}
 	    <select name=template_name>
 		{html_options values=$templates_list output=$templates_list}
 	    </select>
 	    <input type=hidden name=action value=delete>
 	    <input type=hidden name=admin_username value={$admin_username}>
-	<td>
-	    <input type=submit value=delete {jsconfirm raw_msg="\"Are you sure you want to delete permission template \"+getSelectedOption(\"del_template\",\"template_name\")+\" ?\""}>
-	    </form>
+	{/addEditTD}
+    {/addEditTable} 
+</form>
 
-</table>
 	    

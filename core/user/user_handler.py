@@ -2,6 +2,7 @@ from core.server import handler
 from core.user import user_main
 from core.ibs_exceptions import *
 from core.errors import errorText
+from core.lib.multi_strs import MultiStr
 
 
 class UserHandler(handler.Handler):
@@ -9,6 +10,7 @@ class UserHandler(handler.Handler):
 	handler.Handler.__init__(self,"user")
 	self.registerHandlerMethod("addNewUsers")
 	self.registerHandlerMethod("getUserInfo")
+	self.registerHandlerMethod("updateUser")
 	
     def addNewUsers(self,request):
 	request.needAuthType(request.ADMIN)
@@ -41,9 +43,9 @@ class UserHandler(handler.Handler):
 	"""
 	if request.hasAuthType(request.ADMIN):
 	    if request.has_key("user_id"):
-		loaded_users=user_main.getActionManager().getLoadedUsersByUserID(request["user_id"])
+		loaded_users=user_main.getActionManager().getLoadedUsersByUserID(MultiStr(request["user_id"]))
 	    elif request.has_key("normal_username"):
-		loaded_users=user_main.getActionManager().getLoadedUsersByNormalUsername(request["normal_username"])
+		loaded_users=user_main.getActionManager().getLoadedUsersByNormalUsername(MultiStr(request["normal_username"]))
 	    else:
 		raise request.raiseIncompleteRequest("user_id")
 
@@ -55,7 +57,23 @@ class UserHandler(handler.Handler):
 	else:
 	    raise request.raiseIncompleteRequest("auth_type")
 	
-	return user_main.getActionManager().getUserInfosFromLoadedUsers(loaded_users)
+	return user_main.getActionManager().getUserInfosFromLoadedUsers(loaded_users,request.getDateType())
 ############################################################
-
+    def updateUser(self,request):
+	"""
+	    update user basic information
+	    args: user_id(MultStr),owner_name,group_name
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("user_id","owner_name","group_name")
+	user_ids=MultiStr(request["user_id"])
+	loaded_users=user_main.getActionManager().getLoadedUsersByUserID(user_ids)
+	admin_obj=request.getAuthNameObj()
+	def updateUserCheckPerms(loaded_user):
+	    admin_obj.canChangeUser(loaded_user)
+	    if admin_obj.getUsername()!=request["owner_name"]:
+		admin_obj.canDo("CHANGE USERS OWNER")
+	    
+	map(updateUserCheckPerms,loaded_users)
+	return user_main.updateUsers(loaded_users,user_ids,request["owner_name"],request["group_name"])
 

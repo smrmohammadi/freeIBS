@@ -4,62 +4,54 @@
 {config_load file=perm_category_names.conf}
 {include file="header.tpl" title="Template Permission List"}
 {include file="err_head.tpl"}
-
-    
-
-<center>
-
-    <h2> 
-	Template "{$template_name|capitalize}" Permission List
-    </h2>
+    {viewTable title="Template $template_name Permission List" color="orange" table_width="100%"}
+    <tr><td>
     {foreach from=$perms key=category item=cat_perms}
-	<table>
-	    <tr>
-		<td>
-		    Category: {$category_names.$category}
-	    <tr>
-		<td>
-		    <table border=1>
-			<tr>
-			    <th>
-				Name
-			    <th>
-				Value
-			    <th>
-				Description
-			
-
+	{listTable title="`$category_names.$category`" cols_num=3 table_width="100%"}
+	    {listTR type="header"}
+		{listTD}
+		    Name
+		{/listTD}
+		{listTD}
+		    Value
+		{/listTD}
+		{listTD}
+			Description
+		{/listTD}
+	    {/listTR}	
 	    {section loop=$cat_perms name=index}
-	    <tr>
-		<td>
-
-		    {$cat_perms[index].name}
-		<td>
+	        {listTR type="body"}
+		{listTD}
+		    <nobr><b><font size=2>{$cat_perms[index].name}</font></b>
+		{/listTD}
+		{listTD}
+		<nobr>
 		    {if $cat_perms[index].value_type eq "NOVALUE"}
 			No Value
 		    {elseif $cat_perms[index].value_type eq "SINGLEVALUE"}
 			{$cat_perms[index].value} 
 		    {elseif $cat_perms[index].value_type eq "MULTIVALUE"}
-			<table>
+			<table border=1 style="border-collapse:collapse" bordercolor="#c0c0c0" width="100%">
 			{foreach from=$cat_perms[index].value item=val}
-			    <tr>
+			    <tr class="{cycle values="list_Row_LightColor,list_Row_DarkColor"}">
 				<td>
 				    {$val} 
 			{/foreach}
 			</table>
 			    			
 		    {/if}
-		<td>
+		{/listTD}
+		{listTD}
 		    {$cat_perms[index].description|truncate:50}
+		{/listTD}
+		{/listTR}
 	    {/section}
-		    </table>
-	
-	</table>
+	{/listTable}
     {/foreach}
+</td></tr>
+{/viewTable}
 {literal}
 <script language="javascript">
     window.focus();
 </script>
 {/literal}
-
-{include file="admin_footer.tpl"}

@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="Group Internet Charge" selected="Group List"}
+{include file="admin_header.tpl" title="Normal Charge Edit" selected="Group List"}
 {include file="err_head.tpl"}
 
 {editTemplate target="group" target_id=$group_name update_method="normalCharge" edit_tpl_name="normal_charge.tpl"}
@@ -50,6 +50,5 @@
 You can set internet charge, for users who are member of this group.
 Internet charge is used for dialup and lan users.
 {/setAboutPage}
-
 
 {include file="admin_footer.tpl"}

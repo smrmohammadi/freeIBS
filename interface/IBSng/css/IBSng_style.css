@@ -2,6 +2,9 @@
 /*  Page Main 						   */
 /*   Classes:						   */
 /*      1.table.Main_Page				   */
+/*      2.a:link.link_in_body				   */
+/*      3.a:visited.link_in_body			   */
+/*      4.a:hover.link_in_body				   */
 /*---------------------------------------------------------*/
 table.Main_Page {  
 	padding: 0;
@@ -11,6 +14,16 @@ table.Main_Page {
 	text_alignment:center;
 	height:73%;
 	width:100%
+}
+a:link.link_in_body{
+    color: #990000;
+}
+
+a:visited.link_in_body{
+	color: #990000;
+}
+a:hover.link_in_body{ 
+    color: #CC6600;
 }
 
 /*-------------------------------------------------*/
@@ -734,10 +747,11 @@ td.List_Col{
 }
 
 
-tr.List_Foot_Line{ 
+tr.List_Foot_Line_red{ 
 	height:3;
-	background-color:#9A1111
+	background-color:#9A1111;
 }
+
 tr.List_Foot_Line_orange{ 
 	height:3;
 	background-color:#FF9c00
@@ -944,6 +958,7 @@ span.message{
 /*   	8.a:hover.RightSide_Links			  */
 /*   	9.td.RightSide_about_title			  */
 /*   	10.td.RightSide_about_body			  */
+/*   	11.p.about_page					  */
 /*--------------------------------------------------------*/
 
 td.RightSide_Color_dark{ 
@@ -1007,4 +1022,10 @@ td.RightSide_about_body{
 	color: #353535;
 	direction:ltr ;
 	Text-align:left
+}
+p.about_page
+{
+    text-indent:6px;
+    line-height:120%;
+    text-align:justify;
 }

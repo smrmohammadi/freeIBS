@@ -75,11 +75,12 @@ class AttributeManager:
 		attr_holders[handler.getName()]=handler.getAttrHolder(attr_name,attrs)
 	return attr_holders
 
-    def parseAttrs(self,attrs):
+    def parseAttrs(self,attrs,date_type):
 	"""
 	    return a dic of attrs containing the parsed attributes of attrs
 	"""
 	attrs=copy.copy(attrs) #make sure we don't change user/group attributes
-    	attr_holders=self.getAttrHolders(attrs)
-	map(lambda x:attrs.update(x.getParsedDic()),attr_holders.values())
+    	attr_holders=self.getAttrHolders(attrs).values()
+	map(lambda x:x.setDateType(date_type),attr_holders)
+	map(lambda x:attrs.update(x.getParsedDic()),attr_holders)
 	return attrs

@@ -319,16 +319,12 @@ create table saved_user_adds (
 
 create sequence saved_user_adds_id_seq;
 
-
 create table saved_user_adds_users (
     user_add_id integer references saved_user_adds,
     username text,
     password text,
     type integer --1=normal user , 2=voip user
 );
-
-
-
 
 create table country_lists(
     country_id integer primary key,
@@ -341,3 +337,4 @@ create table voip_charge_rules (
     country_list_id integer references country_lists,
     formula text
 ) inherits (charge_rules);
+

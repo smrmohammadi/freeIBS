@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="Group Multi Login" selected="Group List"}
+{include file="admin_header.tpl" title="Multi Login Edit" selected="Group List"}
 {include file="err_head.tpl"}
 
 {editTemplate target="group" target_id=$group_name update_method="multiLogin" edit_tpl_name="multi_login.tpl"}
@@ -50,6 +50,5 @@
 You can set multi login, for users who are member of this group.
 Multi login limits maximum instances of user that can be online.
 {/setAboutPage}
-
 
 {include file="admin_footer.tpl"}

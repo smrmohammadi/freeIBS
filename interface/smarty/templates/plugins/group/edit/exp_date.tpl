@@ -1,6 +1,5 @@
-{include file="admin_header.tpl" title="Group Expiration Date Edit" selected="Group List"}
+{include file="admin_header.tpl" title="Expiration Dates Edit" selected="Group List"}
 {include file="err_head.tpl"}
-
 
 {editTemplate target="group" target_id=$group_name update_method="expDate" edit_tpl_name="exp_date.tpl"}
 
@@ -53,6 +52,5 @@
 {setAboutPage title="Expiration Date Edit"}
 You can set expiration date, for users who are member of this group.
 {/setAboutPage}
-
 
 {include file="admin_footer.tpl"}

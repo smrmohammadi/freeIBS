@@ -26,7 +26,7 @@ function smarty_block_groupInfoTable($params,$content,&$smarty,&$repeat)
 		<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
 			<tr>
 				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
-				<td class="Form_Title">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
+				<td class="Form_Title_red">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
 				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_of_form_title_red.gif"></td>
 			</tr>
 			</table>

@@ -56,4 +56,13 @@
 	
     {/addEditTable}
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_list.php" class="RightSide_links">
+	Admin List
+    </a>
+{/addRelatedLink}
+{setAboutPage title="Add New Admin"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

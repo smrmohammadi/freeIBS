@@ -1,5 +1,6 @@
 from core.admin.admin_perm import *
 from core.admin import perm_loader
+from core.errors import errorText
 
 def init():
     perm_loader.getLoader().registerPerm("GET USER INFORMATION",GetUserInformation)

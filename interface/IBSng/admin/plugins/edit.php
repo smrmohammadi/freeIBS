@@ -14,6 +14,8 @@ if(isInRequest("update","edit_tpl_name","target","target_id","update_method"))
     intUpdateAttrs($smarty,$_REQUEST["edit_tpl_name"],$_REQUEST["target"],$_REQUEST["target_id"],$_REQUEST["update_method"]);
 else if(isInRequest("group_name","edit_tpl_name","edit_group"))
     intEditGroup($smarty,$_REQUEST["group_name"],$_REQUEST["edit_tpl_name"]);
+else if(isInRequest("user_id","edit_tpl_name","edit_user"))
+    intEditUser($smarty,$_REQUEST["user_id"],$_REQUEST["edit_tpl_name"]);
 else
 {
     $err=new error("INVALID_INPUT");
@@ -35,6 +37,7 @@ function intEditGroup(&$smarty,$group_name,$edit_tpl_name)
     showEditGroupInterface($smarty,$edit_tpl_name);
 }
 
+
 function editGroupAssignValues(&$smarty,$group_name,$edit_tpl_name)
 {
     intSetGroupInfo($smarty,$group_name);    
@@ -48,6 +51,13 @@ function showEditGroupInterface(&$smarty,$edit_tpl_name)
     $smarty->display("plugins/group/edit/{$edit_tpl_name}");
 }
 
+function intEditUser(&$smarty,$user_id,$edit_tpl_name)
+{
+    checkTplFileName($edit_tpl_name);
+    editUserAssignValues($smarty,$group_name,$edit_tpl_name);
+    showEditUserInterface($smarty,$edit_tpl_name);
+}
+
 function checkTplFileName($edit_tpl_name)
 {
     if (!preg_match("/^[a-zA-Z0-9_]*\.tpl$/",$edit_tpl_name))
@@ -56,6 +66,5 @@ function checkTplFileName($edit_tpl_name)
 	exit();
     }
 }
-
 
 ?>

@@ -105,6 +105,9 @@ class AbsDate:
 		    minute=0
 		
 		if len(time_sp)==3:
+		    dot_index=time_sp[2].find(".")
+		    if dot_index!=-1:
+			time_sp[2]=time_sp[2][:dot_index]
 		    second=int(time_sp[2])
 		else:
 		    second=0
@@ -178,3 +181,11 @@ class AbsDate:
 
     def __getFormattedDate(self,year,month,day,hour,minute,second):
 	return "%s-%s-%s %s:%s"%(year,month,day,hour,minute)
+
+    def getDate(self,_type):
+	if _type=="jalali":
+	    return self.getJalaliDate()
+	else:
+	    return self.getGregorianDate()
+	
+	

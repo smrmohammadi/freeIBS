@@ -1,5 +1,6 @@
 from core.group import group_main
 from core.admin import admin_main
+from core.lib.date import AbsDate
 
 class BasicUser:
     """
@@ -31,7 +32,7 @@ class BasicUser:
     def getGroupID(self):
 	return self.group_id
 
-    def getInfo(self):
+    def getInfo(self,date_type="gregorian"):
 	"""
 	    return a dic containing Basic User Information
 	"""
@@ -39,7 +40,7 @@ class BasicUser:
 		"owner_id":self.owner_id,
 		"credit":self.credit,
 		"group_id":self.group_id,
-		"creation_date":self.creation_date,
+		"creation_date":AbsDate(self.creation_date,"gregorian").getDate(date_type),
 		"group_name":self.getGroupObj().getGroupName(),
 		"owner_name":self.getOwnerObj().getUsername()
 		}

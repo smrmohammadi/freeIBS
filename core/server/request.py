@@ -80,8 +80,8 @@ class Request:
 	    if not self.params.has_key(arg):
 		self.raiseIncompeleteRequest(arg)
 
-    def raiseIncompleteRequest(missing_arg):
-	raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%arg)
+    def raiseIncompleteRequest(self,missing_arg):
+	raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%missing_arg)
 
     
     def needAuthType(self,*args):
@@ -107,7 +107,7 @@ class Request:
 	if self.auth_type == auth_type:
 	    return True
 	else:
-	    return Fakse
+	    return False
 
     def getRemoteAddr(self):
 	"""
@@ -168,3 +168,16 @@ class Request:
     
     def __checkAnonymousAuth(self):
 	pass
+
+    def getDateType(self):
+	"""
+	    each request can have a "date_type" in arguments that shows results date should be in that format
+	    if no date_type passed, gregorian dates are used
+	    values can be "gregorian" and "jalali"
+	"""
+	if self.has_key("date_type") and self["date_type"] in ["gregorian","jalali"]:
+	    return self["date_type"]
+	else:
+	    return "gregorian"
+
+	    

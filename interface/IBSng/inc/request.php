@@ -13,6 +13,7 @@ class Request
 	$this->server_method=$server_method;
 	$this->__addAuthParams($params_arr);
 	$this->params_arr=$params_arr;
+	$this->setDateTypeParam(null);
 	$this->ibs_rpc=new IBSxmlrpc();
     }
 
@@ -24,6 +25,17 @@ class Request
 	$params_arr["auth_pass"]=$auth_pass;
 	$params_arr["auth_type"]=$auth_type;
 	$params_arr["auth_remoteaddr"]=getClientIPAddress();
+    }
+
+    function setDateTypeParam($date_type)
+    {/*
+	set "date_type" of this request. if $date_type is null, we try to find a "date_type" in request
+	and set it as date_type
+    */
+	if(is_null($date_type) and isInRequest("date_type"))
+	    $date_type=$_REQUEST["date_type"];
+	
+	$this->params_arr["date_type"]=$date_type;
     }
 
     function changeParam($key,$value)

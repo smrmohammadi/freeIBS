@@ -12,16 +12,16 @@ function smarty_block_userInfoTable($params,$content,&$smarty,&$repeat)
     {
 	$title=isset($params["title"])?$params["title"]:"";
 	$header=<<<END
-<table class="Form_Main" width="280" border="0"  cellspacing="0" bordercolor="#000000" cellpadding="0">
+<table class="Form_Main" width="360" border="0"  cellspacing="0" bordercolor="#000000" cellpadding="0">
 	<tr>
 		<td colspan="7">
 		<!-- Title Table User_Info-->
 		<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
 			<tr>
-				<td class="Form_Title_Begin" rowspan="2"><img border="0" src="begin_form_title_red.gif"></td>
-				<td class="Form_Title" rowspan="2">{$title} <img border="0" src="arrow_orange.gif"></td>
-				<td class="Form_Title_End" rowspan="2"><img border="0" src="end_of_list_title_red.gif"></td>
-				<td class="Form_Title_Top_Line" align="right">Group Info<img border="0" src="arrow_orange_bg_white.gif"></td>
+				<td class="Form_Title_Begin" rowspan="2"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
+				<td class="Form_Title_red" rowspan="2">{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
+				<td class="Form_Title_End" rowspan="2"><img border="0" src="/IBSng/images/end_of_list_title_red.gif"></td>
+				<td class="Form_Title_Top_Line" align="right">Group Info<img border="0" src="/IBSng/images/arrow_orange_bg_white.gif"></td>
 			</tr>
 			<tr>
 				<td class="Form_Title_End_Line"></td>
@@ -41,13 +41,13 @@ END;
 			<!-- Foot Table -->
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
-					<td class="Form_Foot_Begin_Line"></td>
-					<td rowspan="2" class="Form_Foot_End"><img border="0" src="end_of_line_bottom_of_table.gif"></td>
+					<td class="Form_Foot_Begin_Line_red"></td>
+					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
 					<td rowspan="2" class="Form_Foot_Buttons">
-					<img border="0" src="edit.gif" width="45" height="20"></td>
+					<img border="0" src="/IBSng/images/edit.gif" width="45" height="20"></td>
 				</tr>
 				<tr>
-					<td class="Form_Foot_Below_Line"></td>
+					<td class="Form_Foot_Below_Line_red"></td>
 				</tr>
 			</table>
 			<!-- End Foot Table -->

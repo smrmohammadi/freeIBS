@@ -23,21 +23,21 @@ function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
     $resp=intSetSingleUserInfo(&$smarty,$user_id,$normal_username);
     if($resp->isSuccessful())
     {
-        intShowSingleUserInfoAssignValues($smarty,$resp->getResult());
+        intShowSingleUserInfoAssignValues($smarty,array_values($resp->getResult()));
 	intShowSingleUserInfoInterface($smarty);
     }
     else
 	intShowSingleUserInfoInput($smarty);
 }
 
-function intShowSingleUserInfoAssignValues(&$smarty)
+function intShowSingleUserInfoAssignValues(&$smarty,$user_info)
 {
-    intSetGroupInfo($smarty,$user_info["basic_info"]["group_name"]);
+    intSetSingleUserGroupAttrs($smarty,$user_info[0]);
 }
 
 function intShowSingleUserInfoInterface(&$smarty)
 {
-    $smarty->display("admin/user/user_info.tpl");
+    $smarty->display("admin/user/single_user_info.tpl");
 }
 //*********************************************
 

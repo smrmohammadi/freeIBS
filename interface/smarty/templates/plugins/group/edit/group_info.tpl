@@ -1,5 +1,6 @@
-{include file="admin_header.tpl" title="Add New Admin" selected="Group List"}
+{include file="admin_header.tpl" title="Group Info Edit" selected="Group List"}
 {include file="err_head.tpl"}
+
 
 {editTemplate target="group" target_id=$group_name update_method="groupInfo" edit_tpl_name="group_info.tpl"}
 <input type="hidden" name="group_id" value="{$group_id}">
@@ -59,7 +60,5 @@
 {setAboutPage title="Expiration Date Edit"}
 Basic group informations can be changed here. Also owner of group is changable if you have relevant permission.
 {/setAboutPage}
-
-
 
 {include file="admin_footer.tpl"}

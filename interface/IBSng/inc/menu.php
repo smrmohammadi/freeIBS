@@ -8,14 +8,16 @@ $GLOBALS["IBSngMenu"]=Array("user"=>array(),
 		"setting"=>array("Charge"=>"/IBSng/admin/charge/charge_list.php",
 				"RAS"=>"/IBSng/admin/ras/ras_list.php",
 				"IPPool"=>"/IBSng/admin/ippool/ippool_list.php",
-				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php")       
+				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php"),
+		"home"=>array("Admin Home"=>"/IBSng/admin/admin_index.php"),		       
 		);
 
 $GLOBALS["IBSngMenuLinks"]=Array("user"=>"/IBSng/admin/user",
 		      "group"=>"/IBSng/admin/group",
 		      "report"=>"/IBSng/admin/report",
 		      "admin"=>"/IBSng/admin/admins",
-	    	      "setting"=>"/IBSng/admin/setting"
+	    	      "setting"=>"/IBSng/admin/setting",
+		      "home"=>"/IBSng/admin/admin_index.php"
 		      );
 
 

@@ -125,4 +125,14 @@
 		</a>
 	{/addRelatedLink}
 {/canDo}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_list.php" class="RightSide_links">
+	Admin List
+    </a>
+{/addRelatedLink}
+{setAboutPage title="Admin Information"}
+
+{/setAboutPage}
+
+
 {include file="admin_footer.tpl"}

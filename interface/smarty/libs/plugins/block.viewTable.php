@@ -46,7 +46,7 @@ function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
 			<tr>
 				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_{$color}.gif"></td>
 				<td class="Form_Title_{$color}">{$title}<img border="0" src="/IBSng/images/arrow_orange.gif"></td>
-				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_of_form_title_{$color}.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_form_title_{$color}.gif"></td>
 			</tr>
 			</table>
 		<!-- End Form Title Table  -->
@@ -60,7 +60,7 @@ END;
 	$footer=<<<END
 	<!-- view table Foot -->
 	<tr class="List_Foot_Line_{$color}">
-		<td colspan=100></td>
+		<td colspan=30></td>
 	</tr>
 	<!-- End view table Foot-->
 </table>

@@ -34,12 +34,12 @@ class LoadedUser:
     def hasAttr(self,attr_name):
 	self.getUserAttrs().hasAttribute(attr_name)
 
-    def getUserInfo(self):
+    def getUserInfo(self,date_type):
 	"""
 	    return a dic of user informations, useful for passing to interface
 	"""
-	return {"basic_info":self.getBasicUser().getInfo(),
-		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttributes()),
+	return {"basic_info":self.getBasicUser().getInfo(date_type),
+    		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttributes(),date_type),
 		"raw_attrs":self.getUserAttrs().getAllAttributes()
 	       }	
     

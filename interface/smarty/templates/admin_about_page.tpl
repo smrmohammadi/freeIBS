@@ -18,7 +18,7 @@
 				{aboutPageBar type="title"} </td>
 			</tr>
 			<tr>
-				<td class="RightSide_about_body">{aboutPageBar type="body"}</td>
+				<td class="RightSide_about_body"><p class="about_page">{aboutPageBar type="body"}</p></td>
 			</tr>
 		</table>
 		<!-- End About page body-->

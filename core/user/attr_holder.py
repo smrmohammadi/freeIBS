@@ -10,6 +10,9 @@ class AttrHolder:
 	"""
 	pass
 
+    def setDateType(self,date_type):
+	self.date_type=date_type
+	
     def getParsedDic(self):
 	"""
 	    return parsed dic of attributes

@@ -1,6 +1,6 @@
 <?php
 
-function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
+function smarty_block_userInfoTD($params,$content,&$smarty,&$repeat)
 {/*	Create an userinfo style column. Also TR s are created when needed
 	parameter comment(boolean,optional): if set to "TRUE", create a td suitable for comments, both
 					    "user_left" and "user_right" and "group" tds should have this flag set
@@ -10,6 +10,7 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
+	$type=$params["type"];
 	if(isset($params["comment"]) and $params["comment"]=="TRUE")
 	{
 	    if($type=="user_left")
@@ -22,7 +23,7 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="Form_Content_Row_Begin"><img border="0" src="begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_Textarea_Td_{$color}">{$content}</td>
+				<td class="Form_Content_Row_Left_Textarea_Td_{$color}"><nobr>{$content}</nobr></td>
 				<td class="Form_Content_Row_End"><img border="0" src="end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
@@ -99,7 +100,7 @@ END;
 		return <<<END
 	<tr>
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_userinfo_{$color}">{$content}</td>
+		<td class="Form_Content_Row_Left_userinfo_{$color}"><nobr>{$content}</nobr></td>
 END;
 	    }
 	    else if($type=="user_right")
@@ -115,17 +116,16 @@ END;
 	    {
 		$color=getTRColor();
 		return <<<END
-		<td class="Form_Content_Row_groupinfo_{$color}"></td>
+		<td class="Form_Content_Row_groupinfo_{$color}" align=center>{$content}</td>
 		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 	<tr>
 		<td colspan="7" class="Form_Content_Row_Space"></td>
 	</tr>
-END;	    
+END;
 	    }
 	    
 	}
     }
-    
 }
 
 ?>
