@@ -45,7 +45,7 @@ class MultiLoginAttrUpdater(AttrUpdater):
 
 class MultiLoginAttrSearcher(AttrSearcher):
     def run(self):
-	self.exactSearchForAttr("multi_login","normal_charge",lambda x:charge_main.getLoader().getChargeByName(x).getChargeID())
+	self.ltgtSearchOnUserAndGroupAttrs("multi_login","multi_login_op","multi_login")
 
 
 class MultiLoginAttrHandler(attribute.AttributeHandler):

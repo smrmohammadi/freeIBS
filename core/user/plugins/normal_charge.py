@@ -37,7 +37,7 @@ class NormalChargeAttrUpdater(AttrUpdater):
 
 class NormalChargeAttrSearcher(AttrSearcher):
     def run(self):
-	self.exactSearchForAttr("normal_charge","normal_charge",lambda x:charge_main.getLoader().getChargeByName(x).getChargeID())
+	self.exactSearchOnUserAndGroupAttrs("normal_charge","normal_charge",lambda x:charge_main.getLoader().getChargeByName(x).getChargeID())
 
 class NormalChargeAttrHandler(attribute.AttributeHandler):
     def __init__(self):

@@ -41,7 +41,8 @@ USER_ACTIONS_ERRORS={
     "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
     "INVALID_PASSWORD_LENGTH":"Invalid password length %s",
     "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
-    "NORMAL_USERNAME_EXISTS":"Normal username already exists"
+    "NORMAL_USERNAME_EXISTS":"Normal username already exists",
+    "INVALID_OPERATOR":"INVALID_OPERATOR %s"
 }
 
 USER_ERRORS={

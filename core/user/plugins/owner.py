@@ -37,7 +37,13 @@ class OwnerNameAttrUpdater(AttrUpdater):
 
 class OwnerNameAttrSearcher(AttrSearcher):
     def run(self):
-	self.exactSearchForBasicInfo("owner_name","owner_id",lambda x:admin_main.getLoader().getAdminByName(x).getAdminID())
+	users_table=self.getSearchHelper().getTable("users")
+	users_table.exactSearch(self.getSearchHelper(),
+			        "owner_name",
+		    		"owner_id",
+			        lambda x:admin_main.getLoader().getAdminByName(x).getAdminID()
+			       )
+
 
 class OwnerNameAttrHandler(attribute.AttributeHandler):
     def __init__(self):

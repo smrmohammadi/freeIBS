@@ -31,7 +31,12 @@ class GroupNameAttrUpdater(AttrUpdater):
 
 class GroupNameAttrSearcher(AttrSearcher):
     def run(self):
-	self.exactSearchForBasicInfo("group_name","group_id",lambda x:group_main.getLoader().getGroupByName(x).getGroupID())
+	users_table=self.getSearchHelper().getTable("users")
+	users_table.exactSearch(self.getSearchHelper(),
+			        "group_name",
+		    		"group_id",
+			        lambda x:group_main.getLoader().getGroupByName(x).getGroupID()
+			       )
 
 class GroupNameAttrHandler(attribute.AttributeHandler):
     def __init__(self):

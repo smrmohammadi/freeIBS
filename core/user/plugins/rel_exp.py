@@ -78,6 +78,15 @@ class RelExpAttrUpdater(AttrUpdater):
     def deleteInit(self):
 	self.useGenerateQuery(["rel_exp_date"])
 
+class RelExpAttrSearcher(AttrSearcher):
+    def run(self):
+	search_helper=self.getSearchHelper()
+	if search_helper.hasCondFor("rel_exp_date","rel_exp_date_unit","rel_exp_date_op"):
+	    checkltgtOperator(search_helper.getCondValue("rel_exp_date_op"))
+	    rel_date_obj=RelativeDate(search_helper.getCondValue("rel_exp_date"),
+				      search_helper.getCondValue("rel_exp_date_unit"))
+	    for table in self.getUserAndGroupAttrsTable():
+		
 
 class RelExpAttrHolder(AttrHolder):
     def __init__(self,rel_exp_hours):
