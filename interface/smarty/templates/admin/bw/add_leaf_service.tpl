@@ -61,12 +61,21 @@
 	{/addEditTD}
 	
 	{addEditTD type="left" err="limit_kbits_err"}
-	    Bandwidth Limit
+	    Bandwidth Rate
 	{/addEditTD}
 
 	{addEditTD type="right"}
-    	    <input type=text name=limit_kbits value="{ifisinrequest name="limit_kbits" default_var="limit_kbits"}" class=text> kbits
-	    {helpicon subject='limit kbits' category='bandwidth'}
+    	    <input type=text name=rate_kbits value="{ifisinrequest name="rate_kbits" default_var="rate_kbits"}" class=text> kbits
+	    {helpicon subject='rate kbits' category='bandwidth'}
+	{/addEditTD}
+
+	{addEditTD type="left" err="limit_kbits_err"}
+	    Bandwidth Ceil
+	{/addEditTD}
+
+	{addEditTD type="right"}
+    	    <input type=text name=ceil_kbits value="{ifisinrequest name="ceil_kbits" default_var="ceil_kbits"}" class=text> kbits
+	    {helpicon subject='ceil kbits' category='bandwidth'}
 	{/addEditTD}
 
     {/addEditTable}

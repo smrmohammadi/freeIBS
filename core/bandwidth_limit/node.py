@@ -1,26 +1,31 @@
 from core.bandwidth_limit import bw_main
 
 class Node:
-    def __init__(self,node_id,parent_id,interface_id,bw_limit):
+    def __init__(self,node_id,parent_id,interface_id,rate_kbits,ceil_kbits):
 	"""
 	    parent_id(int): id of parent, None if this is the root node
 	    interface_id(int): id of interface, this belongs to
-	    bw_limit(int): bandwidth limit in kbits/s
+	    rate_kbits(int): bandwidth limit in kbits/s
+	    ceil_kbits(int): burst limit in kbits/s
 	"""
 	self.interface_id=interface_id
 	self.node_id=node_id
 	self.parent_id=parent_id
-	self.bw_limit=bw_limit
+	self.rate_kbits=rate_kbits
+	self.ceil_kbits=ceil_kbits
 	self.children=[]#child nodes
 	self.leaves=[]#child leaves
 	self.tc_id=None
-
+	self.quantum=3000
 
     def getNodeID(self):
 	return self.node_id
 
-    def getBwLimit(self):
-	return self.bw_limit
+    def getRate(self):
+	return self.rate_kbits
+
+    def getCeil(self):
+	return self.ceil_kbits
 
     def getChildren(self):
 	return self.children
@@ -76,11 +81,19 @@ class Node:
 
     def addToTC(self):
 	self.__assignTC_ID()
-	bw_main.getTCRunner().addClass(self.getInterfaceName(),"parent 0:%s"%self.__getParentTC_ID(),"classid 0:%s"%self.getTC_ID(),"htb","rate %skbit"%self.getBwLimit())
+	bw_main.getTCRunner().addClass(self.getInterfaceName(),
+				       "parent 1:%s"%self.__getParentTC_ID(),
+				       "classid 1:%s"%self.getTC_ID(),
+				       "htb",
+				       "rate %skbit"%self.getRate(),
+				       "ceil %skbit"%self.getCeil(),
+				       "quantum %s"%self.quantum)
 #############################################
     def delFromTC(self):
 	#self.__freeTC_ID() buggy tc doesn't delete node, so let's not release the id
-	bw_main.getTCRunner().delClass(self.getInterfaceName(),"parent 0:%s"%self.__getParentTC_ID(),"classid 0:%s"%self.getTC_ID())
+	bw_main.getTCRunner().delClass(self.getInterfaceName(),
+				       "parent 1:%s"%self.__getParentTC_ID(),
+				       "classid 1:%s"%self.getTC_ID())
 
 #############################################
     def getTC_ID(self):
@@ -104,5 +117,20 @@ class Node:
 		"interface_name":self.getInterfaceName(),
 		"node_id":self.getNodeID(),
 		"parent_id":parent_id,
-		"limit_kbits":self.getBwLimit()}
-		
+		"rate_kbits":self.getRate(),
+		"ceil_kbits":self.getCeil()}
+#####################################
+    def update(self,rate_kbits,ceil_kbits):
+	self.rate_kbits=rate_kbits
+	self.ceil_kbits=ceil_kbits
+	self.__updateTC()		
+
+    def __updateTC(self):
+	bw_main.getTCRunner().changeClass(self.getInterfaceName(),
+				       "parent 1:%s"%self.__getParentTC_ID(),
+				       "classid 1:%s"%self.getTC_ID(),
+				       "htb",
+				       "rate %skbit"%self.getRate(),
+				       "ceil %skbit"%self.getCeil(),
+				       "quantum %s"%self.quantum)
+    

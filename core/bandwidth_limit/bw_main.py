@@ -44,7 +44,7 @@ def getTCRunner():
 def getMarkIDPool():
     return mark_id_pool
 
-def getIPTableRunner():
+def getIPTablesRunner():
     return iptables
 
 def getManager():

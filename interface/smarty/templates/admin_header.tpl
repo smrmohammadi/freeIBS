@@ -50,7 +50,7 @@
 			</table>
 		</td>
 	</tr>
-</table>
+<tr><td colspan=4 valign=top height=25>
 <!-- End Header -->
 <!-- Page title & Info -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -74,8 +74,8 @@
 	</tr>
 </table>
 <!-- End Page title & Info -->
-
-
+</td></tr>
+</table>
 <!-- Main Table -->
 <table border="0" cellspacing="0" cellpadding="0" class="Main_Page">
 	<tr>

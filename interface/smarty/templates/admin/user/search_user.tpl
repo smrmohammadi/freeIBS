@@ -5,7 +5,7 @@
 {include file="err_head.tpl"} 
 <script language="javascript" src="/IBSng/js/check_box_container.js"></script>
 <form method=POST action="/IBSng/admin/user/search_user.php#show_results" name="search_user">
-    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Lock,Misc" content_height=100}
+    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Lock,Misc" content_height=100 action_icon="search"}
 
     {tabContent tab_name="Main"}
 	{include file="plugins/search/user_id.tpl"} 
@@ -41,7 +41,6 @@
     {/tabTable}
     <input type=hidden name=search value=1>
     <input type=hidden name=page value=1>
-    <input type=submit value=search>
 {if $show_results}
 	<p>
 	<a name="show_results"></a>
@@ -67,11 +66,11 @@
 		}
 	    </script>
 	    {/literal}
-	    <input type=submit name=edit value=edit onClick="javascript:  if(checkAnyUserChecked()) submitEdit('edit'); return false;">
-	    <input type=submit name=changecredit value="Change Credit" onClick="javascript: if(checkAnyUserChecked()) submitEdit('change_credit'); return false;">
-	    <input type=submit name=connection_log value="View Connection Logs" onClick="javascript: if(checkAnyUserChecked()) submitEdit('connection_log'); return false;">
-	    <input type=submit name=credit_log value="View Credit Changes" onClick="javascript: if(checkAnyUserChecked()) submitEdit('credit_change'); return false;">
-	    <input type=submit name=delete value="Delete" onClick="javascript: if(checkAnyUserChecked()) submitEdit('delete_users'); return false;">
+	    <input type=image src="/IBSng/images/icon/edit.gif" name=edit value=edit onClick="javascript:  if(checkAnyUserChecked()) submitEdit('edit'); return false;">
+	    <input type=image src="/IBSng/images/icon/change_credit.gif" name=changecredit value="Change Credit" onClick="javascript: if(checkAnyUserChecked()) submitEdit('change_credit'); return false;">
+	    <input type=image src="/IBSng/images/icon/view_connection_logs.gif" name=connection_log value="View Connection Logs" onClick="javascript: if(checkAnyUserChecked()) submitEdit('connection_log'); return false;">
+	    <input type=image src="/IBSng/images/icon/view_credit_changes.gif" name=credit_log value="View Credit Changes" onClick="javascript: if(checkAnyUserChecked()) submitEdit('credit_change'); return false;">
+	    <input type=image src="/IBSng/images/icon/delete.gif" name=delete value="Delete" onClick="javascript: if(checkAnyUserChecked()) submitEdit('delete_users'); return false;">
 
 	{/if}
     

@@ -28,7 +28,7 @@ class AdminHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("SEE ADMIN INFO")
 	admin_info=admin_main.getLoader().getAdminByName(request["admin_username"]).getAdminInfo()
-	admin_info["creator"]=admin_main.getLoader().getAdminByID(admin_info["creator_id"]).getUsername()
+	admin_info["deposit"]=str(admin_info["deposit"])
 	return admin_info
 	
 

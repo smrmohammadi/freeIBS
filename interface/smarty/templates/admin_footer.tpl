@@ -9,6 +9,7 @@
 	
 	</tr>
 </table>
+</td></tr>
 <!-- End Main Table -->
 
 {literal}
@@ -21,7 +22,6 @@
     menu_select.select("menu_full");
 </script>
 {/literal}
-
 <!-- Footer -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 	<tr>
@@ -44,3 +44,4 @@
 	</tr>
 </table>
 <!-- End Footer -->
+</td></tr></table>

@@ -11,7 +11,7 @@ RADIUS packet
 
 __docformat__	= "epytext en"
 
-from core.lib.mschap import mschap
+from core.lib.mschap import mschap,mppe
 
 import md5, struct, types, random, UserDict
 import tools
@@ -425,19 +425,40 @@ class AuthPacket(Packet):
 	    ident=self["MS-CHAP2-Response"][0][0]
 	    return ident+mschap.generate_authenticator_response(password,nt_response,peer_challenge,authenticator_challenge,username)
 
-	def addMPPEkeys(self,password,encryption_policy="\x01",encryption_types="\x06"):
+
+	def addMSChapMPPEkeys(self,password,encryption_policy="\x01",encryption_types="\x06"):
 	    """
-		add mppe keys to packet.
+		add mppe keys to packet. use for mschap-v1 authentications
 		password(string): clear text password
 		encryption_policy(string):          1      Encryption-Allowed 2      Encryption-Required
 		encryption_types(string):
 	    """
 	    lm_hash=mschap.lm_password_hash(password)
-	    nt_hash=mschap.nt_password_hash(password,False)
-	    self["MS-CHAP-MPPE-Keys"]=self.PwCrypt(lm_hash[:8]+nt_hash+"\0"*8)
-	    self["MS-MPPE-Encryption-Policy"]="\0"*3+encryption_policy
-	    self["MS-MPPE-Encryption-Types"]="\0"*3+encryption_types
-	
+	    nt_hash=mschap.hash_nt_password_hash(mschap.nt_password_hash(password,False))
+	    self["MS-CHAP-MPPE-Keys"]=self.PwCrypt(lm_hash[:8]+nt_hash+"\000"*8)
+	    self["MS-MPPE-Encryption-Policy"]="\000"*3+encryption_policy
+	    self["MS-MPPE-Encryption-Types"]="\000"*3+encryption_types
+
+
+	def addMSChap2MPPEkeys(self,password,nt_response,encryption_policy="\x01",encryption_types="\x06"):
+	    """
+		add mppe keys to packet.use for mschap-v2 authentications
+		password(string): clear text password
+		encryption_policy(string):          1      Encryption-Allowed 2      Encryption-Required
+		encryption_types(string):
+	    """
+	    (send_key,recv_key)=mppe.mppe_chap2_gen_keys(password,nt_response)
+	    (send_text,recv_text)=map(mppe.create_plain_text,(send_key,recv_key))
+	    (send_salt,recv_salt)=mppe.create_salts()
+	    
+	    self["MS-MPPE-Send-Key"]=send_salt+\
+				     mppe.radius_encrypt_keys(send_text,self.secret,self.authenticator,send_salt)
+	    self["MS-MPPE-Recv-Key"]=recv_salt+\
+				     mppe.radius_encrypt_keys(recv_text,self.secret,self.authenticator,recv_salt)
+
+	    self["MS-MPPE-Encryption-Policy"]="\000"*3+encryption_policy
+	    self["MS-MPPE-Encryption-Types"]="\000"*3+encryption_types
+
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password
 

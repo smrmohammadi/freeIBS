@@ -16,8 +16,8 @@ table.Main_Page {
 	direction:ltr;
 	alignment:center;
 	text_alignment:center;
-	height:73%;
 	width:100%;
+	height:73%;
 	font-size: 7pt; 
 }
 a:link.link_in_body{
@@ -1167,7 +1167,7 @@ td.RightSide_Arrow{
 }
 
 a:link.RightSide_Links{
-    color: #990000;;
+    color: #990000;
     text-decoration:none
 }
 
@@ -1335,6 +1335,59 @@ a:visited.bw_node{
 a:hover.bw_node{ 
     font-size: 8pt;
     font-family: Tahoma; 
-    color: #CC6600;
+    color: yellow;
     text-decoration:none
+}
+
+a:link.bw_layer{
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #990000;
+    font-weight:bold; 
+    text-decoration:none
+}
+
+a:visited.bw_layer{
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #990000;
+    font-weight:bold; 
+    text-decoration:none
+}
+a:hover.bw_layer{ 
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #CC6600;
+    font-weight:bold; 
+    text-decoration:none
+}
+
+/*------------------------------*/
+/* 	Layer			*/
+/*------------------------------*/
+
+tr.Layer_Row_LightColor{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #353535; 
+	direction:ltr ;
+	background-color:#FFFFFF;
+	Text-align:left;
+	height:20;
+	font-weight:bold; 
+	padding-left:3px;
+	padding-right:3px
+}
+
+tr.Layer_Row_DarkColor{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #353535; 
+	direction:ltr ;
+	background-color:#EcEcEC;
+	Text-align:left;
+	height:20;
+	font-weight:bold; 
+	padding-left:3px;
+	padding-right:3px
 }

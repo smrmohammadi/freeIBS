@@ -10,7 +10,7 @@
 {/addEditTD}
 {addEditTD type="right" comment=TRUE}
     {op class="likestr" name="lock_reason_op" selected="lock_reason_op"} 
-    <textarea class="text" style="height:47" name="lock_reason">{ifIsRequest name="lock_reason"}</textarea>
+    <textarea class="text" style="height:47" name="lock_reason">{ifisrequest name="lock_reason"}</textarea>
 {/addEditTD}
 
 

@@ -71,7 +71,9 @@ class OnlineUsers:
 	    return None
 	self.loading_user.loadingStart(user_obj.getUserID())
 	try:
-	    user_obj.update(ras_msg)
+	    recalc_event=user_obj.update(ras_msg)
+	    if recalc_event:
+		self.recalcNextUserEvent(user_obj.getUserID(),user_obj.instances>1 or (user_obj.instances==1 and not ras_msg.hasAttr("start_accounting")))
 	finally:
 	    self.loading_user.loadingEnd(user_obj.getUserID())
 
@@ -85,16 +87,17 @@ class OnlineUsers:
 		if user_obj==None:
 		    user_obj=self.__loadUserObj(loaded_user,"Normal")
 	        user_obj.login(ras_msg)
-		self.internetAuthenticateSuccessfull(user_obj)
+		self.internetAuthenticateSuccessfull(user_obj,ras_msg)
 	    except:
 		loaded_user.setOnlineFlag(False)
 		raise
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
 	    
-    def internetAuthenticateSuccessfull(self,user_obj):
+    def internetAuthenticateSuccessfull(self,user_obj,ras_msg):
 	self.__addToOnlines(user_obj)
-	self.recalcNextUserEvent(user_obj.getUserID(),user_obj.instances>1)
+	if ras_msg.hasAttr("start_accounting"):
+	    self.recalcNextUserEvent(user_obj.getUserID(),user_obj.instances>1)
 ############################################
     def internetStop(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"])

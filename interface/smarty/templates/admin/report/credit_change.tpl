@@ -150,7 +150,7 @@
 	{/listTD}
 
 	{listTD}
-	    <a href="/IBSng/admin/admins/admin_info.php?admin_username={$row.admin_name}">
+	    <a class="link_in_body" href="/IBSng/admin/admins/admin_info.php?admin_username={$row.admin_name}">
 	        {$row.admin_name}
 	    </a>
 	{/listTD}
@@ -165,14 +165,28 @@
 	    {math equation="x + y" assign=page_total_admin_credit x=`$row.admin_credit` y=$page_total_admin_credit}
 	{/listTD}
 
-	{listTD icon=TRUE}
+	{listTD icon=TRUE }
     	    <a onClick="showReportLayer('{$row.credit_change_id}',this); return false;" href="#">
 		{listTableBodyIcon cycle_color=TRUE action="details"}
 	    </a>
 		{reportDetailLayer name=`$row.credit_change_id` title="Report Details"}
-		    Comment: {$row.comment} <br>
-		    Admin IP Address: {$row.remote_addr} <br>
-		    User IDs: {arrayJoin array=`$row.user_ids` glue=", "}
+		    {layerTable}
+	    		{layerTR cycle_color=TRUE}
+				{listTD}
+				    <font color="#990000">Comment:</font>{$row.comment}
+				{/listTD}
+			{/layerTR}
+			{layerTR cycle_color=TRUE}
+				{listTD}
+				    <font color="#990000">Admin IP Address:</font> {$row.remote_addr}
+				{/listTD}
+			{/layerTR}
+			{layerTR cycle_color=TRUE}
+				{listTD}
+				<font color="#990000">User IDs:</font>{arrayJoin array=`$row.user_ids` glue=", "}
+				{/listTD}
+			{/layerTR}
+		    {/layerTable}
 		{/reportDetailLayer}
 	{/listTD}
 	

@@ -6,22 +6,23 @@ require_once(IBSINC."bw.php");
 needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();
-if(isInRequest("add","leaf_name","protocol","filter_type","filter_value","interface_name","limit_kbits"))
+if(isInRequest("add","leaf_name","protocol","filter_type","filter_value","interface_name","rate_kbits","ceil_kbits"))
     intAddLeafService($smarty,
 		      $_REQUEST["interface_name"],
 		      $_REQUEST["leaf_name"],
 		      $_REQUEST["protocol"],
 		      $_REQUEST["filter_type"],
 		      $_REQUEST["filter_value"],
-		      $_REQUEST["limit_kbits"]);
+		      $_REQUEST["rate_kbits"],
+		      $_REQUEST["ceil_kbits"]);
 else if (isInRequest("add","leaf_name","interface_name"))
     addLeafServiceInterface($smarty,$_REQUEST["interface_name"],$_REQUEST["leaf_name"]);
 else
     redirectToInterfaceList("Invalid Input");
 
-function intAddLeafService(&$smarty,$interface_name,$leaf_name,$protocol,$filter_type,$filter_value,$limit_kbits)
+function intAddLeafService(&$smarty,$interface_name,$leaf_name,$protocol,$filter_type,$filter_value,$rate_kbits,$ceil_kbits)
 {
-    $req=new AddLeafService($leaf_name,$protocol,$filter_type . " " . $filter_value,$limit_kbits);
+    $req=new AddLeafService($leaf_name,$protocol,$filter_type . " " . $filter_value,$rate_kbits,$ceil_kbits);
     $resp=$req->sendAndRecv();
     if($resp->isSuccessful())
 	redirectToInterfaceInfo($interface_name);

@@ -46,10 +46,10 @@ function createRasTable(&$smarty,$prefix)
 function createShowHideTable(&$smarty,$prefix,$rases_content)
 {
     $content= <<<END
-<table width=100%>
+<table width=100% border=0 cellspacing=0 cellpadding=0>
     <tr>
       <td>
-	<a href="#" onClick="{$prefix}_container.toggle('{$prefix}_select_ras'); return false;"><font size=1>Show/Hide Rases</font></a>
+	<a href="#" onClick="{$prefix}_container.toggle('{$prefix}_select_ras'); return false;"><img src="/IBSng/images/icon/show_hide_rases.gif" border=0></a>
       </td>
     </tr>
     <tr id="{$prefix}_select_ras">

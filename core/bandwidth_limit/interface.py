@@ -9,7 +9,6 @@ class Interface:
 	self.root_node_id=None
 	self.minor_id_pool=IDPool((10,0xffff),"interface %s minors"%self.getInterfaceName())
 	self.major_id_pool=IDPool((10,0xffff),"interface %s majors"%self.getInterfaceName())
-
     
     def getInterfaceID(self):
 	return self.interface_id
@@ -35,7 +34,7 @@ class Interface:
 ###################
     def addRootQdisc(self):
 	bw_main.getTCRunner().delQdisc(self.interface_name,"root")
-	bw_main.getTCRunner().addQdisc(self.interface_name,"handle 0:","root","htb")
+	bw_main.getTCRunner().addQdisc(self.interface_name,"handle 1:","root","htb")
 
     def createTree(self):
 	self.addRootQdisc()
@@ -52,3 +51,7 @@ class Interface:
 	return {"interface_id":self.getInterfaceID(),
 		"interface_name":self.getInterfaceName(),
 		"comment":self.comment}
+#####################
+    def changeComment(self,comment):
+	self.comment=comment
+	

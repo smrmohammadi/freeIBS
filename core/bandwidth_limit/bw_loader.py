@@ -121,7 +121,7 @@ class BWLoader:
 	except IndexError:
 	    raise GeneralException(errorText("BANDWIDTH","NODE_ID_NOT_FOUND")%node_id)
 
-	return Node(node_info["node_id"],node_info["parent_id"],node_info["interface_id"],node_info["limit_kbits"])
+	return Node(node_info["node_id"],node_info["parent_id"],node_info["interface_id"],node_info["rate_kbits"],node_info["ceil_kbits"])
     
     def __getNodeInfoDB(self,node_id):
 	return db_main.getHandle().get("bw_node","node_id=%s"%node_id)[0]
@@ -157,8 +157,10 @@ class BWLoader:
 		    leaf_info["leaf_name"],
 		    leaf_info["parent_id"],
 		    leaf_info["interface_id"],
-		    leaf_info["total_limit_kbits"],
-		    leaf_info["default_limit_kbits"],
+		    leaf_info["total_rate_kbits"],
+		    leaf_info["total_ceil_kbits"],
+		    leaf_info["default_rate_kbits"],
+		    leaf_info["default_ceil_kbits"],
 		    services)
 
     def __getleafServicesObjs(self,leaf_id):
@@ -166,7 +168,7 @@ class BWLoader:
 	return map(self.__createLeafServicesObj,services_infos)
 
     def __createLeafServicesObj(self,service_info):
-	return LeafService(service_info["leaf_service_id"],service_info["leaf_id"],service_info["protocol"],service_info["filter"],service_info["limit_kbits"])
+	return LeafService(service_info["leaf_service_id"],service_info["leaf_id"],service_info["protocol"],service_info["filter"],service_info["rate_kbits"],service_info["ceil_kbits"])
     
     def __getLeafInfoDB(self,leaf_id):
 	return db_main.getHandle().get("bw_leaf","leaf_id=%s"%leaf_id)[0]

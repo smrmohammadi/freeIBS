@@ -36,4 +36,17 @@ function intAssignBwLeafNames(&$smarty,$add_empty_leaf=TRUE)
 }
 
 
+function intSetInterfaceInfo(&$smarty,$interface_name)
+{
+    $req=new GetInterfaces();
+    $resp=$req->sendAndRecv();
+    if($resp->isSuccessful())
+    {
+	$result=$resp->getResult();
+	$smarty->assign_array($result[$interface_name]);
+    }
+    else
+	$resp->setErrorInSmarty($smarty);
+}
+
 ?>

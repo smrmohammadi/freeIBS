@@ -12,8 +12,11 @@ class IDPool:
 	self.name=name
 
     def __getIDsFromRange(self,_count,_range):
-	return range(_range[0],_range[1]+1)[:_count]
-    
+	if _range[0]+_count<_range[1]:
+	    return range(_range[0],_range[0]+_count)
+	else:
+	    return range(_range[0],_range[1]+1)
+	
     def __insertToFreeRanges(self,new_range):
 	i=0
 	new_range=list(new_range)
@@ -21,7 +24,7 @@ class IDPool:
 	try:
     	    for _range in self.__free_ranges:
 		if _range[0]>new_range[0]:
-		    self.printPool()
+#		    self.printPool()
 		    backward_merge=False
 		    forward_merge=False
 		    if i>0 and self.__free_ranges[i-1][1]+1==new_range[0]:

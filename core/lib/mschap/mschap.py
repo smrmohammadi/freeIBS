@@ -286,11 +286,11 @@ def lm_password_hash(password):
    }
 
     """
-    ucase_password=password.upper()
+    ucase_password=password.upper()[:14]
     while len(ucase_password)<14:
 	ucase_password+="\0"
-    password_hash=des_hash(ucase_password[:8])
-    password_hash+=des_hash(ucase_password[8:])
+    password_hash=des_hash(ucase_password[:7])
+    password_hash+=des_hash(ucase_password[7:])
     return password_hash
 
 def des_hash(clear):
@@ -312,5 +312,5 @@ def des_hash(clear):
    }
     """
     des_obj=des.DES(clear)
-    return des_obj.encrypt("KGS!@#$%")
-    
+    return des_obj.encrypt(r"KGS!@#$%")
+

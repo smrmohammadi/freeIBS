@@ -9,7 +9,7 @@ from core.charge import charge_main
 
 class BWActions:
     def __checkLimitKbits(self,limit_kbits):
-	if not isInt(limit_kbits) or limit_kbits <0 or limit_kbits > 1024*1024:
+	if not isInt(limit_kbits) or limit_kbits <=0 or limit_kbits > 1024*1024:
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_LIMIT_KBITS")%limit_kbits)
 
     #############################################
@@ -29,7 +29,7 @@ class BWActions:
 	interface_id=self.__getNewInterfaceID()
 	self.__addInterfaceDB(interface_id,interface_name,comment)
 	bw_main.getLoader().loadInterface(interface_id)
-	self.addNode(interface_name,None,1024*100)
+	self.addNode(interface_name,None,1024*100,1024*100)
 	bw_main.getLoader().getInterfaceByName(interface_name).createTree()
 
     def __addInterfaceCheckInput(self,interface_name,comment):
@@ -50,48 +50,51 @@ class BWActions:
 							"comment":dbText(comment)})
 
     #############################################
-    def addNode(self,interface_name,parent_id,limit_kbits):
-	self.__addNodeCheckInput(interface_name,parent_id,limit_kbits)
+    def addNode(self,interface_name,parent_id,rate_kbits,ceil_kbits):
+	self.__addNodeCheckInput(interface_name,parent_id,rate_kbits,ceil_kbits)
 	int_obj=bw_main.getLoader().getInterfaceByName(interface_name)
 	node_id=self.__getNewNodeID()
-	self.__addNodeDB(node_id,int_obj.getInterfaceID(),parent_id,limit_kbits)
+	self.__addNodeDB(node_id,int_obj.getInterfaceID(),parent_id,rate_kbits,ceil_kbits)
 	bw_main.getLoader().loadNode(node_id)
 	node_obj=bw_main.getLoader().getNodeByID(node_id)
 	node_obj.registerInParent()
 	node_obj.createSubTree()
 	
-    def __addNodeCheckInput(self,interface_name,parent_id,limit_kbits):
+    def __addNodeCheckInput(self,interface_name,parent_id,rate_kbits,ceil_kbits):
 	int_obj=bw_main.getLoader().getInterfaceByName(interface_name)
 	if parent_id!=None:
 	    bw_main.getLoader().getNodeByID(parent_id)
 	elif int_obj.getRootNode()!=None:
 	    raise GeneralException(errorText("BANDWIDTH","INTERFACE_HAS_ROOT_NODE")%interface_name)
 
-	self.__checkLimitKbits(limit_kbits)
+	self.__checkLimitKbits(rate_kbits)
+	self.__checkLimitKbits(ceil_kbits)
+
 
     def __getNewNodeID(self):
 	return db_main.getHandle().seqNextVal("bw_node_node_id_seq")
 
-    def __addNodeDB(self,node_id,interface_id,parent_id,limit_kbits):
-	db_main.getHandle().transactionQuery(self.__addNodeQuery(node_id,interface_id,parent_id,limit_kbits))
+    def __addNodeDB(self,node_id,interface_id,parent_id,rate_kbits,ceil_kbits):
+	db_main.getHandle().transactionQuery(self.__addNodeQuery(node_id,interface_id,parent_id,rate_kbits,ceil_kbits))
 
-    def __addNodeQuery(self,node_id,interface_id,parent_id,limit_kbits):
+    def __addNodeQuery(self,node_id,interface_id,parent_id,rate_kbits,ceil_kbits):
 	if parent_id==None:
 	    parent_id="NULL"
 	return ibs_db.createInsertQuery("bw_node",{ "node_id":node_id,
 						    "interface_id":interface_id,
 						    "parent_id":parent_id,
-						    "limit_kbits":limit_kbits})
+						    "rate_kbits":rate_kbits,
+						    "ceil_kbits":ceil_kbits})
     #################################################
-    def addLeaf(self,leaf_name,parent_id,default_limit_kbits,total_limit_kbits):
-	self.__addLeafCheckInput(leaf_name,parent_id,default_limit_kbits,total_limit_kbits)
+    def addLeaf(self,leaf_name,parent_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
+	self.__addLeafCheckInput(leaf_name,parent_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
 	node_obj=bw_main.getLoader().getNodeByID(parent_id)
 	leaf_id=self.__getNewLeafID()
-	self.__addLeafDB(leaf_id,leaf_name,parent_id,node_obj.getInterfaceID(),default_limit_kbits,total_limit_kbits)
+	self.__addLeafDB(leaf_id,leaf_name,parent_id,node_obj.getInterfaceID(),default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
 	bw_main.getLoader().loadLeaf(leaf_id)
 	bw_main.getLoader().getLeafByID(leaf_id).registerInParent()
 
-    def __addLeafCheckInput(self,leaf_name,parent_id,default_limit_kbits,total_limit_kbits):
+    def __addLeafCheckInput(self,leaf_name,parent_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
 	bw_main.getLoader().getNodeByID(parent_id)
 	if bw_main.getLoader().leafNameExists(leaf_name):
 	    raise GeneralException(errorText("BANDWIDTH","LEAF_NAME_ALREADY_EXISTS")%leaf_name)
@@ -99,35 +102,45 @@ class BWActions:
 	if not isValidName(leaf_name):
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_LEAF_NAME")%leaf_name)
 	
-	self.__checkLimitKbits(default_limit_kbits)
-	if not isInt(total_limit_kbits):
-	    raise GeneralException(errorText("BANDWIDTH","INVALID_TOTAL_LIMIT_KBITS")%total_limit_kbits)
+	self.__checkLimitKbits(default_rate_kbits)
+	self.__checkLimitKbits(default_ceil_kbits)
 
+	if not isInt(total_rate_kbits):
+	    raise GeneralException(errorText("BANDWIDTH","INVALID_TOTAL_LIMIT_KBITS")%total_rate_kbits)
+
+	if not isInt(total_ceil_kbits):
+	    raise GeneralException(errorText("BANDWIDTH","INVALID_TOTAL_LIMIT_KBITS")%total_ceil_kbits)
+	
+	if total_rate_kbits*total_ceil_kbits<0:
+	    raise GeneralException(errorText("BANDWIDTH","INVALID_TOTAL_LIMIT_KBITS")%"%s,%s"%(total_rate_kbits,total_ceil_kbits))
+	
     def __getNewLeafID(self):
 	return db_main.getHandle().seqNextVal("bw_leaf_leaf_id_seq")
 
-    def __addLeafDB(self,leaf_id,leaf_name,parent_id,interface_id,default_limit_kbits,total_limit_kbits):
+    def __addLeafDB(self,leaf_id,leaf_name,parent_id,interface_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
 	db_main.getHandle().transactionQuery(
-	    self.__addLeafQuery(leaf_id,leaf_name,parent_id,interface_id,default_limit_kbits,total_limit_kbits))
+	    self.__addLeafQuery(leaf_id,leaf_name,parent_id,interface_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits))
 
-    def __addLeafQuery(self,leaf_id,leaf_name,parent_id,interface_id,default_limit_kbits,total_limit_kbits):
+    def __addLeafQuery(self,leaf_id,leaf_name,parent_id,interface_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
 	return ibs_db.createInsertQuery("bw_leaf",{ "leaf_id":leaf_id,
 						    "leaf_name":dbText(leaf_name),
 						    "parent_id":parent_id,
 						    "interface_id":interface_id,
-						    "default_limit_kbits":default_limit_kbits,
-						    "total_limit_kbits":total_limit_kbits})
+						    "default_rate_kbits":default_rate_kbits,
+						    "default_ceil_kbits":default_ceil_kbits,
+						    "total_rate_kbits":total_rate_kbits,
+						    "total_ceil_kbits":total_ceil_kbits})
 
     ########################################
-    def addLeafService(self,leaf_name,protocol,_filter,limit_kbits):
+    def addLeafService(self,leaf_name,protocol,_filter,rate_kbits,ceil_kbits):
 	(filter_type,filter_value)=self.__parseFilter(_filter)
-	self.__addLeafServiceCheckInput(leaf_name,protocol,_filter,limit_kbits,filter_type,filter_value)
+	self.__addLeafServiceCheckInput(leaf_name,protocol,_filter,rate_kbits,ceil_kbits,filter_type,filter_value)
 	leaf_obj=bw_main.getLoader().getLeafByName(leaf_name)
 	leaf_service_id=self.__getNewLeafServiceID()
-	self.__addLeafServiceDB(leaf_service_id,leaf_obj.getLeafID(),protocol,filter_type,filter_value,limit_kbits)
+	self.__addLeafServiceDB(leaf_service_id,leaf_obj.getLeafID(),protocol,filter_type,filter_value,rate_kbits,ceil_kbits)
 	bw_main.getLoader().loadLeaf(leaf_obj.getLeafID())
 
-    def __addLeafServiceCheckInput(self,leaf_name,protocol,_filter,limit_kbits,filter_type,filter_value):
+    def __addLeafServiceCheckInput(self,leaf_name,protocol,_filter,rate_kbits,ceil_kbits,filter_type,filter_value):
 	leaf_obj=bw_main.getLoader().getLeafByName(leaf_name)
 	if leaf_obj.hasService((protocol,"%s %s"%(filter_type,filter_value))):
 	    raise GeneralException(errorText("BANDWIDTH","LEAF_HAS_THIS_FILTER")%(leaf_name,_filter,protocol))
@@ -135,7 +148,8 @@ class BWActions:
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_PROTOCOL")%protocol)
 	
 	self.__checkFilter(_filter,filter_type,filter_value,protocol)
-	self.__checkLimitKbits(limit_kbits)
+	self.__checkLimitKbits(rate_kbits)
+	self.__checkLimitKbits(ceil_kbits)
 	
     def __getNewLeafServiceID(self):
 	return db_main.getHandle().seqNextVal("bw_leaf_services_leaf_service_id_seq")
@@ -161,16 +175,17 @@ class BWActions:
 	else:
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_FILTER")%_filter)
 	
-    def __addLeafServiceDB(self,leaf_service_id,leaf_id,protocol,filter_type,filter_value,limit_kbits):
+    def __addLeafServiceDB(self,leaf_service_id,leaf_id,protocol,filter_type,filter_value,rate_kbits,ceil_kbits):
 	_filter="%s %s"%(filter_type,filter_value)
-	db_main.getHandle().transactionQuery(self.__addServiceQuery(leaf_service_id,leaf_id,protocol,_filter,limit_kbits))
+	db_main.getHandle().transactionQuery(self.__addServiceQuery(leaf_service_id,leaf_id,protocol,_filter,rate_kbits,ceil_kbits))
 
-    def __addServiceQuery(self,leaf_service_id,leaf_id,protocol,_filter,limit_kbits):	
+    def __addServiceQuery(self,leaf_service_id,leaf_id,protocol,_filter,rate_kbits,ceil_kbits):
 	return ibs_db.createInsertQuery("bw_leaf_services",{"leaf_service_id":leaf_service_id,
 							    "leaf_id":leaf_id,
 							    "protocol":dbText(protocol),
 							    "filter":dbText(_filter),
-							    "limit_kbits":limit_kbits})
+							    "rate_kbits":rate_kbits,
+							    "ceil_kbits":ceil_kbits})
     ###################################
     def delLeafService(self,leaf_name,leaf_service_id):
 	"""
@@ -266,5 +281,57 @@ class BWActions:
 
     def __delInterfaceQuery(self,int_id):
 	return ibs_db.createDeleteQuery("bw_interface","interface_id=%s"%int_id)
+    ####################################
+    def updateInterface(self,interface_id,interface_name,comment):	
+	self.__updateInterfaceCheckInput(interface_id,interface_name,comment)
+	int_obj=bw_main.getLoader().getInterfaceByID(interface_id)
+	self.__updateInterfaceDB(interface_id,interface_name,comment)
+	if interface_name!=int_obj.getInterfaceName():
+    	    bw_main.getLoader().unloadInterface(interface_id)
+	    bw_main.getLoader().loadInterface(interface_id)
+	    int_obj=bw_main.getLoader().getInterfaceByID(interface_id)
+	    self.__reRegisterRootNode(interface_id)
+	    int_obj.createTree()
+	else:
+	    int_obj.changeComment(comment)
+
+    def __reRegisterRootNode(self,interface_id):
+	for node_id in bw_main.getLoader().getAllNodeIDs():
+	    node_obj=bw_main.getLoader().getNodeByID(node_id)
+	    if node_obj.getInterfaceID()==interface_id and node_obj.getParentID()==None:
+		node_obj.registerInParent()
+		return
+
+    def __updateInterfaceCheckInput(self,interface_id,interface_name,comment):
+	int_obj=bw_main.getLoader().getInterfaceByID(interface_id)
+	if int_obj.getInterfaceName()!=interface_name:
+	    self.__addInterfaceCheckInput(interface_name,comment)
 	
+    def __updateInterfaceDB(self,interface_id,interface_name,comment):
+	db_main.getHandle().transactionQuery(
+				self.__updateInterfaceQuery(interface_id,interface_name,comment))
+
+    def __updateInterfaceQuery(self,interface_id,interface_name,comment):
+	return ibs_db.createUpdateQuery("bw_interface",{"interface_name":dbText(interface_name),
+					 "comment":dbText(comment)},"interface_id=%s"%interface_id)
+	    
+    ######################################
+    def updateNode(self,node_id,rate_kbits,ceil_kbits):
+	self.__updateNodeCheckInput(node_id,rate_kbits,ceil_kbits)
+	self.__updateNodeDB(node_id,rate_kbits,ceil_kbits)
+	node_obj=bw_main.getLoader().getNodeByID(node_id)
+	node_obj.update(rate_kbits,ceil_kbits)
     
+    def __updateNodeCheckInput(self,node_id,rate_kbits,ceil_kbits):
+	bw_main.getLoader().getNodeByID(node_id)
+
+	self.__checkLimitKbits(rate_kbits)
+	self.__checkLimitKbits(ceil_kbits)
+
+    def __updateNodeDB(self,node_id,rate_kbits,ceil_kbits):
+	db_main.getHandle().transactionQuery(self.__updateNodeQuery(node_id,rate_kbits,ceil_kbits))
+
+    def __updateNodeQuery(self,node_id,rate_kbits,ceil_kbits):
+	return ibs_db.createUpdateQuery("bw_node",{"rate_kbits":rate_kbits,
+						   "ceil_kbits":ceil_kbits},"node_id=%s"%node_id)
+						   

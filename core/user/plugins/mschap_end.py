@@ -15,13 +15,15 @@ class MSChapEndPlugin(user_plugin.UserPlugin):
  
     def login(self,ras_msg):
 	if ras_msg.hasAttr("ms_chap_response"):
-    	    ras_msg.getReplyPacket().addMPPEkeys(self.user_obj.getUserAttrs()["normal_password"])
+    	    ras_msg.getReplyPacket().addMSChapMPPEkeys(self.user_obj.getUserAttrs()["normal_password"])
 
 	elif ras_msg.hasAttr("ms_chap2_response"):
 		authenticator_response=ras_msg.getRequestPacket().generateMSChap2Response(self.user_obj.getUserAttrs()["normal_username"],
 											  self.user_obj.getUserAttrs()["normal_password"])
 
 		ras_msg.getReplyPacket()["MS-CHAP2-Success"]=authenticator_response
-		ras_msg.getReplyPacket().addMPPEkeys(self.user_obj.getUserAttrs()["normal_password"])
+		ras_msg.getReplyPacket().addMSChap2MPPEkeys(self.user_obj.getUserAttrs()["normal_password"],
+							    ras_msg.getRequestPacket()["MS-CHAP2-Response"][0][26:]
+							    )
 
 

@@ -10,13 +10,18 @@ function smarty_block_tabTable($params,$content,&$smarty,&$repeat)
     parameter content_height(integer,optional): set height of contents, if this value is small, you'll see tab goes
 						up n down
 
+    parameter action_icon(boolean,optional): Tells which icon to use for form submit
+					     Can be on of "edit" "delete" "add" "load" "save" or "ok"
+					     default is "ok"
+
+
 */
     if(!is_null($content))
     {
 	$table_id=getTabTableID(FALSE);
 	$buttons=createButtons($params["tabs"],$table_id);
 	$height=isset($params["content_height"])?$params["content_height"]:200;
-	return createTabTable($buttons,$content,$table_id,$height);
+	return createTabTable($buttons,$content,$table_id,$height,$params["action_icon"]);
     }
     else
 	$table_id=getTabTableID(TRUE);
@@ -60,7 +65,7 @@ END;
     return $ret;
 }
 
-function createTabTable($buttons,$content,$table_id,$height)
+function createTabTable($buttons,$content,$table_id,$height,$action_icon)
 {
 	return <<<END
 <script>
@@ -84,8 +89,21 @@ function createTabTable($buttons,$content,$table_id,$height)
 		    {$content}
 		</td>
 	</tr>
+
 	<tr>
-		<td  class="Tab_Foot_line"></td>
+		<td>
+			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
+				<tr>
+					<td class="Form_Foot_Begin_Line_red"></td>
+					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/list/end_of_line_bottom_of_table.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/icon/{$action_icon}.gif"></td>
+				</tr>
+				<tr>
+					<td class="Form_Foot_Below_Line_red"></td>
+				</tr>
+			</table>
+			<!-- End Form Foot Table -->
+		</td>
 	</tr>
 </table>
 END;

@@ -1,6 +1,9 @@
 from core.charge.charge_rule import ChargeRule
 from core.bandwidth_limit import simple_bw_limit
 from core.bandwidth_limit import bw_main
+from core.ibs_exceptions import *
+from core.errors import errorText
+
 
 class InternetChargeRule(ChargeRule):
     def __init__(self,rule_id,charge_obj,cpm,cpk,day_of_weeks,start,end,bandwidth_limit,bw_tx_leaf_id,bw_rx_leaf_id,assumed_kps,ras_id,ports):
@@ -119,7 +122,7 @@ class InternetChargeRule(ChargeRule):
 	    logException(LOG_ERROR,"Can't apply bandwidth limit on user")
 
 	if action=="apply":
-	    bw_main.getManager().applyBwLimit(ip_addr,self.bw_tx_leaf_id.self.bw_rx_leaf_id)
+	    bw_main.getManager().applyBwLimit(ip_addr,self.bw_tx_leaf_id,self.bw_rx_leaf_id)
 	else:
 	    bw_main.getManager().removeBwLimit(ip_addr)
 

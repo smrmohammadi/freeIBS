@@ -127,11 +127,12 @@
 	Rases
     {/addEditTD}
 
-    {addEditTD type="right" double=TRUE comment=TRUE}
+    <td class="Form_Content_Row_right_Textarea_2col" valign="top" colspan="7">
     	{rasCheckBoxes prefix="ras"}
-    {/addEditTD}
-
-
+    </td></tr>
+    <tr>
+	<td colspan="9" class="Form_Content_Row_Space"></td>
+    </tr>
 
 
 {/addEditTable}
@@ -183,7 +184,7 @@
   {foreach from=$report item=row}
 	{listTR type="body"}
 	    {listTD}
-		<a href="/IBSng/admin/user/user_info.php?user_id={$row.user_id|escape:"url"}">
+		<a class="link_in_body" href="/IBSng/admin/user/user_info.php?user_id={$row.user_id|escape:"url"}">
 		    {$row.user_id}
 		</a>
 	    {/listTD}
@@ -228,18 +229,18 @@
 		{listTableBodyIcon cycle_color=TRUE action="details"}
 	    </a>
 		{reportDetailLayer name=`$row.connection_log_id` title="Report Details"}
-		    <table>
-		    {foreach from=`$row.details` item=tuple}
-			<tr>
-			    <td>
-				{$tuple[0]}:
-			    </td>
-			    <td>
-				{$tuple[1]}
-			    </td>
-			</tr>
+		    {layerTable}
+			{foreach from=`$row.details` item=tuple}
+	    		    {layerTR cycle_color=TRUE}
+				{listTD}
+				    {$tuple[0]}:
+				{/listTD}
+				{listTD}
+				    {$tuple[1]}
+				{/listTD}
+			{/layerTR}
 		    {/foreach}
-		    </table>
+		    {/layerTable}
 		{/reportDetailLayer}
 	{/listTD}
 	

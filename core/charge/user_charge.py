@@ -11,12 +11,14 @@ class UserCharge:
 	self.effective_rules=[]
 	self.rule_start=[]
 	self.rule_start_inout=[]
+	self.accounting_started=[]
 
     def login(self,effective_rule,instance):
     	self.effective_rules.append(effective_rule)
 	self.rule_start.append(time.time())
 	self.rule_start_inout.append([0,0])
 	self.credit_prev_usage_instance.append(0)
+	self.accounting_started.append(False)
 
     def logout(self,instance):
 	_index=instance-1
@@ -24,3 +26,4 @@ class UserCharge:
 	del(self.rule_start[_index])
 	del(self.rule_start_inout[_index])
 	del(self.credit_prev_usage_instance[_index])
+	del(self.accounting_started[_index])

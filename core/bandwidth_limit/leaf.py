@@ -4,7 +4,7 @@ from core.bandwidth_limit import bw_main
 from core.bandwidth_limit.user_leaf import UserLeaf
 
 class Leaf:
-    def __init__(self,leaf_id,leaf_name,parent_id,interface_id,total_bw_kbits,default_bw_kbits,services):
+    def __init__(self,leaf_id,leaf_name,parent_id,interface_id,total_rate_kbits,total_ceil_kbits,default_rate_kbits,default_ceil_kbits,services):
 	"""
 	    services(list of LeafService Instances): services belongs to this leaf
 	"""
@@ -12,8 +12,10 @@ class Leaf:
 	self.leaf_name=leaf_name
 	self.parent_id=parent_id
 	self.interface_id=interface_id
-	self.total_bw_kbits=total_bw_kbits
-	self.default_bw_kbits=default_bw_kbits
+	self.total_rate_kbits=total_rate_kbits
+	self.total_ceil_kbits=total_ceil_kbits
+	self.default_rate_kbits=default_rate_kbits
+	self.default_ceil_kbits=default_ceil_kbits
 	self.services=services
 	
     def getLeafID(self):
@@ -25,11 +27,17 @@ class Leaf:
     def getServices(self):
 	return self.services
 	
-    def getTotalBwLimit(self):
-	return self.total_bw_kbits
+    def getTotalRate(self):
+	return self.total_rate_kbits
 
-    def getDefaultBwLimit(self):
-	return self.default_bw_kbits
+    def getTotalCeil(self):
+	return self.total_ceil_kbits
+
+    def getDefaultRate(self):
+	return self.default_rate_kbits
+
+    def getDefaultCeil(self):
+	return self.default_ceil_kbits
     #########################
     def getParentNode(self):
 	return bw_main.getLoader().getNodeByID(self.getParentNodeID())	
@@ -84,14 +92,16 @@ class Leaf:
 		"parent_id":self.getParentNodeID(),
 		"interface_id":self.getInterfaceID(),
 		"interface_name":self.getInterfaceName(),
-		"total_limit_kbits":self.getTotalBwLimit(),
-		"default_limit_kbits":self.getDefaultBwLimit(),
+		"total_rate_kbits":self.getTotalRate(),
+		"total_ceil_kbits":self.getTotalCeil(),
+		"default_rate_kbits":self.getDefaultRate(),
+		"default_ceil_kbits":self.getDefaultCeil(),
 		"services":map(lambda service:service.getInfo(),self.getServices())}
 
 #########################################################################################
 	
 class LeafService:
-    def __init__(self,leaf_service_id,leaf_id,protocol,_filter,limit_kbytes):
+    def __init__(self,leaf_service_id,leaf_id,protocol,_filter,rate_kbits,ceil_kbits):
 	"""
 	    _filter(string): until now, it has two parts, a type and a value
 			     type is filter identifier like sport,dport,icmp-type and value
@@ -101,11 +111,14 @@ class LeafService:
 	self.leaf_id=leaf_id
 	self.protocol=protocol
 	self._filter=_filter
-	self.limit_kbytes=limit_kbytes
+	self.rate_kbits=rate_kbits
+	self.ceil_kbits=ceil_kbits
 
+    def getRate(self):
+	return self.rate_kbits
 
-    def getBwLimit(self):
-	return self.limit_kbytes
+    def getCeil(self):
+	return self.ceil_kbits
 
     def getProtocol(self):
 	return self.protocol
@@ -126,7 +139,8 @@ class LeafService:
 	return {"leaf_service_id":self.getLeafServiceID(),
 		"filter":self.getFilter(),
 		"protocol":self.getProtocol(),
-		"limit_kbits":self.getBwLimit(),
+		"rate_kbits":self.getRate(),
+		"ceil_kbits":self.getCeil(),
 		"leaf_id":self.getLeafID(),
 		"leaf_name":self.getLeafName()}
 

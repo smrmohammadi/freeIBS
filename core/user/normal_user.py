@@ -24,9 +24,9 @@ class NormalUser:
 	    return ip address of "instance" of user
 	"""
 	user_attrs=self.user_obj.getInstanceInfo(instance)["attrs"]
-	if user_attr.has_key("remote_ip"):
-	    return user_attrs["remote_id"]
-	elif user_attr.has_key("ip_pool_assigned_ip"):
+	if user_attrs.has_key("remote_ip"):
+	    return user_attrs["remote_ip"]
+	elif user_attrs.has_key("ip_pool_assigned_ip"):
 	    return user_attrs["ip_pool_assigned_ip"]
 	else:
 	    raise GeneralException(errorText("USER_LOGIN","USER_IP_NOT_AVAILABLE")%self.user_obj.getUserID())

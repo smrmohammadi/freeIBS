@@ -17,7 +17,7 @@ def init():
 
 class LockUserPlugin(user_plugin.UserPlugin): 
     def login(self,args):
-	if user_obj.getUserAttrs().hasAttr("lock"):
+	if self.user_obj.getUserAttrs().hasAttr("lock"):
 	    raise LoginException(errorText("USER_LOGIN","USER_LOCKED"))
 
 	

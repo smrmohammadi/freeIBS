@@ -45,21 +45,40 @@
 	{/addEditTD}
 
 	{addEditTD type="left" err="total_limit_kbits_err"}
-	    Total Bandwidth Limit
+	    Total Bandwidth Rate
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=total_limit_kbits value="{ifisinrequest name="total_limit_kbits" default_var="total_limit_kbits"}" class=text> kbit/s
-	    {helpicon subject='total limit kbits' category='bandwidth'}
+	    <input type=text name=total_rate_kbits value="{ifisinrequest name="total_rate_kbits" default_var="total_rate_kbits"}" class=text> kbit/s
+	    {helpicon subject='total rate kbits' category='bandwidth'}
+	{/addEditTD}
+
+	{addEditTD type="left" err="total_limit_kbits_err"}
+	    Total Bandwidth Ceil
+	{/addEditTD}
+
+	{addEditTD type="right"}
+	    <input type=text name=total_ceil_kbits value="{ifisinrequest name="total_ceil_kbits" default_var="total_ceil_kbits"}" class=text> kbit/s
+	    {helpicon subject='total ceil kbits' category='bandwidth'}
+	{/addEditTD}
+
+
+	{addEditTD type="left" err="default_kbits_err"}
+	    Default Bandwidth Rate
+	{/addEditTD}
+
+	{addEditTD type="right"}
+	    <input type=text name=default_rate_kbits value="{ifisinrequest name="default_rate_kbits" default_var="default_rate_kbits"}" class=text> kbit/s
+	    {helpicon subject='default rate kbits' category='bandwidth'}
 	{/addEditTD}
 
 	{addEditTD type="left" err="default_kbits_err"}
-	    Default Bandwidth Limit
+	    Default Bandwidth Ceil
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=default_limit_kbits value="{ifisinrequest name="default_limit_kbits" default_var="default_limit_kbits"}" class=text> kbit/s
-	    {helpicon subject='default limit kbits' category='bandwidth'}
+	    <input type=text name=default_ceil_kbits value="{ifisinrequest name="default_ceil_kbits" default_var="default_ceil_kbits"}" class=text> kbit/s
+	    {helpicon subject='default ceil kbits' category='bandwidth'}
 	{/addEditTD}
 	
     {/addEditTable}

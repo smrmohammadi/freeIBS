@@ -1,7 +1,7 @@
 <?php
 
 function smarty_block_listTR($params,$content,&$smarty)
-{/*	Create an Add edit style row(TR).
+{/*	Create list style row(TR)
 	parameter type(text,required): Can be either of "header" or "body"
 				       "header" creates a header style TR and
 				       "body" creates a body style TR

@@ -95,8 +95,8 @@ class PPPDRas(GeneralUpdateRas):
 	ras_msg["unique_id"]="port"
 	if status_type=="Start":
 	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
-	    request_pkt=ras_msg.getRequestPacket()
-	    ras_msg["update_attrs"]=["remote_ip"]
+	    ras_msg["start_accounting"]=True
+	    ras_msg["update_attrs"]=["remote_ip","start_accounting"]
 	    ras_msg.setAction("INTERNET_UPDATE")
 	elif status_type=="Stop":
 	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})

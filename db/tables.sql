@@ -289,7 +289,8 @@ create table bw_node (
     node_id integer primary key,
     interface_id integer references bw_interface,
     parent_id integer references bw_node,
-    limit_kbits integer
+    rate_kbits integer,
+    ceil_kbits integer
 );
 create sequence bw_node_node_id_seq;
 
@@ -298,8 +299,10 @@ create table bw_leaf (
     leaf_name text,
     interface_id integer references bw_interface,
     parent_id integer references bw_node,
-    default_limit_kbits integer,
-    total_limit_kbits integer
+    default_rate_kbits integer,
+    default_ceil_kbits integer,
+    total_rate_kbits integer,
+    total_ceil_kbits integer
 );
 create sequence bw_leaf_leaf_id_seq;
 
@@ -308,7 +311,8 @@ create table bw_leaf_services (
     leaf_id integer references bw_leaf,
     protocol text,
     filter text,
-    limit_kbits integer
+    rate_kbits integer,
+    ceil_kbits integer
 );
 create sequence bw_leaf_services_leaf_service_id_seq;    
 

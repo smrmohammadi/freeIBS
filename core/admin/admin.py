@@ -3,6 +3,7 @@ from core.lib import password_lib
 from core.ibs_exceptions import *
 from core.lib.general import *
 from core.charge import charge_main
+from core.admin import admin_main
 import re
 import threading
 import copy
@@ -37,7 +38,8 @@ class Admin:
 		"comment":self.comment,
 		"admin_id":self.admin_id,
 		"deposit":self.deposit,
-		"creator_id":self.creator_id
+		"creator_id":self.creator_id,
+		"creator":admin_main.getLoader().getAdminByID(self.creator_id).getUsername()
 		}
 
     def setLocks(self,locks):

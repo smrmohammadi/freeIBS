@@ -2,6 +2,9 @@ from core.charge.charge import ChargeWithRules
 from core.user.can_stay_online_result import CanStayOnlineResult
 from core import defs
 from core.lib.time_lib import *
+from core.ibs_exceptions import *
+from core.errors import errorText
+
 import time
 CHARGE_DEBUG=True
 
@@ -71,6 +74,8 @@ class InternetCharge(ChargeWithRules):
 	    calculate and return amount of credit that this instance of user consumed
 	    during --EFFECTIVE-- rule only
 	"""
+	if not user_obj.charge_info.accounting_started[instance-1]:
+	    return 0
 	
 	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	now=time.time()

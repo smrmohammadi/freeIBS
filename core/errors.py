@@ -194,7 +194,7 @@ BANDWIDTH_ERRORS={
     "INTERFACE_NAME_ALREADY_EXISTS":"Interface %s already defined",
     "INVALID_INTERFACE_NAME":"Invalid Interface name %s",
     "INTERFACE_HAS_ROOT_NODE":"Interface %s already has root node",
-    "INVALID_LIMIT_KBITS":"Limits Kbit/s '%s' should be greater or equals zero integer",
+    "INVALID_LIMIT_KBITS":"Limits Kbit/s '%s' should be greater than zero integer",
     "INVALID_LEAF_NAME":"Invalid Leaf name %s",
     "INVALID_TOTAL_LIMIT_KBITS":"Total Limit Kbit/s '%s' should be an integer",
     "LEAF_NAME_ALREADY_EXISTS":"Leaf name %s already defined",

@@ -30,7 +30,6 @@ class Charge:
 	self.admin_id=admin_id
 	self.visible_to_all=visible_to_all
 	self._type=_type
-    
 
     def getType(self):
 	"""
@@ -73,6 +72,13 @@ class Charge:
 	pass
 
 	
+    def startAccounting(self,user_obj,instance):
+	"""
+	    call to notify accounting of user should be started
+	"""
+	user_obj.charge_info.accounting_started[instance-1]=True
+	
+
     def logout(self,user_obj,instance): 
 	"""
     	    called when logout event of user occures or when the user login was not successful
@@ -133,8 +139,10 @@ class ChargeWithRules(Charge):
 
 	effective_rule=self.getEffectiveRule(user_obj,user_obj.instances)
 	user_obj.charge_info.login(effective_rule,user_obj.instances)
-	effective_rule.start(user_obj,user_obj.instances)
-	
+    
+    def startAccounting(self,user_obj,instance):
+	Charge.startAccounting(self,user_obj,instance)
+	user_obj.charge_info.effective_rules[instance-1].start(user_obj,user_obj.instances)
 
     def logout(self,user_obj,instance):
 	Charge.logout(self,user_obj,instance)

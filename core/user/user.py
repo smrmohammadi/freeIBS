@@ -160,8 +160,12 @@ class User:
 	"""
 	    plugins can update themeselved whenever we recieved an update packet, with updated info 
 	    from radius server
+	    They can return True to cause a recalcEvent for user
 	"""
-	user_main.getUserPluginManager().callHooks("UPDATE",self,[ras_msg])
+	ret=user_main.getUserPluginManager().callHooks("UPDATE",self,[ras_msg])
+	if True in ret:
+	    return True
+	return False
 
     def canStayOnline(self):
 	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))

@@ -28,7 +28,7 @@ function intShowInterfaceInfo(&$smarty,$interface_name)
 {
     $tree=createTree($smarty,$interface_name);
     $smarty->assign_by_ref("tree",$tree);
-    $smarty->assign("interface_name",$interface_name);
+    intSetInterfaceInfo($smarty,$interface_name);
     $smarty->display("admin/bw/interface_info.tpl");    
 
 }

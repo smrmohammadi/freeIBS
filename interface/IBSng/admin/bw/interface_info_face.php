@@ -11,7 +11,8 @@ function createSubTree(&$smarty,&$node,$line)
 	return "";
     }
 
-    $limit_kbits=price($node_info["limit_kbits"]);
+    $rate_kbits=price($node_info["rate_kbits"]);
+    $ceil_kbits=price($node_info["ceil_kbits"]);
     $n_table="<table align=center cellspacing=0 cellpadding=0 border=0 width=100%>";
     $n_table.="<tr>
 		    <td align=center>"
@@ -23,14 +24,14 @@ function createSubTree(&$smarty,&$node,$line)
 
     $n_table.="<tr>
 		<td align=center>";
-    $color="blue";
+    $color="aqua";
     $n_table.=<<<END
 		<table border="0" cellspacing="0" cellpadding="0" >
 			<tr>
 				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/form/begin_form_title_{$color}.gif"></td>
 				<td class="Form_Title_{$color}">
 				    <a href="#" id='{$node_info["node_id"]}_node_link' onClick="showReportLayer('{$node_info["node_id"]}_node_id',this,'right'); return false;" class="bw_node">
-					{$limit_kbits}&nbsp;kbits
+					R:{$rate_kbits}|C:{$ceil_kbits}&nbsp;kbits
 				    </a>
 				</td>
 				<td class="Form_Title_End"><img border="0" src="/IBSng/images/form/end_form_title_{$color}.gif"></td>
@@ -118,8 +119,11 @@ function createLeafTable(&$smarty,$leaf_name,$line)
 
 function createLeafHtml(&$smarty,$leaf_info,$line)
 {
-    $total_limit=price($leaf_info["total_limit_kbits"]);
-    $default_limit=price($leaf_info["default_limit_kbits"]);
+    $total_rate_kbits=price($leaf_info["total_rate_kbits"]);
+    $default_rate_kbits=price($leaf_info["default_rate_kbits"]);
+    $total_ceil_kbits=price($leaf_info["total_ceil_kbits"]);
+    $default_ceil_kbits=price($leaf_info["default_ceil_kbits"]);
+
     $n_table="<table cellspacing=0 cellpadding=0 align=center border=0 width=100%>";
     $n_table.="<tr><td align=center>".getLine($line)."</td></tr>";
     $n_table.="<tr><td align=center>".verticalLineImage()."</td>";
@@ -137,8 +141,8 @@ function createLeafHtml(&$smarty,$leaf_info,$line)
 				<td class="Form_Title_End"><img border="0" src="/IBSng/images/form/end_form_title_{$color}.gif"></td>
 			</tr>
 END;
-    $n_table.=leafLimitTR("Total limit: <b>{$total_limit}</b> kbits");
-    $n_table.=leafLimitTR("Default limit: <b>{$default_limit}</b> kbits");
+    $n_table.=leafLimitTR("Total limit: <b>R:{$total_rate_kbits}|C:{$total_ceil_kbits}</b> kbits");
+    $n_table.=leafLimitTR("Default limit: <b>R:{$default_rate_kbits}|C:{$default_ceil_kbits}</b> kbits");
     $n_table.="</table></td></tr>";
     $n_table.="</table>";
     return $n_table.createLeafLayer($smarty,$leaf_info);
@@ -166,22 +170,22 @@ function createLeafLayer(&$smarty,$leaf_info)
 <table>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/add_leaf.php?edit=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}">
-	    Edit Leaf {$leaf_info["leaf_name"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/add_leaf.php?edit=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}">
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Edit Leaf {$leaf_info["leaf_name"]}
 	</a>
       </td>
     </tr>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/interface_info.php?delete_leaf=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}&leaf_id={$leaf_info["leaf_id"]}" onClick='return confirm("Are you sure?");'>
-	    Delete Leaf {$leaf_info["leaf_name"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/interface_info.php?delete_leaf=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}&leaf_id={$leaf_info["leaf_id"]}" onClick='return confirm("Are you sure?");'>
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Delete Leaf {$leaf_info["leaf_name"]}
 	</a>
       </td>
     </tr>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/add_leaf_service.php?add=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}">
-	    Add a new service
+	<a class="bw_layer" href="/IBSng/admin/bw/add_leaf_service.php?add=1&leaf_name={$leaf_info["leaf_name"]}&interface_name={$leaf_info["interface_name"]}">
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Add a new service
 	</a>
       </td>
     </tr>
@@ -213,14 +217,16 @@ function createServicesTable(&$smarty,$services,$interface_name)
 
     $header=smarty_block_listTD(array(),"protocol",$smarty);
     $header.=smarty_block_listTD(array(),"filter",$smarty);
-    $header.=smarty_block_listTD(array(),"limit&nbsp;kbits",$smarty);
+    $header.=smarty_block_listTD(array(),"rate&nbsp;kbits",$smarty);
+    $header.=smarty_block_listTD(array(),"ceil&nbsp;kbits",$smarty);
 
     $content.=smarty_block_listTR(array("type"=>"header"),$header,$smarty);
     foreach($services as $service)
     {
 	$tr=smarty_block_listTD(array(),$service["protocol"],$smarty);
 	$tr.=smarty_block_listTD(array(),$service["filter"],$smarty);
-	$tr.=smarty_block_listTD(array(),$service["limit_kbits"],$smarty);
+	$tr.=smarty_block_listTD(array(),price($service["rate_kbits"]),$smarty);
+	$tr.=smarty_block_listTD(array(),price($service["ceil_kbits"]),$smarty);
 	$edit="<a href='/IBSng/admin/bw/add_leaf_service.php?edit=1&leaf_name={$service["leaf_name"]}&leaf_service_id={$service["leaf_service_id"]}&interface_name={$interface_name}' style='text-decoration:none'>";
 	$edit.=smarty_function_listTableBodyIcon(array("action"=>"edit"),$smarty);
 	$edit.="</a>";
@@ -231,7 +237,7 @@ function createServicesTable(&$smarty,$services,$interface_name)
 	$tr.=smarty_block_listTD(array("icon"=>"TRUE"),$delete,$smarty);
 	$content.=smarty_block_listTR(array("type"=>"body"),$tr,$smarty);
     }
-    return smarty_block_listTable(array("title"=>"services","cols_num"=>"3"),
+    return smarty_block_listTable(array("title"=>"services","cols_num"=>"4"),
 				      $content,
 				      $smarty
 				      );
@@ -245,29 +251,29 @@ function createNodeLayer(&$smarty,$node_info)
 <table>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/add_node.php?edit=1&node_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
-	    Edit Node {$node_info["node_id"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/add_node.php?edit=1&node_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
+	   <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Edit Node {$node_info["node_id"]}
 	</a>
       </td>
     </tr>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/interface_info.php?delete_node=1&node_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}" onClick='return confirm("Are you sure?");'>
-	    Delete Node {$node_info["node_id"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/interface_info.php?delete_node=1&node_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}" onClick='return confirm("Are you sure?");'>
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Delete Node {$node_info["node_id"]}
 	</a>
       </td>
     </tr>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/add_node.php?add=1&parent_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
-	    Add Child Node to {$node_info["node_id"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/add_node.php?add=1&parent_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Add Child Node to {$node_info["node_id"]}
 	</a>
       </td>
     </tr>
     <tr>
       <td>
-	<a href="/IBSng/admin/bw/add_leaf.php?add=1&parent_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
-	    Add Child Leaf to {$node_info["node_id"]}
+	<a class="bw_layer" href="/IBSng/admin/bw/add_leaf.php?add=1&parent_id={$node_info["node_id"]}&interface_name={$node_info["interface_name"]}">
+	    <img src="/IBSng/images/arrow/arrow_menu.gif" border=0> Add Child Leaf to {$node_info["node_id"]}
 	</a>
       </td>
     </tr>

@@ -6,16 +6,23 @@ require_once(IBSINC."bw.php");
 needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();
-if(isInRequest("add","interface_name","leaf_name","parent_id","total_limit_kbits","default_limit_kbits"))
-    intAddLeaf($smarty,$_REQUEST["interface_name"],$_REQUEST["leaf_name"],$_REQUEST["parent_id"],$_REQUEST["total_limit_kbits"],$_REQUEST["default_limit_kbits"]);
+if(isInRequest("add","interface_name","leaf_name","parent_id","total_rate_kbits","total_ceil_kbits","default_rate_kbits","default_ceil_kbits"))
+    intAddLeaf($smarty,
+	       $_REQUEST["interface_name"],
+	       $_REQUEST["leaf_name"],
+	       $_REQUEST["parent_id"],
+	       $_REQUEST["total_rate_kbits"],
+	       $_REQUEST["total_ceil_kbits"],
+	       $_REQUEST["default_rate_kbits"],
+	       $_REQUEST["default_ceil_kbits"]);
 else if (isInRequest("add","interface_name","parent_id"))
     addInterface($smarty,$_REQUEST["interface_name"],$_REQUEST["parent_id"]);
 else
     redirectToInterfaceList();
 
-function intAddLeaf(&$smarty,$interface_name,$leaf_name,$parent_id,$total_kbits,$default_kbits)
+function intAddLeaf(&$smarty,$interface_name,$leaf_name,$parent_id,$total_rate_kbits,$total_ceil_kbits,$default_rate_kbits,$default_ceil_kbits)
 {
-    $req=new AddLeaf($leaf_name,$parent_id,$default_kbits,$total_kbits);
+    $req=new AddLeaf($leaf_name,$parent_id,$default_rate_kbits,$default_ceil_kbits,$total_rate_kbits,$total_ceil_kbits);
     $resp=$req->sendAndRecv();
     if($resp->isSuccessful())
       	redirectToInterfaceInfo($interface_name);

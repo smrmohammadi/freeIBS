@@ -1,3 +1,7 @@
+import os
+from core import defs
+from core.ibs_exceptions import *
+
 class IPTables:
     def addMark(self,mark_id,ip_addr,direction,leaf_service):
 	"""
@@ -10,22 +14,27 @@ class IPTables:
 						 currently we just add protocol from leafservice
 						 and filter should be in iptables syntax without -- prefix
 	"""
-	self.runIPTables("-t mangle -m multiport -A PREROUTING %s -j MARK --set-mark %s"%(self.__createCondition,mark_id))
+	self.runIPTables("-t mangle -A PREROUTING %s -j MARK --set-mark %s"%
+			    (self.__createCondition(ip_addr,direction,leaf_service),mark_id))
 
     def delMark(self,mark_id,ip_addr,direction,leaf_service):
 	"""
 	    delete a mark rule from iptables, same as addMark
 	"""
-	self.runIPTables("-t mangle -m multiport -D PREROUTING %s -j MARK --set-mark %s"%(self.__createCondition,mark_id))
+	self.runIPTables("-t mangle -D PREROUTING %s -j MARK --set-mark %s"%
+			    (self.__createCondition(ip_addr,direction,leaf_service),mark_id))
 
     def __createCondition(self,ip_addr,direction,leaf_service):
 	if direction=="send":
 	    cond="-s"
 	else:
 	    cond="-d"
-	cond+=" %s "
+	cond+=" %s "%ip_addr
 	if leaf_service!=None:
-	    cond+=" -p %s --%s"%(ip_addr,leaf_service.getProtocol(),leaf_service.getFilter())
+	    protocol=leaf_service.getProtocol()
+	    if protocol in ("udp","tcp"):
+		cond+=" -m multiport "
+	    cond+=" -p %s --%s"%(ip_addr,protocol,leaf_service.getFilter())
 	return cond
 
     def runIPTables(self,command):

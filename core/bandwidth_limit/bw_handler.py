@@ -20,9 +20,8 @@ class BWHandler(handler.Handler):
 	self.registerHandlerMethod("getAllLeafNames")
 	self.registerHandlerMethod("delLeaf")
 	self.registerHandlerMethod("delInterface")
-
-
-
+	self.registerHandlerMethod("updateInterface")
+	self.registerHandlerMethod("updateNode")
 
 
     def addInterface(self,request):
@@ -35,10 +34,11 @@ class BWHandler(handler.Handler):
     def addNode(self,request):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
-    	request.checkArgs("interface_name","parent_id","limit_kbits")
+    	request.checkArgs("interface_name","parent_id","rate_kbits","ceil_kbits")
 	bw_main.getActionsManager().addNode(request["interface_name"],
 					    to_int(request["parent_id"],"parent id"),
-					    self.__fixLimitKbits(request["limit_kbits"]))
+					    self.__fixLimitKbits(request["rate_kbits"]),
+					    self.__fixLimitKbits(request["ceil_kbits"]))
 	
 
     ##############################
@@ -51,20 +51,24 @@ class BWHandler(handler.Handler):
     def addLeaf(self,request):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
-    	request.checkArgs("leaf_name","parent_id","default_limit_kbits","total_limit_kbits")
+    	request.checkArgs("leaf_name","parent_id","default_rate_kbits","default_ceil_kbits","total_rate_kbits","total_ceil_kbits")
 	bw_main.getActionsManager().addLeaf(request["leaf_name"],
 					    to_int(request["parent_id"],"parent id"),
-					    self.__fixLimitKbits(request["default_limit_kbits"]),
-					    self.__fixLimitKbits(request["total_limit_kbits"],"INVALID_TOTAL_LIMIT_KBITS"))
+					    self.__fixLimitKbits(request["default_rate_kbits"]),
+					    self.__fixLimitKbits(request["default_ceil_kbits"]),
+					    self.__fixLimitKbits(request["total_rate_kbits"],"INVALID_TOTAL_LIMIT_KBITS"),
+					    self.__fixLimitKbits(request["total_ceil_kbits"],"INVALID_TOTAL_LIMIT_KBITS"))
     ###############################
     def addLeafService(self,request):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
-    	request.checkArgs("leaf_name","protocol","filter","limit_kbits")
+    	request.checkArgs("leaf_name","protocol","filter","rate_kbits","ceil_kbits")
 	bw_main.getActionsManager().addLeafService(request["leaf_name"],
 					    request["protocol"],
 					    request["filter"],
-					    self.__fixLimitKbits(request["limit_kbits"]))
+					    self.__fixLimitKbits(request["rate_kbits"]),
+					    self.__fixLimitKbits(request["ceil_kbits"]))
+
 	
     ###############################
     def getInterfaces(self,request):
@@ -83,7 +87,7 @@ class BWHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
     	request.checkArgs("node_id")
-	return bw_main.getLoader().getNodeByID(request["node_id"]).getInfo()
+	return bw_main.getLoader().getNodeByID(to_int(request["node_id"],"node id")).getInfo()
     #################################
     def getLeafInfo(self,request):
 	request.needAuthType(request.ADMIN)
@@ -125,4 +129,18 @@ class BWHandler(handler.Handler):
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
     	request.checkArgs("interface_name")
 	return bw_main.getActionsManager().delInterface(request["interface_name"])
-	
+    ###################################
+    def updateInterface(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("interface_id","interface_name","comment")
+	return bw_main.getActionsManager().updateInterface(to_int(request["interface_id"],"interface id"),request["interface_name"],request["comment"])
+    ###################################
+    def updateNode(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("node_id","rate_kbits","ceil_kbits")
+	return bw_main.getActionsManager().updateNode(to_int(request["node_id"],"node id"),
+						      self.__fixLimitKbits(request["rate_kbits"]),
+						      self.__fixLimitKbits(request["ceil_kbits"]))
+    	
