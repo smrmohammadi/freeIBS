@@ -85,6 +85,9 @@
 		    {menuTR}
 			<a href="/IBSng/admin/ippool/ippool_list.php" class="page_menu">IPpool</a>
 		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/bw/interface_list.php" class="page_menu">Bandwidth Managment</a>
+		    {/menuTR}
 		{/viewTable}
 	</td>
     </tr>

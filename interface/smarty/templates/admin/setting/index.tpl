@@ -41,12 +41,11 @@
 	<td valign="top" align="center">
 		{viewTable title="Misc" table_width="200" nofoot="TRUE" color="brown" arrow_color="white"}
 		    {menuTR}
+			<a href="/IBSng/admin/bw/interface_list.php" class="page_menu">Bandwidth Managment</a>
+		    {/menuTR}
+		{menuTR}
 			<a href="/IBSng/admin/misc/show_ibs_defs.php" class="page_menu">Advanced Configuration</a>
 		    {/menuTR}
-		    {menuTR}
-			<a href="/IBSng/admin/" class="page_menu"></a>
-		    {/menuTR}
-
 		{/viewTable}
 	</td>
     </tr>
@@ -71,6 +70,11 @@
     </a>
 {/addRelatedLink}
 
+{addRelatedLink}
+    <a href="/IBSng/admin/bw/interface_list.php" class="RightSide_links">
+	Bandwidth Managment
+    </a>
+{/addRelatedLink}
 {addRelatedLink}
     <a href="/IBSng/admin/misc/show_ibs_defs.php" class="RightSide_links">
 	Advanced Configuration	
