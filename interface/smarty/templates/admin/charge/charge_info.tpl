@@ -20,26 +20,17 @@
 {include file="err_head.tpl"}
 
 <center>
-{if isset($update_success) and $update_success}
-    <span class="message">
+{headerMsg var_name="update_success"}
 	Charge Updated Successfully.
-    </span>        
-{/if}
+{/headerMsg}
 
-{if isset($del_charge_rule_success) and $del_charge_rule_success}
-    <span class="message">
+{headerMsg var_name="del_charge_rule_success"}
 	Charge Rule Deleted Successfully.
-    </span>        
-{/if}
+{/headerMsg}
 
-
-{if isInRequest("update_charge_rule_success") }
-    <span class="message">
+{headerMsg var_name="del_charge_rule_success"}
 	Charge Rule Updated Successfully.
-    </span>        
-{/if}
-
-
+{/headerMsg}
 
 {if $is_editing}
     <form action="/IBSng/admin/charge/charge_info.php" method=POST>

@@ -1,17 +1,13 @@
 <?php
 
-function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
+function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
 {
 /*
-    create header and footer of an Add Edit Style table
+    create header and footer of an View Style table
     parameter title(string,optional): Title of table that will be printed on top of table
     parameter table_width(string,optional): width of table, if not set, defaults are used
     parameter double(boolean,optional): Set Double table, double tables has two usable areas in 
 			each row. Also Double TR s should be used for content
-    parameter action_icon(boolean,optional): Tells which icon to use for form submit
-					     Can be on of "edit" "delete" "add" or "ok"
-					     default is "ok"
-
 
 */
     if(!is_null($content))
@@ -56,22 +52,11 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 
 END;
 	$footer=<<<END
-	
-	<tr>
-		<td colspan="{$colspans}">
-			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
-				<tr>
-					<td class="Form_Foot_Begin_Line"></td>
-					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/{$action_icon}.gif"></td>
-				</tr>
-				<tr>
-					<td class="Form_Foot_Below_Line"></td>
-				</tr>
-			</table>
-			<!-- End Form Foot Table -->
-		</td>
+	<!-- List Foot -->
+	<tr class="List_Foot_Line">
+		<td colspan=100></td>
 	</tr>
+	<!-- End List Foot-->
 </table>
 END;
     return $header.$content.$footer;    

@@ -54,7 +54,7 @@ class ChargeLoader:
 	"""
 	charge_obj=self.getChargeByID(charge_id)
 	del(self.charges_id[charge_obj.getChargeID()])
-	del(self.charges_id[charge_obj.getName()])
+	del(self.charges_name[charge_obj.getChargeName()])
 
 
     def checkChargeID(self,charge_id):

@@ -9,45 +9,46 @@
 {listTable title="IP Pool List" cols_num=4}
 	{listTableHeaderIcon action="view" close_tr=TRUE}
 	{listTR type="header"}
-	    <td>
+	    {listTD}
 		ID
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		IP Pool Name
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		Comment
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		IPs(Truncated)
-	    </td>
+	    {/listTD}
 	{/listTR}
 		
 	{foreach from=$ippool_infos item=ippool_info}
 	    {listTR type="body" cycle_color=FALSE}
-		<td>
+		{listTD}
 		    {$ippool_info.ippool_id}
-		</td>
-		<td>
+		{/listTD}
+		{listTD}
 		    {$ippool_info.ippool_name}
-		</td>
-		<td>
+		{/listTD}
+		{listTD}
 		    {$ippool_info.comment}
-		</td>
-		<td>
+		{/listTD}
+		{listTD}
 		    {$ippool_info.ips_text|truncate:80:"...":false}
-		</td>
-		<td>
+		{/listTD}
+		{listTD icon="TRUE"}
 		    <a href="/IBSng/admin/ippool/ippool_info.php?ippool_name={$ippool_info.ippool_name|escape:"url"}">
 			{listTableBodyIcon action="view" cycle_color=TRUE}
 		    </a>
-		</td>
+		{/listTD}
 	    {/listTR}
 	{/foreach}
 
 {/listTable}
-<a href="add_new_ippool.php"> 
-    Add New IP Pool 
-</a>
-
+{addRelatedLink}
+    <a href="/IBSng/admin/ippool/add_new_ippool.php" class="RightSide_links">
+	Add New IPPool
+    </a>
+{/addRelatedLink}
 {include file="admin_footer.tpl"}

@@ -23,6 +23,9 @@
 <br>
 {include file="plugins/group/view/multi_login.tpl"}
 <br>
+{include file="plugins/group/view/normal_charge.tpl"}
+<br>
+
 
 
 {addRelatedLink}

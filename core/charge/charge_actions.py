@@ -57,7 +57,6 @@ class ChargeActions:
 				 })
 
 ###########################################################
-
     def updateCharge(self,charge_id,name,comment,visible_to_all):
 	"""
 	    change charge rule properties

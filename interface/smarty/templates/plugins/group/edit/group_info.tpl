@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="Add New Admin" selected="Add Admin"}
+{include file="admin_header.tpl" title="Add New Admin" selected="Group List"}
 {include file="err_head.tpl"}
 
 {editTemplate target="group" target_id=$group_name update_method="groupInfo" edit_tpl_name="group_info.tpl"}

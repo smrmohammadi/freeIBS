@@ -72,7 +72,12 @@ function groupInfoPluginUpdate(&$update_helper)
 	$update_helper->showEditInterface($err);
 }
 
-//**************************************************** Group Info
+//**************************************************** Normal Charge
+
+function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
+{
+    assignToParsedIfExists($parsed_arr,$attrs,"normal_charge");
+}
 
 
 ?>

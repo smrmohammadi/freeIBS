@@ -14,6 +14,7 @@ GENERAL_ERRORS={
     "INVALID_DATE":"Invalid date format %s",
     "ACCESS_DENIED":"Access Denied",
     "INVALID_INT_VALUE":"%s must be an integer",
+    "INVALID_BOOL_VALUE":"invalid boolean value %s",
     "INVALID_FLOAT_VALUE":"%s must be a valid floating point",
     "INVALID_STRING_VALUE":"%s must be an string",
     "INVALID_LIST_VALUE":"%s must be a list",
@@ -60,9 +61,7 @@ NORMAL_USER_LOGIN_ERRORS={
     "ABS_EXP_DATE_REACHED":"708:absoloute expiration date has reached",
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
     "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
-    "CREDIT_FINISHED":"Credit has finished",
-    "RULE_TIME_EXCEEDED":"Rule Time limit exceeded",
-    "RULE_TRANSFER_EXCEEDED":"Rule Transfer limit exceeded"
+    "CREDIT_FINISHED":"Credit has finished"
 }
 
 VOIP_USER_LOGIN_ERRORS={
@@ -159,14 +158,14 @@ RAS_ERRORS={
 }
 
 IPPOOL_ERRORS={
-    "NO_FREE_IP":"All %s IPPOOL IPs are used",
-    "IP_NOT_IN_USED_POOL":"IP %s is not in used list of IPPOOL %s",
-    "INVALID_IP_POOL_ID":"Invalid IP pool id %s",
-    "INVALID_IP_POOL_NAME":"Invalid IP pool name %s",
+    "NO_FREE_IP":"All %s IP Pool IPs are used",
+    "IP_NOT_IN_USED_POOL":"IP %s is not in \"used list\" of IP Pool %s",
+    "INVALID_IP_POOL_ID":"Invalid IP Pool id %s",
+    "INVALID_IP_POOL_NAME":"Invalid IP Pool name %s",
     "BAD_IP_POOL_NAME":"Bad IP Pool name %s. IP Pool name should only contain alphanumeric and _(underline)",
     "IP_POOL_NAME_ALREADY_EXISTS":"IP Pool name %s already exists",
-    "IP_ALREADY_IN_POOL":"IP %s already exists in ippool",
-    "IP_NOT_IN_POOL":"IP %s is not exists in ippool",
+    "IP_ALREADY_IN_POOL":"IP %s already exists in IP Pool",
+    "IP_NOT_IN_POOL":"IP %s does not exist in IP Pool",
     "IP_POOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
 }
 

@@ -1,9 +1,9 @@
-{include file="admin_header.tpl" title="Group Multi Login" selected="group list"}
+{include file="admin_header.tpl" title="Group Multi Login" selected="Group List"}
 {include file="err_head.tpl"}
 
 {editTemplate target="group" target_id=$group_name update_method="multiLogin" edit_tpl_name="multi_login.tpl"}
 
-  {addEditTable title="Expiration Dates" table_width=300}
+  {addEditTable title="Multi Login" table_width=300}
     {addEditTD type="left"}
 	Has Multi Login
     {/addEditTD}
@@ -22,7 +22,6 @@
 
   {/addEditTable}
 {/editTemplate}
-<script language="javascript" src="/IBSng/js/dom_container.js"> </script>
 <script language="javascript">
 	multi_login_select=new DomContainer();
 	multi_login_select.disable_unselected=true;

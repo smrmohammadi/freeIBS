@@ -1,8 +1,7 @@
-{include file="admin_header.tpl" title="Group Expiration Date Edit" selected="group list"}
+{include file="admin_header.tpl" title="Group Expiration Date Edit" selected="Group List"}
 {include file="err_head.tpl"}
 
 {literal}
-    <script language="javascript" src="/IBSng/js/dom_container.js"> </script>
     <script language="javascript">
 	rel_exp_select=new DomContainer();
 	rel_exp_select.disable_unselected=true;

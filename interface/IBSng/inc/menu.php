@@ -1,6 +1,7 @@
 <?php
 $GLOBALS["IBSngMenu"]=Array("user"=>array(),
-		"group"=>array(),
+		"group"=>array("Group List"=>"/IBSng/admin/group/group_list.php",
+			       "Add Group"=>"/IBSng/admin/group/add_new_group.php"),
 		"report"=>array(),
 		"admin"=>array("Admin List"=>"/IBSng/admin/admins/admin_list.php",
 			       "Add Admin"=>"/IBSng/admin/admins/add_new_admin.php"),

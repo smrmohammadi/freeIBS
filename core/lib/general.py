@@ -108,7 +108,7 @@ def to_str(obj,var_name):
 
 def to_list(obj,var_name):
     """
-	convert obj to int, raise an GeneralException on error	with var_name
+	convert obj to list, raise an GeneralException on error	with var_name
     """
     try:
 	_list=list(obj)
@@ -125,11 +125,6 @@ def checkEmailAddress(email_address):
     if re.match('^[a-zA-Z][a-zA-Z0-9\._]*@[a-zA-Z0-9_]+\.[a-zA-Z0-9\._]+$',email_address)==None:
 	raise GeneralException(errorText("USER_ACTIONS","BAD_EMAIL")%email_address)
 
-
-def radiusAttr(attr_name):
-    if os.environ.has_key(attr_name):
-	return os.environ[attr_name]
-    return 'unknown'
 
 def import_module(module_name,_globals):
     """ import module_name in global scope. _globals is a dictionary that returned by globals() internal method
@@ -149,4 +144,4 @@ def checkDBBool(bool_var,name=""):
 	optional argument "name" is used in raised exception to identify the variable name
     """
     if bool_var != "t" and bool_var != "f":
-	raise generalException("Variable %s is not boolean"%name)
+	raise GeneralException(errorTexT("GENERAL","INVALID_BOOL_VALUE")%name)

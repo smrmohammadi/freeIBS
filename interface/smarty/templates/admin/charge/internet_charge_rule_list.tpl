@@ -65,14 +65,10 @@
 		    {$rule.ras}
 		{/listTD}
 		{listTD}
-		    {foreach from=`$rule.ports` item=port}
-			{$port}
-		    {/foreach}
+		    {arrayJoin array=`$rule.ports` glue=", " truncate=30} 
     		{/listTD}
 		{listTD}
-		    {foreach from=`$rule.day_of_weeks` item=day_name}
-		        {$day_name|truncate:3:'':True}
-		    {/foreach}
+		    {arrayJoin array=`$rule.day_of_weeks` glue=", " truncate_each=3} 
     		{/listTD}
 		{if $can_change}
 		    {listTD icon=TRUE}

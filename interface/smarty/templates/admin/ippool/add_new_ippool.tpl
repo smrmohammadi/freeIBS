@@ -10,31 +10,24 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add New IPPOOL {helpicon subject="add new ippool" category="ippool"}
-	<tr {ifibserr varname="ippool_name_err" add="bgcolor=red"} >
-	    <td>
-		IPpool Name:
-	    <td>
-		<input type=text name=ippool_name value="{$ippool_name}">
-	    <td>
-		{helpicon subject="ippool name" category="ippool"}
-	    
-	<tr {ifibserr varname="ippool_comment_err" add="bgcolor=red"}>
-	    <td>
-		Comment:
-	    <td>
-		<textarea name=comment>{$comment|strip}</textarea>
-	    <td>
+    {addEditTable title="Add New IPPool"}
 
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
+	{addEditTD type="left" err="name_err"}
+	    IPPool Name
+	{/addEditTD}
 
-    </table>
-</center>
+	{addEditTD type="right"}
+	    <input type=text name=ippool_name value="{$ippool_name}" class="text">
+	    {helpicon subject='ippool name' category='ippool'}    
+	{/addEditTD}
+	
+	{addEditTD type="left" err="ippool_comment_err" comment=TRUE}
+	    Comment
+	{/addEditTD}
+	{addEditTD type="right" comment=TRUE}
+	    <textarea name=comment class=text>{$comment|strip}</textarea>
+	{/addEditTD}
+	
+    {/addEditTable}
 </form>
 {include file="admin_footer.tpl"}

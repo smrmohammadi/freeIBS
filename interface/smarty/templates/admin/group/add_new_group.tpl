@@ -1,4 +1,6 @@
-{* Add New Group
+{* 
+    
+    Add New Group
     group_name: new group
     comment: 
     
@@ -11,7 +13,6 @@
 
 <form method=POST>
     {addEditTable title="Add New Group"}
-
 	{addEditTD type="left" err="name_err"}
 	    Group Name
 	{/addEditTD}

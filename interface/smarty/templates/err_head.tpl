@@ -12,4 +12,4 @@
     {/foreach}
 {/if}
 </table>
-<br><br>
+<br>
