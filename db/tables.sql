@@ -191,15 +191,6 @@ create table voip_users (
 
 create sequence users_user_id_seq;
 
-create table user_locks(
-    lock_id bigint primary key,
-    admin_id integer references admins,
-    user_id bigint references users,
-    reason text
-);
-
-create sequence user_locks_lock_id_seq;
-
 --    dayusage integer default 0,
 --    daylimit integer default -1,
 --    mail_quota_kbytes integer default 0,

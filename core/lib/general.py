@@ -21,7 +21,7 @@ def isValidName(name):
 def escapeStr(_str):
     _str=str(_str)
     _str=re.sub("(['\0\"\\\\])",r'\\\1',_str)
-    _str=re.sub("[<](?!br>)(.*?)[>]",r" - \1 - ",_str)
+    _str=re.sub("<(?!br( /){0,1}>)(.*?)>",r" - \1 - ",_str)
     return _str
 
 def dbText(text):

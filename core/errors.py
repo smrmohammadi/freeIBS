@@ -56,14 +56,14 @@ USER_ERRORS={
     "UNREGISTERED_ATTRIBUTE":"Attribute %s not registered",
     "UNKNOWN_ATTRIBUTE_ACTION":"Unknown attribute action %s",
     "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
-    "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
+    "NORMAL_USERNAME_DOESNT_EXISTS":"User with normal username %s does not exists",
     "ACCESS_TO_USER_DENIED":"You have not access to user id %s",
     "CANT_FIND_INSTANCE":"User %s is not online on %s %s",
     "USER_IN_BLACKLIST":"User ID %s is in load black list"
 }
 
 USER_LOGIN_ERRORS={
-    "LOCKED":"User is locked",
+    "USER_LOCKED":"User is locked",
     "NO_CHARGE_DEFINED":"User doesn't have charge for type %s",
     "NO_APPLICABLE_RULE":"No rule can be applied",
     "ABS_EXP_DATE_REACHED":"absoloute expiration date has reached",

@@ -1,49 +1,60 @@
 <?php
+
 function smarty_function_rasCheckBoxes($params,&$smarty)
 {/*
 */
     require_once(IBSINC."ras.php");
-    $ras_table=createRasTable($params["prefix"]);
-    return createShowHideTable($params["prefix"],$ras_table);
+    require_once($smarty->_get_plugin_filepath('block','multiTable'));
+    require_once($smarty->_get_plugin_filepath('block','multiTableTD'));
+    require_once($smarty->_get_plugin_filepath('function','multiTableTR'));
+    require_once($smarty->_get_plugin_filepath('function','multiTablePad'));
+
+
+
+    $ras_table=createRasTable($smarty,$params["prefix"]);
+    return createShowHideTable($smarty,$params["prefix"],$ras_table);
 }
 
-function createRasTable($prefix)
+function createRasTable(&$smarty,$prefix)
 {
     $req=new GetActiveRasIPs();
     $resp=$req->sendAndRecv();
     if($resp->isSuccessful())
     {
-	$content="<table><tr>";
+	$content="";
 	$i=0;
 	foreach($resp->getResult() as $ras_ip)
 	{
-	    if($i!=0 and $i%4==0)
-		$content.="{multiTableTR}";
+	    if($i%4==0)
+		$content.=smarty_function_multiTableTR(array(),$smarty);
 	    $checked=checkBoxValue("{$prefix}_{$i}");
-	    $content.="<td><input type=checkbox name='{$prefix}_{$i}' value='{$ras_ip}' {$checked}> {$ras_ip}</td>";
+	    $content.=smarty_block_multiTableTD(array("type"=>"left","width"=>"25%"),"<input type=checkbox name='{$prefix}_{$i}' value='{$ras_ip}' {$checked}>",$smarty);
+	    $content.=smarty_block_multiTableTD(array("type"=>"right","width"=>"25%"),"{$ras_ip}",$smarty);
 	    $i++;
 	}
-	$content.="</table>";
+	$content.=smarty_function_multiTablePad(array("last_index"=>$i-1,"go_until"=>4,"width"=>"25%"),$smarty);
+	$content=smarty_block_multiTable(array(),$content,$smarty);
     }
     else
-	$content=$resp->getError();
+    {
+	$err=$resp->getError();
+	$content=$err->getErrorMsg();
+    }
     return $content;    
 }
 
-function createShowHideTable($prefix,$rases_content)
+function createShowHideTable(&$smarty,$prefix,$rases_content)
 {
-    return <<<END
-<table>
+    $content= <<<END
+<table width=100%>
     <tr>
       <td>
 	<a href="#" onClick="{$prefix}_container.toggle('{$prefix}_select_ras'); return false;"><font size=1>Show/Hide Rases</font></a>
       </td>
     </tr>
-
     <tr id="{$prefix}_select_ras">
-	<td>{multiTable}
+	<td>
 	    {$rases_content}
-	    {/multiTable}
 	</td>
     </tr>
 </table>
@@ -58,6 +69,7 @@ function createShowHideTable($prefix,$rases_content)
 </script>
 
 END;
+    return $content;
 }
 
 ?>

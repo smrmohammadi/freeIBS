@@ -65,6 +65,12 @@ Total Results: <b> {$result_count} </b>
 	{/listTD}
     {/if}
 
+    {if isInRequest("show__lock")}
+	{listTD}
+	    Locked
+	{/listTD}
+    {/if}
+
     {/listTR}
 
     {foreach from=$user_ids item=user_id}
@@ -112,6 +118,10 @@ Total Results: <b> {$result_count} </b>
 
 	    {if isInRequest("show__normal_charge")}
 	    	{searchUserTD attr_name="normal_charge" user_id=$user_id attr_type="attrs"}{/searchUserTD}
+	    {/if}
+
+	    {if isInRequest("show__lock")}
+	    	{searchUserTD attr_name="lock" user_id=$user_id attr_type="attrs"}Yes{/searchUserTD}
 	    {/if}
 	    
 	{/listTR}	

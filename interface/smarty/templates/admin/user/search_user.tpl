@@ -5,7 +5,7 @@
 {include file="err_head.tpl"} 
 <script language="javascript" src="/IBSng/js/check_box_container.js"></script>
 <form method=POST action="/IBSng/admin/user/search_user.php#show_results" name="search_user">
-    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Misc" content_height=100}
+    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Lock,Misc" content_height=100}
 
     {tabContent tab_name="Main"}
 	{include file="plugins/search/user_id.tpl"} 
@@ -23,6 +23,11 @@
     {tabContent tab_name="ExpDates"}
         {include file="plugins/search/rel_exp_date.tpl"}
     {/tabContent}
+
+    {tabContent tab_name="Lock"}
+        {include file="plugins/search/lock.tpl"}
+    {/tabContent}
+
     {tabContent tab_name="Misc"}
 	{include file="plugins/search/credit.tpl"}
 	{include file="plugins/search/multi_login.tpl"}

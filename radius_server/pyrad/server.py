@@ -205,11 +205,11 @@ class Server(host.Host):
 		@type   fd: socket class instance
 		"""
 		if fd.fileno() in self._realauthfds:
-			pkt=self._GrabPacket(lambda data, s=self: self.CreateAuthPacket(packet=data), fd)
-			self._HandleAuthPacket(fd, pkt)
+			pkt=self._GrabPacket(lambda data, s=self: s.CreateAuthPacket(packet=data), fd)
+			thread_main.runThread(self._HandleAuthPacket,(fd, pkt),"radius")
 		else:
 			pkt=self._GrabPacket(lambda data, s=self: s.CreateAcctPacket(packet=data), fd)
-			self._HandleAcctPacket(fd, pkt)
+			thread_main.runThread(self._HandleAcctPacket,(fd, pkt),"radius")
 
 	def Run(self):
 		"""Main loop.

@@ -36,6 +36,9 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromRequest(TRUE,"rel_exp_date","rel_exp_date_unit","rel_exp_date_op");
     $helper->addToCondsFromRequest(TRUE,"user_id");
     $helper->addToCondsFromRequest(TRUE,"credit","credit_op");
+    $helper->addToCondsFromRequest(TRUE,"lock");
+    $helper->addToCondsFromRequest(TRUE,"lock_reason");
+
 }
 
 

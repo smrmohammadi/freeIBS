@@ -12,7 +12,7 @@ DEBUG_LEVEL=3 #debug level
 LOG_RADIUS_REQUESTS=True #LOG radius requests in /var/log/IBSng/ibs_radius.log
 LOG_SERVER_REQUESTS=True #LOG server requests in /var/log/IBSng/ibs_server.log, Normally not useful
 LOG_DATABASE_QUERIES=True #LOG every query we send to database
-LOG_EVENTS=True #LOG every event that event schedueler runs
+LOG_EVENTS=False #LOG every event that event schedueler runs
 
 IBS_ROOT="/usr/local/IBSng"
 IBS_CORE="%s/core"%IBS_ROOT

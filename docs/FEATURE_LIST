@@ -32,6 +32,7 @@ Ras Names
 "ALLOW ALL USERS LOGIN" FLAG
 attr exists user search
 rel exp date relative from
+PySNMP merge
 
 Interface:
         Charge add new voip rule
@@ -50,7 +51,6 @@ User Groups
 Action on Group Users
 CHAP
 Wireless/Lan Accounting
-PySNMP merge
 
 Interface:
     user list
@@ -65,13 +65,18 @@ Core:
     online handlers
     pppd ras
 
-
+NEXT TODO
+        user_list 
+	admin delete
+	admin change deposit
+	bandwidth manager
+	rel_exp_date fix
 
 Interface:
     Admin Login				DONE
     Admin Index
     Add new Admin			DONE
-    Admin Information			PARTIALLY DONE
+    Admin Information			DONE
     Admin Permission List		DONE
 	Save Permission Template	DONE
 	Load Permission Template	DONE
@@ -82,30 +87,27 @@ Interface:
     Admin Delete			----
     Admin Reports 			----
 	Deposit Change			----
-	Usage Reports!			----
-    Admin Lock				----
-    Admin lock list			----
-    Admin Unlock			----
+	Usage Reports!			DONE
     
     Charge Add new charge		DONE
     Charge List				DONE
     Charge Info				DONE
     Charge add new dialup rule		DONE
     Charge delete rule			DONE
-    Charge Delete			----
+    Charge Delete			DONE
     
     Group Add new Group			DONE
     Group info				DONE
     Group edit				DONE
-    Group Delete			----
-    Group change attributes		----
+    Group Delete			DONE
+    Group change attributes		DONE
     Group List				DONE
     
     Ras Add New Ras			DONE
     Ras Info				DONE
     Ras edit ras			DONE
     Ras list				DONE
-    Ras delete Ras			----
+    Ras delete Ras			DONE
     Ras edit attributes			DONE
     Ras add port			DONE
     Ras list port			DONE
@@ -121,10 +123,10 @@ Interface:
     User edit user			DONE
     User list attributes		DONE
     User change attributes		DONE
-    User list				----
-    User del				----
-    User Lan Usage Report		----
-    User credit change report		----
+    User list				DONE
+    User del				DONE
+    User Lan Usage Report		DONE
+    User credit change report		DONE
     
 Core Features:
     Ras
@@ -132,31 +134,30 @@ Core Features:
 	Loader				DONE
 	RasFactory			DONE
 	Handler				DONE
-	PPPd implemention		----
-	Ras Interface			----
-	User Login 			----
-	Ras Message dispatcher		----
-	User Message dispatcher		----
+	PPPd implemention		DONE
+	Ras Interface			DONE
+	User Login 			DONE
+	Ras Message dispatcher		DONE
+	User Message dispatcher		DONE
     Charge
 	Charge Interface		DONE
 	Actions				DONE
 	Loader				DONE
 	Charge Rule Interface		DONE
-	Charge Rule Internet implemention	Partially Done
-	User Charge				Partially Done
-	Charge/User Interaction		----
+	Charge Rule Internet implemention	DONE
+	User Charge				DONE
+	Charge/User Interaction		DONE
 	
     Group
 	Actions				DONE
 	Loader				DONE
 	Handler				DONE
 	Group Interface			DONE
-	Group/User Interaction		----
+	Group/User Interaction		DONE
     Admin
 	Handler				DONE
 	Actions				DONE
 	Loader				DONE
-	Lock				----
     Permissons
 	Permission Interface		DONE
 	Permission Handler		DONE
@@ -174,29 +175,29 @@ Core Features:
 	Changer				DONE
 	
     User
-        User Pools				DONE	*no tested!
+        User Pools				DONE	
 	User attribute manager			DONE
 	User plugin manager			DONE
 	User Loader				DONE
 	User Actions				DONE
 	User Handlers				DONE
 	    User add				DONE
-	User Search				----
-	User Interface				----
-	User/Ras Interaction			----
-	Internet User Interface			----
-	Online User Manager			----
+	User Search				DONE
+	User Interface				DONE
+	User/Ras Interaction			DONE
+	Internet User Interface			DONE
+	Online User Manager			DONE
 
-    Radius Server				----
-	-CHAP					Partially
-	-MSCHAP?
-	-EAP?
+    Radius Server				DONE
+	-CHAP					DONE
+	-MSCHAP					DONE
+	-EAP					----
 
     IPPOOL
 	Loader					DONE
 	Actions					DONE
 	Handler					DONE
-	IPPOOL Implemention			Partially Done
+	IPPOOL Implemention			DONE
 
 User Attributes:
     Normal					DONE

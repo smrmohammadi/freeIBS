@@ -1,7 +1,7 @@
 <script language="javascript">
     attrs=new CheckBoxContainer();
 </script>
-{listTable no_header=TRUE table_width="100%"} 
+{listTable no_header=TRUE no_foot=TRUE table_width="100%"} 
     {listTableHeader cols_num=30 type="left"}
 	Attributes to show
     {/listTableHeader}
@@ -25,6 +25,7 @@
         {multiTableTR}
 	    {reportToShowCheckBox name="show__multi_login" output="Multi Login" default_checked="FALSE" always_in_form="search" value="multi_login" form_name="search_user" container_name="attrs"}
 	    {reportToShowCheckBox name="show__normal_charge" output="Normal Charge" default_checked="FALSE" always_in_form="search" value="normal_charge" form_name="search_user" container_name="attrs"}
+	    {reportToShowCheckBox name="show__lock" output="Lock Status" default_checked="FALSE" always_in_form="search" value="normal_charge" form_name="search_user" container_name="attrs"}
 	{/multiTable}
 {/listTable}
 <script language="javascript">

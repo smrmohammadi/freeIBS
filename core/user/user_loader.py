@@ -5,7 +5,6 @@ from core.db import db_main
 from core.user.loaded_user import LoadedUser
 from core.user.basic_user import BasicUser
 from core.user.attribute import UserAttributes
-from core.user.user_lock import UserLock
 
 def init():
     global user_loader
@@ -35,9 +34,8 @@ class UserLoader:
 	"""
 	basic_user=self.getBasicUser(user_id) #should be first
 	user_attrs_dic=self.getUserAttrsByUserID(user_id)
-	user_locks=self.__fetchUserLocks(user_id)
 	user_attrs=self.__createUserAttrs(user_attrs_dic,basic_user)
-	return self.__createLoadedUser(basic_user,user_attrs,user_locks)
+	return self.__createLoadedUser(basic_user,user_attrs)
 
     def getUserAttrsByUserID(self,user_id):
 	"""
@@ -66,11 +64,11 @@ class UserLoader:
 	"""
 	return UserAttributes(user_attrs_dic,basic_user.getGroupID())
 
-    def __createLoadedUser(self,basic_user,user_attrs,user_locks):
+    def __createLoadedUser(self,basic_user,user_attrs):
 	"""
 	    create and return an instance of LoadedUser
 	"""
-	return LoadedUser(basic_user,user_attrs,user_locks)
+	return LoadedUser(basic_user,user_attrs)
 
     def __createBasicUser(self,basic_user_info):
 	"""
@@ -148,14 +146,5 @@ class UserLoader:
 	    user_attrs[user_dic["attr_name"]]=user_dic["attr_value"]
 	return user_attrs
 
-    def __fetchUserLocks(self,user_id):
-	"""
-	    fetch user locks and return a list of UserLock instances
-	"""
-	user_locks=[]
-	db_user_locks=db_main.getHandle().get("user_locks","user_id=%s"%user_id)
-	for user_lock_dic in db_user_locks:
-	    user_locks.append(UserLock(user_lock_dic["lock_id"],user_lock_dic["admin_id"],user_lock_dic["user_id"],user_lock_dic["reason"]))
-	return user_locks
 
 

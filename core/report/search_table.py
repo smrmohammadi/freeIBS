@@ -130,6 +130,14 @@ class SearchAttrsTable(SearchTable):
     def __init__(self,table_name):
 	SearchTable.__init__(self,table_name)
 	self.attrs=[]
+
+    def hasAttrSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
+	"""
+	    do search to check if table has attr_db_name
+	"""    
+	if search_helper.hasCondFor(dic_key):
+	    self.addAttr(attr_db_name)
+    	    self.addGroup("%s.attr_name = %s"%(self.getTableName(),dbText(attr_db_name)))
     
     def exactSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
 	"""

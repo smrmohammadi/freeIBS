@@ -14,6 +14,6 @@ class AddNewUser (NoValuePermission,UserCatPermission,Permission):
 		
 		Related Permissions: GROUP_ACCESS, ACCESS_ALL_GROUPS, CHANGE_GROUP
 	       """)
-	self.addAffectedPage("Group->Add New Group","Group->Change Group Attributes")
+	self.addAffectedPage("User->Add New User")
 
 	

@@ -10,7 +10,7 @@ function smarty_function_multiTableTR($params,&$smarty)
     return <<<END
 	</tr>
 	<tr>
-	    <td colspan=30 height=1></td>
+	    <td bgcolor="#FFFFFF" colspan=30 height=2></td>
 	</tr>
 	<tr class="list_row_{$multi_table_color}color"}>
 END;

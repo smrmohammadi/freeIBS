@@ -8,6 +8,8 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
     parameter cols_num(integer,required): number of table columns, not required for no_header tables
     parameter title(string,optional): Title of table that will be printed on top of table
     parameter no_header(any,optional): if set, no header will be included in table
+    parameter no_footer(any,optional): if set, no footer will be included in table
+
 */
     if(!is_null($content))
     {
@@ -37,6 +39,9 @@ END;
 		</td>
 END;
     }
+    if(isset($params["no_foot"]))
+	$footer="</table>";
+    else
 	$footer=<<<END
 	<!-- List Foot -->
 	<tr class="List_Foot_Line_red">

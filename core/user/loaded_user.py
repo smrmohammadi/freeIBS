@@ -6,19 +6,17 @@ class LoadedUser:
 	Loaded User is a container of user information, and should be reloadable.
 	All of information we contain maybe changed so implemention should consider this
     """
-    def __init__(self,basic_user,user_attrs,user_locks):
+    def __init__(self,basic_user,user_attrs):
 	"""
 	    basic_user(BasicUser instance): basic user information
 	    user_attrs(UserAttributes instance): user attribute instance
-	    user_locks(list of UserLock instances): 
 	"""
-	self.__setInternalVars(basic_user,user_attrs,user_locks)
+	self.__setInternalVars(basic_user,user_attrs)
 	self.online_flag=False
 
-    def __setInternalVars(self,basic_user,user_attrs,user_locks):
+    def __setInternalVars(self,basic_user,user_attrs):
 	self.basic_user=basic_user
 	self.user_attrs=user_attrs
-	self.user_locks=user_locks
 
     def getBasicUser(self):
 	return self.basic_user
@@ -57,5 +55,5 @@ class LoadedUser:
 	return self.online_flag
 
     def _reload(self,new_loaded_user):
-	self.__setInternalVars(new_loaded_user.basic_user,new_loaded_user.user_attrs,new_loaded_user.user_locks)
+	self.__setInternalVars(new_loaded_user.basic_user,new_loaded_user.user_attrs)
 	

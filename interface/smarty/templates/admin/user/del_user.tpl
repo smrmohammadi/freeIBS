@@ -7,7 +7,7 @@
 <form method=POST action="del_user.php">
     <input type=hidden name=user_id value="{$user_id}">
     <input type=hidden name="delete" value=1>
-    {addEditTable title="Delete User"}
+    {addEditTable title="Delete User" action_icon="delete"}
 	
 	{addEditTD type="left"}
 	    Comment

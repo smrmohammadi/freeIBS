@@ -3,23 +3,6 @@ require_once(IBSINC."charge.php");
 
 //***************************************************** Relative Exp Date
 
-function relExpParser(&$parsed_arr,&$smarty,&$attrs)
-{
-    if(!isset($attrs["rel_exp_date"]))
-    {
-	$parsed_arr["has_rel_exp"]=FALSE;
-        $parsed_arr["rel_exp_date_unit"]=null;
-	$parsed_arr["rel_exp_date"]=null;
-    }
-    else
-    {
-	$parsed_arr["has_rel_exp"]=TRUE;
-	$rel_exp=(int)$attrs["rel_exp_date"];
-	list($rel_exp,$rel_exp_unit)=calcRelativeDateFromHours($rel_exp);
-        $parsed_arr["rel_exp_date_unit"]=$rel_exp_unit;
-	$parsed_arr["rel_exp_date"]=$rel_exp;
-    }
-}
 
 function relExpDatePluginUpdate(&$update_helper)
 {
@@ -35,10 +18,6 @@ function relExpDatePluginUpdate(&$update_helper)
 
 //**************************************************** Multi Login
 
-function multiLoginParser(&$parsed_arr,&$smarty,&$attrs)
-{
-    assignToParsedIfExists($parsed_arr,$attrs,"multi_login");
-}
 
 
 function multiLoginPluginUpdate(&$update_helper)
@@ -66,18 +45,6 @@ function groupInfoPluginUpdate(&$update_helper)
 }
 
 //**************************************************** Normal Charge
-function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
-{
-    if(isset($attrs["normal_charge"]))
-    { //translate charge_id to charge_name
-	$charge_info_req=new GetChargeInfo(null,$attrs["normal_charge"]);
-	list($success,$info)=$charge_info_req->send();
-	if($success)
-	    $parsed_arr["normal_charge"]=$info["charge_name"];
-	else
-	    $smarty->set_page_error($info->getErrorMsgs());
-    }
-}
 
 function normalChargePluginUpdate(&$update_helper)
 {
@@ -129,4 +96,48 @@ function normalAttrsPluginUpdate(&$update_helper)
     else
 	$update_helper->addToDelAttrs("normal_username");
 }
+//**************************************************
+function lockPluginUpdate(&$update_helper)
+{
+    if(isInRequest("lock"))
+	$update_helper->addToUpdateAttrs("lock",nl2br($_REQUEST["lock"]));
+}
+
+//************************** UNUSED
+function relExpParser(&$parsed_arr,&$smarty,&$attrs)
+{
+    if(!isset($attrs["rel_exp_date"]))
+    {
+	$parsed_arr["has_rel_exp"]=FALSE;
+        $parsed_arr["rel_exp_date_unit"]=null;
+	$parsed_arr["rel_exp_date"]=null;
+    }
+    else
+    {
+	$parsed_arr["has_rel_exp"]=TRUE;
+	$rel_exp=(int)$attrs["rel_exp_date"];
+	list($rel_exp,$rel_exp_unit)=calcRelativeDateFromHours($rel_exp);
+        $parsed_arr["rel_exp_date_unit"]=$rel_exp_unit;
+	$parsed_arr["rel_exp_date"]=$rel_exp;
+    }
+}
+
+function multiLoginParser(&$parsed_arr,&$smarty,&$attrs)
+{
+    assignToParsedIfExists($parsed_arr,$attrs,"multi_login");
+}
+
+function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
+{
+    if(isset($attrs["normal_charge"]))
+    { //translate charge_id to charge_name
+	$charge_info_req=new GetChargeInfo(null,$attrs["normal_charge"]);
+	list($success,$info)=$charge_info_req->send();
+	if($success)
+	    $parsed_arr["normal_charge"]=$info["charge_name"];
+	else
+	    $smarty->set_page_error($info->getErrorMsgs());
+    }
+}
+
 ?>

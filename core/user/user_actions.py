@@ -367,7 +367,6 @@ class UserActions:
 	ibs_query+=self.__delUserAttrsQuery(user_id_conds)
 	ibs_query+=self.__delUserNormalAttrsQuery(user_id_conds)
 	ibs_query+=self.__delUserVoIPAttrsQuery(user_id_conds)
-	ibs_query+=self.__delUserLocksQuery(user_id_conds)
 	ibs_query+=self.__delUserFromUsersTableQuery(user_id_conds)
 	if del_connections:
 	    ibs_query+=user_main.getConnectionLogManager().deleteConnectionLogsForUsersQuery(user_ids)
@@ -384,9 +383,6 @@ class UserActions:
     def __delUserVoIPAttrsQuery(self,user_id_conds):
 	return ibs_db.createDeleteQuery("voip_users",user_id_conds)
 
-    def __delUserLocksQuery(self,user_id_conds):
-	return ibs_db.createDeleteQuery("user_locks",user_id_conds)
-	
     def __delUserFromUsersTableQuery(self,user_id_conds):
 	return ibs_db.createDeleteQuery("users",user_id_conds)
 

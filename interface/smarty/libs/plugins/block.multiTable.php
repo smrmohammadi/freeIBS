@@ -1,6 +1,6 @@
 <?php
 
-function smarty_block_multiTable($params,$content,&$smarty,&$repeat)
+function smarty_block_multiTable($params,$content,&$smarty)
 {/*	Create an Multi Style Table
 */
     
@@ -10,6 +10,10 @@ function smarty_block_multiTable($params,$content,&$smarty,&$repeat)
 <table cellpadding=0 cellspacing=0 border=0 width=100%>
     {$content}
     </tr>
+    <tr>
+        <td bgcolor="#FFFFFF" colspan=30 height=2></td>
+</tr>
+
 </table>
 
 END;
