@@ -1,0 +1,13 @@
+#!/usr/bin/python -O
+import re
+
+fd=open("/proc/net/dev","r")
+lines=fd.readlines()
+fd.close()
+del(lines[0])
+for line in lines:
+    match=re.match("^[\s]*ppp([0-9]+)[\s:]*([0-9]+)[\s]*[0-9]+[\s]*[0-9]+[\s]*[0-9]+[\s]*[0-9]+[\s]*[0-9]+[\s]*[0-9]+[\s]*[0-9]+[\s]*([0-9]+)",line)
+    if match!=None:
+	(ifnum,in_bytes,out_bytes)=match.groups()
+	print "%s %s %s %s"%(ifnum,"unknown",in_bytes,out_bytes)
+    
