@@ -194,9 +194,15 @@ class UserPool:
 	    loaded_user=self.__isInPoolByID(user_id)
 	    if loaded_user!=None:
 	        if loaded_user.isOnline():
-		    loaded_user.reload()
+		    self.__reloadOnlineUser(loaded_user)
 	        else:
 	    	    self.__delFromPool(user_id)
 	finally:
 	    self.loading_users.loadingEnd(user_id)
 
+    def __reloadOnlineUser(self,loaded_user):
+	new_loaded_user=self.__loadUserByID(loaded_user.getUserID())
+	loaded_user._reload(new_loaded_user)
+	user_main.getOnline().reloadUser(loaded_user.getUserID())
+	
+	

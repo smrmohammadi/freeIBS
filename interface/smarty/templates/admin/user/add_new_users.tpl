@@ -48,7 +48,7 @@
 
 	{addEditTD type="right"}
 		{if canDo("CHANGE_USER_OWNER")}
-		    {admin_names_select name="owner_name" default="owner_name"}
+		    {admin_names_select name="owner_name" default_request="owner_name" default=$auth_name}
 		{else}
 		    {$auth_name}
 		    <input type=hidden name="owner_name" value="{$auth_name}" class=text>

@@ -143,7 +143,9 @@ class Time:
 	return (time_str,hour,minute,second)
 
     def __completeTime(self,time_str):
-	if re.match("^[0-9]{1,2}$",time_str):
+	if time_str=="24":
+	    time_str="23:59:59"
+	elif re.match("^[0-9]{1,2}$",time_str):
     	    time_str="%s:00:00"%time_str
 	elif re.match("^[0-9]{1,2}:[0-9]{1,2}$",time_str):
     	    time_str="%s:00"%time_str
@@ -155,7 +157,7 @@ class Time:
 	return time_str
 
     def getSecondsFromMorning(self):
-	return self.hour*3600+self.minute
+	return self.hour*3600+self.minute*60+self.second
 
     def getFormattedTime(self):
 	return self.formatted_time

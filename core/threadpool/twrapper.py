@@ -45,8 +45,8 @@ class ThreadPoolWrapper:
 	self.tlock.acquire()
 	try:
 	    if len(self.queue)>0:
-		(method,args,priority)=self.queue.pop(0)
-		self.__runInThreadPool(self,method,args)
+		(method,args)=self.queue.pop(0)
+		self.__runInThreadPool(method,args)
 	    else:
 		self.usage-=1
 	finally:

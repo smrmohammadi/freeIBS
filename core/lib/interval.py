@@ -17,26 +17,26 @@ class Interval:
 	self.start=Time(start)
 	self.end=Time(end)
 	
-    def __gt__(self,other):
+    def __lt__(self,other):
 	"""
 	    other can be either Interval instance or integer that is seconds from morning
 	    comparing is done, by comparing start_time of interval
 	"""
 	if isinstance(other,Interval):
-	    return self.start>other.start
+	    return self.start<other.start
 	else:
-	    return self.getStartSeconds()>other
+	    return self.getStartSeconds()<other
 
 
-    def __lt__(self,other):
+    def __gt__(self,other):
 	"""
 	    other can be either Interval instance or integer that is seconds from morning
 	    comparing is done, by comparing end_time of interval
 	"""
 	if isinstance(other,Interval):
-	    return self.end<other.end
+	    return self.end>other.end
 	else:
-	    return self.getEndSeconds()<other
+	    return self.getEndSeconds()>other
     
     def containsToday(self):
 	return self.__getTodayOfWeek() in self.dow_container
@@ -49,7 +49,7 @@ class Interval:
     
     def containsNow(self):
 	now=secondsFromMorning()
-	return self.containsToday() and self>now() and self<now() #don't panic interval greater than is checked with start, and less that is checked with end time
+	return self.containsToday() and self>now and self<now #don't panic interval greater than is checked with start, and less that is checked with end time
 
     def getStartSeconds(self):
 	"""

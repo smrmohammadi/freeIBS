@@ -1,5 +1,6 @@
 from core.charge.charge import ChargeWithRules
 from core.user.can_stay_online_result import CanStayOnlineResult
+import time
 
 class InternetCharge(ChargeWithRules):
     def checkLimits(self,user_obj):
@@ -39,7 +40,7 @@ class InternetCharge(ChargeWithRules):
 	    #change current effective rule
 	    user_obj.charge_info.effective_rules[_index] = effective_rule
 	
-	    earliest_rule_end=min(earliest_rule_end,effective_rule.interval.getEndSeconds()-seconds_from_morning)
+	    earliest_rule_end=min(earliest_rule_end,effective_rule.interval.getEndSeconds()-seconds_from_morning+1)#+1 to ensure we don't run at 23:59:59 or such times
 
 	    credit_usage_per_second += effective_rule.cpm / 60.0 + \
 					effective_rule.cpk * effective_rule.assumed_kps
@@ -58,11 +59,10 @@ class InternetCharge(ChargeWithRules):
 	
 	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	now=time.time()
-	in_out=user_obj.getTypeObj().getInOutbytes(instance)
+	in_out=user_obj.getTypeObj().getInOutBytes(instance)
 	credit_used=0
 	if effective_rule.cpm>0:
 	    credit_used+=effective_rule.cpm * (now - user_obj.charge_info.rule_start[instance-1])/60
 	if effective_rule.cpk>0:
-	    credit_used+=effective_rule.cpk * (in_out[0] - user_obj.charge_info.rule_start_inout[0] + in_out[1] -\
-					   user_obj.charge_info.rule_start_inout[1])/1024.0
+	    credit_used+=effective_rule.cpk * (effective_rule.calcRuleTransferUsage(user_obj,instance))/1024.0
 	return credit_used

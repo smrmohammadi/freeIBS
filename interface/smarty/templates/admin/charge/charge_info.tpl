@@ -27,7 +27,7 @@
 	Charge Rule Deleted Successfully.
 {/headerMsg}
 
-{headerMsg var_name="del_charge_rule_success"}
+{headerMsg var_name="update_charge_rule_success"}
 	Charge Rule Updated Successfully.
 {/headerMsg}
 

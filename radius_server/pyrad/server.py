@@ -208,8 +208,6 @@ class Server(host.Host):
 			pkt=self._GrabPacket(lambda data, s=self: s.CreateAcctPacket(packet=data), fd)
 			self._HandleAcctPacket(fd, pkt)
 
-
-
 	def Run(self):
 		"""Main loop.
 
@@ -229,7 +227,7 @@ class Server(host.Host):
 				if event==select.POLLIN:
 					try:
 						fdo=self._fdmap[fd]
-						thread_main.runThread(self._ProcessInput,[fdo],"radius")
+						self._ProcessInput(fdo)
 					except PacketError, err:
 						logException(LOG_ERROR,"Radius Server: Dropping packet: %s" % str(err))
 					except packet.PacketError, err:

@@ -1,7 +1,5 @@
 {* IPpool Info 
     Show IP pool Informations and show IP's of each pool
-
-
 *}
 {include file="admin_header.tpl" title="IPpool Information" selected="IPPool"}
 {include file="err_head.tpl"}

@@ -12,10 +12,13 @@ class LoadedUser:
 	    user_attrs(UserAttributes instance): user attribute instance
 	    user_locks(list of UserLock instances): 
 	"""
+	self.__setInternalVars(basic_user,user_attrs,user_locks)
+	self.online_flag=False
+
+    def __setInternalVars(self,basic_user,user_attrs,user_locks):
 	self.basic_user=basic_user
 	self.user_attrs=user_attrs
 	self.user_locks=user_locks
-	self.online_flag=False
 
     def getBasicUser(self):
 	return self.basic_user
@@ -52,3 +55,7 @@ class LoadedUser:
 
     def isOnline(self):
 	return self.online_flag
+
+    def _reload(self,new_loaded_user):
+	self.__setInternalVars(new_loaded_user.basic_user,new_loaded_user.user_attrs,new_loaded_user.user_locks)
+	

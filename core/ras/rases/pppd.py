@@ -89,6 +89,7 @@ class PPPDRas(GeneralUpdateRas):
 ####################################
     def handleRadAcctPacket(self,ras_msg):
 	status_type=ras_msg.getRequestAttr("Acct-Status-Type")[0]
+	ras_msg["unique_id"]="port"
 	if status_type=="Start":
 	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
 	    ras_msg.setAction("INTERNET_UPDATE")

@@ -23,7 +23,7 @@ class IBSThread(threading.Thread):
             try:
 	        apply(method,args_list)
             except:
-    		logException(LOG_ERROR,"Exception on thread")
+    		logException(LOG_ERROR,"Exception on thread %s while running %s"%(self,self.job))
 
             getThreadPool().releaseThread(self)
 
@@ -43,7 +43,7 @@ class ThreadPool:
 
     def __initThreads(self):
         for i in range(defs.THREAD_POOL_DEFAULT_SIZE):
-            self.__createThread("thread"+str(i))
+            self.__createThread("thread_%s"%i)
         
     def __createThread(self,t_name):
 	    (new_thread,new_event)=self.__getNewThread(t_name)
@@ -111,7 +111,7 @@ class ThreadPool:
         if pool_size==0:
             in_use_size=len(self.__in_use)
             if in_use_size<defs.THREAD_POOL_MAX_SIZE:
-                (thread,event)=self.__getNewThread()
+                (thread,event)=self.__getNewThread("thread_%s"%in_use_size)
             else:
                 raise ThreadException("No Available thread")
         else:
@@ -144,7 +144,7 @@ class ThreadPool:
         del(self.__in_use[thread])
 
     def shutdown(self,sec=10): 
-	"""
+	"""XXX
 	    shutdown the threadpool, by calling exit function on all threads
 	    it will wait until all threads exits for maximum "sec" seconds
 	"""
@@ -166,9 +166,10 @@ class ThreadPool:
 	    toLog("threadpool.shutdown: pool \"%s\" inUse \"%s\""%(self.__pool,self.__in_use),LOG_DEBUG,defs.DEBUG_ALL)
 	
     def printMe(self):
-        print str(self.__pool)
+        print "Free: %s"%self.__pool
 	print "\n"
-        print str(self.__in_use)
+        for thread in self.__in_use:
+	    print "Thread %s doing %s args %s"%(thread,thread.job[0],thread.job[1])
 
 
         

@@ -3,7 +3,7 @@ from core.lib import *
 from core.ibs_exceptions import *
 from core import defs
 from pyrad import dictionary, packet, server
-from core.ras import ras
+from core.ras import ras_main
 from core.threadpool import thread_main
 import socket
 
@@ -20,7 +20,7 @@ def init():
     ibs_dic=dictionary.Dictionary("%s/radius_server/dictionary"%defs.IBS_ROOT)
     
     srv=IBSRadiusServer(dict=ibs_dic,addresses=defs.RADIUS_SERVER_BIND_IP,authport=defs.RADIUS_SERVER_AUTH_PORT,acctport=defs.RADIUS_SERVER_ACCT_PORT)
-#    srv.hosts=ras.rad_remote_hosts
+    srv.hosts=ras_main.getLoader().getRadiusRemoteHosts()
     thread_main.runThread(srv.Run,[],"radius")
     radius_server_started=True
 
@@ -50,33 +50,29 @@ class IBSRadiusServer(server.Server):
 		reply=self.CreateReplyPacket(pkt)
 		reply.dict=ibs_dic
 
-		ret_code=0
+		success=False
 		try:
-		    ret_code=ras.rases_ip[pkt.source[0]].handleRadAuthPacket(pkt,reply)
+		    success=ras_main.getLoader().getRasByIP(pkt.source[0])._handleRadAuthPacket(pkt,reply)
 		except:
 		    logException(LOG_ERROR,"HandleAuthPacket Exception:\n")
 	    
-		if ret_code: #accress ACCEPT	
+		if success: #accress ACCEPT	
 		    reply.code=packet.AccessAccept
 		else:
 		    reply.code=packet.AccessReject
 		    
 		self.SendReplyPacket(fd, reply)
-		
 	
 	def _HandleAcctPacket(self, fd, pkt):
 		server.Server._HandleAcctPacket(self, fd, pkt)
 	        if defs.LOG_RADIUS_REQUESTS:
 		    self.__logRequest(pkt,"Accounting")
-		    
-		    	
+		
     		reply=self.CreateReplyPacket(pkt)		
-		ret_str=None
 		try:
-			ret_str=ras.rases_ip[pkt.source[0]].handleRadAcctPacket(pkt)
+		    ras_main.getLoader().getRasByIP(pkt.source[0])._handleRadAcctPacket(pkt,reply)
 		except:
 		    logException(LOG_ERROR,"HandleAcctPacket exception\n")
-
 
 		self.SendReplyPacket(fd, reply)
 

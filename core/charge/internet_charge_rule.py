@@ -56,9 +56,9 @@ class InternetChargeRule(ChargeRule):
 	    instance (integer): instance number of user 
 	"""
 	ChargeRule.start(self,user_obj,instance)
-	user_obj.charge_info.rule_start_inout[instance-1]=user_obj.getInOutBytes(instance)
+	user_obj.charge_info.rule_start_inout[instance-1]=user_obj.getTypeObj().getInOutBytes(instance)
 
-	if self.bandwidth_limit>=0:
+	if self.bandwidth_limit>0:
 	    bandwidth_limit.applyLimitOnUser(user_obj,instance,self.bandwidth_limit)
 
 
@@ -70,7 +70,7 @@ class InternetChargeRule(ChargeRule):
 	    instance (integer): instance number of user 	    
 	"""
 	ChargeRule.end(self,user_obj,instance)
-	if self.bandwidth_limit>=0:
+	if self.bandwidth_limit>0:
 	    bandwidth_limit.removeLimitOnUser(user_obj,instance)
 
     def calcRuleInOutUsage(self,user_obj,instance):
@@ -79,12 +79,12 @@ class InternetChargeRule(ChargeRule):
 	    assuming this rule is the effective rule for this instance
 	"""
 	cur_in_out=user_obj.getTypeObj().getInOutBytes(instance)
-	return (cur_in_out[0]-user_obj.charge_info.rule_start_inout[0],cur_in_out[1]-user_obj.charge_info.rule_start_inout[1])
+	return (cur_in_out[0]-user_obj.charge_info.rule_start_inout[instance-1][0],cur_in_out[1]-user_obj.charge_info.rule_start_inout[instance-1][1])
 
     def calcRuleTransferUsage(self,user_obj,instance):
 	"""
 	    return amount of user transfer in bytes
 	"""
-	cur_rule_inout=self.calcRuleInOutUsage(self,user_obj,instance)
+	cur_rule_inout=self.calcRuleInOutUsage(user_obj,instance)
 	return cur_rule_inout[0]+cur_rule_inout[1]
     

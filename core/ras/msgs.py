@@ -1,4 +1,6 @@
 import time
+from core.user import user_main
+
 class Msg:
     def __init__(self):
 	self.action=None
@@ -63,7 +65,7 @@ class RasMsg(Msg):
 	try:
 	    self[attr_name]=self.getRequestAttr(request_key)[0]
 	except:
-	    raise IBSException("Attribute %s not found in request packet"%request
+	    raise IBSException("Attribute %s not found in request packet"%request)
 
     def setRequestToAttrIfExists(self,request_key,attr_name):
 	"""
@@ -100,7 +102,7 @@ class RasMsg(Msg):
 	    Send this Message to Ras Message Dispatcher
 	"""
 	Msg.send(self)
-	user_main.getRasMsgDispatcher().dispatch(self)
+	return user_main.getRasMsgDispatcher().dispatch(self)
 
 class UserMsg(Msg):
     def __init__(self):

@@ -118,7 +118,7 @@ class ChargeWithRules(Charge):
     def initUser(self,user_obj):
 	Charge.initUser(self,user_obj)
 	if user_obj.instances==1: #this is a new user_obj
-	    user_Obj.charge_info=UserCharge()
+	    user_obj.charge_info=UserCharge()
 
 	effective_rule=self.getEffectiveRule(user_obj,user_obj.instances)
 	user_obj.charge_info.login(effective_rule,user_obj.instances)
@@ -142,7 +142,6 @@ class ChargeWithRules(Charge):
 	
 	for rule_id in self.rules:
 	    rule=self.rules[rule_id]
-	    appliabe=rule.appliable(user_obj,instance)
 	    if rule.priority > max_priority and rule.appliable(user_obj,instance):
 		max_priority=rule.priority
 		max_applicable_rule=rule

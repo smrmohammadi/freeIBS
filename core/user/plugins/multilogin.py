@@ -11,7 +11,7 @@ def init():
 
 class MultiLogin(user_plugin.UserPlugin): 
     def __init__(self,user_obj):
-	user_plugin.UserPlugin(self,user_obj)
+	user_plugin.UserPlugin.__init__(self,user_obj)
 	self.multi_login=1
 	if user_obj.getUserAttrs().hasAttr("multi_login"):
 	    self.multi_login=int(user_obj.getUserAttrs()["multi_login"])

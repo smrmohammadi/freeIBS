@@ -2,6 +2,7 @@ from core import defs
 from core.user import user_main,can_stay_online_result
 from core.errors import errorText
 from core.ibs_exceptions import *
+import itertools
 
 class UserPlugin:
     def __init__(self,user_obj):
@@ -63,7 +64,7 @@ class AttrCheckUserPlugin(UserPlugin):
 	    should call this class reload method first to ensure has_attr update
     """
     def __init__(self,user_obj,attr_name):
-	UsePlugin.__init__(self,user_obj)
+	UserPlugin.__init__(self,user_obj)
 	self.has_attr_name=attr_name
 	self._setHasAttr(attr_name)
 	
@@ -72,7 +73,7 @@ class AttrCheckUserPlugin(UserPlugin):
 	    return getattr(self,"s_%s"%name)
     	    
     def _setHasAttr(self,attr_name):
-	self.has_attr=user_obj.getLoadedUser().hasAttr(attr_name)
+	self.has_attr=self.user_obj.getLoadedUser().hasAttr(attr_name)
 
     def hasAttr(self):
 	return self.has_attr
@@ -112,7 +113,7 @@ class UserPluginManager:
 	    priority=9
 	self.__plugin_classes[priority].append((plugin_class,plugin_name))
 
-    def callHooks(self,hook,user_obj,args):
+    def callHooks(self,hook,user_obj,args=[]):
 	"""
 	    run plugins methods for hook
 	    args is a list of additional arguments
@@ -146,17 +147,17 @@ class UserPluginManager:
 	    for user plugins we'll create an object of plugin and put it
 	    in user_obj with the name of plugin
 	"""
-	for (plugin_class,plugin_name) in self.__plugin_classes:
+	for (plugin_class,plugin_name) in apply(itertools.chain,self.__plugin_classes):
 	    try:
 		setattr(user_obj,plugin_name,plugin_class(user_obj))
 	    except:
-		logException("UserPluginManager.__initPluginsForUser")
+		logException(LOG_ERROR,"UserPluginManager.__initPluginsForUser")
 
     def __callPluginsMethod(self,user_obj,args,method_name):
 	"""
 	    call plugin method "method_name" with "args" list as argument for object "user_obj"
 	"""	
 	return map(lambda plugin_tuple:apply(getattr(getattr(user_obj,plugin_tuple[1]),method_name),args),
-	           itertools.chain(self.__plugin_clases))
+	           apply(itertools.chain,self.__plugin_classes))
 
 	

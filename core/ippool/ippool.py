@@ -1,13 +1,7 @@
 import threading
+import copy
 from core.ibs_exceptions import *
 from core.errors import errorText
-
-class IPpoolFullException(Exception):
-    def __init__(self,_str):
-	self._str=_str
-
-    def __str__(self):
-	return self._str
 
 class IPPool:
     def __init__(self,ippool_id,ippool_name,comment,ip_list):
@@ -21,7 +15,7 @@ class IPPool:
 	self.ippool_name=ippool_name
         self.comment=comment
         self.ip_list=ip_list
-        self.free=ip_list #list of free ip addresses
+        self.free=copy.copy(ip_list) #list of free ip addresses
         self.used=[] #list of currently used ip addresses
 	self.lock=threading.RLock()
     
@@ -69,7 +63,7 @@ class IPPool:
 	    except ValueError:
 		toLog("Trying to free ip %s from pool %s while it's not in used list!"%(self.getIPpoolName(),ip),LOG_ERROR)
 		raise GeneralException(errorText("IPPOOL","IP_NOT_IN_USED_POOL")%(ip,self.getIPpoolName()))
-		
+		self.free.append(ip)
 	finally:
 	    self.lock.release()
 	

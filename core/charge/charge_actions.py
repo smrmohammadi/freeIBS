@@ -132,7 +132,7 @@ class ChargeActions:
 	if assumed_kps<=0:
 	    raise GeneralException(errorText("CHARGES","ASSUMED_KPS_NOT_POSITIVE"))
 
-	if bandwidth_limit_kbytes<=0:
+	if bandwidth_limit_kbytes<0:
 	    raise GeneralException(errorText("CHARGES","BANDWIDTH_LIMIT_NOT_POSITIVE"))
 	    
 	if cpm<0:

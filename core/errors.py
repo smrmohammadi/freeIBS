@@ -62,15 +62,12 @@ USER_ERRORS={
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached"
 }
 
-NORMAL_USER_LOGIN_ERRORS={
+USER_LOGIN_ERRORS={
     "LOCKED":"User is locked",
     "NO_APPLICABLE_RULE":"No rule can be applied",
     "ABS_EXP_DATE_REACHED":"absoloute expiration date has reached",
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
     "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
-}
-
-VOIP_USER_LOGIN_ERRORS={
 }
 
 ADMIN_LOGIN_ERRORS={
@@ -189,10 +186,9 @@ def errorText(event,error,add_error_key=True):
 	       after the returned string and overrid %s values
     """
     try:
-	error_map={"NORMAL_USER_LOGIN":NORMAL_USER_LOGIN_ERRORS,
-		   "USER_ACTIONS":USER_ACTIONS_ERRORS,
+	error_map={"USER_ACTIONS":USER_ACTIONS_ERRORS,
 		   "USER":USER_ERRORS,
-		   "VOIP_USER_LOGIN":VOIP_USER_LOGIN_ERRORS,
+		   "USER_LOGIN":USER_LOGIN_ERRORS,
 		   "GENERAL":GENERAL_ERRORS,
 		   "PLUGINS":PLUGIN_ERRORS,
 		   "ADMIN_LOGIN":ADMIN_LOGIN_ERRORS,

@@ -2,12 +2,13 @@ from core.db import db_main
 from core.ras import ras_main
 from core.ibs_exceptions import *
 from core.errors import errorText
-
+from radius_server.pyrad.server import RemoteHost
 
 class RasLoader:
     def __init__(self):
 	self.rases_ip={}
 	self.rases_id={}
+	self.radius_remote_hosts={}
 
     def __getitem__(self,key):
 	return self.getRasByID(key)
@@ -83,7 +84,12 @@ class RasLoader:
 	ras_obj=self.getRasByID(ras_id)
 	del(self.rases_id[ras_id])
 	del(self.rases_ip[ras_obj.getRasIP()])
+	del(self.radius_remote_hosts[ras_obj.getRasIP()])
+
     
+    def getRadiusRemoteHosts(self):
+	return self.radius_remote_hosts
+
     def __getAllActiveRasIDs(self):
 	"""
 	    return a list of all ras_id s from table "ras"
@@ -156,4 +162,4 @@ class RasLoader:
 	"""
 	self.rases_ip[ras_obj.getRasIP()]=ras_obj
 	self.rases_id[ras_obj.getRasID()]=ras_obj
-
+	self.radius_remote_hosts[ras_obj.getRasIP()]=RemoteHost(ras_obj.getRasIP(),ras_obj.getRadiusSecret(),ras_obj.getRasIP())

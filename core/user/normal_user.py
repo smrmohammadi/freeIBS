@@ -4,7 +4,7 @@ class NormalUser:
 	self.user_obj=user_obj
 
     def getInOutBytes(self,instance):
-	pass
+	return (0,0)
 
     def killInstance(self,instance):
 	pass

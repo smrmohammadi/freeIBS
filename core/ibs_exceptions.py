@@ -83,6 +83,14 @@ class LoginException (IBSError):
     def __str__(self):
         return self.str_error
 
+class IPpoolFullException(Exception):
+    def __init__(self,_str):
+	self._str=_str
+
+    def __str__(self):
+	return self._str
+
+
 class Logger:
     def __init__(self,file_name):
 

@@ -2,7 +2,7 @@ from core.ibs_exceptions import *
 from core.lib.general import *
 from core.errors import errorText
 from core.db import db_main
-from core.user import normal_user
+from core.user import normal_user,user_main
 import operator
 
 class User:
@@ -15,8 +15,8 @@ class User:
 	    o_type(string): type of user either "Normal" or "VoIP"
 	"""
     	self.instances=0
-	self.__instance_info={}
-	self.loaded_user=loaded_user_instance
+	self.__instance_info=[]
+	self.loaded_user=loaded_user
 	self.__type=_type
 	self.__type_obj=self.__loadTypeObj(_type)
 	self.__setInitialVariables()
@@ -28,6 +28,9 @@ class User:
 	    return normal_user.NormalUser(self)
 
     def __setInitialVariables(self):
+	self.__setInitialCredit()
+
+    def __setInitialCredit(self):
 	self.initial_credit=self.getLoadedUser().getBasicUser().getInitialCredit()
 
     def __str__(self):
@@ -48,7 +51,7 @@ class User:
     def getTypeObj(self):
 	return self.__type_obj
     
-    def isNormalUser():
+    def isNormalUser(self):
 	return self.getType()=="Normal"
 
 ###################################################
@@ -68,7 +71,7 @@ class User:
     def getInstanceFromRasMsg(self,ras_msg):
 	ras_id=ras_msg.getRasID()
 	unique_id_val=ras_msg.getUniqueIDValue()
-	for instance in self.instances:
+	for instance in range(self.instances):
 	    instance_info=self.getInstanceInfo(instance)
 	    if instance_info["ras_id"]==ras_id and instance_info["unique_id_val"]==unique_id_val:
 		return instance
@@ -84,12 +87,14 @@ class User:
 
     def login(self,ras_msg):
 	self.instances+=1
-	self.instance_info["auth_ras_msg"]=ras_msg
-	self.instance_info["unique_id"]=ras_msg["unique_id"]
-	self.instance_info["unique_id_val"]=ras_msg.getUniqueIDValue()
-	self.instance_info["ras_attrs"]=ras_msg.getAttrs()
-	self.instance_info["ras_id"]=ras_msg.getRasID()
-	user_main.getUserPluginManager().callHooks("USER_LOGIN",self,ras_msg)
+	self.__instance_info.append({})
+	instance_info=self.getInstanceInfo(self.instances)
+	instance_info["auth_ras_msg"]=ras_msg
+	instance_info["unique_id"]=ras_msg["unique_id"]
+	instance_info["unique_id_val"]=ras_msg.getUniqueIDValue()
+	instance_info["ras_attrs"]=ras_msg.getAttrs()
+	instance_info["ras_id"]=ras_msg.getRasID()
+	user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
 	
     def logout(self,instance,ras_msg):
 	"""
@@ -97,28 +102,29 @@ class User:
 	    we call plugins now, so they'll see the correct user object
 	    that not changed for logout
 	"""
-	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,instance,ras_msg)
+	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,[instance,ras_msg])
 	self.instances-=1
 	_index=self.instances
-	del(self.instance_info[_index])
+	del(self.__instance_info[_index])
 
     def update(self,ras_msg):
 	"""
 	    plugins can update themeselved whenever we recieved an update packet, with updated info 
 	    from radius server
 	"""
-	user_main.getUserPluginManager().callHooks("UPDATE",self,instance,ras_msg)
+	user_main.getUserPluginManager().callHooks("UPDATE",self,[instance,ras_msg])
 
     def canStayOnline(self):
-	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE"))
+	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))
 
     def commit(self):
 	"""
 	    saves all changed user info from memory into DB
 	"""
 	query=reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_COMMIT",self))
-	db_main.getHandle().transactionQuery(query)
+	return query
 	
     def _reload(self):
+	self.__setInitialCredit()
 	user_main.getUserPluginManager().callHooks("USER_RELOAD",self)
 

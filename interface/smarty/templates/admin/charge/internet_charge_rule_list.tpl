@@ -75,7 +75,7 @@
 			<a href="/IBSng/admin/charge/edit_internet_charge_rule.php?charge_rule_id={$rule.rule_id}&charge_name={$charge_name|escape:"url"}">{listTableBodyIcon action="edit" cycle_color="TRUE"}</a>
     		    {/listTD}
 		    {listTD icon=TRUE}
-		        <a {jsconfirm msg="Are you sure you want to delete charge rule with id `$rule.rule_id`"} href="/IBSng/admin/charge/charge_info.php?charge_rule_id={$rule.rule_id}&carge_name={$charge_name|escape:"url"}&delete_charge_rule=1">{listTableBodyIcon action="delete"}</a>
+		        <a {jsconfirm msg="Are you sure you want to delete charge rule with id `$rule.rule_id`"} href="/IBSng/admin/charge/charge_info.php?charge_rule_id={$rule.rule_id}&charge_name={$charge_name|escape:"url"}&delete_charge_rule=1">{listTableBodyIcon action="delete"}</a>
     		    {/listTD}
 		{/if}
 		{/listTR}

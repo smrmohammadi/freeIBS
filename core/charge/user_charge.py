@@ -1,3 +1,4 @@
+import time
 class UserCharge:
     """
 	Instances of this class will keep charge related information

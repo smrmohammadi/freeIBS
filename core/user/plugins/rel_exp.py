@@ -15,7 +15,7 @@ def init():
 
 class RelExpDate(user_plugin.AttrCheckUserPlugin):
     def __init__(self,user_obj):
-	user_plugin.AttrCheckUserPlugin(self,user_obj,"rel_exp_date")
+	user_plugin.AttrCheckUserPlugin.__init__(self,user_obj,"rel_exp_date")
 	self.__initValues(True)
 
     def __initValues(self,init):
@@ -28,13 +28,13 @@ class RelExpDate(user_plugin.AttrCheckUserPlugin):
 		else:
 		    self.first_login=self.user_obj.getInstanceInfo(1)["auth_ras_msg"].getTime()
 		    
-		self.rel_exp_date_time=self.__calcRelExpDateTime(self,first_login,self.user_obj.getUserAttrs()["rel_exp_date"])
+		self.rel_exp_date_time=self.__calcRelExpDateTime(self.first_login,long(self.user_obj.getUserAttrs()["rel_exp_date"]))
 	    else:
 		self.first_login=long(self.user_obj.getUserAttrs()["first_login"])
 		self.rel_exp_date_time=long(self.user_obj.getUserAttrs()["rel_exp_date_time"])
 
     def __isFirstLogin(self):
-	return not self.user_obj.hasAttr("first_login")
+	return not self.user_obj.getUserAttrs().hasAttr("first_login")
 	    
     def __calcRelExpDateTime(self,first_login,rel_exp_date_val):
 	return first_login+rel_exp_date_val*3600

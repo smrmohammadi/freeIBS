@@ -1,5 +1,6 @@
 from core.lib import interval
 from core.ras import ras_main
+import time
 
 
 class ChargeRule:
@@ -128,10 +129,8 @@ class ChargeRule:
 	    return False if this rule is not applicable
 	    otherwise returns applicability amount of this rule
 	"""
-	
-	if not self.interval.contains_now():
+	if not self.interval.containsNow():
 	    return False
-	
 	return self.anytimeAppliable(user_obj, instance)
 	
 
@@ -140,11 +139,11 @@ class ChargeRule:
 	    return 0 if this rule is not applicable __anytime __
 	    otherwise returns applicability amount of this rule
 	"""
-	if self.ras_id==self.ALL and self.ALL in self.port:
-	    return 1
+	if self.ras_id==self.ALL and self.ALL in self.ports:
+	    return True
 	
 	(ras_id,port)=user_obj.getRasIDAndPort(instance)
 	if self.ras_id==ras_id or self.ras_id==self.ALL:
 	    if port in self.ports or self.ALL in self.ports:
-		return 1
-	return 0
+		return True
+	return False

@@ -1,4 +1,7 @@
 from core.event import periodic_events 
+from core.ras.msgs import RasMsg
+from core.ibs_exceptions import *
+from core.ippool import ippool_main
 
 PORT_TYPES=["Internet","Voice-Origination","Voice-Termination"]
 
@@ -104,23 +107,48 @@ class Ras:
 	    Handle Radius Authenticate Packet
 	    We will call self.handleRadAuthPacket that should be overrided by ras implemention
 	"""
-	self.__callWaithRasMsg(self.handleRadAuthPacket,request,reply)
+	(ras_msg,auth_success)=self._callWithRasMsg(self.handleRadAuthPacket,request,reply)
+	if auth_success:
+	    self._applyIPpool(ras_msg)
+	return auth_success
 
     def _handleRadAcctPacket(self,request,reply):
 	"""
 	    request(Radius Packet Instance): Accounting Request Packet
 	    reply(Radius Packet Instance): Accounting Reply Packet
 	"""
-	self.__callWaithRasMsg(self.handleRadAcctPacket,request,reply)
+	self._callWithRasMsg(self.handleRadAcctPacket,request,reply)
 
-    def __callWithRasMsg(self,method,request,reply):
+    def _callWithRasMsg(self,method,request,reply):
 	"""
 	    call "method" with ras_msg as argument
 	    ras_msg is created by "request" , "reply"
 	"""
 	ras_msg=RasMsg(request,reply,self)
-	apply(method,ras_msg)
-        ras_msg.send()
+	apply(method,[ras_msg])
+        return (ras_msg,ras_msg.send())
+
+    def _applyIPpool(self,ras_msg):
+	reply=ras_msg.getReplyPacket()
+	if reply.has_key("Framed-IP-Address"):
+	    return
+	
+	if len(self.ippools)==0:
+	    return
+	
+	for ippool_id in self.ippools:
+	    try:
+		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).getUsableIP()
+		reply["Framed-IP-Address"]=ip
+		ras_msg["ippool_id"]=ippool_id
+		ras_msg["ippool_assigned_ip"]=ip
+		break
+	    except IPpoolFullException:
+		pass
+	else:
+	    return
+
+	toLog("All IP Pools are full for ras %s"%self.getRasIP(),LOG_ERROR)
 
 #################
 #
