@@ -43,17 +43,17 @@ class GroupActions:
 						 })
 
 ############################################
-    def updateGroup(self,group_id,group_name,comment,owner_id):
+    def updateGroup(self,group_id,group_name,comment,owner_name):
 	"""
 	    update group information with id "group_id"
 	    notice that group_name is changable
 	"""
-	self.__updateGroupCheckInput(group_id,group_name,comment,owner_id)
-	self.__updateGroupDB(group_id,group_name,comment,owner_id)
+	self.__updateGroupCheckInput(group_id,group_name,comment,owner_name)
+	admin_obj=admin_main.getLoader().getAdminByName(owner_name)
+	self.__updateGroupDB(group_id,group_name,comment,admin_obj.getAdminID())
 	group_main.getLoader().loadGroupByName(group_name)
-
 	
-    def __updateGroupCheckInput(self,group_id,group_name,comment,owner_id):
+    def __updateGroupCheckInput(self,group_id,group_name,comment,owner_name):
 	group_obj=group_main.getLoader().getGroupByID(group_id)
 	if group_obj.getName()!=group_name:
 	    if group_main.getLoader().groupNameExists(group_name):
@@ -62,8 +62,7 @@ class GroupActions:
 	    if not isNameValid(self.group_name):
 	        raise GeneralException(errorText("GROUP","GROUP_NAME_INVALID")%self.group_name)
 
-	admin_main.getLoader().checkAdminID(owner_id)
-	    
+	admin_main.getLoader().checkAdminName(owner_name)
     
     def __updateGroupDB(self,group_id,group_name,comment,owner_id):
 	db_main.transactionQuery(self.__updateGroupQuery(group_id,group_name,comment,owner_id))

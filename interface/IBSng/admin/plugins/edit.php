@@ -9,18 +9,21 @@ needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();
 
-if(isInRequest("update","edit_tpl_name","target","target_id"))
-    intUpdateAttrs($_REQUEST["group_name"],$_REQUEST["edit_tpl_name"]);
-
+if(isInRequest("update","edit_tpl_name","target","target_id","update_method"))
+    intUpdateAttrs($smarty,$_REQUEST["edit_tpl_name"],$_REQUEST["target"],$_REQUEST["target_id"],$_REQUEST["update_method"]);
 else if(isInRequest("group_name","edit_tpl_name"))
-    intEditGroup($_REQUEST["group_name"],$_REQUEST["edit_tpl_name"]);
+    intEditGroup($smarty,$_REQUEST["group_name"],$_REQUEST["edit_tpl_name"]);
 else
 {
     $err=new error("INVALID_INPUT");
     redirectToGroupList($err->getErrorMsg());
 }
 
-function intUpdateAttrs(
+function intUpdateAttrs(&$smarty,$edit_tple_name,$target,$target_id,$update_method)
+{
+    $update_helper=new UpdateAttrsHelper($smarty,$target,$target_id,$edit_tpl_name);
+    
+}
 
 
 function intEditGroup(&$smarty,$group_name,$edit_tpl_name)
@@ -61,9 +64,9 @@ class UpdateAttrsHelper
 	$this->target_id=$target_id;
 	$this->edit_tpl_name=$edit_tpl_name;
     }
-
-
-
+    
+    function 
+    
 }
 
 ?>
