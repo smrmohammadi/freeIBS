@@ -6,12 +6,13 @@ class Ras:
     default_attributes={"online_check":1,"update_inout_bytes_interval":10,"update_users_interval":60,"online_check_reliable":0,
 			"online_check_valid_ports":0}
 
-    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,type_default_attributes):
+    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
     	"""
 	    ras_ip(string): ip of ras
 	    ras_id(integer): unique id of ras
 	    ras_type(string): type of ras, a string that represent ras type. ex. cisco, quintum tenor...
 	    port(dic): dic of ports in format    {port_name:{"phone":phone_no,"type":type,"comment":comment}
+	    ippools(list): list of IPpool names that this ras uses
 	    attributes(dic): a dictionary of key=>values that show ras specific attributes
 			     attributes are diffrent for various rases. for each type, 
 			     we have a type_default_attributes that are default values for each type,
@@ -23,6 +24,7 @@ class Ras:
 	self.ras_type=ras_type
 	self.radius_secret=radius_secret
 	self.ports=ports
+	self.ippools=ippools
 	self.attributes=attributes
 	self.type_default_attributes=type_default_attributes
 
@@ -38,6 +40,12 @@ class Ras:
     def hasPort(self,port_name):
 	return self.ports.has_key(port_name)
 	
+    def hasIPpool(self,ippool_name):
+	return self.ippools.has_key(ippool_name)
+
+    def getIPpools(self):
+	return self.ippools
+
     def getSelfAttributes(self):
 	return self.attributes
 
@@ -161,8 +169,8 @@ class GeneralUpdateRas(Ras):
 	This class has an update method, that will be called for update_inout_bytes intervals,
 	"UpdateInOutBytes" is the only method that will be called periodicly
     """
-    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,type_default_attributes):
-	Ras.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,type_default_attributes)
+    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
+	Ras.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
 	self.__registerEvents()
 
     def __registerEvents(self):
@@ -184,8 +192,8 @@ class UpdateUsersRas(GeneralUpdateRas):
 	This Class is same as GeneralUpdateRas but has an additional updateUsers method, that
 	will be called in "update_users" interval
     """
-    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,type_default_attributes):
-	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,type_default_attributes)
+    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
+	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
 	self.__registerEvents(self)
 
     def __registerEvents(self):

@@ -10,8 +10,8 @@ def init():
 class PPPDRas(GeneralUpdateRas):
     type_attrs={"pppd_kill_port_command":"%s/pppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%s/pppd/list_users"%defs.IBS_ADDONS}
 
-    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes):
-	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,attributes,self.type_attrs)
+    def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
+	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
 	self.onlines={}
 
     def killUser(self,user_msg):

@@ -159,4 +159,19 @@ class RasHandler(handler.Handler):
     	request.checkArgs("ras_ip","port_name")
 	return ras_main.getActionManager().getRasPortInfo(request["ras_ip"],MultiStr(request["port_name"]))
 
-    
+    def getRasIPpools(self,request):    
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("GET RAS INFORMATION")
+    	request.checkArgs("ras_ip")
+	return ras_main.getLoader().getRasByIP(request["ras_ip"]).getIPpools()
+
+	
+    def addPort(self,request):
+	request.needAuthType(request.ADMIN)
+    	request.checkArgs("ras_ip","port_name","phone","type","comment")
+	request.getAuthNameObj().canDo("CHANGE RAS")
+	return ras_main.getActionManager().addPort(request["ras_ip"],
+						   MultiStr(request["port_name"]),
+						   request["type"],
+						   MultiStr(request["phone"]),
+						   MultiStr(request["comment"]))

@@ -47,6 +47,20 @@ create table admin_perm_templates_detail (
     perm_value text
 );
 
+-- ****************** IP POOLS
+create table ippool(
+    ippool_id integer primary key,
+    ippool_name text,
+    ippool_comment	text
+);
+
+create sequence ippool_id_seq;
+
+create table ippool_ips(
+    ippool_id integer references ippool,
+    ip	inet
+);
+
 -- *********************** RAS
 create table ras (
     ras_id integer primary key,
@@ -71,8 +85,13 @@ create table ras_attrs (
     attr_name text,
     attr_value text
 );
-create unique index ras_attrs_index on ras_attrs (ras_id,attr_name);
 
+create table ras_ippools (
+    ras_id integer references ras,
+    ippool_id integer references ippool
+);
+
+create unique index ras_attrs_index on ras_attrs (ras_id,attr_name);
 
 -- ******************* CHARGES ***********
 create table charges (
@@ -239,19 +258,6 @@ create table connection_log_details {
     value text
 };
 
--- ****************** IP POOLS
-create table ippool(
-    ippool_id integer primary key,
-    ippool_name text,
-    ippool_comment	text
-);
-
-create sequence ippool_id_seq;
-
-create table ippool_ips(
-    ippool_id integer references ippool,
-    ip	inet
-);
 
 -- ********************* TO BE CHECKED!
 create table admin_deposit_log(

@@ -151,7 +151,9 @@ RAS_ERRORS={
     "RAS_DONT_HAVE_PORT":"Ras doesn't have port %s",
     "RAS_DONT_HAVE_ATTR":"Ras doesn't have attribute %s",
     "NO_SUCH_INACTIVE_RAS":"There's no Inactive ras with ip %s",
-    "RAS_IS_INACTIVE":"Ras with ip %s is inactive, you should reactive it instead of adding"
+    "RAS_IS_INACTIVE":"Ras with ip %s is inactive, you should reactive it instead of adding",
+    "RAS_ALREADY_HAVE_IPPOOL":"Ras already have ippool %s",
+    "RAS_DONT_HAVE_IPPOOL":"Ras doesn't have IPpool %s"
 }
 
 IPPOOL_ERRORS={

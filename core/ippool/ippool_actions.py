@@ -3,7 +3,7 @@ from core.errors import errorText
 from core.lib.general import *
 from core.db import db_main,ibs_db,ibs_query
 from core.ippool import ippool_main
-from core.lib import iplib,multi_strs
+from core.lib import iplib
 
 class IPpoolActions:
     def addNewPool(self,ippool_name,comment):
@@ -92,13 +92,11 @@ class IPpoolActions:
 	return ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s"%ippool_id)
 
 ###########################################################
-    def addIPtoPool(self,ippool_name,ip):
+    def addIPtoPool(self,ippool_name,ips):
 	"""
 	    add new "ip" to ippool with name "ippool_name"
-	    ip(str): can be a multi string of multiple ips
+	    ips(MultiStr): can be a multi string of multiple ips
 	"""
-	ips=multi_strs.MultiStr(ip)
-
 	self.__addIPtoPoolCheckInput(ippool_name,ips)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__addIPtoPoolDB(ippool_obj.getIPpoolID(),ips)
@@ -136,12 +134,11 @@ class IPpoolActions:
 
 
 ##########################################################
-    def delIPfromPool(self,ippool_name,ip):
+    def delIPfromPool(self,ippool_name,ips):
 	"""
 	    delete "ip" from ippool with name "ippool_name"
-	    ip(str): can be a multi string of multiple ips
+	    ips(MultiStr instance): can be a multi string of multiple ips
 	"""
-	ips=multi_strs.MultiStr(ip)
 	self.__delIPfromPoolCheckInput(ippool_name,ips)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__delIPfromPoolDB(ippool_obj.getIPpoolID(),ips)
