@@ -380,6 +380,36 @@ class AuthPacket(Packet):
 
 		return header+attr
 
+	def checkChapPassword(self,password):
+		"""Check if chap password in packet matched with password
+		This method assumes CHAP-Password and CHAP-Challenge are available in attributes.
+		It always return false in case they don't exists
+		
+		XXX TODO: Change this to be able to check authenticator if chap_challeng not available
+		
+		@param password: clear text password that will be check against packet chap password
+		@type password: string
+
+		@return:         true if password correct, else false
+		@rtype:          boolean
+	        """
+		try:
+		    chap_password=self["CHAP-Password"][0]
+		except KeyError:
+		    return False
+
+	    	if self.has_key("CHAP-Challenge")
+		    chap_challenge=self["CHAP-Challenge"][0]
+		else:
+		    chap_challenge=self.authenticator
+		
+		hash=md5.new()
+		hash.update(chap_password[0])
+		hash.update(password)
+		hash.update(chap_challenge)
+		return hash.digest()==chap_password[1:]
+	
+
 
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password

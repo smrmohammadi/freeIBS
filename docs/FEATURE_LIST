@@ -28,6 +28,7 @@ Carrier Based Origination VoIP
 Save Online User States/Update users when crash
 Diffrent Databases/Hosts for log tables
 Session Limit
+Ras Names
 
 Interface:
         Charge add new voip rule
@@ -57,8 +58,9 @@ Interface:
     Admin Edit				DONE
     Admin Change Deposit		----
     Admin Delete			----
-    Admin Report 			----
+    Admin Reports 			----
 	Deposit Change			----
+	Usage Reports!			----
     Admin Lock				----
     Admin lock list			----
     Admin Unlock			----
@@ -74,7 +76,7 @@ Interface:
     Group info				DONE
     Group edit				DONE
     Group Delete			----
-    Group change attributes		PARTIALLY DONE
+    Group change attributes		----
     Group List				DONE
     
     Ras Add New Ras			DONE
@@ -88,10 +90,10 @@ Interface:
     Ras del port			DONE
     Ras Edit port			DONE
     
-    IPPOOL add new			----
-    IPPOOL list				----
-    IPPOOL delete			----
-    IPPOOL edit				----
+    IPPOOL add new			DONE
+    IPPOOL list				DONE
+    IPPOOL delete			DONE
+    IPPOOL edit				DONE
     
     User Add new users			DONE
     User edit user			----
@@ -154,7 +156,7 @@ Core Features:
 	User attribute manager			Partially   2004-8-7*
 	User plugin manager			Partially
 	User Loader				Partially
-	User Actions				----	    2004-8-7
+	User Actions				Partially    2004-8-7
 	User Handlers				----
 	    User add				DONE
 	    
@@ -164,13 +166,15 @@ Core Features:
 	Online User Manager			----
 
     Radius Server				----
-	-CHAP					----
+	-CHAP					Partially
+	-MSCHAP?
+	-EAP?
 
     IPPOOL
-	Loader					----
-	Actions					----
-	Handler					----
-	IPPOOL Implemention			----
+	Loader					DONE
+	Actions					DONE
+	Handler					DONE
+	IPPOOL Implemention			Partially Done
 
 User Attributes:
     Normal					----		2004-8-7*

@@ -13,7 +13,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
     if(!is_null($content))
     {
 	$title=isset($params["title"])?$params["title"]:"";
-	if(isset($params["double"]) and $params["double"])
+	if(isset($params["double"]) and $params["double"]=="TRUE")
 	{
 	    $table_width_default=480;
 	    $colspans=9;

@@ -6,40 +6,48 @@
 {include file="admin_header.tpl" title="IP Pools List"}
 {include file="err_head.tpl"}
 
-<center>
-    <table>
-	<tr>	
-	    <th bgcolor=gray colspan=7>
-		<h2>IPPools</2> 
-	<tr>
-	    <th>
+{listTable title="IP Pool List" cols_num=4}
+	{listTableHeaderIcon action="view" close_tr=TRUE}
+	{listTR type="header"}
+	    <td>
 		ID
-	    <th>
+	    </td>
+	    <td>
 		IP Pool Name
-	    <th>
+	    </td>
+	    <td>
 		Comment
-	    <th>
+	    </td>
+	    <td>
 		IPs(Truncated)
+	    </td>
+	{/listTR}
 		
 	{foreach from=$ippool_infos item=ippool_info}
-	    <tr>
+	    {listTR type="body" cycle_color=FALSE}
 		<td>
 		    {$ippool_info.ippool_id}
+		</td>
 		<td>
 		    {$ippool_info.ippool_name}
+		</td>
 		<td>
 		    {$ippool_info.comment}
+		</td>
 		<td>
 		    {$ippool_info.ips_text|truncate:80:"...":false}
+		</td>
 		<td>
 		    <a href="/IBSng/admin/ippool/ippool_info.php?ippool_name={$ippool_info.ippool_name|escape:"url"}">
-			info
+			{listTableBodyIcon action="view" cycle_color=TRUE}
 		    </a>
+		</td>
+	    {/listTR}
 	{/foreach}
-    </table>
-    <a href="add_new_ippool.php"> 
-	Add New IP Pool 
-    </a>
-</center>
+
+{/listTable}
+<a href="add_new_ippool.php"> 
+    Add New IP Pool 
+</a>
 
 {include file="admin_footer.tpl"}

@@ -11,21 +11,21 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 					   and for 2 column tables can be "left1" "right1" "left2" "right2"
 */
     
-    $err_star_img_link="<img src='/IBSng/images/star.gif'> ";
-    if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
-    {
-	$err_star=$err_star_img_link;
-	$err=True;
-    }
-    else
-    {
-	$err_star="";
-	$err=False;
-    }
     if(!is_null($content))
     {
+	$err_star_img_link="<img src='/IBSng/images/star.gif'> ";
+	if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
+        {
+	    $err_star=$err_star_img_link;
+	    $err=True;
+	}
+        else
+	{
+	    $err_star="";
+	    $err=False;
+        }
 
-	if(isset($params["double"])and $params["double"])
+	if(isset($params["double"])and $params["double"]=="TRUE")
 	{
 	    if($params["type"]=="left1")
 	    {
@@ -65,8 +65,8 @@ END;
 END;
 	    }
 	    
-	}
-	else if (isset($params["comment"]) and $params["comment"])
+	} //end double
+	else if (isset($params["comment"]) and $params["comment"]=="TRUE")
 	{
 	    if($params["type"]=="left")
 	    {
@@ -84,8 +84,8 @@ END;
 		</table>
 		</td>
 END;
-	    }
-	    else
+	    } 
+	    else //type is right
 	    {
 		$color=getTRColor();
 		$ret=<<<END
@@ -116,8 +116,8 @@ END;
     	    }
 	
 	
-	}
-	else
+	}//end comment
+	else //normal 1 row table
 	{
 	    if($params["type"]=="left")
 	    {
@@ -128,7 +128,7 @@ END;
 		<td class="Form_Content_Row_Left_{$color}">{$err_star}<nobr>{$content}</nobr></td>
 END;
 	    }
-	    else
+	    else //type is right
 	    {
 		$color=getTRColor();
 		$ret=<<<END

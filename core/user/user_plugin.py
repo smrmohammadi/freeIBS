@@ -1,5 +1,5 @@
 from core import defs
-from core.user import user_main
+from core.user import user_main,can_stay_online_result
 from core.errors import errorText
 
 class UserPlugin:
@@ -24,7 +24,7 @@ class UserPlugin:
 	"""
 	pass
 
-    def logout(self,instance):
+    def logout(self,instance,ras_msg):
 	"""
 	    called when an instance of user logs out
 	"""
@@ -35,7 +35,7 @@ class UserPlugin:
 	    called during user_obj.canStayOnline
 	    we must return instance of CanStayOnlineResult
 	"""
-	return (defs.MAXLONG,{})
+	return CanStayOnlineResult()
 
     def _reload(self,new_attributes):
 	"""
