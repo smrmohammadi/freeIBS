@@ -16,8 +16,9 @@ def main():
     curses.wrapper(cursesMain)
 
 def setupMainWindow(stdscr):
-    curses.init_pair(1,curses.COLOR_WHITE,curses.COLOR_BLACK)
-    stdscr.bkgdset(0,curses.color_pair(1))
+    if curses.has_colors():
+	curses.init_pair(1,curses.COLOR_WHITE,curses.COLOR_BLACK)
+	stdscr.bkgdset(0,curses.color_pair(1))
     stdscr.clear()
     stdscr.box()
     stdscr.addstr(0,0,"IBSng Setup",curses.A_BOLD)
