@@ -31,7 +31,7 @@ function intShowMultiUserInfo(&$smarty,$user_id)
 //********************************************
 function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
 {
-    $resp=intSetSingleUserInfo(&$smarty,$user_id,$normal_username);
+    $resp=intSetSingleUserInfo($smarty,$user_id,$normal_username);
     if($resp->isSuccessful())
     {
         intShowSingleUserInfoAssignValues($smarty,$user_id,array_values($resp->getResult()));

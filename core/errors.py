@@ -26,7 +26,7 @@ GENERAL_ERRORS={
     "INVALID_DAY_OF_WEEK":"\"%s\" is not a valid day of week",
     "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found",
     "FROM_VALUE_INVALID":"Invalid From value %s",
-    "TP_VALUE_INVALID":"Invalid From value %s",
+    "TO_VALUE_INVALID":"Invalid To value %s",
 }
 
 USER_ACTIONS_ERRORS={

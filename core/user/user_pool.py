@@ -155,7 +155,11 @@ class UserPool:
 	"""
 	    check pool size and release a user if we are more then defs.MAX_USER_POOL_SIZE
 	"""
-	self.__pool_len+=1
+    	self.lock.acquire()
+        try:
+	    self.__pool_len+=1
+	finally:
+	    self.lock.release()
 	if self.__pool_len>defs.MAX_USER_POOL_SIZE:
 	    self.__releaseOneUser()
 

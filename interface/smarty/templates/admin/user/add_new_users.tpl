@@ -67,4 +67,21 @@
 	{/addEditTD}
     {/addEditTable}
 </form>
+
+{addRelatedLink}
+    <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
+	Search User
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/user/user_info.php" class="RightSide_links">
+	User Information
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Search User"}
+Add new Users
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

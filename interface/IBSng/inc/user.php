@@ -46,19 +46,21 @@ class CheckNormalUsernameForAdd extends Request
 }
 
 
-class SearchUser extends Request
-{
-    function SearchUser($conds,$from,$to,$order_by,$desc)
+function getUsersInfoByUserID(&$smarty,$user_ids)
+{/*return a list of user_infos of users with id in $user_ids
+ */ 
+    if(sizeof($user_ids)==0)
+	return array();
+
+    $req=new GetUserInfo(join(",",$user_ids));
+    $resp=$req->sendAndRecv();
+    if($resp->isSuccessful())
+	return $resp->getResult();
+    else
     {
-	parent::Request("user.searchUser",array("conds"=>$conds,
-						"from"=>$from,
-						"to"=>$to,
-						"order_by"=>$order_by,
-						"desc"=>$desc));
+	$resp->setErrorInSmarty($smarty);
+	return array();
     }
 }
-
-
-
 
 ?>

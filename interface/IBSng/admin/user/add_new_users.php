@@ -20,7 +20,7 @@ function intAddNewUsers($count,$credit,$owner_name,$group_name,$credit_comment)
     $add_user_req=new AddNewUsers($count,$credit,$owner_name,$group_name,$credit_comment);
     list($success,$user_ids)=$add_user_req->send();
     if($success)
-      	redirectToUserInfo($user_ids);
+      	redirectToUserInfo(join(",",$user_ids));
     else
 	interface($user_ids);
 }

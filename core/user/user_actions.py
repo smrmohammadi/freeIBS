@@ -5,7 +5,7 @@ from core.db import ibs_db,db_main
 from core.db.ibs_query import IBSQuery
 from core.errors import errorText
 from core.admin import admin_main
-from core.lib import password_lib,iplib
+from core.lib import password_lib,iplib,report_lib
 from core.group import group_main
 from core.user import user_main
 import re
@@ -106,8 +106,6 @@ class UserActions:
 	admin_main.getLoader().checkAdminName(owner_name)
 	admin_main.getLoader().checkAdminName(creator_name)
 	group_main.getLoader().checkGroupName(group_name)
-
-	self.__creditChangeCheckInput(remote_address,credit_change_comment)
 
     def addNewUsersQuery(self,_count,credit,owner_name,group_name,ibs_query):
 	"""
@@ -270,14 +268,9 @@ class UserActions:
 	    search in users based on conditions in "conds" and return user_ids result from "_from" to "to"
 	    admin_obj(Admin Instance): requester admin object
 	"""
-	self.__searchUsersCheckInput(conds,_from,to,order_by,desc)
+	self.__searchUsersCheckInput(conds,_from,to,order_by,desc,admin_obj)
 	search_helper=user_main.getAttributeManager().runAttrSearchers(conds,admin_obj)
-	return search_helper.getUserIDs()
+	return search_helper.getUserIDs(_from,to,order_by,desc)
 
     def __searchUsersCheckInput(self,conds,_from,to,order_by,desc,admin_obj):
-	if not isInt(_from) or _from<0 or _from>1024*1024:
-	    raise GeneralException(errorText("GENERAL","FROM_VALUE_INVALID")%_from)
-
-	if not isInt(to) or to<0 or to>1024*1024:
-	    raise GeneralException(errorText("GENERAL","TO_VALUE_INVALID")%to)
-
+	report_lib.checkFromTo(_from,to)

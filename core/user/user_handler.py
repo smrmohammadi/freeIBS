@@ -4,6 +4,7 @@ from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.multi_strs import MultiStr
 from core.lib.general import *
+import string
 
 
 class UserHandler(handler.Handler):
@@ -118,12 +119,25 @@ class UserHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("conds","from","to","order_by","desc")
 	admin_obj=request.getAuthNameObj()
-	conds=request["conds"]
-	if admin_obj.hasPerm("GET USER INFORMATION"):
+	conds=self.__searchUserFixConds(request["conds"])
+
+	if admin_obj.isGod(): pass
+	elif admin_obj.hasPerm("GET USER INFORMATION"):
 	    if admin_obj.getPerms()["GET USER INFORMATION"].isRestricted():
 		conds["owner_name"]=[admin_obj.getAdminID()]
 	else:
 	    raise PermissionException(errorText("GENERAL","ACCESS_DENIED"))
 		
-	return user_main.getActionManager().searchUsers(conds,request["from"],request["to"],request["desc"],admin_obj)
-	
+	return user_main.getActionManager().searchUsers(conds,request["from"],request["to"],request["order_by"],request["desc"],admin_obj)
+
+    def __searchUserFixConds(self,conds):
+	"""
+	    convert integer key dictionaries to lists. It takes care of other dics so it won't convert 
+	    other dics
+	"""
+	def fixDics(key):
+	    val=conds[key]
+	    if type(val)==types.DictType and False not in map(lambda x:x in string.digits,val): 
+		conds[key]=val.values()
+	map(fixDics,conds)
+	return conds

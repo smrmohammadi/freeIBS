@@ -12,6 +12,7 @@ intersect
 """
 from core.lib.general import *
 from core.lib.multi_strs import MultiStr
+from core.db import db_main
 
 class Condition:
     def __init__(self,cond_dic):
@@ -65,12 +66,12 @@ class SearchTable:
 	map(lambda value:group.addGroup(self.createColGroup(db_name,value,op)),values)
 	self.addGroup(group)
 
-    def ltgtSearch(self,cond_key,cond_op_key,attr_db_name,value_parser_method=None):
+    def ltgtSearch(self,search_helper,cond_key,cond_op_key,attr_db_name,value_parser_method=None):
 	"""
 	"""
 	if search_helper.hasCondFor(cond_key,cond_op_key):
 	    checkltgtOperator(search_helper.getCondValue(cond_op_key))
-	    self.searchOnConds(serach_helper,
+	    self.searchOnConds(search_helper,
 			cond_key,
 			attr_db_name,
 			value_parser_method,
@@ -278,9 +279,9 @@ class SearchUserHelper:
 	    return a tuple of (result_count,user_id_list) 
 	"""
 	query=self.getSearchQuery()
-	db_handle=db_main.getHandle(TRUE)
+	db_handle=db_main.getHandle(True)
 	self.__createResultTable(db_handle,query)
-	result_count=self.__getResultCount()
+	result_count=self.__getResultCount(db_handle)
 	db_dic=self.__applyOrderBy(db_handle,_from,to,order_by,desc)
 	self.__dropResultTable(db_handle)
 	db_handle.releaseHandle()
@@ -292,7 +293,7 @@ class SearchUserHelper:
     def __dropResultTable(self,db_handle):
 	db_handle.query("drop table search_user_temp")
 
-    def __getResultCount(self):
+    def __getResultCount(self,db_handle):
 	return db_handle.getCount("search_user_temp","true")
 
     def __applyOrderBy(self,db_handle,_from,to,order_by,desc):
@@ -316,20 +317,19 @@ class SearchUserHelper:
 	    return self.__emptyOrderBy(db_handle,_from,to)
 
     def __usersOrderBy(self,db_handle,_from,to,order_by,desc):
-	return db_handle.get("users,search_user_temp","users.user_id=search_user_temp.user_id",_from,to,(order_by,desc),("users.user_id"))
+	return db_handle.get("users,search_user_temp","users.user_id=search_user_temp.user_id",_from,to,(order_by,desc),("users.user_id",))
 
     def __emptyOrderBy(self,db_handle,_from,to):
 	return db_handle.get("search_user_temp","true",_from,to,"")
 
     def __normalUsersOrderBy(self,db_handle,_from,to,order_by,desc):
-	self.__handleBySortCol(db_handle,_from,to,order_by,desc,"normal_users")
+	return self.__handleBySortCol(db_handle,_from,to,order_by,desc,"normal_users")
 
     #####################################
     def __handleBySortCol(self,db_handle,_from,to,order_by,desc,table):
 	self.__addSortCol(db_handle,"text")
 	self.__updateSortCol(db_handle,order_by,table)
-	return self.__sortColOrderBy(self,db_handle,_from,to,desc)
-
+	return self.__sortColOrderBy(db_handle,_from,to,desc)
 
     def __addSortCol(self,db_handle,_type):
 	db_handle.query("alter table search_user_temp add sort_col %s"%_type)
@@ -338,7 +338,7 @@ class SearchUserHelper:
 	db_handle.query("update search_user_temp set sort_col=%s from %s where search_user_temp.user_id=%s.user_id"%(order_by,table,table))
 	
     def __sortColOrderBy(self,db_handle,_from,to,desc):
-	return db_handle.get("search_user_temp","true",_from,to,("sort_col",desc),("user_id"))
+	return db_handle.get("search_user_temp","true",_from,to,("sort_col",desc),("user_id",))
     #######################################
 
 class SearchUserGroup:

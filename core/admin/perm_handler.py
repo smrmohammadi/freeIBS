@@ -2,6 +2,7 @@ from core.server import handler
 from core.admin import admin_main,perm_actions,perm_loader
 from core.lib.sort import SortedList
 from core.ibs_exceptions import *
+from core.errors import errorText
 
 
 class PermHandler(handler.Handler):
@@ -21,7 +22,6 @@ class PermHandler(handler.Handler):
 	self.registerHandlerMethod("loadPermTemplateToAdmin")
 	self.registerHandlerMethod("deletePermTemplate")
 	
-
     def canDo(self,request):
 	"""
 	    return True if "admin_username" canDo "perm_name" with params
@@ -89,7 +89,6 @@ class PermHandler(handler.Handler):
 				  })
 	return perms_list
 ##################################
-
     def getAllPerms(self,request):
 	"""
 	    return a list of dics of all perms sorted by permission name

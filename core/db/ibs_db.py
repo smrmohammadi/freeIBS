@@ -143,7 +143,7 @@ def createInsertQuery(table,dict_values):
         raise DBException("Empty values for insert")
     
     names="("+",".join(dict_values.keys())+")"
-    values="("+",".join(dict_values.values())+")"
+    values="("+",".join(map(str,dict_values.values()))+")"
     return "insert into %s %s VALUES %s ;"%(table,names,values)
 
 

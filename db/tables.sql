@@ -260,20 +260,20 @@ create table credit_change_userid (
 create index credit_change_userid_index on credit_change_userid (user_id);
 
 
-create table connection_log {
+create table connection_log (
     connection_log_id bigint,
     user_id integer,
     credit_used integer,
     login_time timestamp,
     logout_time	timestamp
     ras_id integer
-};
+);
 
-create table connection_log_details {
+create table connection_log_details (
     connection_log_id bigint references connection_log,
     name text, 
     value text
-};
+);
 
 
 -- ********************* TO BE CHECKED!

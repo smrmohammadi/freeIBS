@@ -2,6 +2,9 @@ from core.db.ibs_query import IBSQuery
 from core.db import ibs_db,db_main
 from core.ibs_exceptions import *
 from core.errors import errorText
+from core.lib import iplib
+from core.lib.general import *
+import itertools
 
 class CreditChangeLogActions:
     CREDIT_CHANGE_ACTIONS={"ADD_USER":1}
@@ -18,6 +21,7 @@ class CreditChangeLogActions:
 	    remote_address(str): remote ip of admin while changing credit
 	    comment(str): comment of credit change
 	"""
+	self.__creditChangeCheckInput(remote_address,comment)
 	change_id=self.__getNewCreditChangeID()
 	ibs_query=IBSQuery()
 	ibs_query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
@@ -29,10 +33,10 @@ class CreditChangeLogActions:
 							"comment":dbText(comment)
 							})
 	
-	def insertToCreditChangeUserID(user_id):
+	def insertToCreditChangeUserID(user_id,ibs_query):
 	    ibs_query+=ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
 								    "credit_change_id":change_id})
-	map(insertToCreditChangeUserID,user_ids)
+	itertools.imap(insertToCreditChangeUserID,user_ids,itertools.repeat(ibs_query))
 	return ibs_query
 
     def __getNewCreditChangeID(self):

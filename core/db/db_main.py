@@ -11,7 +11,7 @@ class DBHandleQuery:
 	
 	"""
 	if dedicate_handle:
-	    self.__handle=self.allocateHandle()
+	    self.allocateHandle()
 	    self.__dedicate_handle=True
 	else:
 	    self.__handle=None

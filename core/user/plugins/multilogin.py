@@ -48,9 +48,8 @@ class MultiLoginAttrSearcher(AttrSearcher):
     def run(self):
 	self.ltgtSearchOnUserAndGroupAttrs("multi_login","multi_login_op","multi_login")
 
-
 class MultiLoginAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
 	self.registerAttrUpdaterClass(MultiLoginAttrUpdater,["multi_login"])
-
+	self.registerAttrSearcherClass(MultiLoginAttrSearcher)

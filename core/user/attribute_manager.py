@@ -11,7 +11,7 @@ class AttributeManager:
 	self.parse_attr_handlers={}
 	self.all_handlers=[]
 
-    def registerHandler(self,handler_obj,change_attr_list,delete_attr_list,parse_attr_list):
+    def registerHandler(self,handler_obj,change_attr_list=[],delete_attr_list=[],parse_attr_list=[]):
 	"""
 	    handler_obj(AttributeHandler instance): Attribute Handler that generate an attr_updater and attr_holder
 	    change_attr_list(list of strs): list of attributes for change action

@@ -179,5 +179,22 @@ function getPermsByCategory($perms)
     return $categorized_perms;
 }
 
-
+function permValueRestricted($perm_name,$admin_name)
+{/* return True if value of "$perm_name" of "$admin_name" is restricted
+    Also return True if an error has been occured 
+*/
+    if (amIGod())
+	return False;
+    $req=new AdminPermValue($perm_name,$admin_name);
+    $resp=$req->sendAndRecv();
+    if($resp->isSuccessful())
+    {
+	if($resp->getResult()=="Restricted")
+	    return True;
+	else
+	    return False;
+    }
+    else
+	return True;
+}
 ?>

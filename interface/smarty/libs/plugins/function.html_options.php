@@ -56,6 +56,10 @@ function smarty_function_html_options($params, &$smarty)
             case 'selected':
                 $$_key = array_map('strval', array_values((array)$_val));
                 break;
+
+            case 'selected_request':
+                $selected = array(requestVal($_val));
+                break;
                 
             default:
                 if(!is_array($_val)) {
