@@ -4,6 +4,7 @@ from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.multi_strs import MultiStr
 from core.lib.general import *
+from core.lib import report_lib
 import string
 import itertools
 
@@ -156,9 +157,4 @@ class UserHandler(handler.Handler):
 	    convert integer key dictionaries to lists. It takes care of other dics so it won't convert 
 	    other dics
 	"""
-	def fixDics(key):
-	    val=conds[key]
-	    if type(val)==types.DictType and False not in map(lambda x:x in string.digits,val): 
-		conds[key]=val.values()
-	map(fixDics,conds)
-	return conds
+	return report_lib.fixConditionsDic(conds)

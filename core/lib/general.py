@@ -156,3 +156,7 @@ def checkDBBool(bool_var,name=""):
     if bool_var != "t" and bool_var != "f":
 	raise GeneralException(errorTexT("GENERAL","INVALID_BOOL_VALUE")%name)
 
+#################################
+def checkltgtOperator(op):
+    if op not in ("=",">","<",">=","<="):
+        raise GeneralException(errorText("USER_ACTIONS","INVALID_OPERATOR")%op)

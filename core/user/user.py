@@ -11,7 +11,7 @@ class User:
     """
 	Base User Class, for online users
     """
-    remove_ras_attrs=["pap_password","chap_password"]
+    remove_ras_attrs=["pap_password","chap_password","ms_chap_response","ms_chap2_response"]
 
     def __init__(self, loaded_user, _type):
 	"""

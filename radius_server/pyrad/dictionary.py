@@ -230,7 +230,7 @@ class Dictionary:
 			elif tokens[0]=="VENDOR":
 				self.__ParseVendor(state, tokens)
 			elif tokens[0]=="BEGIN-VENDOR":
-				self.ParseBeginVendor(state, tokens)
+				self.__ParseBeginVendor(state, tokens)
 			elif tokens[0]=="END-VENDOR":
 				self.__ParseEndVendor(state, tokens)
 

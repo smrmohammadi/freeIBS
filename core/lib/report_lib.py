@@ -10,4 +10,19 @@ def checkFromTo(_from,to):
 	
 	if _from>to or to-_from>3000:
 	    raise GeneralException(errorText("GENERAL","TO_VALUE_INVALID")%to)
-	
+
+
+def fixConditionsDic(conds):
+    """
+	fix conditions dictionary, convert dictionary members to lists, if they were lists originally
+	some implementions (ex. php) convert arrays to python dics instead of lists, this method fix em by
+	converting them to lists again
+    """	
+    def fixDics(key):
+        val=conds[key]
+        if type(val)==types.DictType and map(str,range(len(val)))==val.keys():
+    	    conds[key]=val.values()
+    map(fixDics,conds)
+    return conds
+
+    

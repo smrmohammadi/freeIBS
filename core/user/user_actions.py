@@ -70,11 +70,8 @@ class UserActions:
 	return True
 	    
     def checkNormalUsernameChars(self,username):
-        if self._checkNormalUsernameChars(username):
+        if not self._checkNormalUsernameChars(username):
 	    raise GeneralException(errorText("USER_ACTIONS","BAD_NORMAL_USERNAME"))
-
-	
-
 ####################################################
     def addNewUsers(self,_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment):
 	self.__addNewUsersCheckInput(_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment)

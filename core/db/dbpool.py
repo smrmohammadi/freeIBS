@@ -51,13 +51,13 @@ class DBPool:
         try:
             to_del=[]
             for handle in self.__in_use:
-                if now-self.__in_use[i]>defs.DB_POOL_MAX_RELEASE_TIME:
+                if now-self.__in_use[handle]>defs.DB_POOL_MAX_RELEASE_TIME:
 		    toLog("Found stale db connection %s"%str(self.__in_use[handle]),LOG_ERROR)
                     handle.reset()
                     to_del.append(handle)
 
             for handle in to_del:
-                del(self.__delFromInUse[handle])
+                self.__delFromInUse(handle)
                 self.__addToPool(handle)
 
             for handle in self.__pool:
@@ -109,7 +109,7 @@ class DBPool:
                 if len(self.__in_use) > defs.DB_POOL_MAX_CONNECTIONS:
                     raise DBException("reached maximum number of connections")
         	else:
-            	    handle=defs.getDBObject()
+            	    handle=defs.getDBHandle()
         finally:
             self.tlock.release()
 

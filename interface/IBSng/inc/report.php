@@ -100,6 +100,15 @@ class ReportCollector
 	$this->addToConds($request_key,$_REQUEST[$request_key]);
     }
 
+    function addToCondsIfNotEq($name,$value)
+    {/*
+	add $name from request to conds, if $name value is not equal $value
+    */
+	if(isInRequest($name) and $_REQUEST[$name]!=$value)
+	    $this->addToConds($name,$_REQUEST[$name]);
+	
+    }
+
     function addToCondsFromRequest($not_empty=TRUE)
     {/*
 	add request arguments to internal dic. request keys are passed as arguments and values are in request
@@ -128,8 +137,9 @@ class ReportCollector
 	foreach($_REQUEST as $name=>$val)
 	    if(preg_match("/^{$prefix}[0-9]+/",$name))
 		$val_arr[]=$val;
-	    if (sizeof($val_arr)!=0)
-		$this->addToConds($cond_name,$val_arr);
+
+	if (sizeof($val_arr)!=0)
+	    $this->addToConds($cond_name,$val_arr);
     }
 }
 
@@ -142,5 +152,16 @@ class GetOnlineUsers extends Request
     }
 }
 
+class GetConnections extends Request
+{
+    function GetConnections($conds,$from,$to,$sort_by,$desc)
+    {
+	parent::Request("report.getConnections",array("conds"=>$conds,
+						      "from"=>$from,
+						      "to"=>$to,
+						      "sort_by"=>$sort_by,
+						      "desc"=>$desc));
+    }    
+}
 
 ?>

@@ -1,34 +1,39 @@
 <?php
 function smarty_block_searchUserTD($params,$content,&$smarty,&$repeat)
 {/*
-    parameter attr_name
-    parameter user_id
+    create a search user td.
+
+    parameter attr_name(str,required): name of attribute, if available on group or user attrs, it will be printed
+				       can be multiple attributes, seperated by ",".
+				       multiple attribute names are only useful if you have 2 or more relative attributes,
+				       that always happened to be together, ex. rel_exp_date and rel_exp_date_unit
+    parameter user_id(int,required): user_id we're showing
     parameter attr_type(string,required): can be "attrs" or "basic"
 */
 
     if(is_null($content))
     {
 	$user_attrs=getUserAttrs($smarty,$params["user_id"]);
-	$val=getUserAttrValue($user_attrs,$params["attr_name"],$params["attr_type"]);
+	$val=getUserAttrValues($user_attrs,$params["attr_name"],$params["attr_type"]);
 	$class="";
-	if(is_null($val) and $params["attr_type"]=="attrs")
+	if(is_null($val[0]) and $params["attr_type"]=="attrs")
 	{
-	    $group_val=getGroupAttrValue($user_attrs,$params["attr_name"]);
-	    if(!is_null($group_val))
+	    $group_val=getGroupAttrValues($user_attrs,$params["attr_name"]);
+	    if(!is_null($group_val[0]))
 	    {
 		$class="Form_Content_Row_groupinfo_dark";
 	        $val=$group_val;
 	    }
 	}
     
-        if(is_null($val))
+        if(is_null($val[0]))
 	{
 	    $repeat=FALSE;
 	    print "<td align=center>-------</td>";
 	}
 	else
 	{
-	    $smarty->assign("search_value",$val);
+	    $smarty->assign("search_value",implode(" ",$val));
 	    $smarty->assign("search_class",$class);
 	}
     }
@@ -49,6 +54,15 @@ function getUserAttrs(&$smarty,$user_id)
     return $user_attrs[$user_id];
 }
 
+function getUserAttrValues(&$user_attrs,$attr_name,$attr_type)
+{
+    $attr_names=explode(",",$attr_name);
+    $ret=array();
+    foreach($attr_names as $attr_name)
+	$ret[]=getUserAttrValue($user_attrs,$attr_name,$attr_type);
+    return $ret;
+}	
+
 function getUserAttrValue(&$user_attrs,$attr_name,$attr_type)
 {
     
@@ -59,6 +73,15 @@ function getUserAttrValue(&$user_attrs,$attr_name,$attr_type)
     else
 	return null;
 }
+
+function getGroupAttrValues(&$user_attrs,$attr_name)
+{
+    $attr_names=explode(",",$attr_name);
+    $ret=array();
+    foreach($attr_names as $attr_name)
+	$ret[]=getGroupAttrValue($user_attrs,$attr_name);
+    return $ret;
+}	
 
 function getGroupAttrValue(&$user_attrs,$attr_name)
 {

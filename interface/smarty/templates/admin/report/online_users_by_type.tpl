@@ -4,8 +4,8 @@
 {include file="admin_header.tpl" title="Online Users" selected="Online Users"} 
 {include file="err_head.tpl"} 
 
-<form method=POST action={requestToUrl ignore="refresh"}>
-{addEditTable title="Online Users" action_icon="ok"}
+<form method=get action="{requestToUrl ignore="refresh"}" name="refresh_form">
+{addEditTable title="Online Users" action_icon="ok" action_onclick="updateRefresh()"}
     {addEditTD type="left"}
 	Refresh Every 
     {/addEditTD}
@@ -22,6 +22,8 @@
 {else}
     refresh=10;
 {/if}
+    url_without_refresh='{requestToUrl ignore="refresh"}';
+//    alert(url_without_refresh);
 {literal}
     updateTimer();
     function updateTimer()
@@ -32,6 +34,12 @@
 	if(refresh==0)
 	    window.location.reload();
 	setTimeout("updateTimer()",1000);
+    }
+
+    function updateRefresh()
+    {
+	window.location=url_without_refresh+"&refresh="+document.refresh_form.refresh.value;
+	return false;
     }
 {/literal}
 
@@ -96,7 +104,7 @@
     {foreach from=$onlines item=info_dic}
 	{listTR type="body" hover_location="/IBSng/admin/user/user_info.php?user_id=`$info_dic.user_id`" hover_color="red"}
 	    {listTD}
-		<a href="/IBSng/admin/user/user_info.php?user_id=`$info_dic.user_id`">
+		<a href="/IBSng/admin/user/user_info.php?user_id={$info_dic.user_id}">
 		    {$info_dic.user_id}
 		</a>
 	    {/listTD}
@@ -174,3 +182,5 @@
 {setAboutPage title="Online Users"}
 You can see online users, seperated by their service
 {/setAboutPage}
+
+{include file="admin_footer.tpl"}

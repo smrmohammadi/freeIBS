@@ -12,8 +12,7 @@ import core.main
 
 
 def termSigHandler(signum,frame):
-    main.mainThreadShutdown()
-    sys.exit(0)
+    event.addEvent(0,core.main.mainThreadShutdown,[],100)
     
 def childWaitSigHandler(signum,frame):
     if signum==signal.SIGUSR1: #successfully started
@@ -69,4 +68,4 @@ def start():
     else:
 	signal.pause()
 
-start()    
+start()   

@@ -103,7 +103,7 @@ Total Results: <b> {$result_count} </b>
 	    {/if}
 
 	    {if isInRequest("show__rel_exp_date")}
-	    	{searchUserTD attr_name="rel_exp_date" user_id=$user_id attr_type="attrs"}{/searchUserTD}
+	    	{searchUserTD attr_name="rel_exp_date,rel_exp_date_unit" user_id=$user_id attr_type="attrs"}{/searchUserTD}
 	    {/if}
 
 	    {if isInRequest("show__multi_login")}

@@ -90,10 +90,14 @@ def mainThreadShutdown():
     setShutdownFlag()
     import radius_server.rad_server
     radius_server.rad_server.shutdown()
-    ibs_server.shutdown()
+    from core.server import server    
+    server.shutdown()
+    from core.threadpool import thread_main
     thread_main.shutdown(10)
-    db_main.getHandle().close()
+    from core.db import db_main
+    db_main.shutdown()
     thread_main.shutdown(30)
+    sys.exit(0)
 
 def shutdown():
     event.addEvent(0,mts,[],-100)

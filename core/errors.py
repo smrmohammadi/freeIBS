@@ -10,6 +10,7 @@ GENERAL_ERRORS={
     "RANGE_END_LESS_THAN_START":"%s Range End is equal or less than Start",
     "RANGE_IS_TOO_LARGE":"%s Range is too large",
     "INVALID_CREDIT_LOG_ACTION":"Invalid credit log action",
+    "INVALID_DATE_UNIT":"Invalid date unit %s",
     "INVALID_DATE_TYPE":"Invalid date type %s",
     "INVALID_DATE":"Invalid date format %s",
     "ACCESS_DENIED":"Access Denied",
@@ -27,7 +28,8 @@ GENERAL_ERRORS={
     "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found",
     "FROM_VALUE_INVALID":"Invalid From value %s",
     "TO_VALUE_INVALID":"Invalid To value %s",
-    "ATTR_NOT_FOUND":"Attribute %s not found"
+    "ATTR_NOT_FOUND":"Attribute %s not found",
+    "INVALID_ORDER_BY":"Invalid Order By value %s"
 }
 
 USER_ACTIONS_ERRORS={

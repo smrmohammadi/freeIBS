@@ -10,9 +10,11 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
     parameter double(boolean,optional): Set Double table, double tables has two usable areas in 
 			each row. Also Double TR s should be used for content
     parameter action_icon(boolean,optional): Tells which icon to use for form submit
-					     Can be on of "edit" "delete" "add" or "ok"
+					     Can be on of "edit" "delete" "add" "load" "save" or "ok"
 					     default is "ok"
 
+    parameter action_onclick(string,optional): optional javascript method that will be called on onClick event of
+						action icon
     parameter nofoot(boolean,optional): if set to TRUE, do not print the last footer of table
     parameter color(string,optional): Set color of table header, default is red
     parameter arrow_color(string,optional): Set color of arrow
@@ -74,8 +76,9 @@ END;
 </table>
 END;
 
-	if(!isset($params["nofoot"]) or $params["nofoot"]!="TRUE")
+	if(!isset($params["nofoot"]))
 	{
+	$action_onclick=isset($params["action_onclick"])?"OnClick='return {$params["action_onclick"]}'":"";
 	$footer=<<<END
 	<tr>
 		<td colspan="{$colspans}">
@@ -83,7 +86,7 @@ END;
 				<tr>
 					<td class="Form_Foot_Begin_Line_{$color}"></td>
 					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/list/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/icon/{$action_icon}.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/icon/{$action_icon}.gif" {$action_onclick}></td>
 				</tr>
 				<tr>
 					<td class="Form_Foot_Below_Line_{$color}"></td>

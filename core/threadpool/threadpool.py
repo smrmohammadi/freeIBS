@@ -144,7 +144,7 @@ class ThreadPool:
         del(self.__in_use[thread])
 
     def shutdown(self,sec=10): 
-	"""XXX
+	"""
 	    shutdown the threadpool, by calling exit function on all threads
 	    it will wait until all threads exits for maximum "sec" seconds
 	"""
@@ -156,20 +156,23 @@ class ThreadPool:
 	            thread.join()
     
             for thread in range(len(self.__pool)):
-                self.__runThread(None,"exit",[],-1)
+                self.__runThread(None,"exit",[])
 	
 	    time.sleep(1)
 	    sec-=1
 	    if sec==0:
 		break
 
-	    toLog("threadpool.shutdown: pool \"%s\" inUse \"%s\""%(self.__pool,self.__in_use),LOG_DEBUG,defs.DEBUG_ALL)
+	    toLog("threadpool.shutdown: %s"%(self),LOG_DEBUG,defs.DEBUG_ALL)
 	
-    def printMe(self):
-        print "Free: %s"%self.__pool
-	print "\n"
+    def __str__(self):
+	_str=""
+        for thread in self.__pool:
+	    _str+="Free Thread %s\n"%(thread)
+
         for thread in self.__in_use:
-	    print "Thread %s doing %s args %s"%(thread,thread.job[0],thread.job[1])
+	    _str+="Thread %s doing %s args %s\n"%(thread,thread.job[0],thread.job[1])
+	return _str
 
 
         

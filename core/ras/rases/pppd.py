@@ -83,7 +83,11 @@ class PPPDRas(GeneralUpdateRas):
     def handleRadAuthPacket(self,ras_msg):
 	ras_msg["unique_id"]="port"
 	ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port"})
-	ras_msg.setInAttrsIfExists({"User-Password":"pap_password","CHAP-Password":"chap_password"})
+	ras_msg.setInAttrsIfExists({"User-Password":"pap_password",
+				    "CHAP-Password":"chap_password",
+				    "MS-CHAP-Response":"ms_chap_response",
+				    "MS-CHAP2-Response":"ms_chap2_response",
+				    })
 	ras_msg.setAction("INTERNET_AUTHENTICATE")
 
 ####################################

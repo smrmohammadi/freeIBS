@@ -193,6 +193,29 @@ class AbsDate:
 	    return self.getGregorianDate()
 	
 
+class AbsDateWithUnit(AbsDate):
+    def __init__(self,date,date_unit):
+	if date_unit in ["jalali","gregorian"]:
+	    AbsDate.__init__(self,date,date_unit)
+	else:
+	    date=time_lib.dbTimeFromEpoch(time.time()+self.__getDateInSeconds(date,date_unit))
+	    AbsDate.__init__(self,date,"gregorian")
+	
+    def __getDateInSeconds(self,date,date_unit):
+	unit_table={"Minutes":60,"Hours":3600,"Days":24*3600,"Months":24*3600*30,"Years":24*3600*30*365}
+
+	try:
+	    date=float(date)
+	except ValueError:	
+    	    raise GeneralException(errorText("GENERAL","INVALID_DATE")%date)
+
+	try:
+	    return unit_table[date_unit]*date
+	except KeyError:
+	    raise GeneralException(errorText("GENERAL","INVALID_DATE_UNIT")%date_unit)
+	    
+
+
 def AbsDateFromEpoch(epoch_time):
     	return AbsDate(time_lib.dbTimeFromEpoch(epoch_time),"gregorian")
 	

@@ -97,14 +97,14 @@ class RelExpAttrUpdater(AttrUpdater):
 	return {"rel_exp_date":self.rel_date_obj.getDBDate()}
 
     def userChangeQuery(self,ibs_query,src,action,**args):
-	new_args=copy.copy(args)
+	new_args=args.copy()
 	for user_id in args["users"]:
 	    loaded_user=args["users"][user_id]
 	    new_args["attr_updater_attrs"]=self.__createUpdateAttrsDic()
-	    new_args["users"]=[user_id]
+	    new_args["users"]={user_id:loaded_user}
 	    if loaded_user.hasAttr("first_login"):
-	        update_attrs["rel_exp_date_time"]=loaded_user.getUserAttrs()["first_login"]+self.rel_date_obj.getDateHours()*3600
-	    ibs_query+=self.generateQuery(ibs_query,src,action,**new_args)
+	        new_args["attr_updater_attrs"]["rel_exp_date_time"]=loaded_user.getUserAttrs()["first_login"]+self.rel_date_obj.getDateHours()*3600
+	    self.generateQuery(ibs_query,src,action,**new_args)
 
 
     def deleteInit(self):
@@ -118,7 +118,7 @@ class RelExpAttrSearcher(AttrSearcher):
 	    rel_date_obj=RelativeDate(search_helper.getCondValue("rel_exp_date"),
 				      search_helper.getCondValue("rel_exp_date_unit"))
 	    for table in self.getUserAndGroupAttrsTable():
-		table.search("rel_exp_date",rel_date_obj.getDBDate(),search_helper.getCondValue("rel_exp_date_op"))
+		table.search("rel_exp_date",(rel_date_obj.getDBDate(),),search_helper.getCondValue("rel_exp_date_op"))
 
 class RelExpAttrHolder(AttrHolder):
     def __init__(self,rel_exp_hours):
@@ -145,4 +145,4 @@ class RelExpDateAttrHandler(attribute.AttributeHandler):
 	self.registerAttrUpdaterClass(RelExpAttrUpdater,["rel_exp_date","rel_exp_date_unit"])
 	self.registerAttrHolderClass(RelExpAttrHolder,["rel_exp_date"])
 	self.registerAttrHolderClass(FirstLoginAttrHolder,["first_login","rel_exp_date_time"])
-
+	self.registerAttrSearcherClass(RelExpAttrSearcher)

@@ -11,6 +11,7 @@ class SeeOnlineUsers (AllRestrictedSingleValuePermission,UserCatPermission,Permi
 		This Permission Allows admins to see online users report and user session informations
 		such as connection time, remaining credit,...
 		Related Permissions: 
+		    SEE CONNECTION LOGS
 	       """)
 	self.addAffectedPage("Report->Online Users")
 	

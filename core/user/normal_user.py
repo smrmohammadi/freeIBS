@@ -50,8 +50,8 @@ class NormalUser:
 
     def __filter(self,instance,attrs):
 	inout=self.getInOutBytes(instance)
-	attrs["in_bytes"]=inout[0]
-	attrs["out_bytes"]=inout[1]
+	attrs["t_in_bytes"]=inout[0]
+	attrs["t_out_bytes"]=inout[1]
 	return attrs
 ##############################################
     def getOnlineReportDic(self,instance):

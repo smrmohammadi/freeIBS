@@ -59,7 +59,7 @@ class ibs_db: #abstract parent class for all db implementions. Children must imp
 	"""
 	    orderBy (str or tuple): if it's an string, it will be placed after the order by clause
 				    if it's a tuple, it'll interpreted as (col_name,desc_flag) where desc_flag
-				    is a boolean telling if it should be ordered desc.
+					is a boolean telling if it should be ordered desc.
 	
 	"""
         query="select "
@@ -68,12 +68,14 @@ class ibs_db: #abstract parent class for all db implementions. Children must imp
         else:         
             query+=",".join(rows)
 
-        query += " from " + table + " where " + condition + " "
+        query += " from " + table 
+	if condition!="":
+	    query+= " where " + condition + " "
         
         if orderBy != "":
 	    order_by_clause=self.__createOrderBy(orderBy)
 
-            query += "order by %s"%order_by_clause
+            query += " order by %s"%order_by_clause
 
         if from_ >0:
             query +=" offset " + str(from_)

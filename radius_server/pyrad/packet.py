@@ -11,6 +11,8 @@ RADIUS packet
 
 __docformat__	= "epytext en"
 
+from core.lib.mschap import mschap
+
 import md5, struct, types, random, UserDict
 import tools
 
@@ -409,6 +411,13 @@ class AuthPacket(Packet):
 		hash.update(chap_challenge)
 		return hash.digest()==chap_password[1:]
 	
+	def checkMSChapPassword(self,password):
+	    return mschap.generate_nt_response_mschap(self["MS-CHAP-Challenge"][0],password)==self["MS-CHAP-Response"][0][26:]
+
+	def checkMSChap2Password(self,username,password):
+	    peer_challenge=self["MS-CHAP2-Response"][0][2:18]
+	    return mschap.generate_nt_response_mschap2(self["MS-CHAP-Challenge"][0],peer_challenge,username,password)==self["MS-CHAP2-Response"][0][26:]
+
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password
 

@@ -55,9 +55,9 @@ class NormalUserAttrUpdater(AttrUpdater):
 	    raise GeneralException(errorText("USER_ACTIONS","NORMAL_COUNT_NOT_MATCH")%(len(users),len(self.usernames)))
 	
 	map(lambda password:password.checkPasswordChars(),self.passwords)
-	map(lambda username:user_main.getActionManager().checkNormalUsernameChars,self.usernames)
+	map(user_main.getActionManager().checkNormalUsernameChars,self.usernames)
 	if self.password_len<0 or self.password_len>30:
-	    raise GeneralException(errorText("USER_ACTIONS","INVALID_PASSWORD_LENGTH")%password_len)
+	    raise GeneralException(errorText("USER_ACTIONS","INVALID_PASSWORD_LENGTH")%self.password_len)
 
     def changeQuery(self,ibs_query,src,action,**args):
 	admin_obj=args["admin_obj"]

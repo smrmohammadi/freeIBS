@@ -14,7 +14,7 @@
     {/addEditTable}
 </form>
 
-<form method=POST action="/IBSng/admin/user/user_info.php">
+<form method=POST action="/IBSng/admin/user/user_info.php" name="user_info_normal">
     {addEditTable title="Normal Username"}
 	{addEditTD type="left"}
 	    Normal Username
@@ -22,7 +22,7 @@
 
 	{addEditTD type="right"}
 	    <input type=text name=normal_username_multi class=text value="{ifisinrequest name="normal_username_multi"}">
-	    {multistr form_name="user_info" input_name="normal_username_multi"}
+	    {multistr form_name="user_info_normal" input_name="normal_username_multi"}
 	{/addEditTD}
 		
     {/addEditTable}

@@ -24,8 +24,8 @@ class Scheduler:
 	while 1:
 	    next_evt=self.nextEvent()
 	    if next_evt<=0:
-		    self.doEvent()
-		    continue
+		self.doEvent()
+		continue
 	    self.eventObj.wait(next_evt)
 	    self.eventObj.clear()
 
@@ -133,4 +133,4 @@ def removeEvent(method,args):
 
 def startLoop():
     sched.loop()
-    
+

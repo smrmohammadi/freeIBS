@@ -45,6 +45,9 @@ def init():
     from core.event import daily_events
     daily_events.addLowLoadJob(vacuumDB,[])
 
+def shutdown():
+    dbpool.getPool().close()
+
 def getHandle(dedicated=False):
     return DBHandleQuery(dedicated)
 

@@ -29,7 +29,7 @@ def shutdown():
 	return
 	    
     sock=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-    sock.connect((defs.RADIUS_SERVER_IP,defs.RADIUS_SERVER_ACCT_PORT))
+    sock.connect((defs.RADIUS_SERVER_BIND_IP[0],defs.RADIUS_SERVER_ACCT_PORT))
     sock.send("\n")
     sock.close()
 

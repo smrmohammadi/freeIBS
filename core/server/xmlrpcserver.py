@@ -87,14 +87,14 @@ class IBSServer(SocketServer.ThreadingMixIn,SocketServer.TCPServer): #overide pr
 	allow_reuse_address=1
 	
         def process_request(self,request,client_address):
-	    if not main.isShuttingDown() or main.noLoginSet():
+	    if not main.isShuttingDown() and not main.noLoginSet():
                 thread_main.runThread(self.process_request_thread,[request,client_address],"server")
-	    else:
-		raise IBSException("Ignore server request while we're shutting down")
+#	    else:
+#		raise IBSException("Ignore server request while we're shutting down")
 
 	def serve_forever(self):
-		while main.isShuttingDown() == 0:
-			self.handle_request()
+	    while not main.isShuttingDown():
+		self.handle_request()
 
 	def handle_error(self,request,client_address):
 	    logException(LOG_ERROR,"IBSServer handle_error")

@@ -37,10 +37,10 @@
 	<td valign="top" align="center">
 		{viewTable title="Report" table_width="200" nofoot="TRUE" color="blue" arrow_color="white"}
 		    {menuTR}
-			<a href="/IBSng/admin/" class="page_menu"></a>
+			<a href="/IBSng/admin/report/online_users.php" class="page_menu">Online Users</a>
 		    {/menuTR}
 		    {menuTR}
-			<a href="/IBSng/admin/" class="page_menu"></a>
+			<a href="/IBSng/admin/report/connections.php" class="page_menu">Connetion Logs</a>
 		    {/menuTR}
 		    {menuTR}
 			<a href="/IBSng/admin/" class="page_menu"></a>

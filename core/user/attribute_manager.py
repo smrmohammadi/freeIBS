@@ -43,7 +43,7 @@ class AttributeManager:
 	    elif action=="delete":
 		return self.delete_attr_handlers[attr_name]
 	except KeyError:
-	    raise GeneralException(errorText("USER","UNREGISTERED_ATTRIBUTE")%attr_name)
+	    pass
 	
     def getAttrUpdaters(self,attrs,action):
 	"""
@@ -54,7 +54,7 @@ class AttributeManager:
 	attr_updaters=AttrUpdaterContainer()
         for attr_name in attrs:
 	    handler=self.__getAttrHandlerForUpdater(attr_name,action)
-	    if not attr_updaters.hasName(handler.getName()):
+	    if handler !=None and not attr_updaters.hasName(handler.getName()):
 	        attr_updaters.addNew(handler.getAttrUpdater(attr_name,attrs,action))
 	return attr_updaters
 

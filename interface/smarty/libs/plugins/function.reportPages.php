@@ -20,10 +20,10 @@ function createReportPagestable($pages,$cur_page,$link,$total_pages)
     $page_nos=array_keys($pages);
     $ret="<table><tr>";
     
-    $ret.=linkedPageTD("first",createReportPageLink($link,1));
+    $ret.=linkedPageTD(pageImage("first"),createReportPageLink($link,1));
 	
     if(in_array($cur_page-1,$page_nos))
-	$ret.=linkedPageTD("back",$pages[$cur_page-1]);
+	$ret.=linkedPageTD(pageImage("back"),$pages[$cur_page-1]);
     
     foreach($pages as $page=>$complete_link)
 	if($page==$cur_page)
@@ -38,12 +38,17 @@ END;
 	    $ret.=linkedPageTD($page,$complete_link);
 	
     if(in_array($cur_page+1,$page_nos))
-	$ret.=linkedPageTD("next",$pages[$cur_page+1]);
+	$ret.=linkedPageTD(pageImage("next"),$pages[$cur_page+1]);
 
-    $ret.=linkedPageTD("last",createReportPageLink($link,$total_pages));
+    $ret.=linkedPageTD(pageImage("last"),createReportPageLink($link,$total_pages));
 
     $ret.="</tr></table>";
     return $ret;
+}
+
+function pageImage($type)
+{
+    return "<img border=0 src=/IBSng/images/arrow/arrow-{$type}.gif>";
 }
 
 function linkedPageTD($face,$link)

@@ -44,9 +44,9 @@ END;
 function currentSortImage($is_desc)
 {
     if($is_desc)
-	return "\/";
+	return "<img src='/IBSng/images/arrow/sort_down.gif' border=0>";
     else
-	return "/\\";
+	return "<img src='/IBSng/images/arrow/sort_up.gif' border=0>";
 }
 
 ?>
