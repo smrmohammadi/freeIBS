@@ -270,7 +270,7 @@ create sequence bw_static_ip_bw_static_ip_id_seq;
 create table charges (
     charge_id integer primary key,
     name text unique,
-    charge_type text, --'internet' or 'voip'
+    charge_type text, --'Internet' or 'VoIP'
     comment text,
     admin_id integer references admins ,
     visible_to_all boolean default 'FALSE'
@@ -290,7 +290,6 @@ create table charge_rules (
 
 
 create table internet_charge_rules (
-    transfer_limit integer, -- in kbytes
     cpm numeric(12,2),
     cpk numeric(12,2),
     assumed_kps integer,
@@ -298,7 +297,6 @@ create table internet_charge_rules (
     bw_transmit_leaf_id integer references bw_leaf,
     bw_receive_leaf_id integer references bw_leaf
 ) inherits (charge_rules);
-
 
 create table charge_rule_ports (
     charge_rule_id integer,
@@ -311,21 +309,29 @@ create table charge_rule_day_of_weeks (
 );
 
 -- *********************
-create table voip_charge_rule_charge_lists (
-    charge_list_id integer primary key,
-    name text,
+create table voip_charge_rule_tariff (
+    tariff_id integer primary key,
+    tariff_name text,
     comment text
 );
+create sequence voip_charge_rule_tariff_tariff_id_seq;
 
-create table voip_charge_rule_countries (
-    charge_list_id integer references voip_charge_rule_charge_lists,
-    prefix text,
-    name text,
+create table tariff_prefix_list (
+    tariff_id integer references voip_charge_rule_tariff,
+    prefix_id integer primary key,
+    prefix_code text unique,
+    prefix_name text,
     cpm numeric(12,2),
     free_seconds smallint,
     min_duration smallint,
     round_to smallint
 );
+create sequence tariff_prefix_list_tariff_id_seq;
+
+
+create table voip_charge_rules (
+    tariff_id integer references voip_charge_rule_tariff
+) inherits (charge_rules);
 
 -- ********************* TO BE CHECKED!
 create table admin_deposit_log(

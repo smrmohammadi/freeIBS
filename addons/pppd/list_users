@@ -1,4 +1,8 @@
 #!/usr/bin/python -O
+"""
+sys.argv[0]: ras ip
+"""
+
 import re
 
 fd=open("/proc/net/dev","r")

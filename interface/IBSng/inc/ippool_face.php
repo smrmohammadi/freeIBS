@@ -6,9 +6,12 @@ function redirectToIPpoolInfo($ippool_name)
     redirect("/IBSng/admin/ippool/ippool_info.php?ippool_name={$ippool_name}");
 }
 
-function redirectToIPpoolList($msg)
+function redirectToIPpoolList($msg="")
 {
-    redirect("/IBSng/admin/ippool/ippool_list.php?msg={$msg}");
+    $url="/IBSng/admin/ippool/ippool_list.php";
+    if($msg)
+	$url.="?msg={$msg}";
+    redirect($url);
 }
 
 function intSetAllIPpoolNames(&$smarty)

@@ -346,7 +346,7 @@ class UserActions:
 	total_credit=0
 	for loaded_user in loaded_users:
 	    if loaded_user.isOnline():
-	        raise GeneralException(errorText("USER_ACTIONS","DELETE_USER_IS_ONLINE"%loaded_user.getUserID()))
+	        raise GeneralException(errorText("USER_ACTIONS","DELETE_USER_IS_ONLINE")%loaded_user.getUserID())
 	    total_credit+=max(0,loaded_user.getBasicUser().getCredit())
 	return total_credit
 
@@ -354,6 +354,7 @@ class UserActions:
 	user_id_conds=" or ".join(map(lambda user_id:"user_id=%s"%user_id,user_ids))
 	ibs_query+=self.__delUserAttrsQuery(user_id_conds)
 	ibs_query+=self.__delUserNormalAttrsQuery(user_id_conds)
+	ibs_query+=self.__delUserPLanAttrsQuery(user_id_conds)
 	ibs_query+=self.__delUserVoIPAttrsQuery(user_id_conds)
 	ibs_query+=self.__delUserFromUsersTableQuery(user_id_conds)
 	if del_connections:
@@ -370,6 +371,9 @@ class UserActions:
 
     def __delUserVoIPAttrsQuery(self,user_id_conds):
 	return ibs_db.createDeleteQuery("voip_users",user_id_conds)
+
+    def __delUserPLanAttrsQuery(self,user_id_conds):
+	return ibs_db.createDeleteQuery("persistent_lan_users",user_id_conds)
 
     def __delUserFromUsersTableQuery(self,user_id_conds):
 	return ibs_db.createDeleteQuery("users",user_id_conds)

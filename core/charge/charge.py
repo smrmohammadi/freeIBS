@@ -21,7 +21,7 @@ class Charge:
 	    admin_id (integer): id of admin who created this charge
 	    visible_default (boolean): if visible default is set to 1 then all admins can use this group without a 
 				       special permission
-	    _type (string): _type of charge (voip or internet)				       
+	    _type (string): _type of charge (VoIP or Internet) 
 	"""
 
 	self.charge_id=charge_id
@@ -39,6 +39,9 @@ class Charge:
 
     def isInternetCharge(self):
 	return self.getType()=="Internet"
+
+    def isVoIPCharge(self):
+	return self.getType()=="VoIP"
 	
     def getChargeID(self):
 	return self.charge_id

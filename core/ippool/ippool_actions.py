@@ -5,6 +5,8 @@ from core.db import db_main,ibs_db,ibs_query
 from core.ippool import ippool_main
 from core.lib import iplib
 from core.ras import ras_main
+from core.user import user_main
+from core.group import group_main
 
 class IPpoolActions:
     def addNewPool(self,ippool_name,comment):
@@ -69,9 +71,6 @@ class IPpoolActions:
     def deletePool(self,ippool_name):
 	"""
 	    delete a pool using it's "ippool_name"
-	    WARNING: currently we don't check if ip pool is used in  user
-		     it's user duty to check it and remove that
-		     if a pool is used but not defined, it should be ignored with a error message in log files
 	"""	
 	self.__deletePoolCheckInput(ippool_name)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
@@ -86,7 +85,20 @@ class IPpoolActions:
 		raise GeneralException(errorText("IPPOOL","IPPOOL_USED_IN_RAS")%ras_obj.getRasIP())
 
 	ras_main.getLoader().runOnAllRases(checkIPpoolInRas)
+	self.__checkPoolUsageInUsers(ippool_obj)
+	self.__checkPoolUsageInGroups(ippool_obj)
 	
+    def __checkPoolUsageInUsers(self,ippool_obj):
+	user_ids=user_main.getActionManager().getUserIDsWithAttr("ippool",ippool_obj.getIPpoolID())
+	if len(user_ids)>0:
+	    raise GeneralException(errorText("IPPOOL","IPPOOL_USED_IN_USER")%",".join(map(str,user_ids)))
+
+    def __checkPoolUsageInGroups(self,ippool_obj):
+	group_ids=group_main.getActionManager().getGroupIDsWithAttr("ippool",ippool_obj.getIPpoolID())
+	if len(group_ids)>0:
+	    raise GeneralException(errorText("IPPOOL","IPPOOL_USED_IN_GROUP")% ",".join(map(str,group_ids)))
+
+
     def __deletePoolDB(self,ippool_id):
 	query=self.__deletePoolIPsQuery(ippool_id)
 	query+=self.__deletePoolQuery(ippool_id)	

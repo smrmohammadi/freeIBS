@@ -8,7 +8,7 @@ def init():
     ras_main.getFactory().register(PPPDRas,"pppd")
 
 class PPPDRas(GeneralUpdateRas):
-    type_attrs={"pppd_kill_port_command":"%spppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%spppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%spppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%spppd/remove_bw_limit"%defs.IBS_ADDONS}
+    type_attrs={"pppd_kill_port_command":"%spppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%spppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%spppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%spppd/remove_bw_limit"%defs.IBS_ADDONS,"pppd_include_mac_address":0,"pppd_mac_script":"%spppd/get_mac"%defs.IBS_ADDONS}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
@@ -40,7 +40,7 @@ class PPPDRas(GeneralUpdateRas):
 	return self.__parseCLIOnlines(lines)
     
     def __getOnlinesFromCLI(self):
-	fd=os.popen(self.getAttribute("pppd_list_users_command"))
+	fd=os.popen("%s %s"%(self.getAttribute("pppd_list_users_command"),self.getRasIP()))
 	out_lines=fd.readlines()
 	fd.close()
 	return out_lines
@@ -79,6 +79,18 @@ class PPPDRas(GeneralUpdateRas):
 	    logException(LOG_ERROR)
 	    return (-1,-1)
 ####################################
+    def __getClientMacAddress(self,station_ip):
+	lines=self.__getClientMacAddressFromCLI(station_ip)
+	if lines:
+	    return lines[0].strip()
+	return ""
+
+    def __getClientMacAddressFromCLI(self,station_ip):
+	fd=os.popen("%s %s %s"%(self.getAttribute("pppd_mac_script"),self.getRasIP(),station_ip))
+	out_lines=fd.readlines()
+	fd.close()
+	return out_lines
+####################################
     def __addUniqueIdToRasMsg(self,ras_msg):
 	ras_msg["unique_id"]="port"
 	ras_msg["port"]=str(ras_msg.getRequestPacket()["NAS-Port"][0])
@@ -92,8 +104,12 @@ class PPPDRas(GeneralUpdateRas):
 				    "MS-CHAP2-Response":"ms_chap2_response",
 				    "Calling-Station-Id":"station_ip"
 				    })
+
 	if self.onlines.has_key(ras_msg["port"]):
 	        self.onlines[ras_msg["port"]]["in_bytes"],self.onlines[ras_msg["port"]]["out_bytes"]=0,0
+
+	if ras_msg.hasAttr("station_ip") and self.getAttribute("pppd_include_mac_address"):
+	    ras_msg["mac"]=self.__getClientMacAddress(ras_msg["station_ip"])
 	ras_msg.setAction("INTERNET_AUTHENTICATE")
 
 ####################################

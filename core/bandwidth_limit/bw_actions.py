@@ -271,9 +271,10 @@ class BWActions:
 
     def __leafUsedInCharge(self,leaf_id):
 	def checkLeafInChargeObj(charge_obj):
-	    for rule_obj in charge_obj.getRules().itervalues():
-		if rule_obj.bw_tx_leaf_id==leaf_id or rule_obj.bw_rx_leaf_id==leaf_id:
-		    raise GeneralException(errorText("BANDWIDTH","LEAF_USED_IN_CHARGE")%charge_obj.getChargeName())
+	    if charge_obj.isInternetCharge():
+	        for rule_obj in charge_obj.getRules().itervalues():
+		    if rule_obj.bw_tx_leaf_id==leaf_id or rule_obj.bw_rx_leaf_id==leaf_id:
+			raise GeneralException(errorText("BANDWIDTH","LEAF_USED_IN_CHARGE")%charge_obj.getChargeName())
 
 
 	charge_main.getLoader().runOnAllCharges(checkLeafInChargeObj)	

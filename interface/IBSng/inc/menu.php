@@ -15,7 +15,8 @@ $GLOBALS["IBSngMenu"]=Array(
 				"RAS"=>"/IBSng/admin/ras/ras_list.php",
 				"IPPool"=>"/IBSng/admin/ippool/ippool_list.php",
 				"Bandwidth"=>"/IBSng/admin/bw/interface_list.php",
-				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php"),
+				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php",
+				"VoIP Tariff"=>"/IBSng/admin/charge/voip_tariff/tariff_list.php"),
 		"home"=>array(""=>"/IBSng/admin/admin_index.php"),		       
 		);
 

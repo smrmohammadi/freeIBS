@@ -56,7 +56,10 @@ class InternetCharge(ChargeWithRules):
 
 	#endfor
 	
-	remained_time = credit / credit_usage_per_second
+	if credit_usage_per_second!=0:
+	    remained_time = credit / credit_usage_per_second
+	else:
+	    remained_time = defs.MAXLONG
 
 	if CHARGE_DEBUG:
 	    toLog("user_id: %s remained_time: %s earliest_rule_end: %s next_more_applicable: %s seconds_from_morning: %s"%

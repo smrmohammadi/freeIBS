@@ -132,7 +132,7 @@ function normalAttrsPluginUpdate(&$update_helper)
 function lockPluginUpdate(&$update_helper)
 {
     if(isInRequest("lock"))
-	$update_helper->addToUpdateAttrs("lock",nl2br($_REQUEST["lock"]));
+	$update_helper->addToUpdateAttrs("lock",removeCR($_REQUEST["lock"]));
     else
 	$update_helper->addToDelAttrs("lock");
 }
@@ -150,9 +150,17 @@ function persistentLanPluginUpdate(&$update_helper)
 	$update_helper->addToDelAttrs("persistent_lan_mac");
 
 }
+//***************************************************
+function commentPluginUpdate(&$update_helper)
+{
+    if(isInRequest("comment"))
+	$update_helper->addToUpdateAttrs("comment",removeCR($_REQUEST["comment"]));
+    else
+	$update_helper->addToDelAttrs("comment");
+}
 
 
-//************************** UNUSED
+//************************** UNUSED CODE
 function relExpParser(&$parsed_arr,&$smarty,&$attrs)
 {
     if(!isset($attrs["rel_exp_date"]))

@@ -18,14 +18,16 @@ def isValidName(name):
     return len(name)!=0 and re.search("[^a-zA-Z0-9_]",name)==None 
 
 ###############################
+escape_slashes=re.compile("(['\0\"\\\\])")
+escape_tags=re.compile("<(?!br( /){0,1}>)(.*?)>")
 def escapeStr(_str):
     _str=str(_str)
-    _str=re.sub("(['\0\"\\\\])",r'\\\1',_str)
-    _str=re.sub("<(?!br( /){0,1}>)(.*?)>",r" - \1 - ",_str)
+    _str=escape_slashes.sub(r'\\\1',_str)
+    _str=escape_tags.sub(r" - \1 - ",_str)
     return _str
 
 def dbText(text):
-    return "'"+escapeStr(text)+"'"
+    return "'%s'"%escapeStr(text)
 
 ###############################
 def dbNull(var):

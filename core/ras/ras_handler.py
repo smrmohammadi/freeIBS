@@ -36,7 +36,7 @@ class RasHandler(handler.Handler):
 	creator_obj=request.getAuthNameObj()
 	creator_obj.canDo("CHANGE RAS")
     	request.checkArgs("ras_ip","ras_type","radius_secret")
-	ras_id=ras_main.getActionManager().addNewRas(request["ras_ip"],request["ras_type"],
+	ras_id=ras_main.getActionManager().addNewRas(request["ras_ip"].strip(),request["ras_type"],
 						  request["radius_secret"])
 	return ras_id
 

@@ -132,10 +132,10 @@ class User:
 	instance_info["ras_id"]=ras_msg.getRasID()
 	instance_info["check_online_fails"]=0
 	instance_info["login_time"]=time.time()
+	instance_info["successful_auth"]=False
 	try:
 	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
 	except Exception,e:
-	    instance_info["successful_auth"]=False
 	    self.setKillReason(self.instances,str(e))
 #	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
 #	    self.instances-=1
@@ -152,12 +152,12 @@ class User:
 	self.getInstanceInfo(instance)["logout_ras_msg"]=ras_msg
 	used_credit=self.charge.calcInstanceCreditUsage(instance)
 	query=self.getTypeObj().logout(instance,ras_msg,used_credit)
-	if self.instances==1:
-	    query+=self.commit(self.charge.calcCreditUsage())
+	if self.getInstanceInfo(instance)["successful_auth"]:
+	    query+=self.commit(used_credit)
 	query.runQuery()
 	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,[instance,ras_msg])
 	self.instances-=1
-	del(self.__instance_info[self.instances])
+	del(self.__instance_info[instance-1])
 
     def update(self,ras_msg):
 	"""

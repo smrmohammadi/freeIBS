@@ -81,8 +81,8 @@ class IBSSmarty extends Smarty
     { /* set page err_msgs array in smarty or append previous array values 
 	 It means you can call this multiple times within a single page, and all of errors will be shown.    
     */
-//	if(!is_array($errs))
-//	    $errs=array($errs);
+	if(!is_array($errs))
+	    $errs=array($errs);
 	
 	if ($this->is_assigned("err_msgs"))
 	    foreach($errs as $err)

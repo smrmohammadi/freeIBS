@@ -173,4 +173,10 @@ function price($string)
 	    $str="-{$str}";
 	return $str;
 }
+
+function removeCR($str)
+{/* remove Carriage Return("\r") from str and return it
+    \r is converted to \n by python xmlrpc */
+    return str_replace("\r","",$str);
+}
 ?>

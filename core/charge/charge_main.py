@@ -2,6 +2,9 @@ from core.server import handlers_manager
 
 
 def init():
+    from core.charge.voip_tariff import tariff_main
+    tariff_main.init()
+
     from core.charge.charge_loader import ChargeLoader
     global charge_loader
     charge_loader=ChargeLoader()

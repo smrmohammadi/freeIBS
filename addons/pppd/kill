@@ -1,4 +1,9 @@
 #!/usr/bin/python -O
+"""
+sys.argv[0]: ras ip
+sys.argv[1]: ras port
+
+"""
 import sys
 import os
 

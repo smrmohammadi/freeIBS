@@ -38,7 +38,7 @@ function intSetInfo(&$smarty,$add_user_save_id)
 
 function intGetAddUserSaveInfo($add_user_save_id)
 {
-    $conds=array("add_user_save_id",$add_user_save_id);
+    $conds=array("add_user_save_id"=>$add_user_save_id);
     $req=new SearchAddUserSaves($conds,
 				0,
 				1,

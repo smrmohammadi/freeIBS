@@ -2,6 +2,7 @@ from core.user import user_main,normal_user,loading_user,user
 from core.event import event,periodic_events
 from core.ibs_exceptions import *
 from core.errors import errorText
+from core.ras.msgs import RasMsg
 import copy
 
 class OnlineUsers:

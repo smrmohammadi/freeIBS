@@ -3,7 +3,7 @@ from core.lib.general import *
 from core.lib.password_lib import Password
 from core.errors import errorText
 from core.server.response import Response
-
+import types
 
 class Request:
     ADMIN="ADMIN"
@@ -180,4 +180,11 @@ class Request:
 	else:
 	    return "gregorian"
 
-	    
+    def fixList(self,key):
+	"""
+	    some xmlrpc implementions return lists as dictionaries. 
+	    This method return value of key if it is a list, or convert it to list, if it's dictionary
+	"""
+	if type(self[key])==types.DictType:
+	    return self[key].values()
+	return key

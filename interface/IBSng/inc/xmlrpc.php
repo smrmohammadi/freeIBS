@@ -23,7 +23,6 @@ class IBSxmlrpc
 	$server_method: method to call ex admin.addNewAdmin
 	$params_arr: an array of parameters
     */
-    
 	$xml_rpc_msg=$this->__createXmlRpcMsg($server_method,$params_arr);
 	$response=$this->__sendXmlRpcRequest($xml_rpc_msg,$timeout);
 	return $this->__returnResponse($response);

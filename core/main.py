@@ -107,10 +107,13 @@ def mainThreadShutdown():
     setShutdownFlag()
     import radius_server.rad_server
     radius_server.rad_server.shutdown()
+
     from core.server import server    
     server.shutdown()
+
     from core.threadpool import thread_main
     thread_main.shutdown(10)
+
     from core.db import db_main
     db_main.shutdown()
     thread_main.shutdown(30)

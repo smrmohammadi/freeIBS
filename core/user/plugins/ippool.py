@@ -18,7 +18,13 @@ class IPpoolUserPlugin(user_plugin.UserPlugin):
     def login(self,ras_msg):
 	if self.user_obj.getUserAttrs().hasAttr("ippool"):
 	    ippool_id=int(self.user_obj.getUserAttrs()["ippool"])
-	    ip=ippool_main.getLoader().getIPpoolByID(ippool_id).setIPInPacket(ras_msg.getReplyPacket())
+	    ip=None
+	    try:
+	        ip=ippool_main.getLoader().getIPpoolByID(ippool_id).setIPInPacket(ras_msg.getReplyPacket())
+	    except GeneralException: #ippool deleted?
+		logException(LOG_DEBUG)
+	    except IPpoolFullException:
+		pass
 	    if ip!=None:
 	        self.__updateInstanceInfo(self.user_obj.instances,ippool_id,ip)
 
@@ -68,7 +74,11 @@ class IPpoolAttrHolder(AttrHolder):
 	self.ippool_id=int(ippool_id)
 
     def getParsedDic(self):
-	return {"ippool":ippool_main.getLoader().getIPpoolByID(self.ippool_id).getIPpoolName()}
+	try:
+	    return {"ippool":ippool_main.getLoader().getIPpoolByID(self.ippool_id).getIPpoolName()}
+	except GeneralException:
+	    logException(LOG_DEBUG)
+	    return {}
 
 class IPpoolAttrSearcher(AttrSearcher):
     def run(self):

@@ -80,10 +80,7 @@ USER_LOGIN_ERRORS={
     "WRONG_PASSWORD":"Wrong password",
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
     "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
-    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
-    "DAY_TIME_USAGE":"Day usage time limit exceeded",
-    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
-
+    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached"
 }
 
 ADMIN_LOGIN_ERRORS={
@@ -188,7 +185,10 @@ IPPOOL_ERRORS={
     "IP_POOL_NAME_ALREADY_EXISTS":"IP Pool name %s already exists",
     "IP_ALREADY_IN_POOL":"IP %s already exists in IP Pool",
     "IP_NOT_IN_POOL":"IP %s does not exist in IP Pool",
-    "IPPOOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
+    "IPPOOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first",
+    "IPPOOL_USED_IN_USER":"IP Pool Used In user(s) %s",
+    "IPPOOL_USED_IN_GROUP":"IP Pool Used In group(s) %s"
+
 }
 
 BANDWIDTH_ERRORS={
@@ -221,6 +221,24 @@ BANDWIDTH_ERRORS={
 
 }
 
+VOIP_TARIFF_ERRORS={
+    "BAD_TARIFF_NAME":"Invalid Tariff name %s",
+    "TARIFF_NAME_ALREADY_EXISTS":"Tariff name %s already exists",
+    "TARIFF_USED_IN_CHARGE":"Tariff used in charge %s",
+    "PREFIX_COUNT_NOT_EQUAL":"Prefix parameter counts are not equal",
+    "PREFIX_CODE_IS_NOT_DIGIT":"Prefix code '%s' is not digit",
+    "FREE_SECONDS_NOT_NUMERIC":"Free seconds is not numeric or is negative",
+    "MIN_DURATION_NOT_NUMERIC":"Minimum duration is not numeric or is negative",
+    "ROUND_TO_NOT_NUMERIC":"Round to seconds is not numeric or is negative",
+    "PREFIX_CODE_ALREADY_EXIST":"Prefix Code '%s' already exists in tariff %s",
+    "DUPLICATE_PREFIX_CODE":"Prefix code %s is duplicate",
+    "TARIFF_DOESNT_HAVE_PREFIX_ID":"Tariff %s doesn't have prefix id %s",
+    "TARIFF_DOESNT_HAVE_PREFIX_CODE":"Tariff %s doesn't have prefix code %s",
+    "NO_PREFIX_TO_DELETE":"No prefix to delete",
+    "TARIFF_NAME_DOESNT_EXISTS":"Tariff name %s doesn't exists",
+    "TARIFF_ID_DOESNT_EXISTS":"Tariff id %s doesn't exists",
+}
+
 
 PLUGIN_ERRORS={
     "INVALID_HOOK":"Invalid Hook name %s"
@@ -250,7 +268,8 @@ def errorText(event,error,add_error_key=True):
 		   "CHARGES":CHARGE_ERRORS,
 		   "RAS":RAS_ERRORS,
 		   "IPPOOL":IPPOOL_ERRORS,
-		   "BANDWIDTH":BANDWIDTH_ERRORS
+		   "BANDWIDTH":BANDWIDTH_ERRORS,
+		   "VOIP_TARIFF":VOIP_TARIFF_ERRORS
 		  }
 		   
 	err_str=error_map[event][error]
