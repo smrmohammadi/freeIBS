@@ -75,13 +75,15 @@ USER_LOGIN_ERRORS={
     "NO_CHARGE_DEFINED":"User doesn't have charge for type %s",
     "NO_APPLICABLE_RULE":"No rule can be applied",
     "ABS_EXP_DATE_REACHED":"absolute expiration date has reached",
-    "DAY_TIME_USAGE":"Day usage time limit exceeded",
-    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
     "CREDIT_FINISHED":"Credit has finished",
     "REL_EXP_DATE_REACHED":"Relative expiration date has reached",
     "WRONG_PASSWORD":"Wrong password",
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
-    "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s"
+    "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
+    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
+
+    "DAY_TIME_USAGE":"Day usage time limit exceeded",
+    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
 
 }
 

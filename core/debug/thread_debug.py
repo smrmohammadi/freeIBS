@@ -1,4 +1,6 @@
 from core import defs
+import sys,threading
+
 def debug_me():
     if defs.DEBUG_LEVEL>=defs.DEBUG_THREADS:
 	sys.settrace(debug_thread_func)

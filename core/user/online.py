@@ -1,5 +1,5 @@
 from core.user import user_main,normal_user,loading_user,user
-from core.event import event
+from core.event import event,periodic_events
 from core.ibs_exceptions import *
 import copy
 
@@ -26,7 +26,6 @@ class OnlineUsers:
     def getOnlineUsers(self):
 	return copy.copy(self.user_onlines)
 
-
 ############################################
     def isUserOnline(self,user_id):
 	return self.user_onlines.has_key(user_id)
@@ -49,8 +48,6 @@ class OnlineUsers:
 	except KeyError:
 	    return None
 	
-
-
 ############################################
     def reloadUser(self,user_id):
 	self.loading_user.loadingStart(user_id)
@@ -78,6 +75,100 @@ class OnlineUsers:
 	finally:
 	    self.loading_user.loadingEnd(user_obj.getUserID())
 
+    
+############################################
+    def recalcNextUserEvent(self,user_id,remove_prev_event=False):
+	"""
+	    recalculates user next event.
+	    user_id(int): id of user we recalculate event
+	    remove_prev_event(bool): Remove user previous event. This flag should be set by reload method
+	"""
+	self.loading_user.loadingStart(user_id)
+	try:
+	    user_obj=self.getUserObj(user_id)
+	    if user_obj==None:
+		toLog("recalcNextUserEvent Called for user id %s while he's not online"%user_id,LOG_DEBUG)
+		return
+	    if remove_prev_event:
+		self.__removePrevUserEvent(user_id)
+	    result=user_obj.canStayOnline()
+	    self.__killUsersInCanStayOnlineResult(user_obj,result)
+	    self.__setNextUserEvent(result,user_id)
+	finally:
+	    self.loading_user.loadingEnd(user_id)
+
+    def __removePrevUserEvent(self,user_id):
+	event.removeEvent(self.recalcNextUserEvent,[user_id,False])
+
+    def __setNextUserEvent(self,result,user_id):
+	next_evt=result.getEventTime()
+	toLog("Next Evt:%s"%next_evt,LOG_DEBUG)
+	if next_evt!=0:
+	    event.addEvent(next_evt,self.recalcNextUserEvent,[user_id,False])
+
+    def __killUsersInCanStayOnlineResult(self,user_obj,result):
+	kill_dic=result.getKillDic()
+	for instance in kill_dic:
+	    user_obj.setKillReason(instance,kill_dic[instance])
+	    user_obj.getTypeObj().killInstance(instance)
+#############################################
+    def checkOnlines(self):
+	"""
+	    check ibs current list of online users, by asking ras to say if user is online or not
+	"""
+	for user_id in self.user_onlines.keys():
+	    self.loading_user.loadingStart(user_id)
+	    try:
+		if user_id in self.user_onlines:
+		    user_obj=self.user_onlines[user_id]
+		    for instance in range(1,user_obj.instances+1):
+			instance_info=user_obj.getInstanceInfo(instance)
+			user_msg=user_obj.createUserMsg(instance,"CHECK_ONLINE")
+			if user_msg.send():
+			    instance_info["check_online_fails"]=0
+			else:
+			    instance_info["check_online_fails"]+=1
+			    if instance_info["check_online_fails"]==defs.CHECK_ONLINE_MAX_FAILS:
+				toLog("Maximum Check Online Fails Reached for user %s"%user_id,LOG_DEBUG)
+				self.__forceLogoutUser(user_obj,instance,errorText("USER_LOGIN","MAX_CHECK_ONLINE_FAILS_REACHED",False))
+	    except:
+		logException(LOG_ERROR)
+	    self.loading_user.loadingEnd(user_id)
+
+    def __forceLogoutUser(self,user_obj,instance,kill_reason):
+	"""
+	    force logout "instance" of "user_obj"
+	    This is done by creating a fake ras_msg and send it to appropiate logout method
+	"""
+	ras_msg=self.__createForceLogoutRasMsg(user_obj,instance)
+	method=self.__populateRasMsg(ras_msg)
+	if method==None:
+	    toLog("Don't know how to force logout user %s instance %s"%(self.user_obj.getUserID(),instance),LOG_ERROR|LOG_DEBUG)
+	    return
+	return apply(method,[ras_msg])
+
+    def __createForceLogoutRasMsg(self,user_obj,instance):
+	instance_info=user_obj.getInstanceInfo(instance)
+	ras_msg=RasMsg(None,None,ras_main.getLoader().getRasByID(instance_info["ras_id"]))
+	return ras_msg
+    
+    def __populateRasMsg(self,user_obj,instance,ras_msg):
+	"""
+	    should set necessary ras_msg attribute and return the logout method
+	"""
+	instance_info=user_obj.getInstanceInfo(instance)
+	ras_msg["unique_id"]=instance_info["unique_id"]
+	ras_msg[instance["unique_id"]]=instance_info[instance_info["unique_id"]]
+	ras_msg["user_id"]=user_obj.getUserID()
+	if user_obj.isNormalUser():
+	    ras_msg["username"]=user_obj.getUserAttrs()["normal_username"]
+	    if user_obj.getUserType().isPersistentLanClient(instance):
+		ras_msg.setAction("PERSISTENT_LAN_STOP")
+		return self.persistentLanStop
+	    else:
+	        ras_msg.setAction("INTERNET_STOP")
+		return self.internetStop
+	
 #############################################
     def internetAuthenticate(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"],True)
@@ -127,42 +218,6 @@ class OnlineUsers:
 		user_obj.getLoadedUser().setOnlineFlag(False)
 	    else:
 		self.recalcNextUserEvent(user_obj.getUserID(),True)
-    
-############################################
-    def recalcNextUserEvent(self,user_id,remove_prev_event=False):
-	"""
-	    recalculates user next event.
-	    user_id(int): id of user we recalculate event
-	    remove_prev_event(bool): Remove user previous event. This flag should be set by reload method
-	"""
-	self.loading_user.loadingStart(user_id)
-	try:
-	    user_obj=self.getUserObj(user_id)
-	    if user_obj==None:
-		toLog("recalcNextUserEvent Called for user id %s while he's not online"%user_id,LOG_DEBUG)
-		return
-	    if remove_prev_event:
-		self.__removePrevUserEvent(user_id)
-	    result=user_obj.canStayOnline()
-	    self.__killUsersInCanStayOnlineResult(user_obj,result)
-	    self.__setNextUserEvent(result,user_id)
-	finally:
-	    self.loading_user.loadingEnd(user_id)
-
-    def __removePrevUserEvent(self,user_id):
-	event.removeEvent(self.recalcNextUserEvent,[user_id,False])
-
-    def __setNextUserEvent(self,result,user_id):
-	next_evt=result.getEventTime()
-	toLog("Next Evt:%s"%next_evt,LOG_DEBUG)
-	if next_evt!=0:
-	    event.addEvent(next_evt,self.recalcNextUserEvent,[user_id,False])
-
-    def __killUsersInCanStayOnlineResult(self,user_obj,result):
-	kill_dic=result.getKillDic()
-	for instance in kill_dic:
-	    user_obj.setKillReason(instance,kill_dic[instance])
-	    user_obj.getTypeObj().killInstance(instance)
 
 #########################################################
     def persistentLanAuthenticate(self,ras_msg):
@@ -176,7 +231,6 @@ class OnlineUsers:
 	    self.__authenticateSuccessfull(user_obj,ras_msg)
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
-
 
     def persistentLanStop(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByID(ras_msg["user_id"])
@@ -196,3 +250,11 @@ class OnlineUsers:
 	    self.__logoutRecalcEvent(user_obj,global_unique_id)
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
+
+class OnlineCheckPeriodicEvent(periodic_events.PeriodicEvent):
+    def __init__(self):
+	periodic_events.PeriodicEvent.__init__(self,"Online Check",defs.CHECK_ONLINE_INTERVAL,[],0)
+
+    def run(self):
+	user_main.getOnline().checkOnlines()
+	

@@ -40,6 +40,10 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromRequest(TRUE,"lock");
     $helper->addToCondsFromRequest(TRUE,"lock_reason");
     $helper->addToCondsFromRequest(TRUE,"ippool");
+    $helper->addToCondsFromRequest(TRUE,"persistent_lan_mac");
+    $helper->addToCondsFromRequest(TRUE,"persistent_lan_ip");
+    $helper->addToCondsFromRequest(TRUE,"persistent_lan_ras_ip");
+
 }
 
 

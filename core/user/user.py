@@ -130,6 +130,7 @@ class User:
 	instance_info["unique_id_val"]=ras_msg.getUniqueIDValue()
 	instance_info["attrs"]=self.__filterRasAttrs(ras_msg.getAttrs())
 	instance_info["ras_id"]=ras_msg.getRasID()
+	instance_info["check_online_fails"]=0
 	try:
 	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
 	except Exception,e:

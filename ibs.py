@@ -56,16 +56,16 @@ def start():
 		print "Shutting down on error"
 	        os.kill(os.getppid(),signal.SIGUSR2)
 		raise
-	    print "Successfully initialized, entering event loop ..."
-    	    event.startLoop()
 	except:
 	    err_text=ibs_exceptions.getExceptionText()
 	    print err_text
 	    logToSysLog(err_text)
 	    core.main.mainThreadShutdown()
-	    
+
+	print "Successfully initialized, entering event loop ..."
+	event.startLoop()
 	    
     else:
 	signal.pause()
 
-start()   
+start()

@@ -3,7 +3,7 @@
 </script>
 {listTable no_header=TRUE no_foot=TRUE table_width="100%"} 
     {listTableHeader cols_num=30 type="left"}
-	Attributes to show
+	Attributes to Show/Edit
     {/listTableHeader}
     {listTableHeader type="right"}
 	<table cellpadding=0 cellspacing=0 border=0 class="List_Top_line" align="right">

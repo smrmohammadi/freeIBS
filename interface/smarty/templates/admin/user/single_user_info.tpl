@@ -17,6 +17,8 @@
     <br>
     {include file="plugins/user/view/normal_username.tpl"}
     <br>
+    {include file="plugins/user/view/persistent_lan.tpl"}
+    <br>
     {include file="plugins/user/view/lock.tpl"}
     <br>
     {include file="plugins/user/view/exp_date.tpl"}
@@ -29,8 +31,6 @@
     <br>
     {include file="plugins/user/view/radius_attrs.tpl"}
     <br>
-    {include file="plugins/user/view/persistent_lan.tpl"}
-    
 
 {if $can_change}
     {attrTableFoot action_icon="edit"}

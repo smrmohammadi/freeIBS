@@ -18,14 +18,19 @@ class DBHandleQuery:
 	    self.__dedicate_handle=False
 
     def __getattr__(self,name):
+	self.method_name=name
+	return self.__runQuery
+
+    def __runQuery(self,*args):
+	result=None
 	if not self.hasDedicatedHandle():
 	    self.allocateHandle()
 	try:
-	    return getattr(self.__handle,name)
+	    return apply(getattr(self.__handle,self.method_name),args)
 	finally:
 	    if not self.hasDedicatedHandle():
 		self.releaseHandle()
-	    
+
     def hasHandle(self):
 	return self.__handle!=None
 

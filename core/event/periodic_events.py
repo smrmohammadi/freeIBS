@@ -55,6 +55,7 @@ class PeriodicEvent:
     
 
 class PeriodicEventsManager:
+    debug=False
     def __init__(self):
 	self.events=[]
 	self.__initialized=False
@@ -110,12 +111,17 @@ class PeriodicEventsManager:
     def __setStartupEvents(self):
 	for _index in range(len(self.events)):
 	    ev=self.events[_index]
+
+	    if self.debug:
+		toLog("Startup PeriodicEvent: Running %s run_at_start_up %s args %s"%(ev.name,ev.run_at_startup,ev.args),LOG_DEBUG)
+
 	    if ev.run_at_startup==1:
 	        thread_main.runThread(ev.run,ev.args,"event")
 	    elif ev.run_at_startup==2:
 		apply(ev.run,ev.args)
 	    
 	    self.__setNextEvent(_index)
+
 
     def __setNextEvent(self,_index):
 	ev=self.events[_index]

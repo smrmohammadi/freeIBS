@@ -4,6 +4,10 @@ p0
 insert into defs (name,value) VALUES ('BW_TC_COMMAND','S\'tc\'
 p0
 .') ;
+insert into defs (name,value) VALUES ('CHECK_ONLINE_INTERVAL','I300
+.') ;
+insert into defs (name,value) VALUES ('CHECK_ONLINE_MAX_FAILS','I3
+.') ;
 insert into defs (name,value) VALUES ('ENCRYPT_PASSWORDS','I0
 .') ;
 insert into defs (name,value) VALUES ('IBS_SERVER_IP','S\'127.0.0.1\'

@@ -14,13 +14,14 @@ from core.debug import thread_debug
 class IBSThread(threading.Thread):
     def run(self):
 	thread_debug.debug_me()
-        while 1:
+        while True:
             self.event_obj.wait()
             self.event_obj.clear() #clear it, to suspend the thread after completing the job
 	    (method,args_list)=self.job
 	    if method == "exit":
 		return
             try:
+#		toLog("running %s %s"%(method,args_list),LOG_DEBUG)
 	        apply(method,args_list)
             except:
     		logException(LOG_ERROR,"Exception on thread %s while running %s"%(self,self.job))

@@ -20,9 +20,11 @@ class LoadingUser:
 	    self.lock.acquire()
 	    try:
 		if user in self.__loading:
+		    if self.__loading[user][0]==None:
+			self.__loading[user]=UserEvent(self.__loading[user][1])
 		    wait=self.__loading[user].requestWait()
 		else:
-		    self.__loading[user]=UserEvent()
+		    self.__loading[user]=(None,threading.currentThread())
 	    finally:
 		self.lock.release()
 
@@ -36,8 +38,8 @@ class LoadingUser:
 	    """
 	    self.lock.acquire()
 	    try:
-		user_event=self.__loading[user]
-		if user_event.getWaitingCount():
+		user_event,thread=self.__loading[user]
+		if user_event!=None and user_event.getWaitingCount():
 		    user_event.notify()
 		else:
 		    del(self.__loading[user])
@@ -45,9 +47,13 @@ class LoadingUser:
 		self.lock.release()
 	
 class UserEvent:
-    def __init__(self):
+    def __init__(self,running_thread):
+	"""
+	    object of this class would be created when two threads wants to enter critical
+	    section of same user
+	"""
 	self.waiting=[]
-	self.__setRunningThread()
+	self.running_thread=running_thread
 	self.recursive_calls=0
 	
     def __setRunningThread(self):
@@ -62,7 +68,6 @@ class UserEvent:
 	else:
 	    self.recursive_calls+=1
 	    return None
-	
     
     def wait(self,evt):
 	evt.wait()
@@ -72,7 +77,7 @@ class UserEvent:
 	if self.recursive_calls>0:
 	    self.recursive_calls-=1
 	elif len(self.waiting):
-	    evt=self.waiting.pop(0)
+	    evt,thread=self.waiting.pop(0)
 	    evt.set()
 
     def getWaitingCount(self):

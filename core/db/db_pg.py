@@ -51,8 +51,6 @@ class db_pg (ibs_db):
 
             raise ibs_exceptions.DBException("%s query: %s" %(e,command))
 
-
-    
     def query(self,command):
 	ibs_db.query(self,command)
         try:

@@ -10,11 +10,14 @@ import copy
 class NormalUser:
     def __init__(self,user_obj):
 	self.user_obj=user_obj
+#############################################
+    def isPersistentLanClient(self,instance):
+	return self.user_obj.getUserAttrs().has_key("persistent_lan") and self.user_obj.getUserAttrs()["persistent_lan"]
 
 ##############################################
     def getInOutBytes(self,instance):
 	"""
-	    return (tx_bytes,rx_bytes) tuple of send/receive of "instance" of user
+	    return (rx_bytes,tx_bytes) tuple of send/receive of "instance" of user
 	"""
 	user_msg=self.user_obj.createUserMsg(instance,"GET_INOUT_BYTES")
 	return user_msg.send()
@@ -28,7 +31,7 @@ class NormalUser:
 	    return user_attrs["remote_ip"]
 	elif user_attrs.has_key("ip_pool_assigned_ip"):
 	    return user_attrs["ip_pool_assigned_ip"]
-	else:
+    	else:
 	    raise GeneralException(errorText("USER_LOGIN","USER_IP_NOT_AVAILABLE")%self.user_obj.getUserID())
 
 ##############################################

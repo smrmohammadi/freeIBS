@@ -14,6 +14,7 @@ class DBException (Exception):
     def __init__(self,str_error):
         toLog("DBException: %s"% str_error,LOG_ERROR)
         self.str_error=str_error
+
     def __str__(self):
         return self.str_error
 
@@ -21,6 +22,7 @@ class ThreadException (Exception):
     def __init__(self,str_error):
         toLog("ThreadException: %s" % str_error,LOG_ERROR)
         self.str_error=str_error
+
     def __str__(self):
         return self.str_error
 
@@ -31,6 +33,7 @@ class IBSException(Exception):
     def __init__(self,str_error):
         toLog("IBSException: %s" % str_error,LOG_ERROR)
         self.str_error=str_error
+
     def __str__(self):
         return self.str_error
 
@@ -38,15 +41,17 @@ class PermissionException (Exception):
     def __init__(self,str_error):
         toLog("PermissionException: %s"%str_error,LOG_DEBUG,defs.DEBUG_ALL)
         self.str_error=str_error
+
     def __str__(self):
         return self.str_error
 		
 class HandlerException (Exception):
-    def __init__(self,strError):
-        toLog("HandlerException: ",LOG_ERROR)
-        self.strError=strError
+    def __init__(self,err_str):
+        toLog("HandlerException: %s"%err_str,LOG_ERROR)
+        self.err_str=err_str
+
     def __str__(self):
-        return self.strError
+        return self.err_str
 
 class XMLRPCFault (Exception):
     def __init__(self,str_error):
@@ -55,12 +60,13 @@ class XMLRPCFault (Exception):
     def __str__(self):
 	return self.str_error
 
-class RSHException (Exception):
-    def __init__(self,strError):
-        toLog("rshException: " + strError,LOG_ERROR)
-        self.strError=strError
+class SnmpException (Exception):
+    def __init__(self,err_str):
+        toLog("SnmpException: %s" % err_str,LOG_ERROR)
+        self.err_str=err_str
+
     def __str__(self):
-        return self.strError
+        return self.err_str
 
 
 class IBSError(Exception):
@@ -73,13 +79,16 @@ class GeneralException (IBSError):
     	    toLog("GeneralException: in (%s,%s,%s) : %s"%
 		(last_stack[0],last_stack[2],last_stack[1],strError),LOG_DEBUG)
         self.strError=strError
+
     def __str__(self):
         return self.strError
 
 class LoginException (IBSError):
     def __init__(self,str_error):
-        toLog("loginException: %s"%str_error,LOG_DEBUG)
+	if(defs.DEBUG_LEVEL>=defs.DEBUG_ALL):
+	    toLog("loginException: %s"%str_error,LOG_DEBUG)
         self.str_error=str_error
+
     def __str__(self):
         return self.str_error
 
@@ -184,4 +193,4 @@ def getExceptionText():
 
 def logException(log_file,extra_str="",debug_level=0):
     err_text=getExceptionText()
-    toLog(extra_str+err_text,log_file,debug_level)
+    toLog(extra_str+"\n"+err_text,log_file,debug_level)

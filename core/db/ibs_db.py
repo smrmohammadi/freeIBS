@@ -4,8 +4,6 @@ from core import defs
 
 
 class ibs_db: #abstract parent class for all db implementions. Children must implement esp. query and connect 
-    connHandle=None
-    
     def __init__(self,dbname,host,port,user,password):
         self.connHandle=None
         self.connect(dbname,host,port,user,password)

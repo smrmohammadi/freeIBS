@@ -22,7 +22,6 @@ class BWActions:
 	    the first is node_id second is list of child nodes and third is list of child leaves
 	    each child node is a list of same format. Leaves are leaf_name s only
 	"""
-	    
 	int_obj=bw_main.getLoader().getInterfaceByName(interface_name)
 	return self.getSubTree(int_obj.getRootNodeID())
 
@@ -49,7 +48,7 @@ class BWActions:
 
     def __addInterfaceDB(self,interface_id,interface_name,comment):
 	db_main.getHandle().transactionQuery(self.__addInterfaceQuery(interface_id,interface_name,comment))
-	
+
     def __getNewInterfaceID(self):
 	return db_main.getHandle().seqNextVal("bw_interface_interface_id_seq")
 
@@ -68,7 +67,7 @@ class BWActions:
 	node_obj=bw_main.getLoader().getNodeByID(node_id)
 	node_obj.registerInParent()
 	node_obj.createSubTree()
-	
+
     def __addNodeCheckInput(self,interface_name,parent_id,rate_kbits,ceil_kbits):
 	int_obj=bw_main.getLoader().getInterfaceByName(interface_name)
 	if parent_id!=None:

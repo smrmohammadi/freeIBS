@@ -9,7 +9,7 @@ class Interface:
 	self.root_node_id=None
 	self.minor_id_pool=IDPool((10,0xffff),"interface %s minors"%self.getInterfaceName())
 	self.major_id_pool=IDPool((10,0xffff),"interface %s majors"%self.getInterfaceName())
-    
+
     def getInterfaceID(self):
 	return self.interface_id
 

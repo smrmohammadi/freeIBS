@@ -73,9 +73,12 @@ def init():
     import radius_server.rad_server
     radius_server.rad_server.init()
     
+    ibs_exceptions.toLog("Starting server",ibs_exceptions.LOG_DEBUG)
+    server.startServer()    
+
+    ibs_exceptions.toLog("Modules Initialized, Entering Post Inits",ibs_exceptions.LOG_DEBUG)
     runPostInits()
 
-    server.startServer()    
     unSetNoLoginFlag()
     ibs_exceptions.toLog("IBS successfully started.",ibs_exceptions.LOG_DEBUG)
     sys.excepthook=sys_except_hook

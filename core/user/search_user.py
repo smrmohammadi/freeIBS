@@ -113,7 +113,7 @@ class SearchUserHelper(SearchHelper):
 	"""
 	table_query=self.getTableQueries()
 	attrs_query=self.__createAttrsQuery(table_query["user_attrs"],table_query["group_attrs"])
-	queries=self.filterNoneQueries(attrs_query,table_query["users"],table_query["normal_users"],table_query["voip_users"])
+	queries=self.filterNoneQueries(attrs_query,table_query["users"],table_query["normal_users"],table_query["voip_users"],table_query["persistent_lan_users"])
 	return self.intersectQueries(queries)
 
     def __createAttrsQuery(self,user_attrs,group_attrs):

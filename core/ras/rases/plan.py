@@ -62,6 +62,7 @@ class PersistentLanRas(GeneralUpdateRas):
 	ras_msg=RasMsg(None,None,self)
 	ras_msg["user_id"],ras_msg["mac"],ras_msg["remote_ip"]=user_id,mac,ip
 	ras_msg["unique_id"]="mac"
+	ras_msg["persistent_lan"]=True
 	ras_msg.setAction(action)
 	return ras_msg
 

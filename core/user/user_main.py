@@ -1,6 +1,7 @@
 from core.plugins import plugin_loader
 from core import defs
 from core.server import handlers_manager
+from core.event import periodic_events
 
 def init():
     from core.user import user_actions,user_plugin,attribute_manager
@@ -39,8 +40,10 @@ def init():
     ras_msg_dispatcher=RasMsgDispatcher()
     
     global online
-    from core.user.online import OnlineUsers
+    from core.user.online import OnlineUsers,OnlineCheckPeriodicEvent
     online=OnlineUsers()
+    periodic_events.getManager().register(OnlineCheckPeriodicEvent())
+    
     
     plugin_loader.loadPlugins(defs.IBS_CORE+"/user/plugins")
 

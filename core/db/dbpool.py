@@ -7,129 +7,122 @@ from core.event import event
 from core import main
 from core.lib.general import *
 
-#TODO: more exception checkings
-
-
 class DBPool:
-    __pool=[]
-    __in_use={}
-    tlock=None
-    
     def __init__(self):
-        self.tlock=threading.RLock()
-	self.__createHandles()
+	self.tlock=threading.Lock()
+	self.__pool=[]
+	self.__in_use={}
+	self.__total_handles=0
+	self.__initializeHandles()
 
-    def __createHandles(self):
-	retries=3
-        for i in range(defs.DB_POOL_DEFAULT_CONNECTIONS):
-            while not main.isShuttingDown(): #this make ibs don't quit on startup when database doesn't still started. (it takes some time to start esp. after a server crash)
-		try:                          #ibs will wait until it can create the connection
-		    db_obj=defs.getDBHandle() #this raises some risks, for ex. when DB_POOL_DEFAULT_CONNECTIONS is too high
-		except:			      #and database can't create this amount of connection, ibs won't start/quit
-		    logException(LOG_ERROR,"Can't connect to database")
-		    retries-=1
-		    if retries==0:
+    def __initializeHandles(self):
+	retry=3
+	for i in range(defs.DB_POOL_DEFAULT_CONNECTIONS):
+	    while not main.isShuttingDown():
+		try:
+		    self.__addNewHandleToPool()
+		except DBException:
+		    if retry==0:
 			raise
-		    else:
-	    	        time.sleep(5)
+		    elif i==0:
+			retry-=1
+			time.sleep(5)
 			continue
-		self.__addToPool(db_obj)
-		break
+		break		
 
+    def __addNewHandleToPool(self):
+	handle=self.__createNewHandle()
+	self.__pool.append(handle)
+	self.__total_handles+=1
+	    
+    def __createNewHandle(self):
+	return defs.getDBHandle()
+
+    ######################################
     def getHandle(self):
-	handle=self.__getHandleFromPool()
-        self.__addToInUse(handle)
-        return handle
+	"""
+	    return a db handle, may raise an DBException on error
+	"""
+	self.tlock.acquire()
+	try:
+	    if len(self.__pool)==0:
+		if self.__total_handles>defs.DB_POOL_MAX_CONNECTIONS:
+		    raise DBException("Maximum number of %s handles already in use"%defs.DB_POOL_MAX_CONNECTIONS)
+		else:
+		    self.__addNewHandleToPool()
+	    handle=self.__useOneHandle()
+	    return handle
+	finally:
+	    self.tlock.release()
 
-    def release(self,handle):
-        self.__delFromInUse(handle)
-        self.__addToPool(handle)   
-
-    def check(self):
-        now=time.time()
-        self.tlock.acquire()
-        try:
-            to_del=[]
-            for handle in self.__in_use:
-                if now-self.__in_use[handle]>defs.DB_POOL_MAX_RELEASE_TIME:
-		    toLog("Found stale db connection %s"%str(self.__in_use[handle]),LOG_ERROR)
-                    handle.reset()
-                    to_del.append(handle)
-
-            for handle in to_del:
-                self.__delFromInUse(handle)
-                self.__addToPool(handle)
-
-            for handle in self.__pool:
-                try:
-                    handle.check() #ping and reset connection
-                except DBException,e:
-                    self.__delFromPool(handle)
-
-	    if len(self.__pool)==0 and len(self.__in_use)==0:
-		raise DBException("No Available db connection")
-
-        finally:
-            self.tlock.release()
-
-    def close(self): #it will be called after killing all threads, so it's OK
-        for handle in self.__pool:
-	    try:
-        	handle.close()
-	    except:
-		logException(LOG_ERROR,"dbpool.close")
-        for handle in self.__in_use:
-	    try:
-		toLog("In Use Database Handle while shutting down!!!",LOG_ERROR)
-        	handle.close()
-	    except:
-		logException(LOG_ERROR,"dbpool.close")
-        
-    def __addToPool(self,handle):
-        self.tlock.acquire()
-        try:
-            self.__pool.append(handle)
-        finally:
-            self.tlock.release()
-
-    def __delFromPool(self,handle):
-        self.tlock.acquire()
-        try:
-            self.__pool.remove(handle)
-        finally:
-            self.tlock.release()
-
-    def __getHandleFromPool(self):
-        self.tlock.acquire()
-        try:
-            pool_len=len(self.__pool)
-            if pool_len>0:
-                handle=self.__pool.pop()
-            else:
-                if len(self.__in_use) > defs.DB_POOL_MAX_CONNECTIONS:
-                    raise DBException("reached maximum number of connections")
-        	else:
-            	    handle=defs.getDBHandle()
-        finally:
-            self.tlock.release()
-
-        return handle
+    def __useOneHandle(self):
+	"""
+	    pop a handle from pool and add it to in_use
+	"""
+	handle=self.__pool.pop()
+	self.__in_use[handle]=time.time()
+	return handle
 	
-    def __addToInUse(self,handle):
-        self.tlock.acquire()
-        try:
-            self.__in_use[handle]=time.time()         
-        finally:
-            self.tlock.release()
+    ######################################
+    def release(self,handle):
+	self.tlock.acquire()
+	try:
+	    del(self.__in_use[handle])
+	    self.__pool.append(handle)
+	finally:
+	    self.tlock.release()
+    ##########################
+    def check(self):
+	self.tlock.acquire()
+	try:
+	    self.__checkInUse()
+	    self.__checkPool()
+	finally:
+	    self.tlock.release()
 
-    def __delFromInUse(self,handle):
-        self.tlock.acquire()
-        try:
-            del(self.__in_use[handle])
-        finally:
-            self.tlock.release()
+    def __checkInUse(self):
+        min_allocate_time=time.time()-defs.DB_POOL_MAX_RELEASE_TIME
+	to_del=[]
+	for handle in self.__in_use:
+	    if self.__in_use[handle]<min_allocate_time:
+		toLog("Closing Stale DB Connection, allocate_time:%s min_allocate_time:%s"%(self.__in_use[handle],min_allocate_time),LOG_ERROR)
+		to_del.append(handle)
 
+	for handle in to_del:
+	    handle.close()
+	    del(self.__in_use[handle])
+	    self.__addNewHandleToPool()
 
+    def __checkPool(self):
+	to_del=[]
+        for handle in self.__pool:
+            try:
+                handle.check() #ping and reset connection
+            except DBException,e:
+		logException(LOG_ERROR)
+		to_del.append(handle)
+
+	for handle in to_del:
+	    self.__pool.remove(handle)
+	    self.__addNewHandleToPool()
+    ################################
+    def close(self): 
+	self.tlock.acquire()
+	try:
+	    for handle in self.__pool:
+	        try:
+    		    handle.close()
+	        except:
+	    	    logException(LOG_ERROR,"dbpool.close")
+
+	    for handle in self.__in_use:
+	        try:
+		    toLog("In Use Database Handle while shutting down!!!",LOG_ERROR)
+		    handle.close()
+	        except:
+		    logException(LOG_ERROR,"dbpool.close")
+	finally:
+	    self.tlock.release()
 
 def initPool():
     global main_pool

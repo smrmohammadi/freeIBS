@@ -8,7 +8,7 @@ from core.ras import ras_main
 PORT_TYPES=["Internet","Voice-Origination","Voice-Termination"]
 
 class Ras:
-    default_attributes={"online_check":1,"online_check_reliable":0}
+    default_attributes={"online_check":1}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
     	"""
@@ -147,7 +147,6 @@ class Ras:
 	if reply.has_key("Framed-IP-Address"):
 	    return
 	
-	
 	for ippool_id in self.ippools:
 	    try:
 		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).setIPInPacket(reply)
@@ -161,8 +160,10 @@ class Ras:
 	    except IPpoolFullException:
 		pass
 	else:
-	    toLog("All IP Pools are full for ras %s"%self.getRasIP(),LOG_ERROR)
+	    self.toLog("All IP Pools are full",LOG_ERROR)
 
+    def toLog(self,msg,log_file=LOG_DEBUG):
+	toLog("%s Ras %s: %s"%(self.getType(),self.getRasIP(),msg),log_file)
 
 #################
 #
@@ -255,8 +256,6 @@ class Ras:
 	self.ports=ports
 	self.ippools=ippools
 	self.attributes=ras_attrs
-	self._delEvent()
-	self._registerEvent()
 	
 	if ras_ip_changed:
 	    ras_main.getLoader().keepObj(self)
@@ -294,6 +293,11 @@ class GeneralUpdateRas(Ras):
 	"""
 	self._delEvent()
 
+    def _reload(self):
+	Ras._reload(self)
+	self._delEvent()
+	self._registerEvent()
+
 class UpdateUsersRas(GeneralUpdateRas):
     """
 	This Class is same as GeneralUpdateRas but has an additional updateUsers method, that
@@ -307,7 +311,7 @@ class UpdateUsersRas(GeneralUpdateRas):
     def _registerEvent(self):
 	class UpdateUserListEvent(periodic_events.PeriodicEvent):
 	    def __init__(my_self):
-		periodic_events.PeriodicEvent("%s update userlist"%self.ras_ip,self.getAttribute("update_users_interval"),[],0)
+		periodic_events.PeriodicEvent("%s update userlist"%self.getRasIP(),self.getAttribute("update_users_interval"),[],0)
 
 	    def run(my_self):
 		self.updateUserList()
