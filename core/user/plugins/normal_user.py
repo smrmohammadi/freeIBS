@@ -46,7 +46,7 @@ class NormalUserInfoHolder(InfoHolder):
 	if len(self.usernames)!=len(users):
 	    raise GeneralException(errorText("USER_ACTIONS","NORMAL_COUNT_NOT_MATCH")%(len(users),len(self.usernames)))
 	
-	map(lambda passowrd:password.checkPasswordChars(),self.passwords)
+	map(lambda password:password.checkPasswordChars(),self.passwords)
 	map(lambda username:user_main.getActionManager().checkNormalUsernameChars,self.usernames)
 
     def changeQuery(self,ibs_query,src,action,**args):

@@ -12,7 +12,7 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-    {addEditTable title="Add New Admin"}
+    {addEditTable title="Add New Admin" table_width="300"}
 	{addEditTD type="left" err="username_err"}
 	    Username
 	{/addEditTD}

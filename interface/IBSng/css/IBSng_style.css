@@ -1,8 +1,8 @@
-/*-----------------------------------------------------*/
-/*  Page Main 										   */
-/*   Classes:										   */
-/*      1.table.Main_Page							   */
-/*-----------------------------------------------------*/
+/*---------------------------------------------------------*/
+/*  Page Main 						   */
+/*   Classes:						   */
+/*      1.table.Main_Page				   */
+/*---------------------------------------------------------*/
 table.Main_Page {  
 	padding: 0;
 	border-collapse: collapse ;
@@ -13,23 +13,23 @@ table.Main_Page {
 	width:100%
 }
 
-/*-----------------------------------------------------*/
-/*  Header 	 										   */
-/*   Classes:										   */
-/*      1.td.Header_color							   */
-/*      2.tr.Header_Top_Link						   */
-/*      3.Table.Header_Submenu						   */
-/*      4.td.Header_Submenu							   */
-/*      5.td.Header_Line_Between_Submenus			   */
-/*      6.td.Page_Header_Date						   */
-/*      7.td.Page_Header_Line						   */
-/*      8.td.Page_Title								   */
-/*      9.td.Page_Top_Space							   */
-/*      10.td.Page_Top_Link							   */
-/*      11.a:link.Header_Top_Links					   */
-/*      12.a:visited.Header_Top_Links				   */
-/*      13.a:hover.Header_Top_Links					   */
-/*-----------------------------------------------------*/
+/*-------------------------------------------------*/
+/*  Header 	 				   */
+/*   Classes:					   */
+/*      1.td.Header_color			   */
+/*      2.tr.Header_Top_Link			   */
+/*      3.Table.Header_Submenu			   */
+/*      4.td.Header_Submenu			   */
+/*      5.td.Header_Line_Between_Submenus	   */
+/*      6.td.Page_Header_Date			   */
+/*      7.td.Page_Header_Line			   */
+/*      8.td.Page_Title				   */
+/*      9.td.Page_Top_Space			   */
+/*      10.td.Page_Top_Link			   */
+/*      11.a:link.Header_Top_Links		   */
+/*      12.a:visited.Header_Top_Links		   */
+/*      13.a:hover.Header_Top_Links		   */
+/*-------------------------------------------------*/
 
 td.Header_color{ 
 	background-color:#990000;
@@ -136,17 +136,17 @@ a:hover.Header_Submenu{
     color: #990000
  }
 
-/*-----------------------------------------------------*/
-/*  Footer 	 										   */
-/*   Classes:										   */
-/*      1.td.Page_Footer_Line						   */
-/*      2.td.Page_Footer							   */
-/*      3.td.Header_Submenu							   */
-/*      4.a:link.Footer_Link						   */
-/*      5.a:visited.Footer_Link						   */
-/*      6.a:hover.Footer_Link						   */
-/*      7.td.Page_Bottom_Space						   */
-/*-----------------------------------------------------*/
+/*-------------------------------------------------*/
+/*  Footer 	 				   */
+/*   Classes:					   */
+/*      1.td.Page_Footer_Line			   */
+/*      2.td.Page_Footer			   */
+/*      3.td.Header_Submenu			   */
+/*      4.a:link.Footer_Link			   */
+/*      5.a:visited.Footer_Link			   */
+/*      6.a:hover.Footer_Link			   */
+/*      7.td.Page_Bottom_Space			   */
+/*-------------------------------------------------*/
 
 td.Page_Footer_Line{ 
 	height:2;
@@ -183,11 +183,11 @@ td.Page_Bottom_Space{
 	height:10
 }
 
-/*-----------------------------------------------------*/
-/*  Form Main 										   */
-/*   Classes:										   */
-/*      1.table.Form_Main							   */
-/*-----------------------------------------------------*/
+/*-------------------------------------------------*/
+/*  Form Main 					   */
+/*   Classes:					   */
+/*      1.table.Form_Main			   */
+/*-------------------------------------------------*/
 table.Form_Main {  
 	padding: 0;
 	border-collapse: collapse ;
@@ -196,14 +196,14 @@ table.Form_Main {
 }
 
 /*------------------------------------------------------*/
-/*  Form Title   										*/
-/*    Classes:  										*/
-/*		1.table.Form_Title								*/
-/*		2.td.Form_Title									*/
-/*      3.td.Form_Title_Begin							*/
-/*      4.td.Form_Title_End								*/
-/*      5.td.Form_Title_Top_Line						*/
-/*      6.td.Form_Title_End_Line						*/
+/*  Form Title						*/
+/*    Classes: 						*/
+/*	1.table.Form_Title				*/
+/*	2.td.Form_Title					*/
+/*      3.td.Form_Title_Begin				*/
+/*      4.td.Form_Title_End				*/
+/*      5.td.Form_Title_Top_Line			*/
+/*      6.td.Form_Title_End_Line			*/
 /*------------------------------------------------------*/
 
 table.Form_Title {  
@@ -247,14 +247,14 @@ td.Form_Title_End_Line{
 }
 
 /*------------------------------------------------------*/
-/*  Form Foot   										*/
-/*    Classes:  										*/
-/*		1.table.Form_Foot								*/
-/*		2.td.Form_Foot									*/
-/*      3.td.Form_Foot_End								*/
-/*      4.td.Form_Foot_Below_Line						*/
-/*      5.td.Form_Foot_Begin_Line						*/
-/*      6.td.Form_Foot_Buttons  						*/
+/*  Form Foot  						*/
+/*    Classes: 						*/
+/*	1.table.Form_Foot				*/
+/*	2.td.Form_Foot					*/
+/*      3.td.Form_Foot_End				*/
+/*      4.td.Form_Foot_Below_Line			*/
+/*      5.td.Form_Foot_Begin_Line			*/
+/*      6.td.Form_Foot_Buttons  			*/
 /*------------------------------------------------------*/
 
 table.Form_Foot {  
@@ -290,28 +290,28 @@ td.Form_Foot_Buttons{
 	background-color:#FFFFFF
 }
 
-/*------------------------------------------------------------------*/
-/*  Form Content 1col & 2col & Userinfo & GroupInfo					*/
-/*    Classes:  													*/
-/*		1.td.Form_Content_Row_Begin									*/
-/*		2.td.Form_Content_Row_End									*/
-/*      3.td.Form_Content_Row_Left_light							*/
-/*      4.td.Form_Content_Row_Right_light							*/
-/*      5.td.Form_Content_Row_Left_2Col_light						*/
-/*      6.td.Form_Content_Row_Right_2Col_light						*/
-/*      7.td.Form_Content_Row_Left_dark								*/
-/*      8.td.Form_Content_Row_Right_dark							*/
-/*      9.td.Form_Content_Row_Left_2Col_dark						*/
-/*      10.td.Form_Content_Row_Right_2Col_dark						*/
-/*      11.td.Form_Content_Row_Space								*/
-/*      12.td.Form_Content_Col_Space								*/
-/*      13.td.Form_Content_Row_Left_userinfo_light					*/
-/*      14.td.Form_Content_Row_Right_userinfo_light					*/
-/*      15.td.Form_Content_Row_groupinfo_light						*/
-/*      16.td.Form_Content_Row_Left_userinfo_dark					*/
-/*      17.td.Form_Content_Row_Right_userinfo_dark					*/
-/*      18.td.Form_Content_Row_groupinfo_dark						*/
-/*------------------------------------------------------------------*/
+/*--------------------------------------------------------------*/
+/*  Form Content 1col & 2col & Userinfo & GroupInfo		*/
+/*    Classes:  						*/
+/*	1.td.Form_Content_Row_Begin				*/
+/*	2.td.Form_Content_Row_End				*/
+/*      3.td.Form_Content_Row_Left_light			*/
+/*      4.td.Form_Content_Row_Right_light			*/
+/*      5.td.Form_Content_Row_Left_2Col_light			*/
+/*      6.td.Form_Content_Row_Right_2Col_light			*/
+/*      7.td.Form_Content_Row_Left_dark				*/
+/*      8.td.Form_Content_Row_Right_dark			*/
+/*      9.td.Form_Content_Row_Left_2Col_dark			*/
+/*      10.td.Form_Content_Row_Right_2Col_dark			*/
+/*      11.td.Form_Content_Row_Space				*/
+/*      12.td.Form_Content_Col_Space				*/
+/*      13.td.Form_Content_Row_Left_userinfo_light		*/
+/*      14.td.Form_Content_Row_Right_userinfo_light		*/
+/*      15.td.Form_Content_Row_groupinfo_light			*/
+/*      16.td.Form_Content_Row_Left_userinfo_dark		*/
+/*      17.td.Form_Content_Row_Right_userinfo_dark		*/
+/*      18.td.Form_Content_Row_groupinfo_dark			*/
+/*--------------------------------------------------------------*/
 
 td.Form_Content_Row_End{ 
 	height:20;
@@ -489,28 +489,28 @@ td.Form_Content_Row_groupinfo_dark{
 	background-color:#D9D9D9
 }
 
-/*------------------------------------------------------------------*/
-/*  Form Content textarea	  										*/
-/*    Classes:  													*/
-/*		1.td.Form_Content_Row_Left_textarea							*/
-/*		2.td.Form_Content_Row_Right_textarea						*/
-/*      3.td.Form_Content_Row_Left_textarea_td_light				*/
-/*      4.td.Form_Content_Row_Right_textarea_td_light				*/
-/*      5.td.Form_Content_Row_Top_textarea_line_light				*/
-/*      6.td.Form_Content_Row_Bottom_textarea_line_light			*/
-/*      7.td.Form_Content_Row_Left_textarea_td_dark					*/
-/*      8.td.Form_Content_Row_Right_textarea_td_dark				*/
-/*      9.td.Form_Content_Row_Top_textarea_line_dark				*/
-/*      10.td.Form_Content_Row_Bottom_textarea_line_dark			*/
-/*      11.td.Form_Content_Row_Textarea_corner						*/
-/*      12.td.Form_Content_Row_Left_textarea_userinfo				*/
-/*      13.td.Form_Content_Row_Right_textarea_userinfo				*/
-/*      14.td.Form_Content_Row_Right_textarea_groupinfo				*/
-/*	15.Form_Content_Row_Right_textarea_line_light 				*/
-/*	16.Form_Content_Row_Left_textarea_line_light 				*/
-/*	17.Form_Content_Row_Right_textarea_line_dark 				*/
-/*	18.Form_Content_Row_Left_textarea_line_dark				*/
-/*------------------------------------------------------------------*/
+/*----------------------------------------------------------------------*/
+/*  Form Content textarea	  					*/
+/*    Classes:  							*/
+/*	1.td.Form_Content_Row_Left_textarea				*/
+/*	2.td.Form_Content_Row_Right_textarea				*/
+/*      3.td.Form_Content_Row_Left_textarea_td_light			*/
+/*      4.td.Form_Content_Row_Right_textarea_td_light			*/
+/*      5.td.Form_Content_Row_Top_textarea_line_light			*/
+/*      6.td.Form_Content_Row_Bottom_textarea_line_light		*/
+/*      7.td.Form_Content_Row_Left_textarea_td_dark			*/
+/*      8.td.Form_Content_Row_Right_textarea_td_dark			*/
+/*      9.td.Form_Content_Row_Top_textarea_line_dark			*/
+/*      10.td.Form_Content_Row_Bottom_textarea_line_dark		*/
+/*      11.td.Form_Content_Row_Textarea_corner				*/
+/*      12.td.Form_Content_Row_Left_textarea_userinfo			*/
+/*      13.td.Form_Content_Row_Right_textarea_userinfo			*/
+/*      14.td.Form_Content_Row_Right_textarea_groupinfo			*/
+/*	15.Form_Content_Row_Right_textarea_line_light 			*/
+/*	16.Form_Content_Row_Left_textarea_line_light 			*/
+/*	17.Form_Content_Row_Right_textarea_line_dark 			*/
+/*	18.Form_Content_Row_Left_textarea_line_dark			*/
+/*----------------------------------------------------------------------*/
 
 td.Form_Content_Row_Left_textarea{ 
 	width:50%;
@@ -629,24 +629,24 @@ td.Form_Content_Row_Left_textarea_line_dark{
 	background-color:#ECECEC
 }
 
-/*-----------------------------------------------------*/
-/*  List Main 										   */
-/*   Classes:										   */
-/*      1.table.List_Main						       */
-/*-----------------------------------------------------*/
+/*-------------------------------------------------*/
+/*  List Main 					   */
+/*   Classes:					   */
+/*      1.table.List_Main			   */
+/*-------------------------------------------------*/
 table.List_Main {  
 	padding: 0;
 	direction:ltr;
 	alignment:center
 }
 
-/*------------------------------------------------------------------*/
-/*  List Rows				   										*/
-/*    Classes:  													*/
-/*		1.tr.List_Row_LightColor									*/
-/*		2.tr.List_Row_DarkColor										*/
-/*		3.tr.List_Foot_Line											*/
-/*------------------------------------------------------------------*/
+/*------------------------------------------------------*/
+/*  List Rows				   		*/
+/*    Classes:  					*/
+/*		1.tr.List_Row_LightColor		*/
+/*		2.tr.List_Row_DarkColor			*/
+/*		3.tr.List_Foot_Line			*/
+/*------------------------------------------------------*/
 
 tr.list_Row_LightColor{ 
 	font-family: Tahoma; 
@@ -670,16 +670,16 @@ tr.List_Foot_Line{
 }
 
 /*------------------------------------------------------*/
-/*  List Title   										*/
-/*    Classes:  										*/
-/*		1.table.List_Title								*/
-/*		2.td.List_Title									*/
-/*      3.td.List_Title_Begin							*/
-/*      4.td.List_Title_End								*/
-/*      5.td.List_Title_Top_Line						*/
-/*      6.td.List_Title_End_Line						*/
-/*      7.tr.list_Head									*/
-/*		8.td.List_Title_Icon	 	       			    */
+/*  List Title   					*/
+/*    Classes:  					*/
+/*	1.table.List_Title				*/
+/*	2.td.List_Title					*/
+/*      3.td.List_Title_Begin				*/
+/*      4.td.List_Title_End				*/
+/*      5.td.List_Title_Top_Line			*/
+/*      6.td.List_Title_End_Line			*/
+/*      7.tr.list_Head					*/
+/*	8.td.List_Title_Icon				*/
 /*------------------------------------------------------*/
 
 table.List_Title {  
@@ -741,20 +741,19 @@ td.List_Title_Icon{
 }
 
 /*----------------------------------------------------*/
-/*  Input 										      */
-/*   Classes:						                  */									  
-/*   	1.Text						                  */									  
-/*   	2.Num						                  */									  
+/*  Input 					      */
+/*   Classes:					      */									  
+/*   	1.Text					      */									  
+/*   	2.Num					      */									  
 /*----------------------------------------------------*/
 
 input.text{
-	border-style:solid; 
-	border-width:1; 
+	border:1px solid #d6d6d6; 
 	font-size: 8pt;
 	font-family:Tahoma;
-	color: #000000;
+	color: #800000;
 	height:18px;
-	width:90px
+	width:110px
 }
 
 input.Num{
@@ -769,16 +768,15 @@ input.Num{
 }
 
 /*----------------------------------------------------*/
-/*  Select 										      */
-/*   Classes:						                  */									  
-/*   	1.'general'					                  */									  
+/*  Select 					      */
+/*   Classes:					      */									  
+/*   	1.'general'				      */									  
 /*----------------------------------------------------*/
-
 select       { 
 	border:1px solid #000000; 
 	padding:1px; 
 	font-family: Tahoma; 
-	font-size: 7.4pt; 
+	font-size: 8pt; 
 	color:#000000; 
 	background-color:#FFFFFF
 }
@@ -789,12 +787,28 @@ select       {
 /*   	1.text			                      */									  
 /*----------------------------------------------------*/
 textarea.text { 
-	border:1px solid #000000; 
+	border:1px solid #d6d6d6; 
 	direction: ltr; 
 	textalign: left; 
 	font-family:Tahoma; 
 	font-size:8pt; 
-	color:#000000; 
+	color:#800000; 
 	background-color:#FFFFFF;
-	height:40px;
+	height:56px;
+	width:100%
+}
+/*------------------------------------------------------*/
+/* 	Error Table & Message				*/
+/*	  Classes 					*/
+/*	     1.td.error_messages			*/
+/*------------------------------------------------------*/	
+
+td.error_messages{ 
+	font-family: Tahoma; 
+	font-size: 9pt; 
+	color: red; 
+	font-weight:bold; 
+	height:18;
+	direction:ltr ;
+	background-color:#FFFFFF
 }

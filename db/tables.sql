@@ -166,6 +166,21 @@ create table normal_users (
     normal_password text,
 );
 
+create sequence normal_user_add_save_id_seq;
+
+create table normal_user_add_saves(
+    user_add_save_id integer,
+    add_date	timestamp
+);
+
+create table normal_user_add_details(
+    user_add_save_id integer,
+    username text,
+    password text
+);
+
+
+
 create table voip_users (
     user_id integer references users,
     voip_username text unique, 
