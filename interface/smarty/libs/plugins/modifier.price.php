@@ -6,7 +6,7 @@ function smarty_modifier_price($string)
 	$price=(float)$string;
 	$sign=$price<0?-1:1;
 	$price*=$sign;
-	$int_price=(int)$price;
+	$int_price=floor($price);
 	$int_part="{$int_price}";
 	$float_part=round(($price-$int_price)*100);
 	$str="";
