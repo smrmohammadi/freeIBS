@@ -177,6 +177,13 @@ def toLog(_str,log_file,debug_level=0,add_stack=0):
     else:
 	debug_log_handle.write(_str,add_stack)
 
-def logException(log_file,extra_str="",debug_level=0):
+def getExceptionText():
+    """
+	create and return text of last exception
+    """
     (_type,value,tback)=sys.exc_info()
-    toLog(extra_str+"".join(traceback.format_exception(_type, value, tback)),log_file,debug_level)
+    return "".join(traceback.format_exception(_type, value, tback))
+
+def logException(log_file,extra_str="",debug_level=0):
+    err_text=getExceptionText()
+    toLog(extra_str+err_text,log_file,debug_level)

@@ -7,6 +7,7 @@ import syslog
 import traceback
 from core.debug import thread_debug
 from core.event import event
+from core import ibs_exceptions
 import core.main
 
 
@@ -37,13 +38,10 @@ def mainThreadSignalHandlers():
     signal.signal(signal.SIGTERM,termSigHandler)
     signal.signal(signal.SIGHUP,signal.SIG_IGN)
 
-def logToSysLog():
+def logToSysLog(err_text):
     syslog.openlog("IBSng",syslog.LOG_DAEMON)
-    (_type,value,tback)=sys.exc_info()
-    syslog.syslog(syslog.LOG_ERR,
-		  "".join(traceback.format_exception(_type, value, tback)))
+    syslog.syslog(syslog.LOG_ERR,err_text)
     syslog.closelog()
-    
 
 def start():
     handleUserDefinedSignals(childWaitSigHandler)
@@ -63,7 +61,10 @@ def start():
     	    event.startLoop()
 	except:
 #	    core.main.mainThreadShutdown()
-	    logToSysLog()	    	
+	    err_text=ibs_exceptions.getExceptionText()
+	    print err_text
+	    logToSysLog(err_text)
+	    
 	    
     else:
 	signal.pause()

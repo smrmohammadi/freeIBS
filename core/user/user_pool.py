@@ -32,7 +32,7 @@ class ReleaseCandidates:
 	"""
 	self.lock.acquire()
 	try:
-	    self.__release_candidates.append(user_id)
+	    self.__release_candidates.append(loaded_user)
 	finally:
 	    self.lock.release()
 	
@@ -65,9 +65,9 @@ class LoadingUser:
 	    self.__loading=[] #currently loading users, to prevent from 
 	    self.__locks={}
 	
-	def __in__(self,obj):
-	    return obj in self.__loading
-	
+	def isLoading(self,user):
+	    return user in self.__loading
+
 	def loadingStart(self,user):
 	    """
 		called when we start loading a user
@@ -142,6 +142,7 @@ class UserPool:
 	    Save LoadedUser instance into pool
 	"""
 	self.__checkPoolSize()
+	self.rel_candidate.addUser(loaded_user)
 	self.__addToPool(loaded_user)
 
     def __addToPool(self,loaded_user):
@@ -160,7 +161,7 @@ class UserPool:
 	    self.__pool_len+=1
 	finally:
 	    self.lock.release()
-	if self.__pool_len>defs.MAX_USER_POOL_SIZE:
+	if self.__pool_len>defs.MAX_USER_POOL_SIZE: 
 	    self.__releaseOneUser()
 
     def __releaseOneUser(self):
@@ -171,7 +172,7 @@ class UserPool:
         if loaded_user_obj!=None:
 	    self.lock.acquire()
 	    try:
-	        if loaded_user_obj.isOnline() or loaded_user_obj.getUserID() in self.loading_users:
+	        if loaded_user_obj.isOnline() or self.loading_users.isLoading(loaded_user_obj.getUserID()):
 			self.__releaseOneUser()
 		        self.rel_candidates.addUser(loaded_user)
 		else:

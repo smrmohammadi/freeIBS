@@ -156,5 +156,3 @@ def checkDBBool(bool_var,name=""):
     if bool_var != "t" and bool_var != "f":
 	raise GeneralException(errorTexT("GENERAL","INVALID_BOOL_VALUE")%name)
 
-
-

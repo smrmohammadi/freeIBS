@@ -16,8 +16,6 @@ function smarty_function_charge_names_select($params,&$smarty)
 
     
 */
-    
-
     require_once($smarty->_get_plugin_filepath('function', 'html_options'));
     require_once(IBSINC."charge.php");
     $type=isset($params["type"])?$params["type"]:null;
