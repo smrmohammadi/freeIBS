@@ -1,8 +1,11 @@
 {* Add/Edit Leaf
     leaf_name: name of leaf
     parent_id: id of parent onde
-    total_limit_kbits: total limit of this leaf
-    default_limit_kbits: default limit of this leaf
+    total_rate_kbits: total rate limit of this leaf
+    total_ceil_kbits: total ceil limit of this leaf
+    default_rate_kbits: default rate limit of this leaf
+    default_lceil_kbits: default ceil limit of this leaf
+
     interface_name: interface_name we're adding node to
     
     Success: client will be redirected to the interface information page
@@ -34,6 +37,18 @@
     	    <input type=hidden name=parent_id value="{$parent_id}">
 	    {helpicon subject='Parent Node' category='bandwidth'}
 	{/addEditTD}
+
+	{if $action == "edit"}
+	    <input type=hidden name="old_leaf_name" value="{$leaf_name}">
+	    {addEditTD type="left" err="leaf_id_err"}
+		Leaf ID
+	    {/addEditTD}
+
+	    {addEditTD type="right"}
+		<input type=hidden name=leaf_id value="{$leaf_id}">
+		{$leaf_id}
+	    {/addEditTD}
+	{/if}
 
 	{addEditTD type="left" err="leaf_name_err"}
 	    Leaf Name

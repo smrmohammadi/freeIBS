@@ -94,49 +94,6 @@ create table ras_ippools (
 
 create unique index ras_attrs_index on ras_attrs (ras_id,attr_name);
 
--- ******************* CHARGES ***********
-create table charges (
-    charge_id integer primary key,
-    name text unique,
-    charge_type text, --'internet' or 'voip'
-    comment text,
-    admin_id integer references admins ,
-    visible_to_all boolean default 'FALSE'
-);
-
-create sequence charges_id_seq;
-create sequence charge_rules_id_seq; --used for both voip and internet rules
-
-create table charge_rules (
-    charge_id integer references charges,
-    charge_rule_id integer primary key,
-    start_time time,
-    end_time time,
-    time_limit integer, -- in minutes
-    ras_id integer references ras
-);
-
-
-create table internet_charge_rules (
-    transfer_limit integer, -- in kbytes
-    cpm numeric(12,2),
-    cpk numeric(12,2),
-    assumed_kps integer,
-    bandwidth_limit_kbytes integer default -1,
-    bw_transmit_leaf_id integer references bw_leaf,
-    bw_receive_leaf_id integer references bw_leaf
-) inherits (charge_rules);
-
-
-create table charge_rule_ports (
-    charge_rule_id integer,
-    ras_port text
-);
-
-create table charge_rule_day_of_weeks (
-    charge_rule_id integer,
-    day_of_week integer
-);
 
 -- ******************
 create table groups (
@@ -316,7 +273,49 @@ create table bw_leaf_services (
 );
 create sequence bw_leaf_services_leaf_service_id_seq;    
 
+-- ******************* CHARGES ***********
+create table charges (
+    charge_id integer primary key,
+    name text unique,
+    charge_type text, --'internet' or 'voip'
+    comment text,
+    admin_id integer references admins ,
+    visible_to_all boolean default 'FALSE'
+);
 
+create sequence charges_id_seq;
+create sequence charge_rules_id_seq; --used for both voip and internet rules
+
+create table charge_rules (
+    charge_id integer references charges,
+    charge_rule_id integer primary key,
+    start_time time,
+    end_time time,
+    time_limit integer, -- in minutes
+    ras_id integer references ras
+);
+
+
+create table internet_charge_rules (
+    transfer_limit integer, -- in kbytes
+    cpm numeric(12,2),
+    cpk numeric(12,2),
+    assumed_kps integer,
+    bandwidth_limit_kbytes integer default -1,
+    bw_transmit_leaf_id integer references bw_leaf,
+    bw_receive_leaf_id integer references bw_leaf
+) inherits (charge_rules);
+
+
+create table charge_rule_ports (
+    charge_rule_id integer,
+    ras_port text
+);
+
+create table charge_rule_day_of_weeks (
+    charge_rule_id integer,
+    day_of_week integer
+);
 
 
 -- ********************* TO BE CHECKED!

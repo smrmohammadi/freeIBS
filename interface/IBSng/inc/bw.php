@@ -142,5 +142,34 @@ class UpdateNode extends Request
     }
 }
 
+class UpdateLeaf extends Request
+{
+    function UpdateLeaf($leaf_id,$leaf_name,$default_rate_kbits,$default_ceil_kbits,$total_rate_kbits,$total_ceil_kbits)
+    {
+	parent::Request("bw.updateLeaf",array("leaf_id"=>$leaf_id,
+					   "leaf_name"=>$leaf_name,
+					   "default_rate_kbits"=>$default_rate_kbits,
+					   "default_ceil_kbits"=>$default_ceil_kbits,
+					   "total_rate_kbits"=>$total_rate_kbits,
+					   "total_ceil_kbits"=>$total_ceil_kbits));
+
+    }
+}
+
+class UpdateLeafService extends Request
+{
+    function UpdateLeafService($leaf_name,$leaf_service_id,$protocol,$filter,$rate_kbits,$ceil_kbits)
+    {
+	parent::Request("bw.updateLeafService",array("leaf_name"=>$leaf_name,
+						  "leaf_service_id"=>$leaf_service_id,
+						  "protocol"=>$protocol,
+						  "filter"=>$filter,
+					          "rate_kbits"=>$rate_kbits,
+					          "ceil_kbits"=>$ceil_kbits
+						  ));
+    }
+}
+
+
 
 ?>

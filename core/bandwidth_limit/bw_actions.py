@@ -14,6 +14,13 @@ class BWActions:
 
     #############################################
     def getTree(self,interface_name):
+	"""
+	    get tree nodes for interface_name
+	    for each node there's a list containing 3 members.
+	    the first is node_id second is list of child nodes and third is list of child leaves
+	    each child node is a list of same format. Leaves are leaf_name s only
+	"""
+	    
 	int_obj=bw_main.getLoader().getInterfaceByName(interface_name)
 	return self.getSubTree(int_obj.getRootNodeID())
 
@@ -96,12 +103,17 @@ class BWActions:
 
     def __addLeafCheckInput(self,leaf_name,parent_id,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
 	bw_main.getLoader().getNodeByID(parent_id)
+	self.__leafCheckName(leaf_name)
+	self.__leafCheckRates(default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
+
+    def __leafCheckName(self,leaf_name):
 	if bw_main.getLoader().leafNameExists(leaf_name):
 	    raise GeneralException(errorText("BANDWIDTH","LEAF_NAME_ALREADY_EXISTS")%leaf_name)
 
 	if not isValidName(leaf_name):
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_LEAF_NAME")%leaf_name)
 	
+    def __leafCheckRates(self,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
 	self.__checkLimitKbits(default_rate_kbits)
 	self.__checkLimitKbits(default_ceil_kbits)
 
@@ -144,13 +156,21 @@ class BWActions:
 	leaf_obj=bw_main.getLoader().getLeafByName(leaf_name)
 	if leaf_obj.hasService((protocol,"%s %s"%(filter_type,filter_value))):
 	    raise GeneralException(errorText("BANDWIDTH","LEAF_HAS_THIS_FILTER")%(leaf_name,_filter,protocol))
+
+	self.__leafServiceCheckFilterAndProtocol(protocol,filter_type,filter_value,_filter)
+	self.__leafServiceCheckRates(rate_kbits,ceil_kbits)
+
+    def __leafServiceCheckRates(self,rate_kbits,ceil_kbits):
+	self.__checkLimitKbits(rate_kbits)
+	self.__checkLimitKbits(ceil_kbits)
+	
+
+    def __leafServiceCheckFilterAndProtocol(self,protocol,filter_type,filter_value,_filter):
 	if protocol not in ["tcp","udp","icmp"]:
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_PROTOCOL")%protocol)
 	
 	self.__checkFilter(_filter,filter_type,filter_value,protocol)
-	self.__checkLimitKbits(rate_kbits)
-	self.__checkLimitKbits(ceil_kbits)
-	
+
     def __getNewLeafServiceID(self):
 	return db_main.getHandle().seqNextVal("bw_leaf_services_leaf_service_id_seq")
 
@@ -334,4 +354,58 @@ class BWActions:
     def __updateNodeQuery(self,node_id,rate_kbits,ceil_kbits):
 	return ibs_db.createUpdateQuery("bw_node",{"rate_kbits":rate_kbits,
 						   "ceil_kbits":ceil_kbits},"node_id=%s"%node_id)
-						   
+    ###########################################
+    def updateLeaf(self,leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
+	self.__updateLeafCheckInput(leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
+	self.__updateLeafDB(leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
+	bw_main.getLoader().unloadLeaf(leaf_id)
+	bw_main.getLoader().loadLeaf(leaf_id)
+
+    def __updateLeafCheckInput(self,leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
+	leaf_obj=bw_main.getLoader().getLeafByID(leaf_id)
+	if leaf_obj.getLeafName()!=leaf_name:
+	    self.__leafCheckName(leaf_name)
+	
+	self.__leafCheckRates(default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits)
+
+
+    def __updateLeafDB(self,leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
+	db_main.getHandle().transactionQuery(
+		self.__updateLeafQuery(leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits))
+
+    def __updateLeafQuery(self,leaf_id,leaf_name,default_rate_kbits,default_ceil_kbits,total_rate_kbits,total_ceil_kbits):
+	return ibs_db.createUpdateQuery("bw_leaf",{ "leaf_name":dbText(leaf_name),
+						    "default_rate_kbits":default_rate_kbits,
+						    "default_ceil_kbits":default_ceil_kbits,
+						    "total_rate_kbits":total_rate_kbits,
+						    "total_ceil_kbits":total_ceil_kbits}
+						    ,"leaf_id=%s"%leaf_id)
+    ##############################################
+    def updateLeafService(self,leaf_name,leaf_service_id,protocol,_filter,rate_kbits,ceil_kbits):
+	(filter_type,filter_value)=self.__parseFilter(_filter)
+	self.__updateLeafServiceCheckInput(leaf_name,leaf_service_id,protocol,_filter,rate_kbits,ceil_kbits,filter_type,filter_value)
+	self.__updateLeafServiceDB(leaf_service_id,protocol,filter_type,filter_value,rate_kbits,ceil_kbits)
+	leaf_obj=bw_main.getLoader().getLeafByName(leaf_name)
+	bw_main.getLoader().loadLeaf(leaf_obj.getLeafID())
+
+    def __updateLeafServiceCheckInput(self,leaf_name,leaf_service_id,protocol,_filter,rate_kbits,ceil_kbits,filter_type,filter_value):
+	leaf_obj=bw_main.getLoader().getLeafByName(leaf_name)
+	service_obj=leaf_obj.getServiceByID(leaf_service_id)
+	if service_obj.getFilter()!="%s %s"%(filter_type,filter_value) or service_obj.getProtocol()!=protocol:
+	    if leaf_obj.hasService((protocol,"%s %s"%(filter_type,filter_value))):
+		raise GeneralException(errorText("BANDWIDTH","LEAF_HAS_THIS_FILTER")%(leaf_name,_filter,protocol))
+	    
+	self.__leafServiceCheckFilterAndProtocol(protocol,filter_type,filter_value,_filter)
+	self.__leafServiceCheckRates(rate_kbits,ceil_kbits)
+
+    def __updateLeafServiceDB(self,leaf_service_id,protocol,filter_type,filter_value,rate_kbits,ceil_kbits):
+	_filter="%s %s"%(filter_type,filter_value)
+	db_main.getHandle().transactionQuery(self.__updateServiceQuery(leaf_service_id,protocol,_filter,rate_kbits,ceil_kbits))
+
+    def __updateServiceQuery(self,leaf_service_id,protocol,_filter,rate_kbits,ceil_kbits):
+	return ibs_db.createUpdateQuery("bw_leaf_services",{"protocol":dbText(protocol),
+							    "filter":dbText(_filter),
+							    "rate_kbits":rate_kbits,
+							    "ceil_kbits":ceil_kbits}
+							    ,"leaf_service_id=%s"%leaf_service_id)
+    

@@ -32,6 +32,16 @@
 	    {helpicon subject='Leaf Name' category='bandwidth'}
 	{/addEditTD}
 
+	{if $action=="edit"}
+	    {addEditTD type="left" err="leaf_name_err"}
+		Leaf Service ID
+	    {/addEditTD}
+
+    	    {addEditTD type="right"}
+		{$leaf_service_id}
+		<input type=hidden name=leaf_service_id value="{$leaf_service_id}">
+    	    {/addEditTD}
+	{/if}
 	{addEditTD type="left" err="protocol_err"}
 	    Protocol
 	{/addEditTD}
@@ -92,8 +102,14 @@
     </a>
 {/addRelatedLink}
 
-{setAboutPage title="Add Leaf Service"}
+{if $action=="add"}
+    {setAboutPage title="Add Leaf Service"}
 
-{/setAboutPage}
+    {/setAboutPage}
+{else}
+    {setAboutPage title="Edit Leaf Service"}
+
+    {/setAboutPage}
+{/if}
 
 {include file="admin_footer.tpl"}

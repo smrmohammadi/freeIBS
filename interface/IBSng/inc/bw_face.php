@@ -49,4 +49,5 @@ function intSetInterfaceInfo(&$smarty,$interface_name)
 	$resp->setErrorInSmarty($smarty);
 }
 
+
 ?>

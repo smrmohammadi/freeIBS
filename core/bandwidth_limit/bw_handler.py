@@ -22,6 +22,8 @@ class BWHandler(handler.Handler):
 	self.registerHandlerMethod("delInterface")
 	self.registerHandlerMethod("updateInterface")
 	self.registerHandlerMethod("updateNode")
+	self.registerHandlerMethod("updateLeaf")
+	self.registerHandlerMethod("updateLeafService")
 
 
     def addInterface(self,request):
@@ -115,7 +117,7 @@ class BWHandler(handler.Handler):
     ##################################
     def getAllLeafNames(self,request):
 	request.needAuthType(request.ADMIN)
-	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+	request.getAuthNameObj().canDo("CHANGE CHARGE")
 	return bw_main.getLoader().getAllLeafNames()
     ##################################
     def delLeaf(self,request):
@@ -143,4 +145,27 @@ class BWHandler(handler.Handler):
 	return bw_main.getActionsManager().updateNode(to_int(request["node_id"],"node id"),
 						      self.__fixLimitKbits(request["rate_kbits"]),
 						      self.__fixLimitKbits(request["ceil_kbits"]))
-    	
+    ###################################
+    def updateLeaf(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("leaf_id","leaf_name","default_rate_kbits","default_ceil_kbits","total_rate_kbits","total_ceil_kbits")
+	bw_main.getActionsManager().updateLeaf(to_int(request["leaf_id"],"leaf id"),
+					    request["leaf_name"],
+					    self.__fixLimitKbits(request["default_rate_kbits"]),
+					    self.__fixLimitKbits(request["default_ceil_kbits"]),
+					    self.__fixLimitKbits(request["total_rate_kbits"],"INVALID_TOTAL_LIMIT_KBITS"),
+					    self.__fixLimitKbits(request["total_ceil_kbits"],"INVALID_TOTAL_LIMIT_KBITS"))
+
+    ####################################
+    def updateLeafService(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("leaf_name","leaf_service_id","protocol","filter","rate_kbits","ceil_kbits")
+	bw_main.getActionsManager().updateLeafService(request["leaf_name"],
+					    to_int(request["leaf_service_id"],"leaf service id"),
+					    request["protocol"],
+					    request["filter"],
+					    self.__fixLimitKbits(request["rate_kbits"]),
+					    self.__fixLimitKbits(request["ceil_kbits"]))
+            	

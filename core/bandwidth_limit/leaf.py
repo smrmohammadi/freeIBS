@@ -68,10 +68,15 @@ class Leaf:
 	return False
     ############################
     def hasServiceID(self,service_id):
+	if self.getServiceByID(service_id)!=None:
+	    return True
+	return False
+    ###########################
+    def getServiceByID(self,service_id):
 	for service in self.getServices():
 	    if service.getLeafServiceID()==service_id:
-		return True
-	return False
+		return service
+	return None
     ###########################
     def registerInParent(self):
 	"""
@@ -151,7 +156,7 @@ class LeafService:
 	    other can be another LeafService Instance or a tuple containing (protocol,filter)
 	"""
 	if type(other) in [types.TupleType,types.ListType]:
-	    return other[0]==self.getProtocol() and self.__filterHasOverlap(other[1],self.getFilter())
+	    return other[0]==self.getProtocol() and self.__filterHasOverLap(other[1],self.getFilter())
 	else:
 	    return other.getProtocol()==self.getProtocol() and self.__filterHasOverLap(other.getFilter(),self.getFilter())
 
@@ -160,8 +165,8 @@ class LeafService:
 	sp2=filter2.split()
 	if sp1[0]!=sp2[0]:
 	    return False
-	ports1=sp1.split(",")
-	ports2=sp2.split(",")
+	ports1=sp1[1].split(",")
+	ports2=sp2[1].split(",")
 	for port in ports1:
 	    if port in ports2:
 		return True
