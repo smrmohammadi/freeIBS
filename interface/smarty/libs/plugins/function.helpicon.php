@@ -15,12 +15,10 @@ function smarty_function_helpicon($params,&$smarty)
     if(isset($params["body"]))
 	$body=$params["body"];
     else
-	$body="<img src=\"/IBSng/images/help_icon.png\" border=0>";
+	$body="<img src=\"/IBSng/images/help_icon.png\" border=0 height=10>";
 	
     return <<<EOF
-<a href="javascript:showHelp('{$params["subject"]}','{$params["category"]}')" title="{$alt}" style="text-decoration: none">
-    {$body}
-</a>
+	    <a href="javascript:showHelp('{$params["subject"]}','{$params["category"]}')" title="{$alt}" style="text-decoration: none">{$body}</a>
 EOF;
 }
 ?>

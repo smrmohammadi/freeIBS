@@ -114,4 +114,4 @@
     
     {include file="admin/admins/admin_perms_list_templates.tpl"}
 {/if}
-{include file="footer.tpl"}
+{include file="admin_footer.tpl"}

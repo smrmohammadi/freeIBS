@@ -62,4 +62,4 @@
 </script>
 {/literal}
 
-{include file="footer.tpl"}
+{include file="admin_footer.tpl"}

@@ -130,4 +130,27 @@ function calcRelativeDateFromHours($rel_date)
     return array($rel_date,$rel_date_unit);
     
 }
+
+function getTRColor($swap=FALSE)
+{/*
+    get TR color, Used in smarty plugins
+    TR colors are either "light" or "dark"
+    argument $swap tells if color needs to be swapped and we need a new color, normally this
+    is done for new TR
+*/
+    global $last_color;
+    if(!isset($last_color))
+	$last_color="light";
+
+    else if($swap)
+    {
+	if($last_color=="light")
+	    $last_color="dark";
+	else
+	    $last_color="light";
+	return $last_color;
+    }
+    return $last_color;
+}
+
 ?>

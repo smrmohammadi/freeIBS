@@ -12,50 +12,50 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add New Admin
-	<tr {ifibserr varname="username_err" add="bgcolor=red"} >
-	    <td>
-		Username:
-	    <td>
-		<input type=text name=username value="{$username}">
-	    <td>
-		{helpicon subject="username" category="admin"}
-	    
-	<tr {ifibserr varname="password_err" add="bgcolor=red"}>
-	    <td>
-		Password:
-	    <td>
-		<input type=password name=password1>
+    {addEditTable title="Add New Admin"}
+	{addEditTD type="left" err="username_err"}
+	    Username
+	{/addEditTD}
 
-	<tr {ifibserr varname="password_err" add="bgcolor=red"}>
-	    <td>
-		Confirm Password:
-	    <td>
-		<input type=password name=password2>
+	{addEditTD type="right"}
+	    <input class=text type=text name=username value='{$username}'>
+	    {helpicon subject='username' category='admin'}
+	{/addEditTD}
 
-	<tr {ifibserr varname="name_err" add="bgcolor=red"}>
-	    <td>
-		Name:
-	    <td>
-		<input type=text name=name value="{$name}">
+	{addEditTD type="left" err="password_err"}
+	    Password
+	{/addEditTD}
+
+	{addEditTD type="right"}
+    	    <input class=text type=password name=password1>
+	{/addEditTD}
+
+	{addEditTD type="left" err="password_err"}
+	    Confirm Password
+	{/addEditTD}
+
+	{addEditTD type="right"}
+    	    <input class=text type=password name=password2>
+	{/addEditTD}
+
+	{addEditTD type="left" err="name_err"}
+	    Name
+	{/addEditTD}
+
+	{addEditTD type="right"}
+    	    <input class=text type=text name=name value="{$name}">
+	{/addEditTD}
 	
-	<tr {ifibserr varname="comment_err" add="bgcolor=red"}>
-	    <td>
-		Comment:
-	    <td>
-		<textarea name=comment> 
-		    {$comment} 
-		</textarea>
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
-    </table>
-</center>
+	{addEditTD type="left" err="name_err" comment=TRUE}
+	    Comment
+	{/addEditTD}
+
+	{addEditTD type="right" comment=TRUE}
+	    <textarea class=text name=comment>{$comment}</textarea>
+	{/addEditTD}
+	
+    {/addEditTable}
 </form>
 
 
-{include file="footer.tpl"}
+{include file="admin_footer.tpl"}

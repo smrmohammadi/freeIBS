@@ -70,4 +70,4 @@
 	<td colspan=4>
 	    <input type=submit value=add>
 </table>
-{include file="footer.tpl"}
+{include file="admin_footer.tpl"}
