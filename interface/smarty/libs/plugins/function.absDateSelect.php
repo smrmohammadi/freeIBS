@@ -30,11 +30,11 @@ function createSelect(&$params,&$smarty)
     if(isset($params["target"]))
 	$new_params["target"]=$params["target"];
 
-
     $select_default=getSelectedAttrFromSmartyParams($smarty,$new_params);
     $date_units=array("Minutes","Hours","Days","Months","Years","Gregorian","Jalali");
+    $date_values=array("minutes","hours","days","months","years","gregorian","jalali");
     $select_arr=array("output"=>$date_units,
-		      "values"=>$date_units,
+		      "values"=>$date_values,
 		      "name"=>$params["name"]."_unit",
 		      "selected"=>$select_default,
 		      "id"=>"{$params["name"]}_select",

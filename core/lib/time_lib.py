@@ -6,102 +6,12 @@ import time
 def dbTimeFromEpoch(epoch_time):
     return time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(epoch_time))
 
-
 #############################33
 def cur_day_of_week():
     return time.localtime()[6]
     
-def dbTimeToEpoch(dbTime):
-    return time.mktime(dbTimeToList(dbTime))
 
-def dbTimeToList(dbTime):
-    dot=dbTime.find(".")
-    if dot ==-1:
-	plus=dbTime.find("+") #old postgresqls date representation
-	if plus==-1:
-	    dot=len(dbTime)
-	else:
-	    dot=plus
-    
-    try:
-	ret=list(time.strptime(dbTime[:dot],"%Y-%m-%d %H:%M:%S"))
-	ret[8]=0
-	return ret
-    except:
-	logException()
-	raise generalException("Invalid dbTime: " + str(dbTime))
-	
-
-def getEpochTimeFromHourOfDay(hour,_min=0,sec=0,dayToAdd=0):
-    tm=list(time.localtime())
-    tm[3]=hour
-    tm[4]=_min
-    tm[5]=sec
-    tm[2]+=dayToAdd
-    
-    return time.mktime(tm)
-
-def epochTimeFromRadiusTime(rad_time):
-    sp=rad_time.split()
-    if sp[0].startswith('.') or sp[0].startswith('*'):
-        sp[0]=sp[0][1:]
-    formatted_time=sp[5]+ " " + sp[3] + " " + sp[4] + " " + sp[0][:sp[0].find('.')]
-
-    time_list=list(time.strptime(formatted_time,'%Y %b %d %H:%M:%S'))
-    time_list[8]=-1 #daylight saving flag
-    epoch=time.mktime(time_list)
-    return epoch
-    
-
-def epochTimeFromRadiusUTCTime(rad_time):
-    return epochTimeFromRadiusTime(rad_time)-time.timezone
-
-def timeConditionToEpoch(condValue,condType,now=0):
-    if now==0:
-	now = time.time()
-	
-    #just because from and to conditions are somehow similar
-    #convert "to" conditions to "from", then negate the condValue
-    if condType.startswith("to"):
-	condType = "from" + condType[2:]
-	if condType != "from":
-	    if condValue.startswith("-"):
-		condValue = condValue[1:]
-	    else:
-		condValue = "-" + condValue
-	
-	
-    if condType=="fromDays":
-	return now - (integer(condValue) * 24 * 60 * 60)
-
-    if condType=="fromYears":
-	return now - (integer(condValue) * 365 * 24 * 60 * 60)
-
-    if condType=="fromMonths":
-	return now - (integer(condValue) * 30 * 24 * 60 * 60)
-
-    if condType=="fromHours":
-	return now - (integer(condValue) * 60 * 60)
-
-    if condType=="from":
-	return dbTimeToEpoch(condValue+" 0:0:0")
-    
-    raise generalException("timeCondition: invalid condition")
-
-
-def getDurationInSec(duration,unit):
-    duration=integer(duration)
-    if unit=="seconds":
-	return duration
-    elif unit=="minutes":
-	return duration*60
-    elif unit=="hours":
-	return duration*3600
-    elif unit=="days":
-	return duration*3600*24
-    else:
-	raise generalException("Invalid duration unit %s"%unit)
-
+###############################
 def secondsFromMorning():
     """
 	return number of seconds from 00:00:00 of today
@@ -110,6 +20,7 @@ def secondsFromMorning():
     return tm[3]*3600+tm[4]*60+tm[5] # now , elapsed seconds from 00:00:00 of today
 
 
+#################################
 class Time:
     """
 	Time class provoid method to handle time types
@@ -162,4 +73,64 @@ class Time:
     def getFormattedTime(self):
 	return self.formatted_time
 
+#************************** NOT TESTED
+
+def dbTimeToEpoch(dbTime):
+    return time.mktime(dbTimeToList(dbTime))
+
+def dbTimeToList(dbTime):
+    """
+    BROKEN
+    """
+    dot=dbTime.find(".")
+    if dot ==-1:
+	plus=dbTime.find("+") #old postgresqls date representation
+	if plus==-1:
+	    dot=len(dbTime)
+	else:
+	    dot=plus
+    
+    try:
+	ret=list(time.strptime(dbTime[:dot],"%Y-%m-%d %H:%M:%S"))
+	ret[8]=0
+	return ret
+    except:
+	raise GeneralException("Invalid dbTime: " + str(dbTime))
+	
+
+def getEpochTimeFromHourOfDay(hour,_min=0,sec=0,dayToAdd=0):
+    tm=list(time.localtime())
+    tm[3]=hour
+    tm[4]=_min
+    tm[5]=sec
+    tm[2]+=dayToAdd
+    
+    return time.mktime(tm)
+
+def epochTimeFromRadiusTime(rad_time):
+    sp=rad_time.split()
+    if sp[0].startswith('.') or sp[0].startswith('*'):
+        sp[0]=sp[0][1:]
+    formatted_time=sp[5]+ " " + sp[3] + " " + sp[4] + " " + sp[0][:sp[0].find('.')]
+
+    time_list=list(time.strptime(formatted_time,'%Y %b %d %H:%M:%S'))
+    time_list[8]=-1 #daylight saving flag
+    epoch=time.mktime(time_list)
+    return epoch
+
+def epochTimeFromRadiusUTCTime(rad_time):
+    return epochTimeFromRadiusTime(rad_time)-time.timezone
+
+def getDurationInSec(duration,unit):
+    duration=integer(duration)
+    if unit=="seconds":
+	return duration
+    elif unit=="minutes":
+	return duration*60
+    elif unit=="hours":
+	return duration*3600
+    elif unit=="days":
+	return duration*3600*24
+    else:
+	raise generalException("Invalid duration unit %s"%unit)
     

@@ -53,15 +53,16 @@ class OnlineUsers:
 
 ############################################
     def reloadUser(self,user_id):
-	self.loading_user.loadingStart(loaded_user.getUserID())
+	self.loading_user.loadingStart(user_id)
 	try:
-	    user_obj=getUserObj(user_id)
+	    user_obj=self.getUserObj(user_id)
 	    if user_obj==None:
 		toLog("Reload User called while user is not online for user_id: %s"%user_id,LOG_ERROR)
 	    else:
 		user_obj._reload()
+		self.recalcNextUserEvent(user_obj.getUserID(),True)
 	finally:
-	    self.loading_user.loadingEnd(loaded_user.getUserID())
+	    self.loading_user.loadingEnd(user_id)
 
 ##############################################
     def updateUser(self,ras_msg):

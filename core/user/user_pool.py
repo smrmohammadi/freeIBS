@@ -183,7 +183,7 @@ class UserPool:
 	    return a LoadedUser instance of user with normal username "normal_username"
 	"""
 	user_id=user_main.getUserLoader().normalUsername2UserID(normal_username)
-	return self.getUserByID(user_id)
+	return self.getUserByID(user_id,online_flag)
 
 #################################
     def userChanged(self,user_id):

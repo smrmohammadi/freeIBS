@@ -58,7 +58,6 @@ class UpdateAttrsHelper
 	    $this->redirectToTargetInfo();
 	else
 	    $this->showEditInterface($ret);
-
     }
     function updateGroupAttrs($group_name,$attrs,$to_del_attrs)
     {

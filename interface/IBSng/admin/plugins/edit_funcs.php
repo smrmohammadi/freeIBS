@@ -73,7 +73,10 @@ function editUserAssignValues(&$smarty,$user_id,$edit_tpls,$edit_tpl_files)
     {
 	$resp=intSetSingleUserInfo($smarty,$user_id);
 	if(!$resp->isSuccessful())
+	{
 	    intShowSingleUserInfoInput($smarty);
+	    exit();
+	}
 	$user_info=array_values($resp->getResult());
         intSetSingleUserGroupAttrs($smarty,$user_info[0]);
     }

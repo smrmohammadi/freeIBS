@@ -16,6 +16,20 @@ function relExpDatePluginUpdate(&$update_helper)
 }
 
 
+//***************************************************** Absolute Exp Date
+
+function absExpDatePluginUpdate(&$update_helper)
+{
+    if(!isInRequest("has_abs_exp"))
+	$update_helper->addToDelAttrs("abs_exp_date");
+    else
+    {
+	$update_helper->addToUpdateAttrs("abs_exp_date",$_REQUEST["abs_exp_date"]);
+	$update_helper->addToUpdateAttrs("abs_exp_date_unit",$_REQUEST["abs_exp_date_unit"]);
+    }
+}
+
+
 //**************************************************** Multi Login
 
 

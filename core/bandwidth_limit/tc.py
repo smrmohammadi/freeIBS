@@ -6,6 +6,7 @@ from core.ibs_exceptions import *
 
 
 class TC:
+    counters_pattern=re.compile("\nclass htb 1:([0-9]+) .*\n Sent ([0-9]+) bytes ([0-9]+) pkts .*\n( rate ([0-9]+)bit)?")
     def addQdisc(self,interface,*args):
 	self.runTC("qdisc add dev %s %s"%(interface," ".join(args)))
 
@@ -42,7 +43,7 @@ class TC:
 	return self.__parseCounters(output)
 	
     def __parseCounters(self,output):
-        groups=re.findall("\nclass htb 1:([0-9]+) .*\n Sent ([0-9]+) bytes ([0-9]+) pkts .*\n( rate ([0-9]+)bit)?",output)
+        groups=self.counters_pattern.findall(output)
 	dic={}
 	    
 	for _tuple in groups:

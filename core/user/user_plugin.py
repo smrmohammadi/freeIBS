@@ -4,12 +4,21 @@ from core.errors import errorText
 from core.ibs_exceptions import *
 import itertools
 
-class UserPlugin:
+class BaseUserPlugin:
     def __init__(self,user_obj):
 	"""
 	    init function called when a new instance of user created
 	"""
 	self.user_obj=user_obj
+
+    ########################
+    def createCanStayOnlineResult(self):
+	return can_stay_online_result.CanStayOnlineResult()
+
+
+class UserPlugin(BaseUserPlugin):
+    def __init__(self,user_obj):
+	BaseUserPlugin.__init__(self,user_obj)
 
     def login(self,ras_msg):
 	"""
@@ -48,14 +57,7 @@ class UserPlugin:
     def update(self,ras_msg):
 	pass
 
-
-    ########################
-    def createCanStayOnlineResult(self):
-	return can_stay_online_result.CanStayOnlineResult()
-
-
-
-class AttrCheckUserPlugin(UserPlugin):
+class AttrCheckUserPlugin(BaseUserPlugin):
     """
 	This is parent class for User Plugins that do the has attribute checkings automatically
 	login,logout,commit,canStayOnline,update is replaced with identical names s_login,s_logut,s_commit,s_canStayOnline,s_update
@@ -64,13 +66,14 @@ class AttrCheckUserPlugin(UserPlugin):
 	    should call this class reload method first to ensure has_attr update
     """
     def __init__(self,user_obj,attr_name):
-	UserPlugin.__init__(self,user_obj)
+	BaseUserPlugin.__init__(self,user_obj)
 	self.has_attr_name=attr_name
 	self._setHasAttr(attr_name)
 	
     def __getattr__(self,name):
 	if self.hasAttr() and name in ("update","login","logout","commit","canStayOnline"):
 	    return getattr(self,"s_%s"%name)
+	
     	    
     def _setHasAttr(self,attr_name):
 	self.has_attr=self.user_obj.getLoadedUser().hasAttr(attr_name)

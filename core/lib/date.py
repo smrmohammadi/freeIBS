@@ -3,6 +3,7 @@ from core.lib.general import *
 from core.ibs_exceptions import *
 from core.errors import errorText
 import time_lib
+import time
 import re
 
 class RelativeDate:
@@ -10,18 +11,21 @@ class RelativeDate:
 	"""
 	    date(integer): date number
 	    unit(string): unit of date
-	    can be on of :"hours", "days","months","years"
+	    can be on of :"Seconds", "Hours", "Days","Months","Years"
 	"""
 	self.date=to_int(date,"relative date")
 	self.factor=self.__getUnitFactor(unit)
-	self.date_hours=self.date*self.factor
+	self.date_seconds=self.date*self.factor
 
     def __getUnitFactor(self,unit):
 	"""
 	    return factor for unit type to convert date to hours
 	    so, factor for hours is 1 , for days is 24 and so on..
 	"""
-	foctor=3600
+	factor=1
+	if unit=="Seconds":
+	    return factor
+	factor*=3600
 	if unit=="Hours":
 	    return factor
 	factor*=24
@@ -36,16 +40,16 @@ class RelativeDate:
 	else:
 	    raise GeneralException(errorText("GENERAL","INVALID_REL_DATE_UNIT")%unit)
 
-    def __findUnit(self,date_hours):
+    def __findUnit(self,date):
 	"""
-	    find which unit is suitable for "date_hours"
-	    date_hours is an integer containing relative date with unit "Hours"
+	    find which unit is suitable for "date"
+	    date is an integer containing relative date with unit "Seconds"
 	"""
-	if date_hours%(3600):
+	if date%(3600) or date<(3600*24):
 	    return "Hours"
-	elif date_hours%(3600*24):
+	elif date%(3600*24) or date<(3600*24*30):
 	    return "Days"
-	elif date_hours%(3600*24*30):
+	elif date%(3600*24*30):
 	    return "Months"
 	else:
 	    return "Years"
@@ -54,27 +58,27 @@ class RelativeDate:
 	"""
 	    check the value of date, raise an exception on error
 	"""
-	if self.date_hours>24*30*365*20: #20 years!
+	if self.date_seconds>3600*24*30*365*20: #20 years!
 	    raise GeneralException(errorText("GENERAL","INVALID_REL_DATE")%self.date)
 	
-    def getDateHours(self):
-	return self.date_hours
+    def getDateSeconds(self):
+	return self.date_seconds
 
     def getDBDate(self):
 	"""
 	    return date(integer) useful for inserting in database.
 	    it's the date in number of seconds
 	"""
-	return self.getDateHours()
+	return self.getDateSeconds()
 	
     def getFormattedDate(self):
 	"""
 	    return tuple of (rel_date,rel_date_units) ex. (14,"Hours")
 	    Automatcally choose best unit for date
 	"""
-	unit=self.__findUnit(self.date_hours)
+	unit=self.__findUnit(self.date_seconds)
 	factor=self.__getUnitFactor(unit)
-	return (self.date_hours/factor,unit)
+	return (self.date_seconds/factor,unit)
 	
 
 class AbsDate:
@@ -199,8 +203,13 @@ class AbsDate:
 	while len(_str)!=_len: _str="0%s"%_str
 	return _str
 
+    def getEpochDate(self):
+	return long(time.mktime(self.getGregorianDateList()+(0,0,0)))
+
     def getDate(self,_type):
-	if _type=="jalali":
+	if _type=="epoch":
+	    return self.getEpochDate()
+	elif _type=="jalali":
 	    return self.getJalaliDate()
 	else:
 	    return self.getGregorianDate()

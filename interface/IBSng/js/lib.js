@@ -113,12 +113,12 @@ function toggleVisibility(obj)
 function absDateSelectChanged(select_obj,calendar_id)
 {
     calendar_obj=document.getElementById(calendar_id);
-    if(select_obj.value=="Gregorian")
+    if(select_obj.value=="gregorian")
     {
 	calendar_obj.date_type="G";
 	calendar_obj.disabled=false;
     }
-    else if (select_obj.value=="Jalali")
+    else if (select_obj.value=="jalali")
     {
 	calendar_obj.date_type="J";
 	calendar_obj.disabled=false;

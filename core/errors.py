@@ -48,7 +48,9 @@ USER_ACTIONS_ERRORS={
     "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
     "NORMAL_USERNAME_EXISTS":"Normal username already exists",
     "INVALID_OPERATOR":"Invalid operator %s",
-    "DELETE_USER_IS_ONLINE":"Can't delete user with id %s, because he is online"
+    "DELETE_USER_IS_ONLINE":"Can't delete user with id %s, because he is online",
+    "INVALID_ABS_EXP_DATE":"Absolute Expiration Date is Invalid: %s"
+
 }
 
 USER_ERRORS={
@@ -66,7 +68,7 @@ USER_LOGIN_ERRORS={
     "USER_LOCKED":"User is locked",
     "NO_CHARGE_DEFINED":"User doesn't have charge for type %s",
     "NO_APPLICABLE_RULE":"No rule can be applied",
-    "ABS_EXP_DATE_REACHED":"absoloute expiration date has reached",
+    "ABS_EXP_DATE_REACHED":"absolute expiration date has reached",
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
     "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
     "CREDIT_FINISHED":"Credit has finished",

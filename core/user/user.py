@@ -174,7 +174,7 @@ class User:
 	"""
 	    saves all changed user info from memory into DB
 	"""
-	query=reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_COMMIT",self))
+	query=reduce(operator.add,filter(lambda x:x!=None,user_main.getUserPluginManager().callHooks("USER_COMMIT",self)))
 	query+=self.__commitCreditQuery(used_credit)
 	return query
 	

@@ -2,6 +2,9 @@ from core import defs
 import sys
 
 class CanStayOnlineResult:
+    MIN_REMAINING_TIME=5
+    DEBUG=True
+    
     def __init__(self):
 	self.remaining_time=sys.maxint
 	self.kill_dic={}#{instance:"kill_reason"}
@@ -11,8 +14,10 @@ class CanStayOnlineResult:
 
     def getEventTime(self):
 	remaining_time=self.getRemainingTime()
-	if remaining_time!=0 and remaining_time<3:
-	    return 3
+	if self.DEBUG:
+	    print "Return Next Event: %s"%remaining_time
+	if remaining_time!=0 and remaining_time<self.MIN_REMAINING_TIME:
+	    return self.MIN_REMAINING_TIME
 	return remaining_time
 
     def getKillDic(self):
@@ -49,6 +54,8 @@ class CanStayOnlineResult:
 	    add another remaining time to object. we check the new remaining time
 	    against previous remaining times, and choose the minimum
 	"""
+	if self.DEBUG:
+	    print "New Remaining time: %s"%new_remaining_time
 	self.remaining_time=min(self.remaining_time,new_remaining_time)
     
     def addInstanceToKill(self,instance,kill_reason):

@@ -24,7 +24,7 @@ class RelExpDate(user_plugin.AttrCheckUserPlugin):
 	    if self.__isFirstLogin():
 		self.commit_first_login=True
 		if init:
-		    self.first_login=time.time()
+		    self.first_login=long(time.time())
 		else:
 		    self.first_login=self.user_obj.getInstanceInfo(1)["auth_ras_msg"].getTime()
 	    else:
@@ -47,20 +47,20 @@ class RelExpDate(user_plugin.AttrCheckUserPlugin):
 
     def s_login(self,ras_msg):
 	if self.__isRelExpired():
-	    raise LoginException(errorText("NORMAL_USER_LOGIN","REL_EXP_DATE_REACHED"))
+	    raise LoginException(errorText("USER_LOGIN","REL_EXP_DATE_REACHED"))
 
     def s_canStayOnline(self):
 	result=self.createCanStayOnlineResult()
 	if self.__isRelExpired():
-	    result.setKillForAllInstances(errorText("NORMAL_USER_LOGIN","REL_EXP_DATE_REACHED",False),user_obj.instances)
+	    result.setKillForAllInstances(errorText("USER_LOGIN","REL_EXP_DATE_REACHED",False),self.user_obj.instances)
 	else:
-	    result.newRemainingTime(time.time()-self.rel_exp_date_time)
+	    result.newRemainingTime(self.rel_exp_date_time-time.time())
 	return result
 
     def s_commit(self):
 	query=""
 	if self.commit_first_login:
-	    query+=user_main.getActionsManager().insertUserAttrQuery(user_obj.getUserID(),
+	    query+=user_main.getActionManager().insertUserAttrQuery(self.user_obj.getUserID(),
 								    "first_login",
 								    self.first_login
 								    )
@@ -68,7 +68,7 @@ class RelExpDate(user_plugin.AttrCheckUserPlugin):
 	return query
 	
     def _reload(self):
-	user_plugin.AttrCheckUserPlugin.__init__(self)
+	user_plugin.AttrCheckUserPlugin._reload(self)
 	self.__initValues(False)
     
 class RelExpAttrUpdater(AttrUpdater):
@@ -85,7 +85,7 @@ class RelExpAttrUpdater(AttrUpdater):
 	except GeneralException:
 	    raise GeneralException(errorText("USER_ACTIONS","INVALID_REL_EXP_DATE"))
 
-	self.useGenerateQuery(self.__CreateUpdateAttrsDic())
+	self.useGenerateQuery(self.__createUpdateAttrsDic())
 		
     def __createUpdateAttrsDic(self):
 	return {"rel_exp_date":self.rel_date_obj.getDBDate()}
@@ -118,9 +118,9 @@ class RelExpAttrSearcher(AttrSearcher):
 		table.search("rel_exp_date",(rel_date_obj.getDBDate(),),search_helper.getCondValue("rel_exp_date_op"))
 
 class RelExpAttrHolder(AttrHolder):
-    def __init__(self,rel_exp_hours):
-	self.rel_exp_hours=rel_exp_hours
-	self.rel_date_obj=RelativeDate(rel_exp_hours,"Hours")
+    def __init__(self,rel_exp):
+	self.rel_exp=rel_exp
+	self.rel_date_obj=RelativeDate(rel_exp,"Seconds")
 
     def getParsedDic(self):
 	(rel_exp_date,unit)=self.rel_date_obj.getFormattedDate()
@@ -130,16 +130,14 @@ class RelExpAttrHolder(AttrHolder):
 class FirstLoginAttrHolder(AttrHolder):
     def __init__(self,first_login,rel_exp_date_time):
 	self.first_login=AbsDateFromEpoch(first_login)
-	self.rel_exp_date_time=AbsDateFromEpoch(rel_exp_date_time)
 
     def getParsedDic(self):
-	return ({"first_login":self.first_login.getDate(self.date_type),
-		 "rel_exp_date_time":self.rel_exp_date_time.getDate(self.date_type)})
+	return ({"first_login":self.first_login.getDate(self.date_type)})
 
 class RelExpDateAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
 	self.registerAttrUpdaterClass(RelExpAttrUpdater,["rel_exp_date","rel_exp_date_unit"])
 	self.registerAttrHolderClass(RelExpAttrHolder,["rel_exp_date"])
-	self.registerAttrHolderClass(FirstLoginAttrHolder,["first_login","rel_exp_date_time"])
+	self.registerAttrHolderClass(FirstLoginAttrHolder,["first_login"])
 	self.registerAttrSearcherClass(RelExpAttrSearcher)
