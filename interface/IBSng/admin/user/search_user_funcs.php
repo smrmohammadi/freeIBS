@@ -43,6 +43,8 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromRequest(TRUE,"persistent_lan_mac");
     $helper->addToCondsFromRequest(TRUE,"persistent_lan_ip");
     $helper->addToCondsFromRequest(TRUE,"persistent_lan_ras_ip");
+    $helper->addToCondsFromRequest(TRUE,"comment","comment_op");
+    $helper->addToCondsFromRequest(TRUE,"limit_mac","limit_mac_op");
 
 }
 

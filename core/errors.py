@@ -80,7 +80,8 @@ USER_LOGIN_ERRORS={
     "WRONG_PASSWORD":"Wrong password",
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
     "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
-    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached"
+    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
+    "LOGIN_FROM_THIS_MAC_DENIED":"You can't login from this mac address"
 }
 
 ADMIN_LOGIN_ERRORS={

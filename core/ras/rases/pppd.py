@@ -8,7 +8,7 @@ def init():
     ras_main.getFactory().register(PPPDRas,"pppd")
 
 class PPPDRas(GeneralUpdateRas):
-    type_attrs={"pppd_kill_port_command":"%spppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%spppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%spppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%spppd/remove_bw_limit"%defs.IBS_ADDONS,"pppd_include_mac_address":0,"pppd_mac_script":"%spppd/get_mac"%defs.IBS_ADDONS}
+    type_attrs={"pppd_kill_port_command":"%spppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%spppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%spppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%spppd/remove_bw_limit"%defs.IBS_ADDONS,"pppd_include_mac_address":1,"pppd_mac_script":"%spppd/get_mac"%defs.IBS_ADDONS}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)

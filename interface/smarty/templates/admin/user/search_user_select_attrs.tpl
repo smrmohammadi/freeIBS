@@ -29,7 +29,8 @@
 	    {reportToShowCheckBox name="show__normal_charge" output="Normal Charge" default_checked="FALSE" always_in_form="search" value="normal_charge" form_name="search_user" container_name="attrs"}
         {multiTableTR}
 	    {reportToShowCheckBox name="show__lock" output="Lock Status" default_checked="FALSE" always_in_form="search" value="normal_charge" form_name="search_user" container_name="attrs"}
-	    {reportToShowCheckBox name="show__ippool" output="IPpool" default_checked="FALSE" always_in_form="search" value="ippool" form_name="search_user" container_name="attrs"}
+	    {reportToShowCheckBox name="show__ippool" output="*IPpool" default_checked="FALSE" always_in_form="search" value="ippool" form_name="search_user" container_name="attrs"}
+	    {reportToShowCheckBox name="show__comment" output="*Comment" default_checked="FALSE" always_in_form="search" value="comment" form_name="search_user" container_name="attrs"}
 	{/multiTable}
 {/listTable}
 <script language="javascript">

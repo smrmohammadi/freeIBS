@@ -142,9 +142,9 @@ function persistentLanPluginUpdate(&$update_helper)
 {
     if(isInRequest("has_plan"))
     {
-	$update_helper->addToUpdateAttrs("persistent_lan_mac",$_REQUEST["persistent_lan_mac"]);
-	$update_helper->addToUpdateAttrs("persistent_lan_ip",$_REQUEST["persistent_lan_ip"]);
-	$update_helper->addToUpdateAttrs("persistent_lan_ras_ip",$_REQUEST["persistent_lan_ras_ip"]);
+	$update_helper->addToUpdateFromRequest("persistent_lan_mac");
+	$update_helper->addToUpdateFromRequest("persistent_lan_ip");
+	$update_helper->addToUpdateFromRequest("persistent_lan_ras_ip");
     }
     else
 	$update_helper->addToDelAttrs("persistent_lan_mac");
@@ -159,6 +159,14 @@ function commentPluginUpdate(&$update_helper)
 	$update_helper->addToDelAttrs("comment");
 }
 
+//***************************************************
+function limitMacPluginUpdate(&$update_helper)
+{
+    if(isInRequest("limit_mac"))
+	$update_helper->addToUpdateFromRequest("limit_mac");
+    else
+	$update_helper->addToDelAttrs("limit_mac");
+}
 
 //************************** UNUSED CODE
 function relExpParser(&$parsed_arr,&$smarty,&$attrs)

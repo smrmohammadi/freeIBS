@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="IPpool"}
-{userInfoTable title="" nofoot="TRUE"}
+{userInfoTable title="IP Pool" nofoot="TRUE"}
     {userInfoTD type="user_left"}
 	Has IPpool
     {/userInfoTD}

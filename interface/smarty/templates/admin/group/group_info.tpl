@@ -32,6 +32,8 @@
 <br>
 {include file="plugins/group/view/radius_attrs.tpl"}
 <br>
+{include file="plugins/group/view/limit_mac.tpl"}
+<br>
 
 
 {attrTableFoot action_icon="edit" table_width="280"}

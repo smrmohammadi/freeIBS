@@ -138,6 +138,10 @@ class UpdateAttrsHelper
     	$this->to_update_attrs[$attr_name]=$attr_value;
     }
 
+    function addToUpdateFromRequest($key)
+    {/* add $key and $_REQUEST["key"] as value to list of update attrs */
+	$this->addToUpdateAttrs($key,$_REQUEST[$key]);
+    }
 }
 
 ?>

@@ -81,7 +81,7 @@ class AttrUpdater:
     def checkInput(self,src,action,arg_dic):
 	"""
 	    this method must check attr updater properties, and check their validity
-	    "action" is one of self.actions that show what action is getting done
+	    "action" is one of "change","delete" that show what action is getting done
 	    arg_dic are extra arguments, that maybe necessary for checkings.
 	    arg_dic contents differs on diffrent actions
 	    IMPORTANT WARNING: early checkings should be done in class initializer

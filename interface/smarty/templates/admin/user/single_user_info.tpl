@@ -33,6 +33,8 @@
     <br>
     {include file="plugins/user/view/radius_attrs.tpl"}
     <br>
+    {include file="plugins/user/view/limit_mac.tpl"}
+    <br>
 
 {if $can_change}
     {attrTableFoot action_icon="edit"}

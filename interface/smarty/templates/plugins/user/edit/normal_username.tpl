@@ -67,8 +67,6 @@
 	{helpicon subject="password" category="user"}
     {/addEditTD}
 
-
-
     {addEditTD type="left"}
 	Save In List<font size=1>[Usernames/Passwords]</font>
     {/addEditTD}

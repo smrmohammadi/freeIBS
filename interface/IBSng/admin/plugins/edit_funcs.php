@@ -80,7 +80,11 @@ function editUserAssignValues(&$smarty,$user_id,$edit_tpls,$edit_tpl_files)
 	$user_info=array_values($resp->getResult());
         intSetSingleUserGroupAttrs($smarty,$user_info[0]);
     }
-
+    else
+    {
+	$smarty->assign("user_attrs",array());
+	$smarty->assign("group_attrs",array());
+    }
 }
 
 function showEditUserInterface(&$smarty)

@@ -5,11 +5,12 @@
 {include file="err_head.tpl"} 
 <script language="javascript" src="/IBSng/js/check_box_container.js"></script>
 <form method=POST action="/IBSng/admin/user/search_user.php#show_results" name="search_user">
-    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Lock,PersistentLan,Misc" content_height=100 action_icon="search"}
+    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Lock,Lan,Misc" content_height=100 action_icon="search"}
 
     {tabContent tab_name="Main"}
 	{include file="plugins/search/user_id.tpl"} 
 	{include file="plugins/search/normal_user.tpl"}
+	{include file="plugins/search/credit.tpl"}
     {/tabContent}
     {tabContent tab_name="Group"}
         {include file="plugins/search/group.tpl"} 
@@ -29,12 +30,12 @@
         {include file="plugins/search/lock.tpl"}
     {/tabContent}
 
-    {tabContent tab_name="PersistentLan"}
+    {tabContent tab_name="Lan"}
         {include file="plugins/search/persistent_lan.tpl"}
+        {include file="plugins/search/limit_mac.tpl"}
     {/tabContent}
 
     {tabContent tab_name="Misc"}
-	{include file="plugins/search/credit.tpl"}
 	{include file="plugins/search/multi_login.tpl"}
 	{include file="plugins/search/ippool.tpl"}
     {/tabContent}
