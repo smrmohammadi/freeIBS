@@ -10,13 +10,13 @@ function showHelp(subject,category)
 {
     subject=escape(subject);
     category=escape(category);
-    open("/IBSng/help/show_help.php?subject="+subject+"&category="+category,"help","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes");
+    open("/IBSng/help/show_help.php?subject="+subject+"&category="+category,"","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes,resizable=yes");
 }
 
 function showMultiStr(form_name,input_name)
 {
     input_obj=eval("document."+form_name+"."+input_name);
-    open("/IBSng/util/show_multistr.php?str="+input_obj.value,"Show MultiString","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes");
+    open("/IBSng/util/show_multistr.php?str="+input_obj.value,"","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes,resizable=yes");
 }
 
 function updateUserAddCheckImage(user_type,current_username,update_timer)
@@ -77,4 +77,21 @@ function toggleVisibility(id)
 	obj.style.visibility='visible';
     else
 	obj.style.visibility='hidden';
+}
+
+function absDateSelectChanged(select_obj,calendar_id)
+{
+    calendar_obj=document.getElementById(calendar_id);
+    if(select_obj.value=="Gregorian")
+    {
+	calendar_obj.date_type="G";
+	calendar_obj.disabled=false;
+    }
+    else if (select_obj.value=="Jalali")
+    {
+	calendar_obj.date_type="J";
+	calendar_obj.disabled=false;
+    }
+    else
+	calendar_obj.disabled=true;
 }

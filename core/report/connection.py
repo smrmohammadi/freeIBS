@@ -145,9 +145,13 @@ class ConnectionSearcher:
 
 	con_table.ltgtSearch(self.search_helper,"credit_used","credit_used_op","credit_used")
     
-	con_table.dateSearch(self.search_helper,"login_time","login_time_unit","login_time_op","login_time")
+	con_table.dateSearch(self.search_helper,"login_time_from","login_time_from_unit",">=","login_time")
 
-	con_table.dateSearch(self.search_helper,"logout_time","login_time_unit","logout_time_op","logout_time")
+	con_table.dateSearch(self.search_helper,"login_time_to","login_time_to_unit","<","login_time")
+
+	con_table.dateSearch(self.search_helper,"logout_time_from","login_time_from_unit",">=","logout_time")
+
+	con_table.dateSearch(self.search_helper,"logout_time_to","login_time_to_unit","<","logout_time")
 	
 	con_table.exactSearch(self.search_helper,"successful","successful",lambda bool:dbText(("t","f")[bool]))
 

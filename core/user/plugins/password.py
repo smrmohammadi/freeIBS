@@ -23,8 +23,14 @@ class PasswordUserPlugin(user_plugin.UserPlugin):
 		self.__raiseIncorrectPassword()
 
 	elif ras_msg.hasAttr("ms_chap2_response"):
-	    if not ras_msg.getRequestPacket().checkMSChap2Password(self.user_obj.getUserAttrs()["normal_username"],self.user_obj.getUserAttrs()["normal_password"]):
+	    if not ras_msg.getRequestPacket().checkMSChap2Password(self.user_obj.getUserAttrs()["normal_username"],\
+								   self.user_obj.getUserAttrs()["normal_password"]):
 		self.__raiseIncorrectPassword()
+	    else:
+		authenticator_response=ras_msg.getRequestPacket().generateMSChap2Response(self.user_obj.getUserAttrs()["normal_username"],
+											  self.user_obj.getUserAttrs()["normal_password"])
+		ras_msg.getReplyPacket()["MS-CHAP2-Success"]=authenticator_response
+
 	else:
 	    toLog("Unknown Password checking method",LOG_DEBUG)
 	    self.__raiseIncorrectPassword()

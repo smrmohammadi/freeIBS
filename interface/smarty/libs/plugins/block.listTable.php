@@ -7,7 +7,7 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
     parameter title(string,optional): Title of table that will be printed on top of table
     parameter table_width(string,optional): width of table, if not set, defaults are used
     parameter cols_num(integer,required): number of table columns
-
+    parameter no_header(any,optional): if set, no header will be included in table
 */
     if(!is_null($content))
     {
@@ -15,6 +15,10 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
 	$table_width=isset($params["table_width"])?"width={$params["table_width"]}":"";
 	$header=<<<END
 <table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0" {$table_width}>
+END;
+    if(!isset($params["no_header"]))
+    {
+	$header.=<<<END
 	<tr>
 		<td colspan="{$params["cols_num"]}" valign="bottom">
 		<!-- List Title Table -->
@@ -32,6 +36,7 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
 		<!-- End List Title Table -->
 		</td>
 END;
+    }
 	$footer=<<<END
 	<!-- List Foot -->
 	<tr class="List_Foot_Line_red">

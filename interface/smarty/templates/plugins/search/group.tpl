@@ -1,4 +1,4 @@
-Group Names:
+
 {counter name="group_search_id" start=0 print=false}
 {foreach from=$group_names item=group_name}
     {counter name="group_search_id" assign="group_search_id"}

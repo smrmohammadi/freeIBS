@@ -152,7 +152,6 @@ class UserActions:
 	    return a new unique user_id from
 	"""
 	return db_main.getHandle().seqNextVal("users_user_id_seq")
-
 ######################################################
     def changeCredit(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment):
 	"""

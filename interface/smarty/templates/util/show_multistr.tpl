@@ -28,25 +28,21 @@
 		</td>
 		    <tr>
 			<td>
-			    <table  width="100%" border=0 cellspacing=0 cellpadding=0>
+	{multiTable}
 	    {foreach from=$all_strs key=index item=str}
 	        {if $index%4==0}
-			</tr>
-			<tr>
-			    <td height=1></td>
-			</tr>
-			{cycle values="light,dark" assign="color"}	
-			<tr class="list_row_{$color}color"}>
+		    {multiTableTR}
     		{/if}
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Begin"><font size=1 color="#800000"><b>{math equation="index+1" index=$index}.</b></font></td>
-		<td align="left" class="List_col"><b>{$str}</b></td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
+		{multiTableTD type="left"}
+		    {math equation="index+1" index=$index}.
+		{/multiTableTD}
+		{multiTableTD type="right"}
+		    {$str}
+		{/multiTableTD}
+	    {/foreach}
+	    {multiTablePad last_index=$index go_until=4}
 	    
-	{/foreach}
-		    </tr>
-			</td>
-			    </table>
+	{/multiTable}
 	<!-- view table Foot -->
 	<tr class="List_Foot_Line_red">
 		<td colspan=100></td>

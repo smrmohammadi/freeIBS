@@ -69,7 +69,7 @@ Total Results: <b> {$result_count} </b>
 
     {foreach from=$user_ids item=user_id}
 	{assign var="user_info" value=`$user_infos.$user_id`}
-	{listTR type="body" cycle_color=TRUE hover_color="red" hover_location="/IBSng/admin/user/user_info.php?user_id=`$user_id`"}
+	{listTR type="body" cycle_color=TRUE hover_location="/IBSng/admin/user/user_info.php?user_id=`$user_id`"}
 	    {if $can_change}
 		{listTD extra="onClick='event.cancelBubble=true;'"}
 	    	    <input type=checkbox name="edit_user_id_{$user_id}" value="{$user_id}"> 

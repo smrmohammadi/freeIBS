@@ -21,8 +21,11 @@ function smarty_block_listTR($params,$content,&$smarty,&$repeat)
     	    $cycle_color=(isset($params["cycle_color"]) and $params["cycle_color"]=="TRUE")?True:False;
 	    $color=getTRColor($cycle_color);
 	    $hover="";
-	    if(isset($params["hover_color"]) and isset($params["hover_location"]))
-		$hover=TRHover($params["hover_color"],$params["hover_location"]);
+	    if(isset($params["hover_location"]))
+	    {
+		$hover_color=isset($params["hover_color"])?$params["hover_color"]:"#FFAA00";
+		$hover=TRHover($hover_color,$params["hover_location"]);
+	    }
 	    return "<tr class=\"List_Row_{$color}Color\" {$hover}>".$content."</tr>";
 	}
 }

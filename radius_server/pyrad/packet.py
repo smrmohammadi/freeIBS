@@ -418,6 +418,13 @@ class AuthPacket(Packet):
 	    peer_challenge=self["MS-CHAP2-Response"][0][2:18]
 	    return mschap.generate_nt_response_mschap2(self["MS-CHAP-Challenge"][0],peer_challenge,username,password)==self["MS-CHAP2-Response"][0][26:]
 
+	def generateMSChap2Response(self,username,password):
+	    peer_challenge=self["MS-CHAP2-Response"][0][2:18]
+	    nt_response=self["MS-CHAP2-Response"][0][26:]
+	    authenticator_challenge=self["MS-CHAP-Challenge"][0]
+	    ident=self["MS-CHAP2-Response"][0][0]
+	    return ident+mschap.generate_authenticator_response(password,nt_response,peer_challenge,authenticator_challenge,username)
+
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password
 

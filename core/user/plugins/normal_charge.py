@@ -30,7 +30,11 @@ class NormalChargeAttrUpdater(AttrUpdater):
 	self.useGenerateQuery(["normal_charge"])
 
     def checkInput(self,src,action,dargs):
-	dargs["admin_obj"].canDo("CHANGE NORMAL USER ATTRIBUTES")
+	if src=="group":
+	    dargs["admin_obj"].canChangeNormalAttrs(None)
+	else:
+	    map(dargs["admin_obj"].canChangeNormalAttrs,dargs["users"].values())
+	    
 	if hasattr(self,"charge_name"):
 	    dargs["admin_obj"].canUseCharge(self.charge_name)
 

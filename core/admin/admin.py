@@ -213,3 +213,14 @@ class Admin:
 	"""
 	self.canDo("CHANGE USER ATTRIBUTES",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 
+    def canChangeNormalAttrs(self,loaded_user):
+	"""
+	    raise an PermissionException if admin can not change normal attributes of user loaded in "loaded_user"
+	    if loaded_user is None, it will check if admin have enough permissions, useful for checking group attribute chnges
+	    Admin should have CHANGE_NORMAL_USER_ATTRS permission to be able to change users
+	"""
+	if loaded_user==None:
+	    self.canDo("CHANGE NORMAL USER ATTRIBUTES",None,None)
+	else:
+	    self.canDo("CHANGE NORMAL USER ATTRIBUTES",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
+

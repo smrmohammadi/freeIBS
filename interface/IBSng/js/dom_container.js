@@ -43,8 +43,6 @@ function DomContainer()
 	this.objs.push(obj);
     }
 
-
-
     function addByID(dom_id,dependent_ids)
     {/*add a new element with id "dom_id"
        dependent_ids is array of id's that will be selected when dom_id is selected too 

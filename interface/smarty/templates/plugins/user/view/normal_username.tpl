@@ -18,9 +18,9 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<a class="link_in_body" href="change_password.php">
+<!--	<a class="link_in_body" href="change_password.php">
 	    Change Password
-	</a>
+	</a>--> &lt; Hidden &gt; 
 	{helpicon subject="normal password" category="user"}
     {/addEditTD}
 {/viewTable}

@@ -3,6 +3,7 @@
 
 {include file="admin_header.tpl" title="Connection Logs" selected="Connection Logs"} 
 {include file="err_head.tpl"} 
+{include file="util/calendar.tpl"}
 
 <form method=POST>
 <input type=hidden name=show value=1>
@@ -25,21 +26,36 @@
 
 
     {addEditTD type="left1" double=TRUE}
-	Login Time
+	Login Time From
     {/addEditTD}
 
     {addEditTD type="right1" double=TRUE}
-	<input type=text class=text name=login_time value="{ifisinrequest name="login_time"}">
+	{absDateSelect name="login_time_from" default_request="login_time_from"}
     {/addEditTD}
 
     {addEditTD type="left2" double=TRUE}
-	Logout Time
+	Login Time To
     {/addEditTD}
 
     {addEditTD type="right2" double=TRUE}
-	<input type=text class=text name=logout_time value="{ifisinrequest name="logout_time"}">
+	{absDateSelect name="login_time_to" default_request="login_time_to"}
     {/addEditTD}
 
+    {addEditTD type="left1" double=TRUE}
+	Logout Time From
+    {/addEditTD}
+
+    {addEditTD type="right1" double=TRUE}
+	{absDateSelect name="logout_time_from" default_request="logout_time_from"}
+    {/addEditTD}
+
+    {addEditTD type="left2" double=TRUE}
+	Logout Time To
+    {/addEditTD}
+
+    {addEditTD type="right2" double=TRUE}
+	{absDateSelect name="logout_time_to" default_request="logout_time_to"}
+    {/addEditTD}
 
     {addEditTD type="left1" double=TRUE}
 	Credit Used

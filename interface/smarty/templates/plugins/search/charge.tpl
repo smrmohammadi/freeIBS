@@ -1,4 +1,3 @@
-Charge Names:
 {counter name="charge_search_id" start=0 print=false}
 {foreach from=$charge_names item=charge_name}
     {counter name="charge_search_id" assign="charge_search_id"}

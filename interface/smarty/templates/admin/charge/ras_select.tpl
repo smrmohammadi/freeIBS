@@ -60,7 +60,7 @@
 			    <td height=1></td>
 			</tr>
 			{cycle values="light,dark" assign="color"}	
-			<tr class="list_row_{$color}color"}>
+			<tr class="list_row_{$color}color">
     		{/if}
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
 		<td class="Form_Content_Row_Begin"><input type=checkbox name="{$ras_ip_escaped}__{$port.port_name}" {ifisinrequest name="`$ras_ip_escaped`__`$port.port_name`" default_var="`$ras_ip`_`$port.port_name`" default="" value="checked"}></td>

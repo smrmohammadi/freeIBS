@@ -36,26 +36,15 @@
 </tr>
 </td>	
 {/viewTable}
-
 {literal}
 <script language="javascript">
-
     window.focus();
-    element=document.getElementById("help_table");
-    height=0;
-    while (element)
-    {    
-	height+=element.offsetHeight;
-	if(element.offsetTop)
-	    height+=element.offsetTop;
-	if(element.offsetParent)
-	    element=element.offsetParent;
-	else
-	    element=null;
-    }
-//    alert(height);
-    window.resizeTo(window.outerWidth,height-100);
+    el=document.getElementById("help_table");
+    height=el.offsetHeight;
+    width=el.offsetWidth;
+    window.resizeTo(width+50,height+50);
 </script>
+
 {/literal}
 
 {include file="help_footer.tpl"}

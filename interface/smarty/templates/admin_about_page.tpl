@@ -9,7 +9,7 @@
 		<td width="139" height="6" class="RightSide_Color_light"></td>
 	</tr>
 	<tr>
-		<td width="32" background="anti_alias_bacground_left.gif" align="center"><a href="javascript: menu_select.select('menu_hidden');"><img border="0" src="/IBSng/images/sidebar/hide.gif" width="32" height="66"></a></td>
+		<td width="32" background="/IBSng/images/sidebar/anti_alias_bacground_left.gif" align="center"><a href="javascript: menu_select.select('menu_hidden');"><img border="0" src="/IBSng/images/sidebar/hide.gif" width="32" height="66"></a></td>
 		<td width="139" class="RightSide_Color_light" valign="top" rowspan="2">
 		<!-- About page body-->
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">

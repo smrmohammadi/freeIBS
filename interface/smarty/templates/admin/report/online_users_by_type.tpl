@@ -23,7 +23,6 @@
     refresh=10;
 {/if}
     url_without_refresh='{requestToUrl ignore="refresh"}';
-//    alert(url_without_refresh);
 {literal}
     updateTimer();
     function updateTimer()
@@ -33,7 +32,8 @@
 	span_obj.childNodes[0].nodeValue=refresh;
 	if(refresh==0)
 	    window.location.reload();
-	setTimeout("updateTimer()",1000);
+	else	    
+	    setTimeout("updateTimer()",1000);
     }
 
     function updateRefresh()
@@ -102,7 +102,7 @@
 	{/listTD}
     {/listTR}
     {foreach from=$onlines item=info_dic}
-	{listTR type="body" hover_location="/IBSng/admin/user/user_info.php?user_id=`$info_dic.user_id`" hover_color="red"}
+	{listTR type="body" hover_location="/IBSng/admin/user/user_info.php?user_id=`$info_dic.user_id`"}
 	    {listTD}
 		<a href="/IBSng/admin/user/user_info.php?user_id={$info_dic.user_id}">
 		    {$info_dic.user_id}

@@ -195,6 +195,7 @@ class AbsDate:
 
 class AbsDateWithUnit(AbsDate):
     def __init__(self,date,date_unit):
+	date_unit=date_unit.lower()
 	if date_unit in ["jalali","gregorian"]:
 	    AbsDate.__init__(self,date,date_unit)
 	else:
@@ -202,7 +203,7 @@ class AbsDateWithUnit(AbsDate):
 	    AbsDate.__init__(self,date,"gregorian")
 	
     def __getDateInSeconds(self,date,date_unit):
-	unit_table={"Minutes":60,"Hours":3600,"Days":24*3600,"Months":24*3600*30,"Years":24*3600*30*365}
+	unit_table={"minutes":60,"hours":3600,"days":24*3600,"months":24*3600*30,"years":24*3600*30*365}
 
 	try:
 	    date=float(date)

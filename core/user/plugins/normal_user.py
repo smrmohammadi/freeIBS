@@ -47,7 +47,7 @@ class NormalUserAttrUpdater(AttrUpdater):
 	    self.passwords=getPasswords(len(self.usernames),self.generate_password,self.password_len)
 	
     def checkInput(self,src,action,dargs):
-	dargs["admin_obj"].canDo("CHANGE NORMAL USER ATTRIBUTES")
+	map(dargs["admin_obj"].canChangeNormalAttrs,dargs["users"].values())
 
     def __changeCheckInput(self,users,admin_obj):
 	

@@ -5,25 +5,32 @@
 {include file="err_head.tpl"} 
 <script language="javascript" src="/IBSng/js/check_box_container.js"></script>
 <form method=POST action="/IBSng/admin/user/search_user.php#show_results" name="search_user">
+    {tabTable tabs="Main,Group,Charge,Owner,ExpDates,Misc" content_height=100}
 
-    {include file="plugins/search/user_id.tpl"} 
-	<p>
-    {include file="plugins/search/group.tpl"} 
-	<p>
-    {include file="plugins/search/charge.tpl"}
-	<p>
-    {include file="plugins/search/owner.tpl"}
-	<p>
-    {include file="plugins/search/credit.tpl"}
-	<p>
-    {include file="plugins/search/multi_login.tpl"}
-	<p>
-    {include file="plugins/search/normal_user.tpl"}
-	<p>
-    {include file="plugins/search/rel_exp_date.tpl"}
-	<p>
+    {tabContent tab_name="Main"}
+	{include file="plugins/search/user_id.tpl"} 
+	{include file="plugins/search/normal_user.tpl"}
+    {/tabContent}
+    {tabContent tab_name="Group"}
+        {include file="plugins/search/group.tpl"} 
+    {/tabContent}
+    {tabContent tab_name="Charge"}
+	{include file="plugins/search/charge.tpl"}
+    {/tabContent}
+    {tabContent tab_name="Owner"}
+	{include file="plugins/search/owner.tpl"}
+    {/tabContent}
+    {tabContent tab_name="ExpDates"}
+        {include file="plugins/search/rel_exp_date.tpl"}
+    {/tabContent}
+    {tabContent tab_name="Misc"}
+	{include file="plugins/search/credit.tpl"}
+	{include file="plugins/search/multi_login.tpl"}
+    {/tabContent}
+
+    {/tabTable}
+
     {include file="report_foot.tpl"}
-
     {include file="admin/user/search_user_select_attrs.tpl"}     
     <input type=hidden name=search value=1>
     <input type=hidden name=page value=1>
