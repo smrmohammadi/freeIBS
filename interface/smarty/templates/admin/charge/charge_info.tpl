@@ -156,4 +156,8 @@
         </a>
     {/addRelatedLink}
 
+{setAboutPage title="Charge Information"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

@@ -46,7 +46,7 @@
 {addRelatedLink}
     <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
 	RAS List
-    </a>
+     </a>
 {/addRelatedLink}
 
 {setAboutPage title="Add New RAS"}

@@ -1,5 +1,5 @@
-{* Show Permissions of one category
-    
+{* 
+	Show Permissions of one category
 *}
 {config_load file=perm_category_names.conf}
 {include file="admin_header.tpl" title="Add Permission to admin [$admin_username]"}
@@ -27,6 +27,17 @@
 	{foreach from=$perms item=perm}
 	        {if $perm.name eq $selected}
 		<a name="selected">
+		<tr><td colspan=4>
+			<!-- Form Title Table -->
+			<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
+			<tr>
+				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
+				<td class="Form_Title_red">Permission: {$perm.name} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_form_title_red.gif"></td>
+		    	</tr>
+		    	</table>
+		    <!-- End Form Title Table  -->
+		</td></tr>
 		<tr class="list_Row_perm">
 		{listTD}
 			<nobr>{$perm.name}</nobr>
@@ -51,39 +62,38 @@
 		    <input type=hidden name=perm_name value="{$selected}">
 		    <input type=hidden name=selected value="{$selected}">
 		    <td colspan=5>
-			<table border=0 width=100%>
-			    <tr>
+			<table border=1 width=100% style="border-collapse:collapse" bordercolor="#FFFFFF">
+			    <tr class="list_Row_darkcolor">
 				<td>
-				    Admin Has this Permission: 
-					{if $has_selected_perm eq TRUE} Yes <br> Current Value: 
+				    <b><font color="#800000">Admin Has this Permission: 
+					{if $has_selected_perm eq TRUE} Yes </b>
+					<td>
+					<nobr><b><font color="#800000">Current Value: 
 					    {if $perm.value_type eq "NOVALUE"}
 						Permission doesn't need value
 					    {elseif $cur_val eq ""}
 						Empty
 					    {elseif is_array($cur_val)}
-    						<table border=1 style="border-collapse:collapse" bordercolor="#606060">
-						    <tr>
-						{foreach from=$cur_val item=val}
-						    <td>	    
-							{$val}
-						{/foreach}
-						</table>
+					    <font size=1 color="#000000"><b>
+						    {arrayJoin array=$cur_val glue=" , "}
+						</b></font>
+						</nobr>
 					    {else}
 						{$cur_val}
 					    {/if}
 					{else} 
-					    No 
+					    No </b>
 					{/if}
 
 		    {if $can_change eq TRUE && $perm.value_type eq "SINGLEVALUE" || $perm.value_type eq "MULTIVALUE" }
-			<td>
+			<td><b><font color="#800000">
 			    New Value:
 			{if isset($perm.value_candidates)}
 			    <select name="value">
 				{html_options values=$perm.value_candidates output=$perm.value_candidates selected=$selected_value}
 			    </select>
 			{else}
-			    <input type=text name=value 
+			    <input class="text" type=text name=value 
 			    {if $selected_value ne ""}
 				value="{$selected_value}"
 			    {elseif $perm.value_type eq "SINGLEVALUE" && $has_selected_perm eq TRUE} 
@@ -93,7 +103,9 @@
 			{/if}
 			
 		    {/if}
-				<tr><td colspan=2>
+		    </td></tr>
+		    </table>
+		    <tr><td colspan=4>
 			    <table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
 					<td class="Form_Foot_Begin_Line_red"></td>
@@ -104,10 +116,7 @@
 					<td class="Form_Foot_Below_Line_red"></td>
 				</tr>
 			</table>
-		    </td></tr>	    
-		
-		    </table>
-		    
+		    </td></tr>		
 	    {else}
 		{listTR type="body"}
 		    {listTD}

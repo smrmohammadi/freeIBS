@@ -7,14 +7,17 @@ function smarty_block_listTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
-	if(isset($params["icon"]) and $params["icon"]=="TRUE")
+	if(isset($params["icon"]) and $params["icon"]=="TRUE"){
 	    $style="List_col_Body_Icon";
-	else
+	    $valign="Top";
+	    }
+	else{
 	    $style="list_col";
-    
-
+	    $valign="Middle";
+	    }
+	
 	return <<<END
-    <td class="{$style}">{$content}</td>
+    <td class="{$style}" valign="{$valign}">{$content}</td>
 END;
 
     }

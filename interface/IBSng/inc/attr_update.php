@@ -3,29 +3,27 @@ require_once("init.php");
 require_once(IBSINC."group_face.php");
 require_once(IBSINC."attrs.php");
 
-function runUpdateMethod($update_method,&$update_helper)
+function runUpdateMethod($update_methods,&$update_helper)
 {/*	All user plugin udpate function should be named "{$update_method}PluginUpdate"
-	$update_method is set in smarty template and will be passed to this function.
-	    it may countain "," to define multiple update methods
+	$update_methods are set in smarty templates and will be passed to this function.
+	    it contains an array of update methods
 	All update methods will get an $update_helper instance as their first argument. It must be 
 	    passed as refrence.
 	The update method should just update update_helper attributes. update function will be called by caller
 
 	pluginUpdateTest(&$update_helper)
 */
-    $update_methods=explode(",",$update_method);
     foreach($update_methods as $update_method)
 	eval("{$update_method}PluginUpdate(\$update_helper);");
 }
 
 class UpdateAttrsHelper
 {	
-    function UpdateAttrsHelper(&$smarty,$target,$target_id,$edit_tpl_name)
+    function UpdateAttrsHelper(&$smarty,$target,$target_id)
     {
 	$this->smarty=$smarty;
 	$this->target=$target;
 	$this->target_id=$target_id;
-	$this->edit_tpl_name=$edit_tpl_name;
 	$this->to_update_attrs=array();
 	$this->to_del_attrs=array();
     }
@@ -88,7 +86,7 @@ class UpdateAttrsHelper
     */
 	$this->setPageError($err);
 	if($this->target=="group")
-	    intEditGroup($this->smarty,$this->target_id,$this->edit_tpl_name);
+	    intEditGroup($this->smarty,$this->target_id);
 
 	exit();
     }
@@ -129,9 +127,6 @@ class UpdateAttrsHelper
     	$this->to_update_attrs[$attr_name]=$attr_value;
     }
 
-    
-
 }
-
 
 ?>

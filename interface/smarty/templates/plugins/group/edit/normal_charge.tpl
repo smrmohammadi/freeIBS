@@ -1,9 +1,6 @@
-{include file="admin_header.tpl" title="Normal Charge Edit" selected="Group List"}
-{include file="err_head.tpl"}
+{attrUpdateMethod update_method="normalCharge"}
 
-{editTemplate target="group" target_id=$group_name update_method="normalCharge" edit_tpl_name="normal_charge.tpl"}
-
-  {addEditTable title="Internet Charge" table_width=300}
+  {viewTable title="Internet Charge" table_width=300}
     {addEditTD type="left"}
 	Has Internet Charge
     {/addEditTD}
@@ -20,8 +17,7 @@
 	{charge_names_select name="normal_charge" type="Internet" target="group" default_var="normal_charge" default_request="normal_charge" id="normal_charge"}
     {/addEditTD}
 
-  {/addEditTable}
-{/editTemplate}
+  {/viewTable}
 <script language="javascript">
 	normal_charge_select=new DomContainer();
 	normal_charge_select.disable_unselected=true;
@@ -46,9 +42,3 @@
     </a>
 {/addRelatedLink}
 
-{setAboutPage title="Internet Charge Edit"}
-You can set internet charge, for users who are member of this group.
-Internet charge is used for dialup and lan users.
-{/setAboutPage}
-
-{include file="admin_footer.tpl"}

@@ -40,7 +40,7 @@ function template_handler_func($resource_type, $resource_name, &$template_source
 function showHelpError($msg="")
 {
     print getHelpErrorContents($msg);
-    exit();
+//    exit();
 }
 
 function getHelpErrorContents($msg)

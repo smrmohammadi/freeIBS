@@ -49,7 +49,7 @@
 	<tr>
 	        <td colspan="30" class="Form_Content_Row_Space"></td>
 	</tr>
-	<tr class="List_Foot_Line">
+	<tr class="List_Foot_Line_red">
 		<td colspan=100></td>
 	</tr>
 	<!-- End List Foot-->

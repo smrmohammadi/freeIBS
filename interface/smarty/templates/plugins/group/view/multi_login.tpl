@@ -1,15 +1,15 @@
-{groupViewTemplate edit_tpl_name="multi_login.tpl"}
-  {groupInfoTable title="Multi Login"}
-    {groupInfoTD type="left"}
+{viewTable title="Multi Login"}
+    {addEditTD type="left"}
+	{strip}
+	    {if $can_change} {editCheckBox edit_tpl_name="multi_login"} {/if}
 	    Multi Login
-    {/groupInfoTD}
-    {groupInfoTD type="right"}
+	{/strip}
+    {/addEditTD}
+    {addEditTD type="right"}
 		{ifHasAttr object="group" var_name="multi_login"}
 		    {$group_attrs.multi_login} instances 
 		{/ifHasAttr} 
 		{helpicon subject="multi login" category="user"}
-    {/groupInfoTD}
-
-  {/groupInfoTable}
-{/groupViewTemplate}
+    {/addEditTD}
+{/viewTable}
 

@@ -10,10 +10,10 @@ needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();
 
-if(isInRequest("update","edit_tpl_name","target","target_id","update_method"))
-    intUpdateAttrs($smarty,$_REQUEST["edit_tpl_name"],$_REQUEST["target"],$_REQUEST["target_id"],$_REQUEST["update_method"]);
-else if(isInRequest("group_name","edit_tpl_name","edit_group"))
-    intEditGroup($smarty,$_REQUEST["group_name"],$_REQUEST["edit_tpl_name"]);
+if(isInRequest("update","edit_tpl_cs","target","target_id"))
+    intUpdateAttrs($smarty,$_REQUEST["target"],$_REQUEST["target_id"]);
+else if(isInRequest("group_name","edit_group"))
+    intEditGroup($smarty,$_REQUEST["group_name"]);
 else if(isInRequest("user_id","edit_tpl_name","edit_user"))
     intEditUser($smarty,$_REQUEST["user_id"],$_REQUEST["edit_tpl_name"]);
 else
@@ -22,33 +22,37 @@ else
     redirectToGroupList($err->getErrorMsg());
 }
 
-function intUpdateAttrs(&$smarty,$edit_tpl_name,$target,$target_id,$update_method)
+function intUpdateAttrs(&$smarty,$target,$target_id)
 {
-    $update_helper=new UpdateAttrsHelper($smarty,$target,$target_id,$edit_tpl_name);
-    runUpdateMethod($update_method,$update_helper);
+    $update_methods=getUpdateMethodsArray();
+    $update_helper=new UpdateAttrsHelper($smarty,$target,$target_id);
+    runUpdateMethod($update_methods,$update_helper);
     $update_helper->updateTargetAttrs(FALSE);
 }
 
 
-function intEditGroup(&$smarty,$group_name,$edit_tpl_name)
+function intEditGroup(&$smarty,$group_name)
 {
-    checkTplFileName($edit_tpl_name);
-    editGroupAssignValues($smarty,$group_name,$edit_tpl_name);
-    showEditGroupInterface($smarty,$edit_tpl_name);
+    $edit_templates=getEditTemplateArray();
+    array_map("checkTplFileName",$edit_templates);
+    $edit_template_files=array_map(create_function('$tpl_name','return "plugins/group/edit/".$tpl_name.".tpl";'),$edit_templates);
+    editGroupAssignValues($smarty,$group_name,$edit_templates,$edit_template_files);
+    showEditGroupInterface($smarty);
 }
 
 
-function editGroupAssignValues(&$smarty,$group_name,$edit_tpl_name)
+function editGroupAssignValues(&$smarty,$group_name,$edit_tpls,$edit_tpl_files)
 {
     intSetGroupInfo($smarty,$group_name);    
-    $smarty->assign("edit_tpl_name",$edit_tpl_name);
+    $smarty->assign("edit_tpl_files",$edit_tpl_files);
+    $smarty->assign("edit_tpl_cs",join($edit_tpls,","));
     $smarty->assign("target","group");
     $smarty->assign("target_id",$group_name);
 }
 
-function showEditGroupInterface(&$smarty,$edit_tpl_name)
+function showEditGroupInterface(&$smarty)
 {
-    $smarty->display("plugins/group/edit/{$edit_tpl_name}");
+    $smarty->display("plugins/group/edit/skelton.tpl");
 }
 
 function intEditUser(&$smarty,$user_id,$edit_tpl_name)
@@ -60,11 +64,36 @@ function intEditUser(&$smarty,$user_id,$edit_tpl_name)
 
 function checkTplFileName($edit_tpl_name)
 {
-    if (!preg_match("/^[a-zA-Z0-9_]*\.tpl$/",$edit_tpl_name))
+    if (!preg_match("/^[a-zA-Z0-9_]*$/",$edit_tpl_name))
     {
 	print "Invalid Template Filename";
 	exit();
     }
+}
+
+function getEditTemplateArray()
+{/* 
+    Find edit templates from request, and return template names in an array
+*/
+    if(isInRequest("edit_tpl_cs")) //we're runned from an update method
+	return split("/,/",$_REQUEST["edit_tpl_cs"]);
+    else
+    {
+	$edit_templates=array();    
+	foreach($_REQUEST as $key=>$value)
+	    if (preg_match("/^attr_edit_checkbox_[0-9]+$/",$key))
+		$edit_templates[]=$value;
+	return $edit_templates;
+    }
+}
+
+function getUpdateMethodsArray()
+{
+    $update_methods=array();    
+    foreach($_REQUEST as $key=>$value)
+        if (preg_match("/^attr_update_method_[0-9]+$/",$key))
+    	    $edit_templates[]=$value;
+    return $edit_templates;
 }
 
 ?>

@@ -16,17 +16,19 @@
 *}
 {include file="admin_header.tpl" title="Group Information"}
 {include file="err_head.tpl"}
+<form method=POST action="/IBSng/admin/plugins/edit.php">
+    <input type=hidden name="group_name" value="{$group_name}">
+    <input type=hidden name="edit_group" value="1">
 
 {include file="plugins/group/view/group_info.tpl"}
-<br>
 {include file="plugins/group/view/exp_date.tpl"}
-<br>
 {include file="plugins/group/view/multi_login.tpl"}
-<br>
 {include file="plugins/group/view/normal_charge.tpl"}
-<br>
 
 
+<input type=submit value=edit >
+
+</form>
 
 {addRelatedLink}
     <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">

@@ -21,7 +21,7 @@ function relExpParser(&$parsed_arr,&$smarty,&$attrs)
     }
 }
 
-function expDatePluginUpdate(&$update_helper)
+function relExpDatePluginUpdate(&$update_helper)
 {
     if(!isInRequest("has_rel_exp"))
 	$update_helper->addToDelAttrs("rel_exp_date");

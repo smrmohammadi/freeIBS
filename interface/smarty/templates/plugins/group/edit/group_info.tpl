@@ -1,10 +1,6 @@
-{include file="admin_header.tpl" title="Group Info Edit" selected="Group List"}
-{include file="err_head.tpl"}
-
-
-{editTemplate target="group" target_id=$group_name update_method="groupInfo" edit_tpl_name="group_info.tpl"}
 <input type="hidden" name="group_id" value="{$group_id}">
-{addEditTable title="Group Information"}
+{attrUpdateMethod update_method="groupInfo"}
+{viewTable title="Group Information"}
     {addEditTD type="left"}
 	Group ID
     {/addEditTD}
@@ -42,23 +38,5 @@
     {addEditTD type="right" comment=TRUE}
 	<textarea name=comment class=text>{strip}{ifisinrequest name="comment" default_var="comment"}{/strip}</textarea>
     {/addEditTD}
-{/addEditTable}
-{/editTemplate}
+{/viewTable}
 
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
-	Group List
-    </a>
-{/addRelatedLink}
-
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name}" class="RightSide_links">
-	{$group_name} Group Info
-    </a>
-{/addRelatedLink}
-
-{setAboutPage title="Expiration Date Edit"}
-Basic group informations can be changed here. Also owner of group is changable if you have relevant permission.
-{/setAboutPage}
-
-{include file="admin_footer.tpl"}

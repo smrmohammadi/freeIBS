@@ -1,15 +1,12 @@
-{groupViewTemplate edit_tpl_name="exp_date.tpl"}
-  {groupInfoTable title="Expiration Date"}
-    {groupInfoTD type="left"}
-	    Relative Expiration Date 
-    {/groupInfoTD}
-    {groupInfoTD type="right"}
+{viewTable title="Expiration Date"}
+    {addEditTD type="left" open_tr="FALSE"}
+	{if $can_change} {editCheckBox edit_tpl_name="rel_exp_date"} {/if} Relative Expiration Date 
+    {/addEditTD}
+    {addEditTD type="right"}
 		{ifHasAttr object="group" var_name="rel_exp_date"}
 		    {$group_attrs.rel_exp_date} {$group_attrs.rel_exp_date_unit} 
 		{/ifHasAttr}
 		{helpicon subject="relative expiration date" category="user"}		
-    {/groupInfoTD}
-
-  {/groupInfoTable}
-{/groupViewTemplate}
+    {/addEditTD}
+{/viewTable}
 

@@ -8,24 +8,52 @@
 
 {include file="header.tpl" title="Show Multiple Strings"}
 {include file="err_head.tpl"}
-<table border=1 align=center width=100% bgcolor=#FAFFC5>
-<tr align=center bgcolor=#3E91EB>
-    <td>
-	<h2>Show Multiple Strings</h2>
-<tr align=left>
-    <td>
-	Raw Multi String: <b>{$raw_str}</b>
-<tr align=left>
-    <table width=100% border=1>
-    {foreach from=$all_strs key=index item=str}
-	{if $index%3==0} <tr align=center>  {/if}
-	    <td bgcolor=#3E91EB width=10%>
-		{math equation="index+1" index=$index}
-	    <td width=20%>
-		{$str}
-    {/foreach}
-    </table>
+<table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0" width=100%>
+	<tr>
+		<td colspan="5" valign="bottom">
+		<!-- List Title Table -->
+		<table border="0" cellspacing="0" cellpadding="0" class="List_Title">
+			<tr>
+				<td class="List_Title_Begin" rowspan="2"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
+				<td class="List_Title" rowspan="2"><nobr>Show Multiple Strings</td>
+				<td class="List_Title_End" rowspan="2"><img border="0" src="/IBSng/images/end_of_list_title_red.gif" width="5" height="20"></td>
+				<td class="List_Title_Top_Line" align="RIGHT"><nobr>
+				Raw Multi String:<font color="#800000"> {$raw_str}</font></td>
+			</tr>
+			<tr>
+				<td class="List_Title_End_Line"></td>
+			</tr>
+		</table>
+		<!-- End List Title Table -->
+		</td>
+		    <tr>
+			<td>
+			    <table  width="100%" border=0 cellspacing=0 cellpadding=0>
+	    {foreach from=$all_strs key=index item=str}
+	        {if $index%4==0}
+			</tr>
+			<tr>
+			    <td height=1></td>
+			</tr>
+			{cycle values="light,dark" assign="color"}	
+			<tr class="list_row_{$color}color"}>
+    		{/if}
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Begin"><font size=1 color="#800000"><b>{math equation="index+1" index=$index}.</b></font></td>
+		<td align="left" class="List_col"><b>{$str}</b></td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+	    
+	{/foreach}
+		    </tr>
+			</td>
+			    </table>
+	<!-- view table Foot -->
+	<tr class="List_Foot_Line_red">
+		<td colspan=100></td>
+	</tr>
+	<!-- End view table Foot-->
 </table>
+
 
 {literal}
 <script language="javascript">

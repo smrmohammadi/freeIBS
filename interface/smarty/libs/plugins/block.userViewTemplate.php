@@ -5,6 +5,7 @@ function smarty_block_userViewTemplate($params,$content,&$smarty,&$repeat)
 /*
     return html codes that are necassary for SINGLE user view template start and ends
     parameter edit_tpl_name(string,required): tpl file name in plugins/edi/edit template directory.
+    XXX TO BE REMOVED
 */
     if(!is_null($content))
     {

@@ -142,9 +142,8 @@
     </a>
 {/addRelatedLink}
 {setAboutPage title="Admin Change Password"}
+
 {/setAboutPage}
-
-
 
 
 {include file="admin_footer.tpl"}

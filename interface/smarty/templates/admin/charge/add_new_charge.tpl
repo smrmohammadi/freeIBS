@@ -53,5 +53,8 @@
 	 Charge List
     </a>
 {/addRelatedLink}
+{setAboutPage title="Add New Charge"}
+
+{/setAboutPage}
 
 {include file="admin_footer.tpl"}

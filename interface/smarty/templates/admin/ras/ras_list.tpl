@@ -116,4 +116,9 @@
     </a>
 {/addRelatedLink}
 
+{setAboutPage title="RAS List"}
+
+{/setAboutPage}
+
+
 {include file="admin_footer.tpl"}

@@ -1,9 +1,6 @@
-{include file="admin_header.tpl" title="Multi Login Edit" selected="Group List"}
-{include file="err_head.tpl"}
+{attrUpdateMethod update_method="multiLogin"}
 
-{editTemplate target="group" target_id=$group_name update_method="multiLogin" edit_tpl_name="multi_login.tpl"}
-
-  {addEditTable title="Multi Login" table_width=300}
+  {viewTable title="Multi Login" table_width=300}
     {addEditTD type="left"}
 	Has Multi Login
     {/addEditTD}
@@ -20,8 +17,7 @@
 	<input id="multi_login" type=text name="multi_login" value="{attrDefault target="group" default_var="multi_login" default_request="multi_login"}" class=small_text> 
     {/addEditTD}
 
-  {/addEditTable}
-{/editTemplate}
+  {/viewTable}
 <script language="javascript">
 	multi_login_select=new DomContainer();
 	multi_login_select.disable_unselected=true;
@@ -33,22 +29,3 @@
 {/if}
 </script>
 
-
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
-	Group List
-    </a>
-{/addRelatedLink}
-
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name}" class="RightSide_links">
-	{$group_name} Group Info
-    </a>
-{/addRelatedLink}
-
-{setAboutPage title="Multi Login Edit"}
-You can set multi login, for users who are member of this group.
-Multi login limits maximum instances of user that can be online.
-{/setAboutPage}
-
-{include file="admin_footer.tpl"}

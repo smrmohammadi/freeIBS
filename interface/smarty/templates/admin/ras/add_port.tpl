@@ -59,9 +59,20 @@
 
     {/addEditTable}
 </form>
+
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$ras_ip}" class="RightSide_links">
+	RAS <b>{$ras_ip}</b> Info
+    </a>
+{/addRelatedLink}
 {addRelatedLink}
     <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
 	RAS List
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/add_new_ras.php" class="RightSide_links">
+	Add New RAS
     </a>
 {/addRelatedLink}
 

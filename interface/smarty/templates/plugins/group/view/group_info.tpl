@@ -1,31 +1,32 @@
-{groupViewTemplate edit_tpl_name="group_info.tpl"}
-  {groupInfoTable title="Group Informations"}
-    {groupInfoTD type="left"}
+{viewTable title="Group Informations"}
+    {addEditTD type="left"}
+	    {strip}
+		{if $can_change} {editCheckBox edit_tpl_name="group_info"} {/if}
 		Group ID
-    {/groupInfoTD}
-    {groupInfoTD type="right"}
+	    {/strip}
+    {/addEditTD}
+    {addEditTD type="right"}
 		{$group_id}
-    {/groupInfoTD}
+    {/addEditTD}
 
-    {groupInfoTD type="left"}
+    {addEditTD type="left"}
 		Group Name
-    {/groupInfoTD}
-    {groupInfoTD type="right"}
+    {/addEditTD}
+    {addEditTD type="right"}
 		{$group_name}
-    {/groupInfoTD}
+    {/addEditTD}
 
-    {groupInfoTD type="left"}
+    {addEditTD type="left"}
 		Owner Name
-    {/groupInfoTD}
-    {groupInfoTD type="right"}
+    {/addEditTD}
+    {addEditTD type="right"}
 		{$owner_name}
-    {/groupInfoTD}
+    {/addEditTD}
 
-    {groupInfoTD type="left" comment=TRUE}
+    {addEditTD type="left" comment=TRUE}
 		Comment
-    {/groupInfoTD}
-    {groupInfoTD type="right" comment=TRUE}
+    {/addEditTD}
+    {addEditTD type="right" comment=TRUE}
 		{$comment}
-    {/groupInfoTD}
-  {/groupInfoTable}
-{/groupViewTemplate}
+    {/addEditTD}
+{/viewTable}

@@ -128,43 +128,6 @@ Ras Info
 <table width=100% border=0>
     <tr valign=top> 
 	<td  valign="top" align="right">
-{if not $is_editing and not $attr_editing and $can_change}
-    <form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
-	{addEditTable title="Delete Port(s)" table_width="220" action_icon="delete"}
-	    {addEditTD type="left" err="del_port_err"}
-	        Ports(s)
-	    {/addEditTD}
-	    {addEditTD type="right"}
-		<nobr><input class="text" type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}		
-    	    {/addEditTD}
-	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
-    {/addEditTable}
-    </form>
-    <form method=POST action="/IBSng/admin/ras/edit_port.php" name=edit_port>
-	{addEditTable title="Edit Port(s)" table_width="220" action_icon="edit"}
-	    {addEditTD type="left" err="edit_port_err"}
-	        Ports(s)
-	    {/addEditTD}
-	    {addEditTD type="right"}
-		<nobr><input class="text" type=text name=edit_port> {multistr form_name="edit_port" input_name="edit_port"}		
-    	    {/addEditTD}
-	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
-        {/addEditTable}
-    </form>
-    <form method=POST action="/IBSng/admin/ras/ras_info.php">
-	{addEditTable title="Add IPPool" table_width="220" action_icon="add"}
-	    {addEditTD type="left" err="edit_port_err"}
-	        Add IPpool To Ras
-	    {/addEditTD}
-	    {addEditTD type="right"}
-		<nobr><select name="add_ip_pool">
-				{html_options values=$ippool_names output=$ippool_names}
-			    </select>
-	    {/addEditTD}
-        <input type=hidden name=ras_ip value="{$info.ras_ip}">
-    {/addEditTable}
-	</form>
-{/if}
     {listTable title="RAS IPPools" cols_num=1}
 	{if not $is_editing and not $attr_editing and $can_change}
 	    {listTableHeaderIcon action="delete" close_tr=TRUE}
@@ -187,7 +150,46 @@ Ras Info
 	{/listTR}
 	{/foreach}
 	{/listTable}
-<td align="center" valign="top">
+
+{if not $is_editing and not $attr_editing and $can_change}
+    <form method=POST action="/IBSng/admin/ras/ras_info.php">
+	{addEditTable title="Add IPPool" table_width="220" action_icon="add"}
+	    {addEditTD type="left" err="edit_port_err"}
+	        Add IPpool To Ras
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><select name="add_ip_pool">
+				{html_options values=$ippool_names output=$ippool_names}
+			    </select>
+	    {/addEditTD}
+        <input type=hidden name=ras_ip value="{$info.ras_ip}">
+    {/addEditTable}
+	</form>
+    <form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
+	{addEditTable title="Delete Port(s)" table_width="220" action_icon="delete"}
+	    {addEditTD type="left" err="del_port_err"}
+	        Ports(s)
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><input class="text" type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}		
+    	    {/addEditTD}
+	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
+    {/addEditTable}
+    </form>
+    <form method=POST action="/IBSng/admin/ras/edit_port.php" name=edit_port>
+	{addEditTable title="Edit Port(s)" table_width="220" action_icon="edit"}
+	    {addEditTD type="left" err="edit_port_err"}
+	        Ports(s)
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><input class="text" type=text name=edit_port> {multistr form_name="edit_port" input_name="edit_port"}		
+    	    {/addEditTD}
+	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
+        {/addEditTable}
+    </form>
+{/if}
+<td width="4%"></td>
+<td align="left" valign="top">
     
     {listTable title="RAS Ports List" cols_num=4}
 	{if not $is_editing and not $attr_editing and $can_change}
@@ -250,27 +252,27 @@ Ras Info
 {if !$is_editing}
 {addRelatedLink}
     <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit=1" class="RightSide_links">
-	Edit RAS Information
+	Edit RAS<b>{$info.ras_ip}</b> Information
     </a>
 {/addRelatedLink}
 {/if}
 {if !$attr_editing}
 {addRelatedLink}
     <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit_attrs=1" class="RightSide_links">
-	Edit RAS Attributes
+	Edit RAS<b>{$info.ras_ip}</b> Attributes
     </a>
 {/addRelatedLink}
 {/if}
 
 {addRelatedLink}
     <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&reset_attrs=1" {jsconfirm msg="Reset attributes of ras `$info.ras_ip` to default?"} class="RightSide_links">
-	Reset Ras Attributes 
+	Reset Ras<b>{$info.ras_ip}</b> Attributes 
     </a>
 {/addRelatedLink}
 
 {addRelatedLink}
     <a href="/IBSng/admin/ras/add_port.php?ras_ip={$info.ras_ip}" class="RightSide_links">
-	Add Port
+	Add Port to RAS<b>{$info.ras_ip}</b> 
     </a>
 {/addRelatedLink}
 {addRelatedLink}
