@@ -1,5 +1,4 @@
 import copy
-
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.user.attr_updater import AttrUpdaterContainer
@@ -9,6 +8,7 @@ class AttributeManager:
 	self.change_attr_handlers={}
 	self.delete_attr_handlers={}
 	self.parse_attr_handlers={}
+	self.all_handlers=[]
 
     def registerHandler(self,handler_obj,change_attr_list,delete_attr_list,parse_attr_list):
 	"""
@@ -18,6 +18,7 @@ class AttributeManager:
 	    parse_attr_list(list of strs): list of attributes that this attr handle can parse
 	    register a attr_handler, that will be called when we encounter an attribute in attr_list
 	"""
+	self.all_handlers.append(handler_obj)
 	for attr in change_attr_list:
 	    if self.change_attr_handlers.has_key(attr):
 		raise IBSException(errorText("USER","DUPLICATE_ATTR_REGISTRATION")%attr)
@@ -84,3 +85,22 @@ class AttributeManager:
 	map(lambda x:x.setDateType(date_type),attr_holders)
 	map(lambda x:attrs.update(x.getParsedDic()),attr_holders)
 	return attrs
+#############################################
+    def runAttrSearchers(self,conditions):
+	"""
+	    create attr searcher instances and execute their "run" method
+	"""
+	search_helper=SearchUserHelper(conditions)
+	attr_searchers=__getAllAttrSearchers(search_helper)
+	map(lambda x:apply(getattr(x,"run")),attr_searchers)
+	return search_helper
+
+    def __getAllAttrSearchers(self,search_helper):
+	attr_searchers=[]
+	def createAttrSearcher(handler_obj):
+	    attr_searcher_class=handler_obj.getAttrSearcher()
+	    if attr_searcher_class!=None:
+		attr_searchers.append(attr_searcher_class(search_helper))
+	return map(createAttrSearcher,self.all_handlers)
+    
+    

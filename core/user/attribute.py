@@ -53,6 +53,16 @@ class AttributeHandler:
 	arg_list=map(lambda x:attrs[x],self.attr_holder_attrs)
 	return apply(self.attr_holder_class,arg_list)
 
+    ##########################################################
+    def registerAttrSearcherClass(self,attr_searcher):
+	"""
+	    register an attr_searcher class
+	"""
+	self.attr_searcher=attr_searcher
+
+    def getAttrSearcher(self):
+	return self.attr_searcher
+
 class UserAttributes:
     def __init__(self,attributes,group_id):
 	"""

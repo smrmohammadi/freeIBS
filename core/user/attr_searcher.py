@@ -8,7 +8,7 @@ class AttrSearcher:
     def run(self):
 	"""
 	    AttrSearchers should override this method and do the real job here
-	    by updating search_helper
+	    by updating search_helper groups and addTable
 	"""
 	pass
 

@@ -60,6 +60,7 @@ Core:
     search user
     ippool o ras o user o online o charge o plugin interface
     online handlers
+    pppd ras
 
 
 
