@@ -1,4 +1,5 @@
-{* Ras List
+{* 
+    Ras List
    $ras_infos: array of associative arrays containing active ras infos
    $inactive_ras_infos: array of associative arrays containing inactive ras infos
 
@@ -8,89 +9,106 @@
 {include file="err_head.tpl"}
 
 <center>
-{if isset($deactive_success) and $deactive_success}
-    <h2>
-	Ras DeActivated Successfully
-    </h2>
+{if  $deactive_success}
+    {headerMsg var_name="deactive_success"}Ras DeActivated Successfully.{/headerMsg}
 {/if}
 
-{if isset($reactive_success) and $reactive_success}
-    <h2>
-	Ras ReActivated Successfully
-    </h2>
+{if  $reactive_success}
+    {headerMsg var_name="reactive_success"}Ras ReActivated Successfully.{/headerMsg}
 {/if}
-
-    <table>
-	<tr>	
-	    <th bgcolor=gray colspan=7>
-		<h2>Active Rases</2> 
-	<tr>
-	    <th colspan=7>
-	    	{helpicon subject="deactive ras" category="ras" body="Help On Deactive Ras"}
-	<tr>
-	    <th>
+{listTable title="Active Rases" cols_num=4}
+	{listTableHeaderIcon action="view"}
+	{listTableHeaderIcon action="deactive" close_tr=TRUE}
+	{listTR type="header"}
+	    {listTD}
 		ID
-	    <th>
-		Ras IP
-	    <th>
+	    {/listTD}
+	    {listTD}
+		RAS IP
+	    {/listTD}
+	    {listTD}
 		Type
-	    <th>
+	    {/listTD}
+	    {listTD}
 		Radius Secret
-		
+	    {/listTD}
+	{/listTR}
 	{foreach from=$ras_infos item=ras_info}
-	    <tr>
-		<td>
+	{listTR type="body"}
+	    {listTD}
 		    {$ras_info.ras_id}
-		<td>
+	    {/listTD}
+	    {listTD}
 		    {$ras_info.ras_ip}
-		<td>
-		    {$ras_info.ras_type}
-		<td>
+	    {/listTD}
+	    {listTD}
+	    	    {$ras_info.ras_type}
+	    {/listTD}
+	    {listTD}
 		    {$ras_info.radius_secret}
-		<td>
+	    {/listTD}
+	    {listTD icon="TRUE"}
 		    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$ras_info.ras_ip|escape:"url"}">
-			info
+			{listTableBodyIcon action="view" cycle_color=TRUE}
 		    </a>
-		{if $can_change}
-	    	    <td>
+	    {/listTD}
+	    {if $can_change}
+	    {listTD icon="TRUE"}
 			<a href="/IBSng/admin/ras/ras_list.php?deactive={$ras_info.ras_ip|escape:"url"}">
-			    DeActive
+			    deactive
 			</a> 
-		    <td>
-
-		{/if}
+	    {/listTD}
+	    {/if}
+	{/listTR}
 	{/foreach}
 
-	<tr>	
-	    <th bgcolor=gray colspan=7>
-		<h2>INActive Rases</2> 
-	<tr>
-	    <th colspan=7>
-	    	{helpicon subject="reactive ras" category="ras" body="Help On Reactive Ras"}
+{/listTable}
+<br>
+{listTable title="Deactive Rases" cols_num=4}
+	{listTableHeaderIcon action="view"}
+	{listTableHeaderIcon action="active" close_tr=TRUE}
+	{listTR type="header"}
+	    {listTD}
+		ID
+	    {/listTD}
+	    {listTD}
+		RAS IP
+	    {/listTD}
+	    {listTD}
+		Type
+	    {/listTD}
+	    {listTD}
+		Radius Secret
+	    {/listTD}
+	{/listTR}
 	{foreach from=$inactive_ras_infos item=ras_info}
-	    <tr>
-		<td>
+	{listTR type="body"}
+	    {listTD}
 		    {$ras_info.ras_id}
-		<td>
+	    {/listTD}
+	    {listTD}
 		    {$ras_info.ras_ip}
-		<td>
-		    {$ras_info.ras_type}
-		<td>
+	    {/listTD}
+	    {listTD}
+	    	    {$ras_info.ras_type}
+	    {/listTD}
+	    {listTD}
 		    {$ras_info.radius_secret}
-		<td>
-		
-		{if $can_change}
-	    	    <td>
+	    {/listTD}
+	    {listTD icon="TRUE"}
+		    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$ras_info.ras_ip|escape:"url"}">
+			{listTableBodyIcon action="view" cycle_color=TRUE}
+		    </a>
+	    {/listTD}
+	    {if $can_change}
+	    {listTD icon="TRUE"}
 			<a href="/IBSng/admin/ras/ras_list.php?reactive={$ras_info.ras_ip|escape:"url"}">
-			    ReActive
-			</a>
-		    <td>
-		{/if}
-
+			    Reactive
+			</a> 
+	    {/listTD}
+	    {/if}
+	{/listTR}
 	{/foreach}
-    </table>
-
-
-</center>
+{/listTable}
 
 {include file="admin_footer.tpl"}

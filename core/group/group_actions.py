@@ -75,24 +75,25 @@ class GroupActions:
 						 },"group_id=%s"%group_id)
 
 ############################################
-    def updateGroupAttrs(self,group_name,attrs,to_del_attrs):
+    def updateGroupAttrs(self,group_name,attrs,to_del_attrs,admin_obj):
 	"""
 	    update group attributes
 	    attrs(dic): a dic of attributes in format attr_name=>attr_value that tell "I want these attributes
 			have these values", so attrs may contain only a portion of attributes and not all of them
 	    to_del_attrs(list): list of attributes that should be deleted from group
+	    admin_obj(Admin instance): admin that request this update
 	"""    
 	group_obj=group_main.getLoader().getGroupByName(group_name)
 	changed_info_holders=user_main.getAttributeManager().getInfoHolders(attrs,"change")
 	deleted_info_holders=user_main.getAttributeManager().getInfoHolders(to_del_attrs,"delete")
 	ibs_query=IBSQuery()
-	self.__getChangedQuery(ibs_query,group_obj,changed_info_holders)
-	self.__getDeletedQuery(ibs_query,group_obj,deleted_info_holders)
+	self.__getChangedQuery(ibs_query,group_obj,changed_info_holders,admin_obj)
+	self.__getDeletedQuery(ibs_query,group_obj,deleted_info_holders,admin_obj)
 	ibs_query.runQuery()
 	
 	group_main.getLoader().loadGroupByName(group_name)
 
-    def __getChangedQuery(self,ibs_query,group_obj,changed_info_holders):
+    def __getChangedQuery(self,ibs_query,group_obj,changed_info_holders,admin_obj):
 	"""
 	    get query for changed attributes in changed_info_holders
 	    this method may raise an exception on error condition, because info holder checkInputs are called 
@@ -102,10 +103,14 @@ class GroupActions:
 	    changed_info_holders(InfoHolderContainer Instance): Container of all info holders
 	
 	"""
-	return changed_info_holders.getQuery(ibs_query,"group","change",{"group_obj":group_obj})
+	return changed_info_holders.getQuery(ibs_query,"group","change",{"group_obj":group_obj,
+									 "admin_obj":admin_obj
+									 })
 
-    def __getDeletedQuery(self,ibs_query,group_obj,deleted_info_holders):
-	return deleted_info_holders.getQuery(ibs_query,"group","delete",{"group_obj":group_obj})
+    def __getDeletedQuery(self,ibs_query,group_obj,deleted_info_holders,admin_obj):
+	return deleted_info_holders.getQuery(ibs_query,"group","delete",{"group_obj":group_obj,
+									 "admin_obj":admin_obj
+									 })
 
     ########################################
 

@@ -6,12 +6,16 @@ require_once(IBSINC."attrs.php");
 function runUpdateMethod($update_method,&$update_helper)
 {/*	All user plugin udpate function should be named "{$update_method}PluginUpdate"
 	$update_method is set in smarty template and will be passed to this function.
+	    it may countain "," to define multiple update methods
 	All update methods will get an $update_helper instance as their first argument. It must be 
-	passed as refrence
+	    passed as refrence.
+	The update method should just update update_helper attributes. update function will be called by caller
+
 	pluginUpdateTest(&$update_helper)
 */
-    
-    eval("{$update_method}PluginUpdate(\$update_helper);");
+    $update_methods=explode(",",$update_method);
+    foreach($update_methods as $update_method)
+	eval("{$update_method}PluginUpdate(\$update_helper);");
 }
 
 class UpdateAttrsHelper
@@ -22,10 +26,16 @@ class UpdateAttrsHelper
 	$this->target=$target;
 	$this->target_id=$target_id;
 	$this->edit_tpl_name=$edit_tpl_name;
+	$this->to_update_attrs=array();
+	$this->to_del_attrs=array();
     }
     
+    function updateTargetAttrs($return_after_send=TRUE)
+    {
+	return $this->_updateTargetAttrs($this->to_update_attrs,$this->to_del_attrs,$return_after_send);
+    }
 
-    function updateTargetAttrs($updated_attrs,$to_del_attrs,$return_after_send=TRUE)
+    function _updateTargetAttrs($updated_attrs,$to_del_attrs,$return_after_send=TRUE)
     {/*
 	
 	$return_after_send(boolean): if set to TRUE, function will return after executation of request
@@ -108,6 +118,19 @@ class UpdateAttrsHelper
 	else
 	    $this->showEditInterface($group_info);
     }
+
+    function addToDelAttr($attr_name)
+    {
+	$this->to_del_attrs[]=$attr_name;
+    }
+
+    function addToUpdateAttrs($attr_name,$attr_value)
+    {
+    	$this->to_update_attrs[$attr_name]=$attr_value;
+    }
+
+    
+
 }
 
 

@@ -78,7 +78,10 @@ class Request:
 	"""
 	for arg in args:
 	    if not self.params.has_key(arg):
-		raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%arg)
+		self.raiseIncompeleteRequest(arg)
+
+    def raiseIncompleteRequest(missing_arg):
+	raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%arg)
 
     
     def needAuthType(self,*args):

@@ -30,4 +30,14 @@
 	
     {/addEditTable}
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/charge/charge_list.php" class="RightSide_links">
+	Charge List
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Add New IPPool"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

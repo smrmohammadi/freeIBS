@@ -47,10 +47,13 @@ class ChargeHandler(handler.Handler):
 
     def getChargeInfo(self,request):
 	request.needAuthType(request.ADMIN)
-	request.checkArgs("charge_name")
-	requester=request.getAuthNameObj()
-	requester.canUseCharge(request["charge_name"])
-	charge_obj=charge_main.getLoader().getChargeByName(request["charge_name"])
+	if request.has_key("charge_name"):
+	    charge_obj=charge_main.getLoader().getChargeByName(request["charge_name"])
+	elif request.has_key("charge_id"):
+	    charge_obj=charge_main.getLoader().getChargeByID(to_int(request["charge_id"],"charge id"))
+	else:
+	    request.raiseIncompleteRequest("charge_name")
+	request.getAuthNameObj().canUseCharge(charge_obj.getChargeName())
 	return charge_obj.getChargeInfo()
 
 

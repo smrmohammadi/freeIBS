@@ -23,7 +23,8 @@ else
 function intUpdateAttrs(&$smarty,$edit_tpl_name,$target,$target_id,$update_method)
 {
     $update_helper=new UpdateAttrsHelper($smarty,$target,$target_id,$edit_tpl_name);
-    runUpdateMethod($update_method,$update_helper);	
+    runUpdateMethod($update_method,$update_helper);
+    $update_helper->updateTargetAttrs(FALSE);
 }
 
 

@@ -1,4 +1,6 @@
 <?php
+require_once(IBSINC."charge.php");
+
 //***************************************************** Relative Exp Date
 
 function relExpParser(&$parsed_arr,&$smarty,&$attrs)
@@ -21,17 +23,13 @@ function relExpParser(&$parsed_arr,&$smarty,&$attrs)
 
 function expDatePluginUpdate(&$update_helper)
 {
-    $to_del_attrs=array();
-    $update_attrs=array();
-
     if(!isInRequest("has_rel_exp"))
-	$to_del_attrs[]="rel_exp_date";
+	$update_helper->addToDelAttrs("rel_exp_date");
     else
     {
-	$update_attrs["rel_exp_date"]=$_REQUEST["rel_exp_date"];	
-	$update_attrs["rel_exp_date_unit"]=$_REQUEST["rel_exp_date_unit"];
+	$update_helper->addToUpdateAttrs("rel_exp_date",$_REQUEST["rel_exp_date"]);
+	$update_helper->addToUpdateAttrs("rel_exp_date_unit",$_REQUEST["rel_exp_date_unit"]);
     }
-    $update_helper->updateTargetAttrs($update_attrs,$to_del_attrs,FALSE);
 }
 
 
@@ -45,15 +43,10 @@ function multiLoginParser(&$parsed_arr,&$smarty,&$attrs)
 
 function multiLoginPluginUpdate(&$update_helper)
 {
-    $to_del_attrs=array();
-    $update_attrs=array();
-
     if(!isInRequest("has_multi_login"))
-	$to_del_attrs[]="multi_login";
+	$update_helper->addToDelAttrs("multi_login");
     else
-	$update_attrs["multi_login"]=$_REQUEST["multi_login"];
-
-    $update_helper->updateTargetAttrs($update_attrs,$to_del_attrs,FALSE);
+	$update_helper->addToUpdateAttrs("multi_login",$_REQUEST["multi_login"]);
 }
 
 //**************************************************** Group Info
@@ -76,7 +69,26 @@ function groupInfoPluginUpdate(&$update_helper)
 
 function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
 {
-    assignToParsedIfExists($parsed_arr,$attrs,"normal_charge");
+    if(isset($attrs["normal_charge"]))
+    { //translate charge_id to charge_name
+	$charge_info_req=new GetChargeInfo(null,$attrs["normal_charge"]);
+	list($success,$info)=$charge_info_req->send();
+	if($success)
+	    $parsed_arr["normal_charge"]=$info["charge_name"];
+	else
+	    $smarty->set_page_error($info->getErrorMsgs());
+    }
+}
+
+function normalChargePluginUpdate(&$update_helper)
+{
+    $to_del_attrs=array();
+    $update_attrs=array();
+
+    if(!isInRequest("has_normal_charge"))
+	$update_helper->addToDelAttrs("normal_charge");
+    else
+	$update_helper->addToUpdateAttrs("normal_charge",$_REQUEST["normal_charge"]);
 }
 
 

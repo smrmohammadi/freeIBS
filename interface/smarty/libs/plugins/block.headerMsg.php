@@ -13,7 +13,7 @@ function smarty_block_headerMsg($params,$content,&$smarty,&$repeat)
 
 	return <<<END
     <span class="message">
-	{$content}
+	{$content}<br><br>
     </span>        
 	
 END;

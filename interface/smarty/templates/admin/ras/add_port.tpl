@@ -13,62 +13,59 @@
 {include file="err_head.tpl"}
 
 <form method=POST name=add_port>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add Port To Ras {helpicon subject="add ras port" category="ras"}
-	<tr>
-	    <td>
-		Ras IP:
-	    <td>
-		{$ras_ip}
-	    <td>
-	    
-	<tr {ifibserr varname="port_name_err" add="bgcolor=red"}>
-	    <td>
-		Port Name:
-	    <td>
-		<input type=text name=port_name value="{$port_name}">
-	    <td>
+    {addEditTable title="Add New Port to Ras" table_width=320}
+
+	{addEditTD type="left" err="ras_ip_err"}
+	    Ras IP:
+	{/addEditTD}
+	{addEditTD type="right"}
+	    {$ras_ip}    
+	{/addEditTD}
+
+	{addEditTD type="left" err="name_err"}
+	    Port Name
+	{/addEditTD}
+	{addEditTD type="right"}
+	    	<input class="text" type=text name=port_name value="{$port_name}">
 		{helpicon subject="port name" category="ras"}
 		{multistr form_name="add_port" input_name="port_name"}
+    	{/addEditTD}
 
-
-	<tr {ifibserr varname="port_type_err" add="bgcolor=red"}>
-	    <td>
-		Port Type:
-	    <td>
+	{addEditTD type="left" err="port_type_err"}
+	    Port Type
+	{/addEditTD}
+	{addEditTD type="right"}
 		<select name=port_type>
 		    {html_options output=$port_types values=$port_types default=$port_type}
 		</select>
-	    <td>
-		{helpicon subject="port type" category="ras"}
+	    	{helpicon subject="port type" category="ras"}
+    	{/addEditTD}
 
-
-	<tr {ifibserr varname="phone_err" add="bgcolor=red"}>
-	    <td>
-		Phone no.:
-	    <td>
-		<input type=text name=phone value="{$phone}">
-	    <td>
-		{helpicon subject="phone" category="ras"}
+	{addEditTD type="left" err="port_type_err"}
+	    Phone No. 
+	{/addEditTD}
+	{addEditTD type="right"}
+		<input type=text name=phone value="{$phone}" class=text>
+	    	{helpicon subject="phone" category="ras"}
 		{multistr form_name="add_port" input_name="phone"}
+    	{/addEditTD}
 
-	<tr {ifibserr varname="comment_err" add="bgcolor=red"}>
-	    <td>
-		Comment:
-	    <td>
-		<textarea name=comment>
-		    {$comment|strip}
-		</textarea>
-	    <td>
-		{multistr form_name="add_port" input_name="comment"}
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
+	{addEditTD type="left" err="ippool_comment_err" comment=TRUE}
+	    Comment
+	{/addEditTD}
+	{addEditTD type="right" comment=TRUE}
+	    <textarea name=comment class=text>{$comment|strip}</textarea>
+	{/addEditTD}
 
-    </table>
-</center>
+    {/addEditTable}
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
+	RAS List
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Add New Port"}
+
+{/setAboutPage}
 {include file="admin_footer.tpl"}

@@ -51,4 +51,8 @@
 	Add New IPPool
     </a>
 {/addRelatedLink}
+{setAboutPage title="IPPool List"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

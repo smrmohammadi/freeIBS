@@ -1,47 +1,41 @@
 {include file="admin_header.tpl" title="IBS Definitions"}
-
-<center>
-    <h2>
-	IBS Definitions 
-    </h2>
 {include file="err_head.tpl"}
 
-{if $save_success}
-    Definitions updated successfully
-{/if}
+{headerMsg var_name="save_success"}Definitions updated successfully.{/headerMsg}
+{headerMsg}
+Warning: Changing these value may result IBS not working properly. Don't change any value until you know
+what are you doing.
+{/headerMsg}
 
-    <p>
-	Warning: Changing these value may result IBS not working properly. Don't change any value until you know
-	what are you doing.
-    </p>
-
-<table align=center border=1>
     <form method=POST>
+    {addEditTable title="IBS Definitions" table_width="400"}
     {foreach from=$defs_arr item=def_arr}
-    <tr valign=top>
-	<td>
+    	{addEditTD type="left"}
 	    {$def_arr.name}
-	<td>
+	{/addEditTD}
+	{addEditTD type="right"}
+	<nobr>
 	    {if is_array($def_arr.value)}
-		<table>
 		{foreach from=$def_arr.value key=index item=member }
-		    <tr>
-			<td>
-			    <input type=text name="def_{$def_arr.name}__{$index}__" value="{$member}">
+		    <input class="text" type=text name="def_{$def_arr.name}__{$index}__" value="{$member}">
 		{/foreach}
-		    <font size=1>(new value)</font><input type=text name="def_{$def_arr.name}__new__" value="">
-		</table>
+		    <font size=1>(new value)</font><input class="text" type=text name="def_{$def_arr.name}__new__" value="">
 	    {else}
-		<input type=text name="def_{$def_arr.name}" value="{$def_arr.value}">
+		<input class="text" type=text name="def_{$def_arr.name}" value="{$def_arr.value}">
 	    {/if}
-    
-    
+	{/addEditTD}    
     {/foreach}
-
-</table>
-    <input type=hidden name=action value=save>
-    <input type=submit name=submit value="save">
-</center>
+{/addEditTable}
+<input type=hidden name=action value=save>
 </form>
 
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/setting" class="RightSide_links">
+	Settings
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="IBS Definitions"}
+
+{/setAboutPage}
 {include file="admin_footer.tpl"}

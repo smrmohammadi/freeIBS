@@ -11,43 +11,46 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add New Ras {helpicon subject="add new ras" category="ras"}
-	<tr {ifibserr varname="ras_ip_err" add="bgcolor=red"} >
-	    <td>
-		Ras IP:
-	    <td>
-		<input type=text name=ras_ip value="{$ras_ip}">
-	    <td>
-		{helpicon subject="ras ip" category="ras"}
-	    
-	<tr {ifibserr varname="ras_type_err" add="bgcolor=red"}>
-	    <td>
-		Ras Type:
-	    <td>
+    {addEditTable title="Add New RAS"}
+
+	{addEditTD type="left" err="ras_ip_err"}
+	    RAS IP
+	{/addEditTD}
+	{addEditTD type="right"}
+	    	<input class="text" type=text name=ras_ip value="{$ras_ip}">
+	    	{helpicon subject="ras ip" category="ras"}
+	{/addEditTD}
+
+	{addEditTD type="left" err="ras_type_err"}
+	    RAS Type
+	{/addEditTD}
+	{addEditTD type="right"}
 		<select name=ras_type>
 		    {html_options output=$ras_types values=$ras_types default=$ras_type}
 		</select>
-	    <td>
 		{helpicon subject="ras type" category="ras"}
+	{/addEditTD}
 
-
-	<tr {ifibserr varname="radius_secret_err" add="bgcolor=red"}>
-	    <td>
-		Radius Secret
-	    <td>
-		<input type=text name=radius_secret value="{$radius_secret}">
-	    <td>
+	{addEditTD type="left" err="radius_secret_err"}
+	    Radius Secret
+	{/addEditTD}
+	{addEditTD type="right"}
+	    	<input class="text" type=text name=radius_secret value="{$radius_secret}">
 		{helpicon subject="radius secret" category="ras"}
 
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
+	{/addEditTD}
+	
+    {/addEditTable}
 
-    </table>
-</center>
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
+	RAS List
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Add New RAS"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}

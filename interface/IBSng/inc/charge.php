@@ -28,9 +28,18 @@ class UpdateCharge extends Request
 
 class GetChargeInfo extends Request
 {
-    function GetChargeInfo($charge_name)
-    {
-	parent::Request("charge.getChargeInfo",array("charge_name"=>$charge_name));
+    function GetChargeInfo($charge_name,$charge_id=null)
+    {/*
+	$charge_name : name of charge to get info, can be null if you want to set $charge_id
+	$charge_id: id of charge to get info, can be null if you want to use $charge_name
+    */
+	$params=array();
+	if(!is_null($charge_name))
+	    $params["charge_name"]=$charge_name;
+	else if (!is_null($charge_id))
+	    $params["charge_id"]=$charge_id;
+
+	parent::Request("charge.getChargeInfo",$params);
     }
 }
 

@@ -1,4 +1,6 @@
-{* Edit Ras Port
+{* 
+
+    Edit Ras Port
     ras_ip: new ras ip (invisible)
     port_name: string representation of port
     phone: phone number
@@ -12,67 +14,68 @@
 {include file="admin_header.tpl" title="Edit Ras Port"}
 {include file="err_head.tpl"}
     
-<center>
+{headerMsg}
         Warning: If you edit multiple ports, default values are shown from first port, but updating will
-	occure for all ports
-</center>
+	occure for all ports.<br>
+{/headerMsg}
 
         <form method=POST name=edit_port action="/IBSng/admin/ras/edit_port.php">
 	<input type=hidden name=ras_ip value="{$ras_ip}">
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Edit Ras Port {helpicon subject="edit ras port" category="ras"}
-	<tr>
-	    <td>
-		Ras IP:
-	    <td>
-		{$ras_ip}
-	    <td>
-	    
-	<tr {ifibserr varname="port_name_err" add="bgcolor=red"}>
-	    <td>
-		Port Name:
-	    <td>
-		<input type=text name=port_name value="{$port_name}">
-	    <td>
+
+    {addEditTable title="Edit RAS Port" table_width=320}
+
+	{addEditTD type="left" err="ras_ip_err"}
+	    Ras IP:
+	{/addEditTD}
+	{addEditTD type="right"}
+	    {$ras_ip}    
+	{/addEditTD}
+
+	{addEditTD type="left" err="name_err"}
+	    Port Name
+	{/addEditTD}
+	{addEditTD type="right"}
+	    	<input class="text" type=text name=port_name value="{$port_name}">
 		{helpicon subject="port name" category="ras"}
 		{multistr form_name="edit_port" input_name="port_name"}
+    	{/addEditTD}
 
-
-	<tr {ifibserr varname="port_type_err" add="bgcolor=red"}>
-	    <td>
-		Port Type:
-	    <td>
+	{addEditTD type="left" err="port_type_err"}
+	    Port Type
+	{/addEditTD}
+	{addEditTD type="right"}
 		<select name=port_type>
 		    {html_options output=$port_types values=$port_types default=$port_type}
 		</select>
-	    <td>
-		{helpicon subject="port type" category="ras"}
+	    	{helpicon subject="port type" category="ras"}
+    	{/addEditTD}
 
-
-	<tr {ifibserr varname="phone_err" add="bgcolor=red"}>
-	    <td>
-		Phone no.:
-	    <td>
-		<input type=text name=phone value="{$phone}">
-	    <td>
-		{helpicon subject="phone" category="ras"}
+	{addEditTD type="left" err="port_type_err"}
+	    Phone No. 
+	{/addEditTD}
+	{addEditTD type="right"}
+		<input type=text name=phone value="{$phone}" class=text>
+	    	{helpicon subject="phone" category="ras"}
 		{multistr form_name="edit_port" input_name="phone"}
+    	{/addEditTD}
 
-	<tr {ifibserr varname="comment_err" add="bgcolor=red"}>
-	    <td>
-		Comment:
-	    <td>
-		<textarea name=comment>{$comment|strip}</textarea>
-	    <td>
-		{multistr form_name="edit_port" input_name="comment"}
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
+	{addEditTD type="left" err="ippool_comment_err" comment=TRUE}
+	    Comment
+	{/addEditTD}
+	{addEditTD type="right" comment=TRUE}
+	    <textarea name=comment class=text>{$comment|strip}</textarea>
+	{/addEditTD}
 
-    </table>
-</center>
+    {/addEditTable}
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
+	RAS List
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Edit RAS Port"}
+
+{/setAboutPage}
+
 {include file="admin_footer.tpl"}
