@@ -1,0 +1,10 @@
+
+IBSDialer will look for "server.ibs" after connecting.
+So you have to setup named to map "server.ibs" to
+ibs server address.
+
+IBSDialer uses "http://server.ibs/dialer/
+
+If  you are using multiport, you have to modify portslave
+to send corresponding error codes to IBSDialer.
+(see /portslave/ibs.patch)

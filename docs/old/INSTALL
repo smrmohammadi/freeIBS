@@ -1,0 +1,85 @@
+IBS Installation guide
+
+This Installation guide is written mainly for redhat 8/9, fedora core 1
+Installation on other distributions should be similar
+
+
+
+1. Checkout/Export/Copy IBS source in /usr/local
+   (ibs must be in /usr/local/ibs)
+
+    Notes: I. You Need Python 2+ and PHP 4 (redhat 7.3 users will need to compile python themselves)
+ 	   II. You need pyPGsql: http://pypgsql.sourceforge.net/ 
+	   (if you compile python yourself or your distribution doesn't have it)
+	   III. IBS will run without 
+
+##############################################################
+2. IBS Interface
+    Notes: 
+	I. php must be enabled! 
+	II. if you encounter problems with interface shows variables instead of values
+	    try "short_open_tag = On" and "asp_tags = On" in php.ini
+	
+    A. Put this line in your httpd.conf:
+    	Alias /ibs "/usr/local/ibs/interface/ibs/"
+
+    B. Reload httpd configuration 
+    
+	ex. "service httpd reload"
+
+#############################################################
+3. Run "/usr/local/ibs/sc/setup.sh" as root
+
+    
+    The script do the following jobs:
+    -Create log directory (/var/log/ibs) 
+    -Copy ibs service file to /etc/init.d (it works for Redhat only, non Redhat disto. 
+	can use /usr/local/ibs/ibs.py to start ibs and killall ibs.py to stop it)
+    -Ask you for "system" admin password and create /usr/local/ibs/db/myconf.sql
+
+##############################################################
+4. postgresql configuration 
+    Notes:
+	I. If you have another configuration. just let ibs connect to it's db
+
+    A. put these lines at end of  /var/lib/pgsql/data/pg_hba.conf
+
+local   ibs         all                                             md5
+host    ibs         all         127.0.0.1         255.255.255.255   md5
+
+
+
+   B. Restart Postgresql service
+	service postgresql restart
+
+   C. Create IBS Database and run scripts 
+      su - postgres
+
+      createuser -P ibs 
+	(enter ibsdbpass as password, or enter a new password and change /usr/local/ibs/defs.py DB_PASSWORD variable)
+
+      createdb ibs
+
+      psql -U ibs ibs
+      (in psql prompt) 
+	    \i /usr/local/ibs/db/db.sql
+	    \i /usr/local/ibs/db/defaults.sql
+	    \i /usr/local/ibs/db/myconf.sql
+
+
+###########################################################
+5. Start ibs service
+    service ibs start
+
+###########################################################
+6. Add rases
+    A. launch your browser
+    B. http://localhost/ibs
+    C. login with username: system 
+		password: what you entered in setup.sh
+		
+    D. in reports section choose list rases
+	you can add rases here
+    
+        -Add rases with snmp community and radius secret key
+        -Add correspoding port

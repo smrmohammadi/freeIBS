@@ -1,0 +1,2 @@
+1- if and admin don't have access to a group and able to edit a user with that group, he must change group on editing!
+2- if mail_quota_kbytes set to zero, userinfo won't work because of division by zero error

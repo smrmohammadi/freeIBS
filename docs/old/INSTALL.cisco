@@ -1,0 +1,81 @@
+#########################################
+
+DIALUP:
+
+    add ras with snmp community and radius key
+    add ports as async
+
+
+    these are sample necassary config lines for cisco dialup service
+    
+NOTE: snmp must be RW for ibs to be able to kill users
+	 strongkey is the same as you set in ibs ras
+	 xxx.xxx.xxx.xxx is your ibs server ip address
+---------------------------------------
+
+aaa new-model
+aaa authentication ppp default group radius
+aaa authorization network default if-authenticated
+aaa accounting delay-start
+aaa accounting network default start-stop group radius
+
+access-list 90 permit xxx.xxx.xxx.xxx
+snmp-server community strongkey RW 90
+snmp-server enable traps tty
+radius-server host xxx.xxx.xxx.xxx auth-port 1812 acct-port 1813 key 0 strongkey
+
+
+
+#######################################
+VoIP Prepaid cards:
+
+    add ras with ports as voice ports
+
+    these are sample necassary config lines for cisco voip
+---------------------------------------
+
+aaa authentication login default local
+aaa authentication login h323 group radius
+aaa authorization exec default local
+aaa authorization exec h323 group radius
+aaa accounting connection h323 start-stop group radius
+    
+
+radius-server host xxx.xxx.xxx.xxx auth-port 1812 acct-port 1813 key 0 strongkey
+radius-server retransmit 3
+radius-server authorization permit missing Service-Type
+radius-server vsa send accounting
+radius-server vsa send authentication
+
+
+########################################
+Termination CDRs:
+
+    add ras with ports as voice-termination
+    
+    
+aaa accounting connection h323 start-stop group radius
+
+radius-server host xxx.xxx.xxx.xxx auth-port 1812 acct-port 1813 key 0 strongkey
+radius-server retransmit 3
+radius-server authorization permit missing Service-Type
+radius-server vsa send accounting
+radius-server vsa send authentication
+
+########################################
+ISDN:
+
+    **Use Cisco With Update accounting ras
+
+enable rsh to be able to force clear an isdn connection:
+
+ip rcmd rsh-enable
+ip rcmd remote-host root xxx.xxx.xxx.xxx(ibs server ip address) root enable
+
+configure aaa commands as dialup 
+
+aaa new-model aaa authentication ppp default group radius 
+aaa authorization network default if-authenticated 
+aaa accounting delay-start 
+aaa accounting network default start-stop group radius
+aaa accounting update periodic 1

@@ -1,0 +1,23 @@
+
+Integrated mail system means that users in ibs with "has mailbox" checked 
+can login to mail system using their ibs passwords
+
+############################################################
+-qmail (mail service only)
+    http://www.qmail.org/
+
+     Redhat 9.0 Patch (new glibc errno access ) 
+          http://www.qmail.org/moni.csi.hu/pub/glibc-2.3.1/var-qmail-create-1.03-110patch_14_15.src.rpm
+
+############################################################
+-courier imap (mail service only)
+
+TODO:XXX write a complete description, write in forum if you want mail support, I may put a compiled version of 
+	 courier imap on website
+
+    put these files in authlib direcotry, change make file to compile ibs_client.c with other sources
+    
+     /usr/local/ibs/mail/preauthcustom.c
+     /usr/local/ibs/client/ibs_client.c
+ 
+############################################################

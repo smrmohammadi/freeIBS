@@ -1,0 +1,67 @@
+#!/usr/bin/python -O
+import sys
+sys.path.append("/usr/local/ibs")
+import ibs_client
+import string
+from ibs_exceptions import *
+import traceback
+from lib import *
+
+logger=Logger("/var/log/ibs/sc_voipStartAccounting.log")
+debug=debug()
+
+if len(sys.argv) <=12:
+    logger.write("Invalid number of arguments %s"%sys.argv)
+    sys.exit(-1)
+
+call_origin=sys.argv[12][17:]
+call_type=sys.argv[11][15:]
+#print call_origin
+#print call_type
+
+
+if call_type=="VoIP" and call_origin=="originate": #this is normal originate
+    account=sys.argv[1]
+    if len(account) != 12:
+	logger.write("Invalid account length --%s--" % account)
+    	sys.exit(1)
+    sock=ibs_client.SendCommand()
+    username=account[:8]
+    password=account[8:]
+    if debug:
+	logger.write("got account -%s- username -%s- password -%s-"%(account,username,password))
+    sock.send("voipStartAccounting(auth_name=%s\xffauth_pass=%s\xffauth_type=voip_user)\r\n"%(username,password))
+    ret=sock.recv()
+    if debug:
+	logger.write("return for %s is %s"%(account,ret))
+
+elif call_type=="Telephony" and call_origin=="originate": #this is what we want to log for termination
+    sock=ibs_client.SendCommand()
+    called_num=sys.argv[9]
+    rasIP=sys.argv[2]
+    rasPort=sys.argv[3][1:-1]
+    router_id=sys.argv[1]
+    if debug:
+	logger.write("got called_num -%s- rasIP -%s- rasPort -%s- router_id -%s-"%(called_num,rasIP,rasPort,router_id))
+    sock.send("terminateCallStart(called_num=%s\xffsource_router_id=%s\xffrasIP=%s\xffport=%s\xffauth_type=aaa_server\xffauth_name=\xffauth_pass=)\r\n"%(called_num,router_id,rasIP,rasPort))
+    ret=sock.recv()
+    if debug:
+	logger.write("return for %s is %s"%(called_num,ret))
+elif call_type=="VoIP" and call_origin=="answer": #this is start for VoIP answer, and we'll ignore
+    pass
+elif call_type=="Telephony" and call_origin=="answer" and sys.argv[1]=="unknown" and sys.argv[9]=="6619#469": #this is idcaller originate
+    sock=ibs_client.SendCommand()
+    called_num=sys.argv[9]
+    rasIP=sys.argv[2]
+    rasPort=sys.argv[3][1:-1]
+    router_id="originate"
+    if debug:
+	logger.write("got called_num -%s- rasIP -%s- rasPort -%s- router_id -%s-"%(called_num,rasIP,rasPort,router_id))
+    sock.send("terminateCallStart(called_num=%s\xffsource_router_id=%s\xffrasIP=%s\xffport=%s\xffauth_type=aaa_server\xffauth_name=\xffauth_pass=)\r\n"%(called_num,router_id,rasIP,rasPort))
+    ret=sock.recv()
+    if debug:
+	logger.write("return for %s is %s"%(called_num,ret))
+  
+else:
+    logger.write("Unknown arguments %s " % sys.argv)
+    

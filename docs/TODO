@@ -1,0 +1,83 @@
+Attributes:
+    Relative Expiration Date
+    Absoloute Expiration Date
+    Delete After Expire
+    Multi Login
+    Assign IP
+    Session Limit
+    Periodic Accounting
+    
+
+
+
+
+1. create,delete template generaly.
+
+
+=====================================================================
+- onlines list for each ras
+
+- assign a name to each ras and show it instead of/with ip address
+
+- show page x of n in reports
+
+- Documentation!!!
+
+- All reports start/end date fix
+
+  we have now conditions for login and logout time in reports. this doesn't satisfy users and also
+  logout time conditions are unnecessary. it must be login_from and login_to conditions meaning users that logged on
+  after login_from and before login_to
+  
+- New GROUPs based on ras ip/ports with ability to dedicate lines for special users
+
+- action on group of users.. (define a group of users)
+
+- discount support!
+
+- A settable flag that don't let users login
+
+- assign/authorize ip's allow admins to set a specific ip for a user
+
+- IBS SERVER PASSWORD CHECKING ISSUES
+    -for non local clients,it's better to add a handler to get password salt of a username, and then get encrypted pass
+    -we currently keep passwords in session, it's insecure! it's md5 hash, but as long as we accept md5 hashes 
+     every user that can read session files (owner is apache, ex. other webbased apps) can use it to login to ibs_server
+
+
+- IBS SERVER REMOTE_ADDR ISSUES
+    -It's insecure now! we must not trust remote_addr if our peer address is not 127.0.0.1.
+     if our peer address is not  127.0.0.1 we must use peer address as remote address
+
+- admin expiration date
+
+- virtual isp
+
+- check pass for admins
+
+- focus on forms on page load
+
+- transactionize useradd creditadd and such things
+
+- VoIP check onlines for cisco routers using "show aaa users all" command and rsh or update accountings
+
+- NEXT GENERATION IBS
+  
+  there are users recognizes by and integer called user_id
+  there are some services each user can have (lan, dialup, voip , ....)
+  it's like users have some kind of permissions. each permission has it's own value(s)
+  for example group each service uses, or other service specific information
+  we need a good group for this!
+
+  pluginized ibs / every service must be plugin and there must be well placed hooks
+  Assign ip's
+  dedicate ports
+  VISP
+  transactioize
+  group of users
+  password handshaking
+  
+- Patch poptop to send real remote ip address in radius request so we can use it as port in ibs
+
+- Templates for web interface
+

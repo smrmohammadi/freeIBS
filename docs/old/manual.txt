@@ -1,0 +1,627 @@
+
+
+IBS Mini-Manual
+
+Copyright ParsPooyesh Co. 2003 under GPL license
+
+			    
+Table of Contents:
+			    
+    I. Concepts
+	A. Introduction
+	B. Groups and Rules
+	C. Permissions
+	
+    II. Interface Sections
+	A. Internet Users
+	    1. Add New User
+	    2. Generate Users
+	    3. User Generations List
+	    4. User Information
+		a. Edit Info
+		b. Change Credit
+		c. Change Password
+		d. Check Password
+		e. Lock This User
+		f. Delete User
+		g. User Report
+	    5. Users List
+	    6. Set MOTD
+	B. VoIP Users
+	    1. Add New User
+	    2. Generate Users
+	    3. User Generations List
+	    4. User Information
+		a. Edit Info
+		b. Change Credit
+		c. Change Password
+		d. Check Password
+		e. Lock This User
+		f. Delete User
+		g. User Report
+	    5. Users List
+	C. Groups
+	    1. Internet Add Group
+	    2. Internet Groups List
+		a. Rules List
+		b. Add New Rule
+	    3. VoIP Add Group
+	    4. VoIP Groups List
+		a. Rules List
+		b. Add New Rule
+	    5. VoIP Countries List
+	    6. VoIP Charges List
+	D. Admins
+	    1. Add New Admin
+	    2. Delete Admin
+	    3. Change Password
+	    4. Admin Permissions
+	    5. Admin Information
+		a. Edit Info
+		b. Add Deposit
+		c. Change Deposit Ratio
+		d. Lock This Admin
+		e. Permissions
+		f. Admin Report
+	    6. Admins List
+	E. Reports
+	    1. Internet Online Users
+	    2. VoIP Online Users
+	    3. CDR
+	    4. Internet Connections
+	    5. VoIP Calls
+	    6. List RASes
+		a. Add New RAS
+	F. Graphs
+	    1. Internet Ports
+	    2. Internet Onlines
+	    3. VoIP Ports
+	    4. VoIP Onlines
+	    5. Termination Ports
+	    6. Termination Onlines
+	
+    III. Troubleshooting
+
+
+
+I. Concepts
+
+    A. Introduction
+
+	IBS(ISP Billing System) is a free and open-source project, released
+	under GPL license that provides accounting services for ISPs that
+	sell Prepaid VoIP/DialUP/Lan accounts. It also supports VoIP Call
+	Detail Recording with radius accounting.
+	
+	Web interface has been written in PHP4 and the core has been written
+	in Python. IBS uses Postgresql as database . IBS can work with 
+	Cisco Routers/Access servers, Multiport (needs portslave) for dialup 
+	connections, Cisco and Quintum Products for VoIP Call Detail Recording. 
+	
+	IBS supports LAN accounting using PPTP protocol (needs POPTOP),
+	PrePaid VoIP with IVR for cisco/quintum platforms, Traffic Shaping 
+	for LAN clients, Integrated Mail System(needs Qmail and Courier IMAP) 
+	and an apache authentication module (needs mod_auth_external).
+	
+	IBS implements a thread pool, an event scheduler and a database
+	connection pool for better performance. The core is providing all
+	information to clients by a TCP connection. Interface uses this
+	connection to query information from IBS server. 
+    
+    
+    B. Groups and Rules
+	
+	IBS Groups are charging methods that define how much credit will
+	be consumed by logged on users based on Time of day/Day of week
+	and called number prefix (VoIP only). There can be infinite number
+	of groups each with different Charge Per Minutes.
+	
+	IBS supports different definable charging methods for different
+	users. For each type of connection, you can specify a charging
+	method for any user. You do that by putting that user in a
+	Charging Group( or Group ).
+	
+	Each charging group contain some Charge Rules. Each charge rule
+	should have a day of week, an start time and end time, and a
+	CPM(charge per minute) for this period(internet groups) or a 
+	charge list(for VoIP groups).
+	
+	Charge Lists (for VoIP), specify a call destination based charging
+	method. A charge list is a list of country codes and their CPMs
+	(Charge Per Minute).
+	
+	Currently IBS only supports time-based charging rules. In furture IBS 
+	will support transfer based and mixed charging rules.
+	
+	
+    C. Permissions
+	
+	IBS has a flexible permission based authorization for admins.
+	Each admin is permitted to do a job only if he has been given
+	related permissions.
+	
+	There is only one exceptional permission:  "Admin - GOD"
+	This permission means all possible positive permissions.
+	Giving this single permission to an admin means giving him
+	all permissions to do all tasks in IBS.
+	
+	Some permissions are more configurable. They can be assigned
+	value(s). For example "Admin - Limit Login Address", can be
+	assigned multiple IP addresses, which will limit from which
+	IPs an admin can login to IBS Web Interface.
+	Some other permissions are designed for resellers. Resellers
+	are admins who have control over limited number of users,
+	which are owned by them (Every user has an owner as you can 
+	see in User Information Page). This type of permissions like
+	"Internet - Change users information", can be assigned to
+	one of these two values: "All" or "Restricted".
+	Assigning "Restricted" means this admin has the permission to
+	change information only for users whose owners are that admin.
+	But, "All" means this admin can change information of ALL users.
+	
+	
+	
+II. Interface Sections
+
+    A. Internet Users
+    
+	1. Add New User
+	
+	    To add new internet users. In this page you can specify
+	    following items( just mandatory fields are explained):
+	    
+	    Username 	: username of the user.
+	    Password 	: guess what!
+	    Day limit	: limits day usage of the user, so users cannot
+			  exceed this limit in a single day. (-1 means unlimited)
+	    Credit	: Initial credit of the user
+	    Exp. Date	: User expiration date. This day is an absolute
+			  date, this means even if the user never logs
+			  into the system, the account will expire on
+			  the specified date. IBS uses this date to delete
+			  accounts which have expired more than six months
+			  ago.
+	    Rel. Exp. Date: Relative Expiration Date. This expiration date
+			  is relative to the first login of the user.
+	    Owner	: Owner of the user. Used for reseller permissions.
+	    
+	    
+	    After filling out above fields, you must select in which types
+	    the user can login to the system. For each type, you have to
+	    select charge group.
+			  
+			  
+	2. Generate Users
+	
+	    User generation is a process in which many users with
+	    the same attributes can be created. Most fields in this
+	    page are similar to Add New User page. The difference is in
+	    how the username and passwords are created.
+	    Each username is built up of three parts:
+		    Prefix + Digits + (Postfix)
+	    Prefix is an string which all users will start with.
+	    Digits are incremented for each new user, you specify
+	    how many digits should be used in "Serial Digits Count",
+	    numbers will be left padded with 0 if needed. "Start"
+	    specifies the start of counting, and count specifies how
+	    many users should be generated.
+	    Postfix is like Prefix, but it's just added to the end of
+	    the username and is optional.
+	    You can also specify how passwords should be generated,
+	    if you want password to only contain digits, you can select
+	    it. Otherwise let it unchanged.
+	    
+	    For example:
+		Prefix = 'usr'
+		Serial Digits Count = '4'
+		Postfix = ''
+		Password Characters Count: '5'
+		Password Characters Type: 'Digits Only'
+		Start = 10
+		Count = 4
+		
+		These settings will create 4 users like this:
+		
+		  | Username | Password
+		=======================
+		1 | usr0010  | 61238
+		2 | usr0011  | 29745
+		3 | usr0012  | 82352
+		4 | usr0013  | 90648
+		
+	    After you hit "Generate" button , A list of users which will be
+	    generated is shown. Then by clicking apply generation those users
+	    will be generated.
+		
+	3. User Generations List
+	    
+	    Previously generated users list. You can see usernames
+	    and passwords by selecting a generation from table.
+	
+		
+	4. User Information
+	
+	    Most of fields here are explained in Add New User page.
+	    Just two concepts here : every user has two important logs.
+	    Connection Log and Credit Log, they both can be viewed in
+	    User Report link in this page. Connection Log shows credit
+	    which is decremented by the system when the user was online,
+	    and Credit log which shows when and how much the credit has
+	    been added to the user. When you add credit to a user, you
+	    can enter how much money he has paid. The system tracks
+	    paid money and credit increments, and calculates how much user
+	    has to pay: the user "Due".
+
+	    At the bottom of this page, there is a table that can be
+	    used to see how much the user can stay online if the shown
+	    rule is used.
+	    
+	    a. Edit Info
+	    
+		Change User Information.
+
+	
+	    b. Change Credit
+		
+		Add credit to the user, or add information about paid
+		money in this page.
+
+	    
+	    c. Change Password
+	    
+		Change user password.
+	
+		
+	    d. Check Password
+	    
+		IBS doesn't save passwords as clear text. So if you needed
+		to know if user's password is correct, you can test it in this
+		page.
+		
+		
+	    e. Lock This User
+	    
+		In this page you can lock the user. A user can have
+		more than one locks, each lock can have a reason.
+		A locked user cannot login to the system.
+	    
+	    
+	    f. Delete User
+	    
+		Delete a user from system.
+		
+		WARNING: Deleting a user will also delete all his logs,
+			 so it's better to just lock the user if you are
+			 unsure if you need the logs or not.
+		
+		
+	    g. User Report
+	    
+		Credit Log and Connection Log can be viewed here.
+		Disconnect reason shows why and how a user had beed disconnected.
+		See (Internet - User Information) for more information
+		about Credit Log and Connection Log.
+		
+		
+	5. Users List
+		
+	    In this page you can have a very datailed search for a user.
+	    You can select from many conditions in this page to find
+	    a user with least information you may have about him.
+	
+		
+	6. Set MOTD
+	
+	    (IBSDialer users only) Set Message Of The Day. For users who
+    	    use IBSDialer to connect.
+		
+		Message Title	:  This text will pop up on user's desktop,
+			    	   as the user logs in using IBSDialer.
+				
+		Contents	:  If the user clicks on popped up message,
+				   a browser window will open and the "Contents"
+				   will be shown to the user.
+	
+	
+	
+    B. VoIP Users
+    
+	1. Add New User
+	    
+	    (See Internet - Add New User)
+	    The only important thing here is that usernames
+	    should only contain digits. No alphabets.
+	    And they can only be 8 digits.
+	
+		
+	2. Generate Users
+	
+	    (See Internet - Generate Users)
+	    For VoIP users, passwords can only contain digits, and its
+	    length can only be 4.
+	
+	    
+	3. User Generations List
+	    
+	    (See Internet - Generations List)
+	
+	
+	4. User Information
+	    
+    	    a. Edit Info
+	    b. Change Credit
+	    c. Change Password
+	    d. Change Password
+	    e. Lock This User
+	    f. Delete User
+	    g. User Report
+	    
+		(See Internet - User Information)
+
+	    
+	5. Users List
+
+	    (See Internet - Users List)
+	
+    C. Groups
+    
+	1. Internet Add Group
+	
+	    Here you can make new groups. Notice if you specify
+	    "No Limit" for group type, then users in this group
+	    can always login to the system anytime, and rules
+	    you define won't take effect.
+	    "Timely Internet User" is the usual group type for
+	    normal users.
+	    
+	    Checking "Group is visible to all admins" makes the group
+	    visible to all admins by default, and not checking it
+	    will makes the group visible to Admins who are granted
+	    access to (by adding group name to 
+	    "Groups - Can list these Groups even if they are non-visible"
+	    permission values).
+	    
+	    
+	2. Internet Groups List
+	
+	    List of internet groups. You can click on "List Group Rules" here
+	    to add/delete/modify group rules.
+	    
+	    
+	    a. Rules List
+		
+		List of group rules and their information
+		
+		
+	    b. Add New Rule
+	    
+		To add a new rule, you have to specify on which days,
+		from Rule Start time till Rule End time,  users in
+		this group will be charged at amount of CPM(Cost Per Minute) 
+		for each minute of being online.
+		
+		Rule Usage Limit specifies how long a user can use this
+		rule. For example think of a situation where you want
+		a user to connect for maximum of 1 hours between 8 AM
+		and 10 AM. We will create a rule starting @8 AM and
+		ending @10AM and enter "60" (minutes) in Rule Usage Limit
+		field.
+			
+	    
+	3. VoIP Add Group
+	
+	    (See Groups - Internet Add Group)
+		
+		
+	4. VoIP Groups List
+
+	    (See Groups - Internet Groups List)
+
+
+	    a. Rules List
+		
+		(See Groups - Internet Groups List - Rules List)
+		
+		
+	    b. Add New Rule
+		
+		(See Groups - Internet Groups List - Rules List)
+		The only difference is that instead of CPM( cost
+		per minute), you have to specify Rule Charging
+		Group, in which country codes and their CPMs
+		are defined.
+	    
+
+	5. VoIP Countries List
+	
+		List of all countries,and their country prefix code,
+		just to make it easier to add the country into a 
+		VoIP Charge List.
+		
+		
+	6. VoIP Charges List
+	
+		A Charge List contains a list of countries and their
+		CPMs(Cost Per Minutes).
+	
+    D. Admins
+    
+	1. Add New Admin
+	
+		To add a new admin.
+		A newly created admin won't have any permissions, so 
+		you have to add needed permissions after you create 
+		an admin.
+		
+	2. Delete Admin
+	
+		To Delete an admin.
+		
+		WARNING: Deleting an admin will also delete all his
+			 logs. So it's better to lock the admin if you
+			 are unsure if you will need his logs.
+			 
+			 
+	3. Change Password
+		
+		To change an admin password. If you have enough access,
+		a list will appear and you can select for which admin you
+		want to change password.
+		
+		
+	4. Admin Permissions
+	
+		List all admin's permissions. To add a new permissoin
+		select "Add New Permission".
+		
+		
+	5. Admin Information
+	
+		Views information about an admin. Admins have two important
+		reports. Deposit Report and Credit Usage Report, both can be viewed
+		in "Admin Report" page. Each admin has an "Deposit Ratio" value.
+		This value specifies discount for that admin. For example
+		suppose an admin whose "Deposit Ratio" is 10%, when you give
+		him 1000 more deposit, he can spend 1000 + 10% * 1000 = 1100.
+		
+		
+		a. Edit Info
+		    
+		    Change admin information.
+		    
+		    
+		b. Add Deposit
+		
+		    Add any amount of deposit to the Admin. You have to
+		    consider admin's "Deposit Ratio" here.
+		    See (Admins - Admin Information)
+		    
+		    
+		c. Change Deposit Ratio
+		    
+		    Change the value of "Deposit Ratio" for the admin.
+		    See (Admins - Admin Information)
+		    
+		    
+		d. Lock This Admin
+		
+		    Locks the admin. A locked admin cannot login into
+		    the system.
+		    
+		    
+		e. Permissions
+		
+		    Lists all admins permissions.
+		    
+		    
+		f. Admin Report
+		
+		    "Credit Usage Report" and "Deposit Report" for the selected
+		    admin. See (Admins - Admin Information)
+		
+	6. Admins List
+	
+		Lists all admins and their brief information.
+	
+    E. Reports
+    
+	1. Internet Online Users
+	    
+	    Lists currently Internet online users.
+	    
+	    
+	2. VoIP Online Users
+	
+	    Lists currently VoIP online users.
+	    
+	    
+	3. CDR
+	
+	    You can view a report of CDR(Call Detail Recording)
+	    with the conditions you specify.
+	    
+	    
+	4. Internet Connections
+
+	    You can view a report of Internet Connections
+	    with the conditions you specify.
+	    
+	    
+	5. VoIP Calls
+
+	    You can view a report of VoIP Calls with the conditions
+	    you specify.
+	    
+	    
+	6. List RASes
+	
+	    Lists all rases and their information.
+	    
+	    a. Add New RAS
+	    
+		In this page you can add a new RAS.
+		You have to define all rases you want ibs users to login 
+		on or ibs to controll.
+		You must specify the right ras type and "Radius Secret Key" 
+		and "Snmp Community" if applicable.
+		(See docs/INSTALL.<ras type>)
+	    
+	    b. List Ports
+		
+		Lists all ports on this ras, you can add new ports to ras
+		using "Add New Port"
+		There are 3 port types:
+		    -"Async" for internet dialup ports
+		    -"Voice" for VoIP origination ports
+		    -"Voice-termination" for VoIP termination ports
+		
+		To see "* Ports graphs" correctly, you must define ports and
+		their types here.
+	    
+	
+    F. Graphs
+    
+	1. Internet Ports
+	
+	    In this page you can see each port's usage.
+	    
+	    
+	2. Internet Onlines
+	
+	    A graph of online users in specified time.
+	    
+	    
+	3. VoIP Ports
+
+	    In this page you can see each port's usage.
+	    
+	    
+	4. VoIP Onlines
+
+	    A graph of online users in specified time.
+	    
+	    
+	5. Termination Ports
+
+	    In this page you can see each port's usage.
+	    
+	    
+	6. Termination Onlines
+
+	    A graph of online users in specified time.
+	    
+	
+III. Troubleshooting
+
+	IBS has extensive options for debugging and locating problems. IBS saves
+	its log files in '/var/log/ibs' by default. IBS core appends its logs
+	to 'ibs.log', and Web Interface	uses 'ibs_interface.log'.
+	You can change its core log level in 'defs.py'.
+	
+	On user login failure, one of important places to look for the cause
+	is "User Report". For each disconnection, the "Disconnect Reason"
+	is shown in this log.
+	
+	
+	
+    

@@ -1,0 +1,126 @@
+#!/usr/bin/python -O
+import sys
+sys.path.append("/usr/local/ibs")
+import ibs_client
+import string
+from ibs_exceptions import *
+import traceback
+from lib import *
+import ras
+import time
+
+logger=Logger("/var/log/ibs/sc_voipLogout.log")
+if len(sys.argv)<=12:
+    logger.write("Wrong number of arguments\n")
+    sys.exit(-1)
+
+debug=debug()
+try:
+    call_origin=sys.argv[12][17:]
+    call_type=sys.argv[11][15:]
+    in_bytes=sys.argv[7]
+    out_bytes=sys.argv[6]	
+
+
+    if ((call_type=="Telephony" and call_origin=="answer") or (call_type=="VoIP" and call_origin=="originate")) and sys.argv[1]!="unknown":
+	account=sys.argv[1]
+	ras_ip=sys.argv[2]
+	ras_port=sys.argv[3]
+
+        if debug:
+    	    logger.write(str(sys.argv))
+
+	if len(account) != 12:
+	    logger.write("Invalid account length --%s--" % account)
+	    sys.exit(1)
+	sock=ibs_client.SendCommand()
+	username=account[:8]
+	password=account[8:]
+	if ras_port!="unknown":
+	    ras_port=ras_port[1:-1]
+	if debug:
+	    logger.write("got account -%s- username -%s- password -%s-"%(account,username,password))
+
+	if call_type=="Telephony" and call_origin=="answer":
+	    sock.send("telephonyCallStop(auth_name=%s\xffauth_pass=%s\xffauth_type=voip_user)\r\n"%(username,password))
+	elif call_type=="VoIP" and call_origin=="originate":
+	    sock.send("voipCallStop(auth_name=%s\xffauth_pass=%s\xffauth_type=voip_user\xffreason=\xffras_ip=%s\xffras_port=%s\xffin_bytes=%s\xffout_bytes=%s)\r\n"%(username,password,ras_ip,ras_port,in_bytes,out_bytes))
+	else:
+	    logger.write("Invalid call origin %s call type %s"%(call_origin,call_type))
+	    sys.exit(-1)
+
+	ret=sock.recv()
+	if debug:
+	    logger.write("return for %s is %s"%(account,ret))
+    elif call_type=="Telephony" and call_origin=="originate": #we'll log this for termination
+	rasIP=sys.argv[2]
+	rasPort=sys.argv[3][1:-1]
+        called_num=sys.argv[9]
+        router_id=sys.argv[1]
+	connect_time=sys.argv[10][19:-1]
+	epoch=epochTimeFromRadiusTime(connect_time)
+	sock=ibs_client.SendCommand()
+	if debug:
+	    logger.write("got rasIP -%s- rasPort -%s- connect_time -%s- epoch -%s- called_num -%s- router_id -%s- "%(rasIP,rasPort,connect_time,epoch,called_num,router_id))
+	sock.send("terminateCallStop(rasIP=%s\xffport=%s\xffstart_time=%s\xffcalled_num=%s\xffsource_router_id=%s\xffauth_type=aaa_server\xffauth_name=\xffauth_pass=\xffin_bytes=%s\xffout_bytes=%s)\r\n"%(rasIP,rasPort,epoch,called_num,router_id,in_bytes,out_bytes))
+	ret=sock.recv()
+	if debug:
+	    logger.write("return for %s %s is %s"%(rasIP,rasPort,ret))
+    
+    elif call_type=="VoIP" and call_origin=="answer":
+	pass
+
+    elif call_type=="Telephony" and call_origin=="answer" and sys.argv[1]=="unknown" and sys.argv[9]=="101#469":
+	rasIP=sys.argv[2]
+	rasPort=sys.argv[3][1:-1]
+	called_num=sys.argv[9]
+	router_id="originate"
+	connect_time=sys.argv[10][19:-1]
+	epoch=epochTimeFromRadiusTime(connect_time)
+	sock=ibs_client.SendCommand()
+	if debug:
+	    logger.write("got rasIP -%s- rasPort -%s- connect_time -%s- epoch -%s- called_num -%s- router_id -%s- "%(rasIP,rasPort,connect_time,epoch,called_num,router_id))
+	sock.send("terminateCallStop(rasIP=%s\xffport=%s\xffstart_time=%s\xffcalled_num=%s\xffsource_router_id=%s\xffauth_type=aaa_server\xffauth_name=\xffauth_pass=\xffin_bytes=%s\xffout_bytes=%s)\r\n"%(rasIP,rasPort,epoch,called_num,router_id,in_bytes,out_bytes))
+	ret=sock.recv()
+	if debug:
+	    logger.write("return for %s %s is %s"%(rasIP,rasPort,ret))
+
+    elif sys.argv[5]!="unknown" and sys.argv[9]!="unknown" and sys.argv[20]!="unknown" and \
+	sys.argv[21]!="unknown" and sys.argv[23]!="unknown" :
+	call_origin=sys.argv[20][17:]
+	call_type=sys.argv[21][15:]
+
+	if call_type=="VoIP" and call_origin=="answer":
+	    sock=ibs_client.SendCommand()
+	    called_num=sys.argv[9]
+	    rasIP=sys.argv[2]
+	    rasPort=sys.argv[23][1:-1]
+	    router_id=sys.argv[22][20:]
+	    connect_time=sys.argv[5][19:-1]
+	    disconnect_time=sys.argv[25][22:-1]
+	    epoch=epochTimeFromRadiusUTCTime(connect_time)
+	    disconnect_epoch=epochTimeFromRadiusUTCTime(disconnect_time)
+	    in_bytes=0
+	    out_bytes=0
+	    
+	    if debug:
+		logger.write("got --tenor-- called_num  -%s- rasIP -%s- rasPort -%s- router_id -%s-"%(called_num,rasIP,rasPort,router_id))
+	    sock.send("terminateCallStop(rasIP=%s\xffport=%s\xffstart_time=%s\xffstop_time=%s\xffcalled_num=%s\xffsource_router_id=%s\xffauth_type=aaa_server\xffauth_name=\xffauth_pass=\xffin_bytes=%s\xffout_bytes=%s)\r\n"%(rasIP,rasPort,epoch,disconnect_epoch,called_num,router_id,in_bytes,out_bytes))
+	    ret=sock.recv()
+	    if debug:
+		logger.write("return for %s %s is %s"%(rasIP,rasPort,ret))
+
+
+    else:
+	logger.write("Unknown arguments %s " % sys.argv)
+
+
+
+
+
+except:
+    logger.write("Exception!")
+    t=""
+    logger.write(t.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback)))
+    raise
+		

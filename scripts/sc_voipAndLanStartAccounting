@@ -1,0 +1,48 @@
+#!/usr/bin/python -O
+import sys
+sys.path.append("/usr/local/ibs")
+import ibs_client
+import string
+from ibs_exceptions import *
+import traceback
+from lib import *
+import os
+
+account=radiusAttr('User-Name')
+debug=1
+
+logger=Logger("/var/log/ibs/sc_voipAndLanStartAccounting.log")
+if debug:
+    logger.write(str(os.environ))
+
+h323_call_type=radiusAttr('H323-call-type')
+
+try:
+    if h323_call_type!="unknown" and h323_call_type.startswith("h323"):
+        sock=ibs_client.SendCommand()
+        username=account[:8]
+        password=account[8:]
+        if debug:
+    	    logger.write("got account -%s- username -%s- password -%s-"%(account,username,password))
+        sock.send("voipStartAccounting(auth_name=%s\xffauth_pass=%s\xffauth_type=voip_user)\r\n"%(username,password))
+	ret=sock.recv()
+	if debug:
+	    logger.write("return for %s is %s"%(account,ret))
+    else:
+	ras_ip=radiusAttr('NAS-IP-Address')
+        port=radiusAttr('NAS-Port-Id')
+	remote_ip=radiusAttr('Framed-IP-Address')
+
+	sock=ibs_client.SendCommand()
+	sock.send("lanStartAccounting(auth_name=%s\xffauth_pass=\xffauth_type=aaa_server\xffras_ip=%s\xffport=%s\xffremote_ip=%s)\r\n"%(account,ras_ip,port,remote_ip))
+        ret=sock.recv()
+	if debug:
+	    logger.write("return for %s is %s"%(account,ret))
+
+
+except:
+    logger.write("Exception!")
+    t=""
+    logger.write(t.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback)))
+
+sys.exit(0)

@@ -1,0 +1,13 @@
+add these to your gnugk.ini file
+
+
+[RadAcct]
+Servers=xxx.xxx.xxx.xxx
+LocalInterface=xxx.xxx.xxx.xxx
+SharedSecret=your_radius_key
+RequestTimeout=20000
+AppendCiscoAttributes=1
+IdCacheTimeout=40000
+
+##############################
+add a ras with gnugk type

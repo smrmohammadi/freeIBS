@@ -1,0 +1,17 @@
+Error Codes that will be sent to MS DUN:
+
+500 Credit Finished
+501 Relative Expiration Date reached
+708 Absolute Expiration Date reached
+502 Too many connections for this user
+647 Account is locked
+645 Service unavailable
+503 Rule Usage time exceed
+646 Group rules denies access at this time
+504 Day usage time exceed
+505 Password incorrect
+691 Invalid Account
+649 Account denies dialup access
+506 Account denies Lan access
+507 Account denies access to this ras
+

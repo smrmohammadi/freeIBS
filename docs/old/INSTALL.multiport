@@ -1,0 +1,6 @@
+- multiport
+    download/install/config portslave 
+    http://portslave.sourceforge.net/
+    
+    Add a ras with portslave type, and add it's ports.
+    put ras radius key in radiusclient servers file

@@ -1,0 +1,27 @@
+XTRADIUS use is highly discouraged!
+it's ancient and has known bugs and we don't care about fixing it because
+pyras is faster and more flexible for IBS
+scripts will be removed in next ibs versions
+
+
+xtradius is not neccasary, ibs has it's own radius server (based on  pyrad)
+but still, you can use xtradius if you want
+############################################################
+- xtradius 
+   put these lines in /etc/raddb/users for internet (and/or) voip (and/or) lan
+
+DEFAULT Acct-Status-Type = "Stop"
+        Exec-Program-Account = "/usr/local/ibs/sc/sc_voipAndInternetLogout"
+
+DEFAULT Acct-Status-Type = "Start"
+        Exec-Program-Account = "/usr/local/ibs/sc/sc_voipAndLanStartAccounting"
+
+DEFAULT Auth-Type = External
+        Exec-Program-Wait = "/usr/local/ibs/sc/sc_voipAndInternetAuth",
+        Fall-Through = No
+
+
+#################
+add this line to /etc/raddb/dictionary (include cisco dictionary)
+
+$INCLUDE dictionary.cisco

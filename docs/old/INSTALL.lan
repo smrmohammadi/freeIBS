@@ -1,0 +1,20 @@
+############################################################
+- lan
+    pppd with radius plugin (2.4.3b3 for now)
+	http://pppd.samba.org/
+	
+	compile radius plugin and radius client and configure it to use ibs as server by defining 
+	ibs ip/radius key in radiusclient server file
+	(see docs/samples)
+
+    download/install poptop
+	http://www.poptop.org/
+
+
+see samples confs in samples/ directory
+
+IBS server must be install on same server as poptop. There are workarounds to change scripts and use rsh.
+Easy to implement, if a nice guy do, please send us the patch ;)
+=======
+
+    (see docs/samples)

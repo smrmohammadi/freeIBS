@@ -1,0 +1,138 @@
+#!/usr/bin/python -O
+import sys
+sys.path.append("/usr/local/ibs")
+import ibs_client
+import string
+from ibs_exceptions import *
+import traceback
+from lib import *
+import ras
+import os
+
+logger=Logger("/var/log/ibs/sc_voipAndInternetAuth.log")
+
+debug=1
+if debug:
+    logger.write(str(os.environ))
+
+unknown="unknown"
+
+try:
+
+    account=radiusAttr('User-Name')
+    ras_ip=radiusAttr('NAS-IP-Address')
+    _type=radiusAttr('Framed-Protocol')
+    caller_id=radiusAttr('Calling-Station-Id')
+
+
+    if _type=="PPP":
+	password=radiusAttr('User-Password')
+	port=radiusAttr('NAS-Port')
+	sock=ibs_client.SendCommand()
+	sock.send("dialupAndLanLogin(auth_name=%s\xffauth_pass=%s\xffauth_type=aaa_server\xffcaller_id=%s\xffras_ip=%s\xffras_port=%s)\r\n"%(account,password,caller_id,ras_ip,port))
+    	ret=sock.recv()
+    
+	ret=ret.strip()
+	sp=string.splitfields(ret,":",3)
+	if sp[0]=="login" and sp[1]=="OK":
+	    if debug:
+		logger.write("Login ok for %s " % account)
+
+    	    sock=ibs_client.SendCommand()
+	    sock.send("getDefinedValue(auth_name=\xffauth_pass=\xffauth_type=aaa_server\xffname=WEB_SERVER_IP)\r\n")
+	    ret=sock.recv()
+	    ret=ret.strip()
+	    ret=string.splitfields(ret,":",2)
+	    msg="IBS:"
+	    if ret[0]=="defs":
+		msg+=ret[1]
+	    else:
+		msg+="ibs"
+	
+	    msg+=" Welcome"
+
+	    exit_code=0
+
+	elif len(sp)!=3:
+	    msg="E=645"
+	    exit_code=1
+
+	else:
+    	    logger.write("Authen:return -%s-"%ret)
+	    msg="E=%s"%sp[1]
+	    exit_code=2
+
+	print "Reply-Message=\"%s\"" % msg
+
+    else:
+	port=radiusAttr('Cisco-NAS-Port')
+	called_number=radiusAttr('Called-Station-Id')
+
+	if len(account) != 12:
+	    logger.write("Invalid account length --%s--" % account)
+    	    return_code=1
+	else:
+		sock=ibs_client.SendCommand()
+		username=account[:8]
+    		password=account[8:]
+
+		if debug:
+    		    logger.write("got account -%s- username -%s- password -%s-"%(account,username,password))
+		if called_number == unknown:
+	    	    sock.send("voipAuthen(auth_name=%s\xffauth_pass=%s\xffauth_type=aaa_server\xffcaller_id=%s\xffras_ip=%s\xffras_port=%s)\r\n"%(username,password,caller_id,ras_ip,port))
+    		    ret=sock.recv()
+	    	    ret=ret.strip()
+		    sp=string.splitfields(ret,":",2)
+    		    if sp[0]=="login":
+			sp1=string.splitfields(sp[1],",",3)
+	        	return_code=sp1[0]
+	    		credit_amount=sp1[1]
+	    		msg=sp1[2]
+			if debug:
+	    		    logger.write("return_code -%s- c_amount -%s- msg -%s-"%(return_code,credit_amount,msg))
+		    elif ret=="auth:Authentication Failed, Wrong password":
+			if debug:
+			    logger.write("Got wrong password!")
+			return_code=2
+		    elif ret.startswith("auth:Authentication Failed, voip user not found"):
+			if debug:
+		    	    logger.write("Got no such user!")
+			return_code=1
+		    else:
+			logger.write("Authen: invalid return -%s-"%ret)
+	    		return_code=-1
+			credit_amount=-1
+    		else:
+		    sock.send("voipAuthorize(auth_name=%s\xffauth_pass=%s\xffauth_type=voip_user\xffdst=%s\xffcaller_id=%s\xffras_ip=%s\xffras_port=%s)\r\n"%
+			(username,password,called_number,caller_id,ras_ip,port))
+		    ret=sock.recv()
+		    ret=ret.strip()
+		    sp=string.splitfields(ret,":",2)
+		    if sp[0]=="authorize":
+			sp1=string.splitfields(sp[1],",",3)
+			return_code=sp1[0]
+	    		credit_time=sp1[1]
+	    		msg=sp1[2]
+			if debug:
+	    		    logger.write("return_code -%s- c_time -%s- msg -%s-"%(return_code,credit_time,msg))
+		    else:
+			logger.write("Authorize: invalid return -%s-"%ret)
+    			return_code=-1
+	    		credit_time=-1
+		sock.close()
+
+	print "h323-return-code=\"h323-return-code=%s\"" % str(return_code)
+	if "credit_time" in locals() and integer(credit_time) != -1:
+	    print "h323-credit-time=\"h323-credit-time=%s\"" % str(integer(credit_time))
+	if "credit_amount" in locals() and integer(credit_amount) != -1:
+	    print "h323-credit-amount=\"h323-credit-amount=%s\"" % str(integer(credit_amount))
+	exit_code=0
+except:
+    logger.write("Exception!")
+    t=""
+    logger.write(t.join(traceback.format_exception(sys.exc_type, sys.exc_value, sys.exc_traceback)))
+    raise
+    sys.exit(-1)
+
+sys.exit(exit_code)
+

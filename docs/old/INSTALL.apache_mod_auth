@@ -1,0 +1,38 @@
+Apache Authentication using IBS
+
+You can set your apache to authenticate users using IBS admins username/password
+Note that admins must have "Admin - Allow administrator to enter admins special area." Permission or be "GOD"
+Only Apache 2.0 is supported now.
+
+
+1- Compile mod_auth_external that included with ibs for your apache (2.0 supported only)
+   mod_auth_external.c and ibs-client.c is in client directory under IBS root
+   
+    apxs -c mod_auth_external.c
+    apxs -i -a mod_auth_external.la
+    
+  refer to http://www.unixpapa.com/mod_auth_external.html mod_auth_external website for more information
+  on howto compile
+ 
+2- Put these lines in Apache  httpd.conf
+
+LoadModule external_auth_module modules/mod_auth_external.so
+
+AddExternalAuth ibs_admin IBS_ADMIN:
+SetExternalAuthMethod ibs_admin function
+
+
+3- Put these lines in .htaccess file in directory you want to be password protected
+
+AuthType Basic
+AuthName "Admins Area"
+AuthExternal ibs_admin
+require valid-user
+
+
+Don't forget to let that directory override auth config by adding something like this to httpd.conf
+
+<Directory /var/www/html/admin>
+    AllowOverride AuthConfig
+    Options None
+</Directory>

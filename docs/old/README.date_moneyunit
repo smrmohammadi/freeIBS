@@ -1,0 +1,12 @@
+You Can change MoneyUnit and date type in 
+
+/usr/local/ibs/interface/ibs/inc/defs.php
+
+You can change these 2 lines
+
+define("DATE_FORMAT",DATE_FORMAT_GREGORIAN); 
+define("MONEY_UNIT","UNITS");
+
+
+DATE_FORMAT can be either DATE_FORMAT_JALALI or DATE_FORMAT_GREGORIAN
+MONEY_UNIT is an arbitary string

@@ -1,0 +1,17 @@
+IBS keeps many of it's system wide configurable items in a table named "defs", 
+As IBSng v.1 defs table values in generated from a python file that's in IBSng/core/defs_defaults.py
+while installing IBS and defs values are changable via interface
+The Python file can be converted with defs2sql.py script
+
+The syntax is
+
+defs2sql.py: Utility to convert IBS python defs file to sql script
+Usage: defs2sql.py <-i|-u> <python_file.py> <sql_file.sql>
+       -i : use insert queries
+       -u : use update queries
+	       
+       python_file.py : defs variables in python format
+       sql_file.sql : sql scripts to be created
+       
+after sql file is created, you must execute it in psql (postgresql interactive shell)
+psql>\i <sql_file.sql>

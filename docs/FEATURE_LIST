@@ -1,0 +1,182 @@
+Accounting based on mac
+Caller ID Based Authentication
+Dialup/E1
+VoIP
+VISP
+SMS
+Mail
+CDR
+PostPaid Services
+User Sets
+Delete after expire
+Backup/Restore interface
+export reports
+Exterded Authentication Protocol
+Extensible User Attributes
+Extensible User Reports
+MS CHAP - MS CHAP v.2
+Lock admins's users
+Reports of admin users
+Reports deposits/user consumption 
+GnuGK authentication
+Nocat support
+Ras supports
+Ras/Port based charges
+PySNMP support
+Periodic Accounting
+Carrier Based Origination VoIP
+Save Online User States/Update users when crash
+Diffrent Databases/Hosts for log tables
+Session Limit
+
+Interface:
+        Charge add new voip rule
+
+
+Phase1:
+Jalali/Gregorian Dates
+IP Pool/IP Assign
+Accounting Based On Ras
+Transfer Accounting
+User Groups
+Action on Group Users
+CHAP
+Wireless/Lan Accounting
+PySNMP merge
+
+Interface:
+    Admin Login				DONE
+    Admin Index
+    Add new Admin			DONE
+    Admin Information			PARTIALLY DONE
+    Admin Permission List		DONE
+	Save Permission Template	DONE
+	Load Permission Template	DONE
+    Admin Add Permission		DONE
+    Admin Change Password		DONE
+    Admin Edit				DONE
+    Admin Change Deposit		----
+    Admin Delete			----
+    Admin Report 			----
+	Deposit Change			----
+    Admin Lock				----
+    Admin lock list			----
+    Admin Unlock			----
+    
+    Charge Add new charge		DONE
+    Charge List				DONE
+    Charge Info				DONE
+    Charge add new dialup rule		DONE
+    Charge delete rule			DONE
+    Charge Delete			----
+    
+    Group Add new Group			DONE
+    Group info				DONE
+    Group edit				DONE
+    Group Delete			----
+    Group change attributes		PARTIALLY DONE
+    Group List				DONE
+    
+    Ras Add New Ras			DONE
+    Ras Info				DONE
+    Ras edit ras			DONE
+    Ras list				DONE
+    Ras delete Ras			----
+    Ras edit attributes			DONE
+    Ras add port			DONE
+    Ras list port			DONE
+    Ras del port			DONE
+    Ras Edit port			DONE
+    
+    IPPOOL add new			----
+    IPPOOL list				----
+    IPPOOL delete			----
+    IPPOOL edit				----
+    
+    User Add new users			DONE
+    User edit user			----
+    User list attributes		----
+    User change attributes		----
+    User list				----
+    User del				----
+    User Lan Usage Report		----
+    User credit change report		----
+    
+Core Features:
+    Ras
+	Action 				DONE
+	Loader				DONE
+	RasFactory			DONE
+	Handler				DONE
+	PPPd implemention		----
+	Ras Interface			----
+	User Login 			----
+	Ras Message dispatcher		----
+	User Message dispatcher		----
+    Charge
+	Charge Interface		DONE
+	Actions				DONE
+	Loader				DONE
+	Charge Rule Interface		DONE
+	Charge Rule Internet implemention	Partially Done
+	User Charge				Partially Done
+	Charge/User Interaction		----
+	
+    Group
+	Actions				DONE
+	Loader				DONE
+	Handler				DONE
+	Group Interface			DONE
+	Group/User Interaction		----
+    Admin
+	Handler				DONE
+	Actions				DONE
+	Loader				DONE
+	Lock				----
+    Permissons
+	Permission Interface		DONE
+	Permission Handler		DONE
+	Permission/Admin Interaction	DONE
+    XML Server
+	Server Implemention		DONE
+	Request 			DONE
+	Response			DONE
+	Login Checking			DONE
+    Server Handler
+	Handlers Manager		DONE
+	Handlers			DONE
+    Definitions
+	Interface			DONE
+	Changer				DONE
+	
+    User
+        User Pools				DONE	*no tested!
+	User attribute manager			Partially   2004-8-7*
+	User plugin manager			Partially
+	User Loader				Partially
+	User Actions				----	    2004-8-7
+	User Handlers				----
+	    User add				DONE
+	    
+	User Interface				----
+	User/Ras Interaction			----
+	Internet User Interface			----
+	Online User Manager			----
+
+    Radius Server				----
+	-CHAP					----
+
+    IPPOOL
+	Loader					----
+	Actions					----
+	Handler					----
+	IPPOOL Implemention			----
+
+User Attributes:
+    Normal					----		2004-8-7*
+    Rel exp date				Partially DONE
+    Multilogin					Partially DONE
+    Credit					----
+    Charge					----
+    Change Radius Attrs				----
+    Assign IP Address				----

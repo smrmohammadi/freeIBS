@@ -1,0 +1,56 @@
+Add a ras with QuintumTenor type. Don't forget to update firmware to latest (2-4-20+)
+cause older releases have problems with radius PORT attribute 
+
+
+SAMPLE CONFIGURATION FOR a TENOR:
+
+####################################
+PREPAID card accounting (Origination):
+
+These lines are necassary in "pstn trunk group":
+
+Ivr Type = Prepaid calling card
+Ivr Card Digit Length  = 12
+Disabled Voice Prompt 0
+Ivr Language Type = 0
+Ivr Language = 1
+MultiSession code: = **
+IVR Access Number  = None
+Ivr Answer Delay  = 0
+Retry Counter  = 3
+
+And configration in "radius user" section:
+
+
+host p XXX.XXX.XXX.XXX (ibs server ip)
+authenticationport p 1812
+accountingport p 1813
+
+host s 0.0.0.0
+authenticationport s 1812
+accountingport s 1813
+
+retry = 6
+timeout = 10
+accountingtype = 2
+billingvendor 0
+sharedsecret *********
+
+######################################
+Termination CDRs
+
+host p XXX.XXX.XXX.XXX (ibs server ip)
+authenticationport p 1812
+accountingport p 1813
+
+host s 0.0.0.0
+authenticationport s 1812
+accountingport s 1813
+
+retry = 6
+timeout = 10
+accountingtype = 2
+billingvendor 0
+sharedsecret *********
+
+
