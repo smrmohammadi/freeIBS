@@ -25,7 +25,12 @@ a:visited.link_in_body{
 a:hover.link_in_body{ 
     color: #CC6600;
 }
-
+p.in_body
+{
+    text-indent:6px;
+    line-height:120%;
+    text-align:justify;
+}
 /*-------------------------------------------------*/
 /*  Header 	 				   */
 /*   Classes:					   */
@@ -729,6 +734,16 @@ tr.List_Row_DarkColor{
 	Text-align:center;
 	height:20;
 
+}
+tr.list_Row_Perm{ 
+	font-family: Tahoma; 
+	font-weight:bold; 
+	font-size: 8pt; 
+	color: #222222; 
+	direction:ltr ;
+	background-color:#c0c0c0;
+	Text-align:center;
+	height:20;
 }
 
 td.List_col_Body_Icon{ 

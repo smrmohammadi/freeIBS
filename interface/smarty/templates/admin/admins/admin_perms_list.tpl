@@ -30,9 +30,6 @@
     Permission Template Deleted successfully
 {/headerMsg}
 
-{if $can_change eq TRUE}
-    {include file="admin/admins/admin_perms_list_templates.tpl"}
-{/if}
 
 <table boreder=1>
 <tr><td>
@@ -121,6 +118,7 @@
 
 
 {if $can_change eq TRUE}
+    {include file="admin/admins/admin_perms_list_templates.tpl"}
 {addRelatedLink}
     <a href="/IBSng/admin/admins/show_perm_categories.php?admin_username={$admin_username}" class="RightSide_links">
 	Add New Permission to <b>{$admin_username|capitalize}</b>
@@ -145,6 +143,7 @@
 {/addRelatedLink}
 {setAboutPage title="Admin Change Password"}
 {/setAboutPage}
+
 
 
 

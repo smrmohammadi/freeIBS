@@ -2,57 +2,56 @@
     
 *}
 {config_load file=perm_category_names.conf}
-{include file="admin_header.tpl" title="Add Permission to admin"}
+{include file="admin_header.tpl" title="Add Permission to admin [$admin_username]"}
 {include file="err_head.tpl"}
     
-
-<center>
-{if $add_success eq TRUE}
-    <h3>
-	Permission Added Successfully
-    </h3>
-{/if}
-	
-
-    <h2> 
-	Adding permission to {$admin_username} <a href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$admin_username}">Permission List</a>
-    </h2>
-	Category : {eval var=$category_name}
-    <table border=1>
-	<tr>
-	    <th>
-		Name
-	    <th>
-		Description
-	    <th>
-		Affected Pages
-	    <th>
-		Dependencies
+{headerMsg var_name="add_success"}
+    Permission Added Successfully.
+{/headerMsg}
+	{eval var=$category_name assign="category_name_face"}
+	{listTable title="$category_name_face" cols_num=4 table_width="90%"}
+	    {listTR type="header"}
+		{listTD}
+		    Name
+		{/listTD}
+		{listTD}
+		    	Description
+		{/listTD}
+		{listTD}
+			Affected Pages
+		{/listTD}
+		{listTD}
+			Dependencies
+		{/listTD}
+	    {/listTR}
 	{foreach from=$perms item=perm}
-
-	    {if $perm.name eq $selected}
+	        {if $perm.name eq $selected}
 		<a name="selected">
-		<tr bgcolor=#0a9ffc>
-		    <td>
+		<tr class="list_Row_perm">
+		{listTD}
 			<nobr>{$perm.name}</nobr>
-		    <td>
-			{$perm.description|nl2br}  
-		    <td>
+		{/listTD}
+		{listTD}
+			<p class="in_body">{$perm.description|nl2br}</p>  
+		{/listTD}
+		{listTD}
 			{foreach from=$perm.affected_pages item=affected_page}
 			    <nobr>{$affected_page}</nobr><br>
 			{/foreach}
-		    <td>
+		{/listTD}
+		{listTD}
 			{foreach from=$perm.dependencies item=dependency}
 			    <nobr>{$dependency}</nobr><br>
 			{/foreach}
-		<tr bgcolor=#0a9ffc>
+		{/listTD}
+		<tr class="list_Row_perm">
 		    <form action=/IBSng/admin/admins/show_perms.php>
     		    <input type=hidden name=admin_username value="{$admin_username}">
 		    <input type=hidden name=category value="{$category}">
 		    <input type=hidden name=perm_name value="{$selected}">
 		    <input type=hidden name=selected value="{$selected}">
 		    <td colspan=5>
-			<table border=1 width=100%>
+			<table border=0 width=100%>
 			    <tr>
 				<td>
 				    Admin Has this Permission: 
@@ -62,7 +61,7 @@
 					    {elseif $cur_val eq ""}
 						Empty
 					    {elseif is_array($cur_val)}
-    						<table>
+    						<table border=1 style="border-collapse:collapse" bordercolor="#606060">
 						    <tr>
 						{foreach from=$cur_val item=val}
 						    <td>	    
@@ -90,38 +89,82 @@
 			    {elseif $perm.value_type eq "SINGLEVALUE" && $has_selected_perm eq TRUE} 
 				value="{$cur_val}" 
 			    {/if} 
-			    >
-			{/if}
-
-
-		    {/if}
-			<td>
-			    <input type=submit name="submit" value="Add This Permission">
 			    
-
+			{/if}
+			
+		    {/if}
+				<tr><td colspan=2>
+			    <table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
+				<tr>
+					<td class="Form_Foot_Begin_Line_red"></td>
+					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/add.gif"></td>
+				</tr>
+				<tr>
+					<td class="Form_Foot_Below_Line_red"></td>
+				</tr>
+			</table>
+		    </td></tr>	    
+		
 		    </table>
-
+		    
 	    {else}
-		<tr>
-		    <td>
-			<a href="/IBSng/admin/admins/show_perms.php?category={$category}&admin_username={$admin_username}&selected={$perm.name|escape:"url"}#selected">
-			    <nobr>{$perm.name}</nobr>
+		{listTR type="body"}
+		    {listTD}
+			<a class="link_in_body" href="/IBSng/admin/admins/show_perms.php?category={$category}&admin_username={$admin_username}&selected={$perm.name|escape:"url"}#selected">
+			    <align="left"><nobr><b>{$perm.name}</b></nobr></align>
 			</a>
-		    <td>
-			{$perm.description|nl2br|truncate:150:"...":false}
-		    <td>
+		    {/listTD}
+		    {listTD}
+			<p class="about_page" {$perm.description|nl2br|truncate:150:"...":false}</p>
+		    {/listTD}
+		    {listTD}
 			{foreach from=$perm.affected_pages item=affected_page}
 			    <nobr>{$affected_page}</nobr><br>
 			{/foreach}
-		    <td>
+		    {/listTD}
+		    {listTD}
 			{foreach from=$perm.dependencies item=dependency}
 			    <nobr>{$dependency}</nobr><br>
 			{/foreach}
+		    {/listTD}
+		{/listTR}
 	    {/if}
 	{/foreach}
 
-    </table>
+    {/listTable}	
 </center>
 </form>
+{if $can_change eq TRUE}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/show_perm_categories.php?admin_username={$admin_username}" class="RightSide_links">
+	Add New Permission to <b>{$admin_username|capitalize}</b>
+    </a>
+{/addRelatedLink}
+{/if}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$admin_username}" class="RightSide_links">
+	<b>{$admin_username|capitalize}</b> Permissions
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_info.php?admin_username={$admin_username}" class="RightSide_links">
+	Admin <b>{$admin_username|capitalize}</b> info
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/admin_list.php" class="RightSide_links">
+	Admin List
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/admins/add_new_admin.php" class="RightSide_links">
+	Add New Admin
+    </a>
+{/addRelatedLink}
+{setAboutPage title="Add New Permission"}
+{/setAboutPage}
+
 
 {include file="admin_footer.tpl"}

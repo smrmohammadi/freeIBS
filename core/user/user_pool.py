@@ -119,6 +119,8 @@ class UserPool:
 	self.loading_users=LoadingUser()
 	self.rel_candidate=ReleaseCandidates()
 	self.lock=threading.RLock()
+	self.misses=0
+	self.hits=0
 
     def __isInPoolByID(self,user_id):
 	"""
@@ -128,7 +130,9 @@ class UserPool:
 	self.lock.acquire()
 	try:
 	    if self.__pool_by_id.has_key(user_id):
+		self.hits+=1
 		return self.__pool_by_id[user_id]
+	    self.misses+=1
 	    return None
 	finally:
 	    self.lock.release()
