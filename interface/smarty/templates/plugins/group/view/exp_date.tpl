@@ -1,4 +1,4 @@
-{viewTable title="Expiration Date"}
+{viewTable title="Expiration Date" nofoot="TRUE"}
     {addEditTD type="left" open_tr="FALSE"}
 	{if $can_change}{editCheckBox edit_tpl_name="rel_exp_date"}{/if}Relative Expiration Date 
     {/addEditTD}

@@ -4,6 +4,8 @@ define("MONEY_UNIT","UNITS");
 
 define("IBS_ROOT","/usr/local/IBSng/");
 define("INTERFACE_ROOT",IBS_ROOT."interface/");
+define("IMAGES_ROOT",INTERFACE_ROOT."IBSng/images/");
+
 
 define("XMLRPCINC",INTERFACE_ROOT."xmlrpc/");
 

@@ -3,7 +3,7 @@
     username: username of admin to change permission
 	      if user don't have permission to change other admin passwords
 *}
-{include file="admin_header.tpl" title="Change Admin Password"}
+{include file="admin_header.tpl" title="Change Admin Password" selected="Admin List"}
 {include file="err_head.tpl"}
 {headerMsg var_name="success"}
     Password for {$changed_username} Changed Successfully

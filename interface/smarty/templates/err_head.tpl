@@ -3,7 +3,7 @@
     {foreach from=$err_msgs item=err}
 	<tr>
 	    <td align=left>
-		<img border="0" src="/IBSng/images/before_error_message.gif">
+		<img border="0" src="/IBSng/images/msg/before_error_message.gif">
 	    </td>
 	    <td align=left class="error_messages">	    
 		{$err|escape:"html"}

@@ -19,7 +19,7 @@ END;
 
 function getMenuIconImageLink($name,$menu_selected)
 {
-    $image_link="/IBSng/images/menu_icon_".$name;
+    $image_link="/IBSng/images/menu/menu_icon_".$name;
     if($menu_selected==$name)
 	$image_link.="_selected";
     $image_link.=".gif";

@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="multiLogin"}
-  {viewTable title="Multi Login"}
+  {viewTable title="Multi Login" nofoot="TRUE"}
     {addEditTD type="left"}
 	Has Multi Login
     {/addEditTD}
@@ -17,6 +17,7 @@
     {/addEditTD}
 
   {/viewTable}
+  <BR>
 <script language="javascript">
 	multi_login_select=new DomContainer();
 	multi_login_select.disable_unselected=true;

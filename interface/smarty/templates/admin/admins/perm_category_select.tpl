@@ -2,44 +2,48 @@
     
 *}
 {config_load file=perm_category_names.conf}
-{include file="admin_header.tpl" title="Add Permission to admin"}
+{include file="admin_header.tpl" title="Add Permission to admin [$admin_username]" selected="Admin List"}
 {include file="err_head.tpl"}
 
-Adding permission to "{$admin_username}"<br>
-<center>
-    <h2> 
-	
-	Please Select Permission category
-    </h2>
-
-    <table>
+<table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0" width="400">
+	<tr>
+		<td class="Menu_Content_Row_white" align="center" colspan=4>
+		<font size=2 color="#800000">Please Select Permission category:</font></td>
 	<tr>	
 	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=ADMIN&admin_username={$admin_username}">{#ADMIN#}</a>
-
-	<tr>	
+		<img border=0 src="/IBSng/images/permission/admin_permission.gif">
+	    <td class="Menu_Content_Row_white">
+	    <a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=ADMIN&admin_username={$admin_username}">{#ADMIN#}</a>
+		
 	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=USER&admin_username={$admin_username}">{#USER#}</a>
-
-	<tr>	
-	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=CHARGE&admin_username={$admin_username}">{#CHARGE#}</a>
+		<img border=0 src="/IBSng/images/permission/user_permission.gif">
+	    <td class="Menu_Content_Row_white">	
+		<a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=USER&admin_username={$admin_username}">{#USER#}</a>
 
 	<tr>	
 	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=GROUP&admin_username={$admin_username}">{#GROUP#}</a>
+		<img border=0 src="/IBSng/images/permission/charge_permission.gif">
+	    <td class="Menu_Content_Row_white">
+		<a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=CHARGE&admin_username={$admin_username}">{#CHARGE#}</a>
+		
+	    <td>
+		<img border=0 src="/IBSng/images/permission/group_permission.gif">
+	    <td class="Menu_Content_Row_white">
+		<a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=GROUP&admin_username={$admin_username}">{#GROUP#}</a>
 
 	<tr>	
 	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=RAS&admin_username={$admin_username}">{#RAS#}</a>
-
-	<tr>	
+		<img border=0 src="/IBSng/images/permission/ras_permission.gif">
+	    <td class="Menu_Content_Row_white">
+		<a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=RAS&admin_username={$admin_username}">{#RAS#}</a>
+		
 	    <td>
-		<a href="/IBSng/admin/admins/show_perms.php?category=MISC&admin_username={$admin_username}">{#MISC#}</a>
-
+		<img border=0 src="/IBSng/images/permission/misc_permission.gif">
+	    <td class="Menu_Content_Row_white">
+		<a class="page_menu" href="/IBSng/admin/admins/show_perms.php?category=MISC&admin_username={$admin_username}">{#MISC#}</a>
 
     </table>
-</center>
+
 </form>
 {if $can_change eq TRUE}
 {addRelatedLink}

@@ -35,7 +35,7 @@ END;
 function lineSpaceTD()
 {
     return <<<END
-    <td class="Header_Line_Between_Submenus"><img border="0" src="/IBSng/images/line_between_submenus.gif"></td>
+    <td class="Header_Line_Between_Submenus"><img border="0" src="/IBSng/images/menu/line_between_submenus.gif"></td>
 END;
 }
 

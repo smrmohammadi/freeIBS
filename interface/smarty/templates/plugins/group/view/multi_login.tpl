@@ -1,4 +1,4 @@
-{viewTable title="Multi Login"}
+{viewTable title="Multi Login" nofoot="TRUE"}
     {addEditTD type="left"}
 	{strip}
 	    {if $can_change} {editCheckBox edit_tpl_name="multi_login"} {/if}

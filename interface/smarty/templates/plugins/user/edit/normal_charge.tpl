@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="normalCharge"}
-{userInfoTable title="Internet Charge"}
+{userInfoTable title="Internet Charge" nofoot="TRUE"}
     {userInfoTD type="user_left"}
 	Has Internet charge
     {/userInfoTD}
@@ -27,6 +27,7 @@
     {/userInfoTD}
 
 {/userInfoTable}
+<br>
 <script language="javascript">
 	normal_charge_select=new DomContainer();
 	normal_charge_select.disable_unselected=true;

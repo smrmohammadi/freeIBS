@@ -10,7 +10,7 @@ function smarty_function_listTableHeaderIcon($params,&$smarty)
     
     $action=$params["action"];
     $close_tr=(isset($params["close_tr"]) and $params["close_tr"]=="TRUE")?"</tr>":"";
-    $link="/IBSng/images/list_header_";
+    $link="/IBSng/images/list/list_header_";
     if($action=="add")
 	$link.="add.gif";
     else if ($action=="delete")

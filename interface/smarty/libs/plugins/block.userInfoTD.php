@@ -39,9 +39,9 @@ END;
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%">
 				
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Top_textarea_line_{$color}"></td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_right_of_comment_{$color}.gif"></td>
 				<td width=1 rowspan=3><font style="font-size:8pt">&nbsp;</font></td>
 			</tr>
 			</tr>
@@ -51,9 +51,9 @@ END;
 			</tr>
 			
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Bottom_textarea_line_{$color}">&nbsp;</td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_right_of_comment_{$color}.gif"></td>
 			</tr>
 				
 		</table>
@@ -68,17 +68,17 @@ END;
 		<td class="Form_Content_Row_Right_textarea_groupinfo" colspan="3">
 			<table border="0" width="100%" height="100%" cellspacing="0" cellpadding="0" >
 		<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Top_textarea_line_{$color}"></td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_right_of_comment_{$color}.gif"></td>
 			</tr>
 			<tr>
 				<td colspan="3" class="Form_Content_Row_Right_textarea_td_{$color}"><nobr>{$content}</td>
 			</tr>
 			<tr>
-			<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
+			<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_left_of_comment_{$color}.gif"></td>
 			<td class="Form_Content_Row_Bottom_textarea_line_{$color}">&nbsp;</td>
-			<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_{$color}.gif"></td>
+			<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_right_of_comment_{$color}.gif"></td>
 			</tr>
 		</table>
 		<!-- End Form Text Area userinfo-->
@@ -99,7 +99,7 @@ END;
 		$color=getTRColor(TRUE);
 		return <<<END
 	<tr>
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
 		<td class="Form_Content_Row_Left_userinfo_{$color}"><nobr>{$content}</nobr></td>
 END;
 	    }
@@ -108,16 +108,16 @@ END;
 		$color=getTRColor();
 		return <<<END
 		<td class="Form_Content_Row_Right_userinfo_{$color}">{$content}</td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
 END;
 	    }
 	    else  if($type=="group")
 	    {
 		$color=getTRColor();
 		return <<<END
-		<td class="Form_Content_Row_groupinfo_{$color}" align=center><nobr>{$content}</td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_groupinfo_{$color}" align=center>{$content}</td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 	<tr>
 		<td colspan="7" class="Form_Content_Row_Space"></td>
 	</tr>

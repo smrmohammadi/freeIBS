@@ -17,7 +17,7 @@ function relatedLinksLinkTD($content)
 {
     return <<<END
 	<tr>
-		<td class="RightSide_Arrow"><img border="0" src="/IBSng/images/red_arrow.gif" width="6" height="10"></td>
+		<td class="RightSide_Arrow"><img border="0" src="/IBSng/images/arrow/red_arrow.gif" width="6" height="10"></td>
 		<td class="RightSide_links">{$content}</td>
 	</tr>
 END;

@@ -4,18 +4,18 @@
 <!-- Header -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 	<tr>
-		<td rowspan="3" width="107"><img border="0" src="/IBSng/images/logoibsng.gif"></td>
+		<td rowspan="3" width="107"><img border="0" src="/IBSng/images/logo/logoibsng.gif"></td>
 		<td rowspan="3" width="100%" class="Header_Color"></td>
 		<!-- Top right Link -->
 		<td class="Header_Color" width="204"></td>
 		<td width="180" height="19">
 		<table height="19" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr class="Header_Top_link">
-				<td width="7"><img border="0" src="/IBSng/images/top_right_links_begin.gif"></td>
+				<td width="7"><img border="0" src="/IBSng/images/header/top_right_links_begin.gif"></td>
 				<td class="Page_Top_Link">Admin</td>
 				<td class="Page_Top_Link">&nbsp;</td>
 				<td class="Page_Top_Link">Username:<font color="#FF9C00">{$auth_name|capitalize}</font></td>
-				<td class="Page_Top_Link">|</td>
+				<td class="Page_Top_Link"><img border="0" src="/IBSng/images/menu/line_between_topmenu.gif"></td>
 				<td class="Page_Top_Link"><a class="Header_Top_links" href="/IBSng/admin/?logout=1">Logout</a></td>
 			</tr>
 		</table>
@@ -58,9 +58,9 @@
 		<td width="200" rowspan="2">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width="22"><img border="0" src="/IBSng/images/arrow_before_page_title.gif"></td>
-				<td class="Page_Title"><nobr>{$title}</b></td>
-				<td width="27" ><img border="0" src="/IBSng/images/arrow_after_page_title.gif"></td>
+				<td width="22"><img border="0" src="/IBSng/images/arrow/arrow_before_page_title.gif"></td>
+				<td class="Page_Title">{$title}</td>
+				<td width="27" ><img border="0" src="/IBSng/images/arrow/arrow_after_page_title.gif"></td>
 			</tr>
 		</table>
 		</td>

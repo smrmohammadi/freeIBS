@@ -5,6 +5,10 @@
 /*      2.a:link.link_in_body				   */
 /*      3.a:visited.link_in_body			   */
 /*      4.a:hover.link_in_body				   */
+/*      2.p:in_body					   */
+/*      2.a:link.page_menu				   */
+/*      3.a:visited.page_menu				   */
+/*      4.a:hover.page_menu				   */
 /*---------------------------------------------------------*/
 table.Main_Page {  
 	padding: 0;
@@ -32,6 +36,21 @@ p.in_body
     line-height:120%;
     text-align:justify;
 }
+a:link.page_menu{
+    color: #333333;
+    text-decoration:none
+}
+
+a:visited.page_menu{
+	color: #333333;
+	text-decoration:none
+
+}
+a:hover.page_menu{ 
+    color: #CC6600;
+    text-decoration:none
+}
+
 /*-------------------------------------------------*/
 /*  Header 	 				   */
 /*   Classes:					   */
@@ -100,11 +119,13 @@ td.Page_Header_Info{
 	font-weight:bold; 
 	height:23;
 	direction:ltr ;
-	text-align:right
+	text-align:right ;
+	white-space:nowrap
+
 }
 td.Page_Header_Line{ 
 	height:3;
-	background-image:url('/IBSng/images/background_line_header.gif') 
+	background-image:url('/IBSng/images/header/background_line_header.gif') 
 }
 
 td.Page_Title{ 
@@ -114,8 +135,10 @@ td.Page_Title{
 	font-weight:bold; 
 	height:17;
 	direction:ltr ;
-	background-image:url('/IBSng/images/background_page_title.gif') ;
-	text-align:center
+	background-image:url('/IBSng/images/header/background_page_title.gif') ;
+	text-align:center ;
+	white-space:nowrap
+
 }
 td.Page_Top_Space{ 
 	height:10
@@ -126,8 +149,8 @@ td.Page_Top_Link{
 	color: #FFFFFF; 
 	font-weight:bold; 
 	direction:ltr ;
-	text-align:center 
-	
+	text-align:center ;
+	white-space:nowrap
 }
 
 a:link.Header_Top_Links{
@@ -229,6 +252,11 @@ table.Form_Main {
 /*      5.td.Form_Title_Top_Line			*/
 /*      6.td.Form_Title_End_Line			*/
 /*	7.td.Form_Title_orange				*/
+/*	8.td.Form_Title_green				*/
+/*	9.td.Form_Title_blue				*/
+/*	10.td.Form_Title_aqua				*/
+/*	11.td.Form_Title_brown				*/
+/*	12.td.Form_Title_violet				*/
 /*------------------------------------------------------*/
 
 table.Form_Title {  
@@ -283,6 +311,60 @@ td.Form_Title_orange{
 	background-color:#ff9c00 ;
 	white-space:nowrap
 }
+td.Form_Title_green{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #FFFFFF; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#178009 ;
+	white-space:nowrap
+}
+
+td.Form_Title_blue{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #FFFFFF; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#10418f ;
+	white-space:nowrap
+}
+
+td.Form_Title_aqua{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #FFFFFF; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#0D738D ;
+	white-space:nowrap
+}
+
+td.Form_Title_brown{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #FFFFFF; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#CC7A00 ;
+	white-space:nowrap
+}
+
+td.Form_Title_violet{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #FFFFFF;
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#571978 ;
+	white-space:nowrap
+}
 
 /*------------------------------------------------------*/
 /*  Form Foot  						*/
@@ -317,7 +399,9 @@ td.Form_Foot_Below_Line_red{
 	font-weight:bold;
 	height:18;
 	width:100%;
-	background-color:#FFFFFF
+	background-color:#FFFFFF ;
+	white-space:nowrap
+
 }
 td.Form_Foot_Begin_Line_red{ 
 	height:2;
@@ -337,7 +421,9 @@ td.Form_Foot_Below_Line_orange{
 	font-weight:bold;
 	height:18;
 	width:100%;
-	background-color:#FFFFFF
+	background-color:#FFFFFF ;
+	white-space:nowrap
+
 }
 
 td.Form_Foot_Begin_Line_orange{ 
@@ -366,6 +452,8 @@ td.Form_Foot_Begin_Line_orange{
 /*      16.td.Form_Content_Row_Left_userinfo_dark		*/
 /*      17.td.Form_Content_Row_Right_userinfo_dark		*/
 /*      18.td.Form_Content_Row_groupinfo_dark			*/
+/*      19.td.Menu_Content_Row_light				*/
+/*      20.td.Menu_Content_Row_white				*/
 /*--------------------------------------------------------------*/
 
 td.Form_Content_Row_End{ 
@@ -562,6 +650,30 @@ td.Form_Content_Row_groupinfo_dark{
 	white-space:nowrap
 }
 
+td.Menu_Content_Row_light{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #353535; 
+	font-weight:bold; 
+	height:20;
+	width:100%;
+	direction:ltr ;
+	background-color:#ECECEC ;
+	white-space:nowrap
+}
+td.Menu_Content_Row_white	
+{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #353535; 
+	font-weight:bold; 
+	height:40;
+	width:100%;
+	direction:ltr ;
+	background-color:#FFFFFF ;
+	white-space:nowrap
+}
+
 /*----------------------------------------------------------------------*/
 /*  Form Content textarea	  					*/
 /*    Classes:  							*/
@@ -607,7 +719,9 @@ td.Form_Content_Row_Left_textarea_td_light{
 	width:100%;
 	height:20;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC;
+	white-space:nowrap
+
 }
 td.Form_Content_Row_Right_textarea_td_light{ 
 	font-family: Tahoma; 
@@ -640,7 +754,9 @@ td.Form_Content_Row_Left_textarea_td_dark{
 	width:100%;
 	height:20;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9 ;
+	white-space:nowrap
+
 }
 td.Form_Content_Row_Right_textarea_td_dark{ 
 	font-family: Tahoma; 
@@ -823,7 +939,9 @@ td.List_Title{
 	height:20;
 	direction:ltr ;
 	background-color:#9A1111 ;
-	width:50%
+	width:50% ;
+	white-space:nowrap
+
 }
 td.List_Title_Begin{ 
 	height:20;
@@ -841,7 +959,9 @@ td.List_Title_Top_Line{
 	color: #909090; 
 	font-weight:bold;
 	height:17;
-	background-color:#FFFFFF
+	background-color:#FFFFFF ;
+	white-space:nowrap
+
 }
 td.List_Title_End_Line{ 
 	height:3;
@@ -1009,7 +1129,7 @@ td.RightSide_Color_light{
 td.RightSide_seperator{ 
 	width:100%:
 	height:1;
-	background-image:url('dash_line.gif') 
+	background-image:url('/IBSng/images/sidebar/dash_line.gif') 
 }
 
 td.RightSide_Links{ 
@@ -1063,6 +1183,6 @@ td.RightSide_about_body{
 p.about_page
 {
     text-indent:6px;
-    line-height:120%;
-    text-align:justify;
+    line-height:130%;
+    text-align:left;
 }

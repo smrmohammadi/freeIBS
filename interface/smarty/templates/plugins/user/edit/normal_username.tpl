@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="normalAttrs"}
-{viewTable title="Internet Username and Password" table_width="370"} 
+{viewTable title="Internet Username and Password" table_width="380" nofoot="TRUE"} 
     {addEditTD type="left"}
 	Has Internet Username
     {/addEditTD}
@@ -13,9 +13,19 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input id="normal_username" type=text  class=text name="normal_username" value="{attrDefault target="user" default_var="normal_username" default_request="normal_username"}"> 
+	<input id="normal_username" type=text  class=text name="normal_username" 
+	    value="{attrDefault target="user" default_var="normal_username" default_request="normal_username"}" 
+	    onChange="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',0);" 
+	    onKeyUp="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',1);"
+	> 
 	{multistr form_name="user_edit" input_name="normal_username"}
 	{helpicon subject="normal username" category="user"}
+	<a href="#" onClick="showUserAddCheckWindow('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}');">
+	    <img border=0 name="normal_user_exists" src="/IBSng/admin/user/check_user_for_add.php?image=t&username=&type=normal&current_username=" title="Users Exist">
+	</a>
+	<script language=javascript>
+	    updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',1);
+	</script>
     {/addEditTD}
 
     {addEditTD type="left"}
@@ -59,7 +69,7 @@
 
 
     {addEditTD type="left"}
-	Save In List of username/passwords
+	Save In List<font size=1>[Usernames/Passwords]</font>
     {/addEditTD}
 
     {addEditTD type="right"}
@@ -67,6 +77,7 @@
 	{helpicon subject="save username and password" category="user"}
     {/addEditTD}
 {/viewTable}
+<br>
 <script language="javascript">
 	normal_select=new DomContainer();
 	normal_select.disable_unselected=true;

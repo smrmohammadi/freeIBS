@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="multiLogin"}
-{userInfoTable title="Multi Login"}
+{userInfoTable title="Multi Login" nofoot="TRUE"}
     {userInfoTD type="user_left"}
 	Has Multi Login
     {/userInfoTD}
@@ -25,6 +25,7 @@
 	{helpicon subject="multi login" category="user"}
     {/userInfoTD}
 {/userInfoTable}
+<br>
 <script language="javascript">
 	multi_login_select=new DomContainer();
 	multi_login_select.disable_unselected=true;

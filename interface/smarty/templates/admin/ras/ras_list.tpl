@@ -9,13 +9,9 @@
 {include file="err_head.tpl"}
 
 <center>
-{if  $deactive_success}
-    {headerMsg var_name="deactive_success"}Ras DeActivated Successfully.{/headerMsg}
-{/if}
+{headerMsg var_name="deactive_success"}Ras DeActivated Successfully.{/headerMsg}
+{headerMsg var_name="reactive_success"}Ras ReActivated Successfully.{/headerMsg}
 
-{if  $reactive_success}
-    {headerMsg var_name="reactive_success"}Ras ReActivated Successfully.{/headerMsg}
-{/if}
 {listTable title="Active Rases" cols_num=4}
 	{listTableHeaderIcon action="view"}
 	{listTableHeaderIcon action="active" close_tr=TRUE}

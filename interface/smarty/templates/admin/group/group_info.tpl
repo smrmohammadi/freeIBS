@@ -21,10 +21,13 @@
     <input type=hidden name="edit_group" value="1">
 
 {include file="plugins/group/view/group_info.tpl"}
+<br>
 {include file="plugins/group/view/exp_date.tpl"}
+<br>
 {include file="plugins/group/view/multi_login.tpl"}
+<br>
 {include file="plugins/group/view/normal_charge.tpl"}
-
+<br>
 
 {attrTableFoot action_icon="edit" table_width="280"}
 {/attrTableFoot}

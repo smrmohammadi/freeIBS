@@ -8,7 +8,7 @@ function smarty_function_multistr($params,&$smarty)
 */
     return <<<EOF
 <a href="javascript:showMultiStr('{$params["form_name"]}','{$params["input_name"]}')" title="Show All Strings" style="text-decoration: none">
-    <img src="/IBSng/images/multistr_icon.gif" border=0>
+    <img src="/IBSng/images/icon/multistr_icon.gif" border=0>
 </a>
 EOF;
 }

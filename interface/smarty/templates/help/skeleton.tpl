@@ -5,22 +5,22 @@
 	Subject
     {/addEditTD}
     {addEditTD type="right1" double="TRUE"}
-	<nobr>{$subject|capitalize}
+	{$subject|capitalize}
     {/addEditTD}
     {addEditTD type="left2" double="TRUE"}
     	Category
     {/addEditTD}
     {addEditTD type="right2" double="TRUE"}
-	<nobr>{$category|capitalize}
+	{$category|capitalize}
     {/addEditTD}
 
 <tr>
     <td colspan=10>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" >
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_dark.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_left_of_comment_dark.gif"></td>
 				<td class="Form_Content_Row_Top_textarea_line_dark"></td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_dark.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_right_of_comment_dark.gif"></td>
 			</tr>
 			<tr>
 				<td class="Form_Content_Row_Left_textarea_line_dark">&nbsp;</td>
@@ -28,9 +28,9 @@
 				<td class="Form_Content_Row_Right_textarea_line_dark">&nbsp;</td>
 			</tr>
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_dark.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_left_of_comment_dark.gif"></td>
 				<td class="Form_Content_Row_Bottom_textarea_line_dark">&nbsp;</td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_dark.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_right_of_comment_dark.gif"></td>
 			</tr>
 		</table>
 </tr>

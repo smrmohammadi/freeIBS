@@ -10,7 +10,7 @@
 {/headerMsg}    
 {/if}
 
-{viewTable title="User  Information" table_width="370"}
+{viewTable title="User  Information" table_width="380" nofoot="TRUE"}
 
     {addEditTD type="left"}
 	User ID
@@ -20,7 +20,7 @@
     {/addEditTD}
 
 {/viewTable}
-
+<br>
 <form method=POST action="/IBSng/admin/plugins/edit.php" name="user_edit">
 
     <input type=hidden name="target" value="user">

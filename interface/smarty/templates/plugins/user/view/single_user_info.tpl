@@ -1,4 +1,4 @@
-{viewTable title="Basic User Informations" table_width="370"} 
+{viewTable title="Basic User Informations" table_width="380" nofoot="TRUE"} 
 
     {addEditTD type="left"}
 	User ID
@@ -13,7 +13,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	{$user_info.basic_info.credit|price} <a href="change_credit.php">Change Credit</a>
+	{$user_info.basic_info.credit|price} <a class="link_in_body" href="change_credit.php">Change Credit</a>
     {/addEditTD}
 
     {addEditTD type="left"}

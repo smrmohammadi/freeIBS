@@ -15,7 +15,7 @@ function smarty_function_listTableBodyIcon($params,&$smarty)
 	return "";
     $cycle_color=(isset($params["cycle_color"]) and $params["cycle_color"]=="TRUE")?TRUE:FALSE;
     $color=getTRColor($cycle_color);
-    $link="/IBSng/images/list_body_{$action}_{$color}.gif";
+    $link="/IBSng/images/list/list_body_{$action}_{$color}.gif";
     
     return <<<EOF
 <img border="0" src="{$link}" width="25" height="20" title="{$action}">

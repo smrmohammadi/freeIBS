@@ -158,7 +158,7 @@ Ras Info
 	        Add IPpool To Ras
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<nobr><select name="add_ip_pool">
+		<select name="add_ip_pool">
 				{html_options values=$ippool_names output=$ippool_names}
 			    </select>
 	    {/addEditTD}
@@ -166,23 +166,25 @@ Ras Info
     {/addEditTable}
 	</form>
     <form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
+	<input type=hidden name=ras_ip value="{$info.ras_ip}">
 	{addEditTable title="Delete Port(s)" table_width="220" action_icon="delete"}
 	    {addEditTD type="left" err="del_port_err"}
 	        Ports(s)
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<nobr><input class="text" type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}		
+		<input class="text" type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}		
     	    {/addEditTD}
 	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
     {/addEditTable}
     </form>
     <form method=POST action="/IBSng/admin/ras/edit_port.php" name=edit_port>
+	<input type=hidden name=ras_ip value="{$info.ras_ip}">
 	{addEditTable title="Edit Port(s)" table_width="220" action_icon="edit"}
 	    {addEditTD type="left" err="edit_port_err"}
 	        Ports(s)
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<nobr><input class="text" type=text name=edit_port> {multistr form_name="edit_port" input_name="edit_port"}		
+		<input class="text" type=text name=port_name> {multistr form_name="edit_port" input_name="edit_port"}		
     	    {/addEditTD}
 	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
         {/addEditTable}

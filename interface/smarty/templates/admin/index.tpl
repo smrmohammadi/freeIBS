@@ -10,7 +10,7 @@
 <!-- Header -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="107"><img border="0" src="/IBSng/images/logoibsng.gif"></td>
+		<td width="107"><img border="0" src="/IBSng/images/logo/logoibsng.gif"></td>
 		<td width="100%" class="Header_color"></td>
 	</tr>
 	<tr>
@@ -31,9 +31,9 @@
 		<td width="200" rowspan="2">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td width="22"><img border="0" src="/IBSng/images/arrow_before_page_title.gif"></td>
-				<td class="Page_Title"><nobr>Admin Login</b></td>
-				<td width="27" ><img border="0" src="/IBSng/images/arrow_after_page_title.gif"></td>
+				<td width="22"><img border="0" src="/IBSng/images/arrow/arrow_before_page_title.gif"></td>
+				<td class="Page_Title">Admin Login</td>
+				<td width="27" ><img border="0" src="/IBSng/images/arrow/arrow_after_page_title.gif"></td>
 			</tr>
 		</table>
 		</td>
@@ -87,7 +87,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td width="34" rowspan="2"><img border="0" src="/IBSng/images/logo_parspooyesh.gif"></td>
+		<td width="34" rowspan="2"><img border="0" src="/IBSng/images/logo/logo_parspooyesh.gif"></td>
 		<td rowspan="2" width="280" class="Page_Footer">
 		<!--Footer Links -->
 			<a class="Footer_Link" target="_blank" href="http://www.ParsPooyesh.com">www.Parspooyesh.com</a>

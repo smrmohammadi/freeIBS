@@ -24,7 +24,7 @@ class UserActions:
 	"""
 	    XXX:change to use stored procedures
 	"""
-	return ibs_db.createInsertQuery("user_attrs",{"attr_value":dbText(attr_value)}
+	return ibs_db.createUpdateQuery("user_attrs",{"attr_value":dbText(attr_value)}
 						    ,"attr_name=%s and user_id=%s"%
 						    (dbText(attr_name),user_id)
 					)
@@ -62,12 +62,17 @@ class UserActions:
 	return ibs_db.createDeleteQuery("normal_users","user_id=%s"%user_id)
 
 ######################################################
-    def checkNormalUsernameChars(self,username):
+    def _checkNormalUsernameChars(self,username):
 	if not len(username) or username[0] not in string.letters:
-	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
-
+	    return False
         if re.search("[^A-Za-z0-9_\-\.]",username) != None:
-	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
+	    return False
+	return True
+	    
+    def checkNormalUsernameChars(self,username):
+        if self._checkNormalUsernameChars(username):
+	    raise GeneralException(errorText("USER_ACTIONS","BAD_NORMAL_USERNAME"))
+
 	
 
 ####################################################
@@ -253,6 +258,8 @@ class UserActions:
 	    NOTE: This is not thread safe 
 	    XXX: test & check where_clause length
 	"""
+	if len(normal_username)==0:
+	    return []
 	where_clause=" or ".join(map(lambda username:"normal_username=%s"%dbText(username),normal_username))
 	users_db=db_main.getHandle().get("normal_users",where_clause)
 	return [m["normal_username"] for m in users_db]

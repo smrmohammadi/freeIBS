@@ -1,6 +1,6 @@
 <input type="hidden" name="group_id" value="{$group_id}">
 {attrUpdateMethod update_method="groupInfo"}
-{viewTable title="Group Information"}
+{viewTable title="Group Information" nofoot="TRUE"}
     {addEditTD type="left"}
 	Group ID
     {/addEditTD}
@@ -39,4 +39,4 @@
 	<textarea name=comment class=text>{strip}{ifisinrequest name="comment" default_var="comment"}{/strip}</textarea>
     {/addEditTD}
 {/viewTable}
-
+<br>

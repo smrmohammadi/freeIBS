@@ -1,6 +1,6 @@
 {attrUpdateMethod update_method="relExpDate"}
 
-  {viewTable title="Expiration Dates"}
+  {viewTable title="Expiration Dates" nofoot="TRUE"}
     {addEditTD type="left"}
 	Has Relative Expiration Date
     {/addEditTD}
@@ -19,7 +19,7 @@
     {/addEditTD}
 
   {/viewTable}
-
+<BR>
 <script language="javascript">
 	rel_exp_select=new DomContainer();
 	rel_exp_select.disable_unselected=true;

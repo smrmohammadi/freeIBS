@@ -29,7 +29,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td width="34" rowspan="2"><img border="0" src="/IBSng/images/logo_parspooyesh.gif"></td>
+		<td width="34" rowspan="2"><img border="0" src="/IBSng/images/logo/logo_parspooyesh.gif"></td>
 		<td rowspan="2" width="280" class="Page_Footer">
 		<!--Footer Links -->
 			<a class="Footer_Link" target="_blank" href="http://www.ParsPooyesh.com">www.Parspooyesh.com</a>

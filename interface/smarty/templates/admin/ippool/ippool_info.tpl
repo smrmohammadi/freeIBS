@@ -42,7 +42,7 @@
 		    IP(s)
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<nobr><input type=text name=add_ip value="{ifisinrequest name="add_ip"}" class=text>{multistr form_name="add_ip_form" input_name="add_ip"}    
+		<input type=text name=add_ip value="{ifisinrequest name="add_ip"}" class=text>{multistr form_name="add_ip_form" input_name="add_ip"}    
 	    {/addEditTD}
 	    {/addEditTable}
 	<input type=hidden name=ippool_name value="{$ippool_name}">
@@ -55,7 +55,7 @@
 		    IP(s)
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<nobr><input type=text name=del_ip value="{ifisinrequest name="del_ip"}" class=text>{multistr form_name="del_ip_form" input_name="del_ip"}    
+		<input type=text name=del_ip value="{ifisinrequest name="del_ip"}" class=text>{multistr form_name="del_ip_form" input_name="del_ip"}    
 	    {/addEditTD}
 	    {/addEditTable}
 	<input type=hidden name=ippool_name value="{$ippool_name}">

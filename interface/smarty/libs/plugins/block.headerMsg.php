@@ -15,7 +15,7 @@ function smarty_block_headerMsg($params,$content,&$smarty,&$repeat)
 <table align=center border=0>
 	<tr>
 	    <td align=left>
-		<img border="0" src="/IBSng/images/before_successful_msg.gif">
+		<img border="0" src="/IBSng/images/msg/before_successful_msg.gif">
 	    </td>
 	    <td align=left class="error_messages">	    
 		{$content}

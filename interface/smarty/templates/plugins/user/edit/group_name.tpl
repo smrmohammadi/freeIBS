@@ -1,8 +1,8 @@
 {attrUpdateMethod update_method="groupName"}
 
-{viewTable title="Group Name" } 
+{viewTable title="Group Name" table_width="380" nofoot="TRUE"} 
     {addEditTD type="left"}
-	Group Name:
+	Group Name
     {/addEditTD}
 
     {addEditTD type="right"}
@@ -13,3 +13,4 @@
 	{/if}
     {/addEditTD}
 {/viewTable}
+<br>

@@ -1,4 +1,4 @@
-{userInfoTable title="Internet Charge"}
+{userInfoTable title="Internet Charge" nofoot="TRUE"}
     {userInfoTD type="user_left"}
 	{strip}
 	    {if $can_change}{editCheckBox edit_tpl_name="normal_charge"}{/if}

@@ -15,8 +15,10 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
+	if(in_array($params["type"],array("left","left1","left2")) and trim($content)!="")
+	    $content.=" :";
 	$ret="";
-	$err_star_img_link="<img src='/IBSng/images/error.gif'> ";
+	$err_star_img_link="<img src='/IBSng/images/msg/error.gif'> ";
 	if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
         {
 	    $err_star=$err_star_img_link;
@@ -41,9 +43,9 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 		<td class="Form_Content_Row_Left_Textarea_2col" valign="top" colspan="2">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content} :</nobr></td>
-				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}">{$content}</td>
+				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
 		</td>
@@ -58,9 +60,9 @@ END;
 		<td colspan="7" class="Form_Content_Row_Right_Textarea_2col">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" >
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Top_textarea_line_{$color}"></td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_right_of_comment_{$color}.gif"></td>
 			</tr>
 			<tr>
 				<td class="Form_Content_Row_Left_textarea_line_{$color}">&nbsp;</td>
@@ -68,9 +70,9 @@ END;
 				<td class="Form_Content_Row_Right_textarea_line_{$color}">&nbsp;</td>
 			</tr>
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Bottom_textarea_line_{$color}">&nbsp;</td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_right_of_comment_{$color}.gif"></td>
 			</tr>
 		</table>
 		</td>
@@ -92,8 +94,8 @@ END;
 	    	$color=getTRColor(TRUE);
 		$ret=<<<END
 	<tr>
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}{$content}</td>
 END;
 	    }
 	    else if ($params["type"]=="right1")
@@ -101,7 +103,7 @@ END;
 	    	$color=getTRColor();
 		$ret=<<<END
 		<td class="Form_Content_Row_Right_2col_{$color}">{$content}</td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 END;
 	    }
 	    else if($params["type"]=="left2")
@@ -110,8 +112,8 @@ END;
 		$ret=<<<END
 		<td class="Form_Content_Col_Space">&nbsp;</td>
 		
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star} {$content}</td>
 
 END;
 	    }
@@ -120,7 +122,7 @@ END;
 	    	$color=getTRColor();
 		$ret=<<<END
 		<td class="Form_Content_Row_Right_2col_{$color}">{$content}</td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 		
 	</tr>
 		<tr>
@@ -143,9 +145,9 @@ END;
 		<td class="Form_Content_Row_Left_Textarea" valign="top" colspan="2">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content} :</nobr></td>
-				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}">{$content}</td>
+				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
 		</td>
@@ -158,9 +160,9 @@ END;
 		<td colspan="2" class="Form_Content_Row_Right_Textarea">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" >
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Top_textarea_line_{$color}"></td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/top_right_of_comment_{$color}.gif"></td>
 			</tr>
 			<tr>
 				<td class="Form_Content_Row_Left_textarea_line_{$color}">&nbsp;</td>
@@ -168,9 +170,9 @@ END;
 				<td class="Form_Content_Row_Right_textarea_line_{$color}">&nbsp;</td>
 			</tr>
 			<tr>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_left_of_comment_{$color}.gif"></td>
 				<td class="Form_Content_Row_Bottom_textarea_line_{$color}">&nbsp;</td>
-				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/comment/bottom_right_of_comment_{$color}.gif"></td>
 			</tr>
 		</table>
 		</td>
@@ -190,8 +192,8 @@ END;
 		$color=getTRColor(TRUE);
 		$ret=<<<END
 	<tr {$id}>
-		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Left_{$color}">{$err_star} {$content}</td>
 END;
 	    }
 	    else //type is right
@@ -199,7 +201,7 @@ END;
 		$color=getTRColor();
 		$ret=<<<END
 		<td class="Form_Content_Row_Right_{$color}">{$content}</td>
-		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 	</tr>
 	<tr>
 		<td colspan="4" class="Form_Content_Row_Space"></td>

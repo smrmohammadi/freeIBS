@@ -1,9 +1,56 @@
 {include file="admin_header.tpl" title="Setting" selected="Charge"}
 
-<a href="charge">Charge</a>
-<a href="misc">Misc</a>
-<a href="ras">Ras</a>
-<a href="ippool">IPpool</a>
+<table border=0 width="100%" height="100%" cellspacing=0 cellpadding=0>
+    <tr>
+	<td colspan=2 height=30>
+	</td>
+    </tr>	
+    <tr>
+	<td valign="top" align="center"> 
+		{viewTable title="Charge" table_width="200" nofoot="TRUE" color="red" arrow_color="white"}
+		    {menuTR}
+			<a href="/IBSng/admin/charge/charge_list.php" class="page_menu">Charge List</a>
+		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/charge/add_new_charge.php" class="page_menu">Add New Charge</a>
+		    {/menuTR}
+		{/viewTable}
+	</td>
+	<td valign="top" align="center">
+		{viewTable title="RAS" table_width="200" nofoot="TRUE" color="green" arrow_color="white"}
+		    {menuTR}
+			<a href="/IBSng/admin/ras/ras_list.php" class="page_menu">RAS List</a>
+		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/ras/add_new_ras.php" class="page_menu">Add New RAS</a>
+		    {/menuTR}
+		{/viewTable}
+	</td>
+    </tr>
+    <tr>
+	<td valign="top" align="center">
+		{viewTable title="IPpool" table_width="200" nofoot="TRUE" color="blue" arrow_color="white"}
+		    {menuTR}
+			<a href="/IBSng/admin/ippool/ippool_list.php" class="page_menu">IPpool List</a>
+		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/ippool/add_new_ippool.php" class="page_menu">Add New IPpool</a>
+		    {/menuTR}
+		{/viewTable}
+	</td>
+	<td valign="top" align="center">
+		{viewTable title="Misc" table_width="200" nofoot="TRUE" color="brown" arrow_color="white"}
+		    {menuTR}
+			<a href="/IBSng/admin/misc/show_ibs_defs.php" class="page_menu">Advanced Configuration</a>
+		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/" class="page_menu"></a>
+		    {/menuTR}
+
+		{/viewTable}
+	</td>
+    </tr>
+</table>
 
 
 {addRelatedLink}

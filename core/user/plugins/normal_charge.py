@@ -23,7 +23,6 @@ class NormalChargeAttrUpdater(AttrUpdater):
 
     def changeInit(self,normal_charge):
 	self.charge_name=normal_charge
-	dargs["admin_obj"].canUseCharge(self.charge_name)
 	self.useGenerateQuery({"normal_charge":charge_main.getLoader().getChargeByName(self.charge_name).getChargeID()})
 
     def deleteInit(self):
@@ -31,7 +30,8 @@ class NormalChargeAttrUpdater(AttrUpdater):
 
     def checkInput(self,src,action,dargs):
 	dargs["admin_obj"].canDo("CHANGE NORMAL USER ATTRIBUTES")
-
+	if hasattr(self,"charge_name"):
+	    dargs["admin_obj"].canUseCharge(self.charge_name)
 
 
 class NormalChargeAttrHandler(attribute.AttributeHandler):

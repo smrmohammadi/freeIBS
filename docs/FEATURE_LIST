@@ -34,6 +34,10 @@ Interface:
         Charge add new voip rule
 
 
+
+
+
+
 Phase1:
 Jalali/Gregorian Dates
 IP Pool/IP Assign
@@ -44,6 +48,20 @@ Action on Group Users
 CHAP
 Wireless/Lan Accounting
 PySNMP merge
+
+Interface:
+    user list
+    change credit
+    change password
+    check password
+    user report
+    online users
+Core:
+    search user
+    ippool o ras o user o online o charge o plugin interface
+    online handlers
+
+
 
 Interface:
     Admin Login				DONE
@@ -96,9 +114,9 @@ Interface:
     IPPOOL edit				DONE
     
     User Add new users			DONE
-    User edit user			----
-    User list attributes		----
-    User change attributes		----
+    User edit user			DONE
+    User list attributes		DONE
+    User change attributes		DONE
     User list				----
     User del				----
     User Lan Usage Report		----
@@ -153,13 +171,13 @@ Core Features:
 	
     User
         User Pools				DONE	*no tested!
-	User attribute manager			Partially   2004-8-7*
-	User plugin manager			Partially
-	User Loader				Partially
-	User Actions				Partially    2004-8-7
-	User Handlers				----
+	User attribute manager			DONE
+	User plugin manager			DONE
+	User Loader				DONE
+	User Actions				DONE
+	User Handlers				DONE
 	    User add				DONE
-	    
+	User Search				----
 	User Interface				----
 	User/Ras Interaction			----
 	Internet User Interface			----
@@ -177,10 +195,10 @@ Core Features:
 	IPPOOL Implemention			Partially Done
 
 User Attributes:
-    Normal					----		2004-8-7*
-    Rel exp date				Partially DONE
-    Multilogin					Partially DONE
-    Credit					----
-    Charge					----
+    Normal					DONE
+    Rel exp date				DONE
+    Multilogin					DONE
+    Credit					DONE
+    Charge					DONE
     Change Radius Attrs				----
     Assign IP Address				----

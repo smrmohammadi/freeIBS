@@ -1,6 +1,6 @@
 {attrUpdateMethod update_method="normalCharge"}
 
-  {viewTable title="Internet Charge"}
+  {viewTable title="Internet Charge" nofoot="TRUE"}
     {addEditTD type="left"}
 	Has Internet Charge
     {/addEditTD}
@@ -18,6 +18,7 @@
     {/addEditTD}
 
   {/viewTable}
+  <BR>
 <script language="javascript">
 	normal_charge_select=new DomContainer();
 	normal_charge_select.disable_unselected=true;

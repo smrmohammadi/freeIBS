@@ -4,6 +4,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 {
 /*
     create header and footer of an Add Edit Style table
+
     parameter title(string,optional): Title of table that will be printed on top of table
     parameter table_width(string,optional): width of table, if not set, defaults are used
     parameter double(boolean,optional): Set Double table, double tables has two usable areas in 
@@ -12,7 +13,10 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 					     Can be on of "edit" "delete" "add" or "ok"
 					     default is "ok"
 
+    parameter nofoot(boolean,optional): if set to TRUE, do not print the last footer of table
     parameter color(string,optional): Set color of table header, default is red
+    parameter arrow_color(string,optional): Set color of arrow
+
 
 */
     if(!is_null($content))
@@ -34,6 +38,11 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 	else
 	    $color="red";
 
+	if(isset($params["arrow_color"]))
+	    $arrow_color=$params["arrow_color"];
+	else
+	    $arrow_color="orange";
+
 	$action_icon="ok";
 	if(isset($params["action_icon"]) and in_array($params["action_icon"],array("edit","delete","add","ok")))
 	    $action_icon=$params["action_icon"];
@@ -48,9 +57,9 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 		<!-- Form Title Table -->
 		<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
 			<tr>
-				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_{$color}.gif"></td>
-				<td class="Form_Title_{$color}">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
-				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_form_title_{$color}.gif"></td>
+				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/form/begin_form_title_{$color}.gif"></td>
+				<td class="Form_Title_{$color}">{$title} <img border="0" src="/IBSng/images/arrow/arrow_{$arrow_color}_on_{$color}.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/form/end_form_title_{$color}.gif"></td>
 			</tr>
 			</table>
 		<!-- End Form Title Table  -->
@@ -62,14 +71,19 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 
 END;
 	$footer=<<<END
-	
+</table>
+END;
+
+	if(!isset($params["nofoot"]) or $params["nofoot"]!="TRUE")
+	{
+	$footer=<<<END
 	<tr>
 		<td colspan="{$colspans}">
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
 					<td class="Form_Foot_Begin_Line_{$color}"></td>
-					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/{$action_icon}.gif"></td>
+					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/list/end_of_line_bottom_of_table.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/icon/{$action_icon}.gif"></td>
 				</tr>
 				<tr>
 					<td class="Form_Foot_Below_Line_{$color}"></td>
@@ -78,9 +92,11 @@ END;
 			<!-- End Form Foot Table -->
 		</td>
 	</tr>
-</table>
-<br>
+	{$footer}
+	<br>
 END;
+      }
+
     return $header.$content.$footer;    
     }
     

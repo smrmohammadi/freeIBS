@@ -7,7 +7,7 @@
 """
 
 from core.lib import ranges
-
+import itertools
 
 class MultiStr:
     def __init__(self,string):
@@ -32,7 +32,6 @@ class MultiStr:
 	    sum+=len(_range)
 	    if sum>_index:
 		return _range[_index-(sum-len(_range))]
-
 
     def __iter__(self):
 	class MultiStrIter:

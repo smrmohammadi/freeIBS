@@ -1,4 +1,4 @@
-{viewTable title="Normal Charge"}
+{viewTable title="Normal Charge" nofoot="TRUE"}
     {addEditTD type="left"}
 	{strip}
 	    {if $can_change}{editCheckBox edit_tpl_name="normal_charge"}{/if}

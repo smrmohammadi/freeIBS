@@ -2,7 +2,7 @@
     Shows one admin information, on error, client is redirected to admin_list
     so no error will be shown here
 *}
-{include file="admin_header.tpl" title="Admin Information"}
+{include file="admin_header.tpl" title="Admin Information" selected="Admin List"}
 
 {include file="err_head.tpl"}
 <center>
@@ -75,7 +75,7 @@
 		Name
 	    {/addEditTD}
 	    {addEditTD type="right1" double="TRUE"}
-	        <nobr>{$name}
+	        {$name}
 	    {/addEditTD}
 	    {addEditTD type="left2" double="TRUE"} 
 	        Creator

@@ -1,5 +1,5 @@
 {attrUpdateMethod update_method="relExpDate"}
-{userInfoTable title="User Expiration Date"} 
+{userInfoTable title="User Expiration Date" nofoot="TRUE"} 
     {userInfoTD type="user_left"}
 	Has Reletaive Expiration Date
     {/userInfoTD}
@@ -28,7 +28,7 @@
 	{/ifHasAttr}
     {/userInfoTD}
 {/userInfoTable}
-
+<br>
 <script language="javascript">
 	rel_exp_select=new DomContainer();
 	rel_exp_select.disable_unselected=true;

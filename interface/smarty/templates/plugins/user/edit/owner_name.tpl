@@ -1,7 +1,7 @@
 {attrUpdateMethod update_method="ownerName"}
-{viewTable title="Owner Name" } 
+{viewTable title="Owner Name" nofoot="TRUE" table_width="380"} 
     {addEditTD type="left"}
-	Owner Admin:
+	Owner Admin
     {/addEditTD}
 
     {addEditTD type="right"}
@@ -13,3 +13,4 @@
     {/addEditTD}
 
 {/viewTable}
+<br>

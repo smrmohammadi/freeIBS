@@ -3,7 +3,7 @@
 *}
 {config_load file=admin_perms_list.conf}
 {config_load file=perm_category_names.conf}
-{include file="admin_header.tpl" title="Admin [$admin_username] Permission List"}
+{include file="admin_header.tpl" title="Admin [$admin_username] Permission List" selected="Admin List"}
 {include file="err_head.tpl"}
 
     

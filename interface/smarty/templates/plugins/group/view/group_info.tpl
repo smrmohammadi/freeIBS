@@ -1,4 +1,4 @@
-{viewTable title="Group Informations"}
+{viewTable title="Group Informations" nofoot="TRUE"}
     {addEditTD type="left"}
 	    {strip}
 		{if $can_change} {editCheckBox edit_tpl_name="group_info"} {/if}

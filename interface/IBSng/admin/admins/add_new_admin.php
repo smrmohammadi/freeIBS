@@ -9,8 +9,6 @@ if(isInRequest("username","password1","password2","name","comment"))
 else
     interface();
 
-
-
 function interface($err=NULL)
 {
     $smarty=new IBSSmarty();

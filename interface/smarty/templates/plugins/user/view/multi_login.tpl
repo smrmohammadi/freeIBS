@@ -1,4 +1,4 @@
-{userInfoTable title="Multi Login"}
+{userInfoTable title="Multi Login" nofoot="TRUE"}
     {userInfoTD type="user_left"}
 	{strip}
 	    {if $can_change} {editCheckBox edit_tpl_name="multi_login"} {/if}

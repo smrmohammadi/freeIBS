@@ -32,7 +32,7 @@ USER_ACTIONS_ERRORS={
     "CREDIT_NOT_FLOAT":"Credit must be a float number",
     "CREDIT_MUST_BE_POSTIVE":"Credit must be positive number",
     "INVALID_CREDIT_ACTION":"Invalid credit change action %s",
-    "BAD_USERNAME":"Bad characters in username",
+    "BAD_NORMAL_USERNAME":"Bad characters in username",
     "BAD_PASSWORD":"Bad characters in password",
     "BAD_EMAIL":"Invalid email address %s",
     "INVALID_REL_EXP_DATE":"Relative Expiration Date is Invalid",
@@ -40,7 +40,8 @@ USER_ACTIONS_ERRORS={
     "COUNT_NOT_INTEGER":"User count should be positive integer",
     "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
     "INVALID_PASSWORD_LENGTH":"Invalid password length %s",
-    "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list"
+    "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
+    "NORMAL_USERNAME_EXISTS":"Normal username already exists"
 }
 
 USER_ERRORS={
@@ -62,6 +63,7 @@ NORMAL_USER_LOGIN_ERRORS={
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
     "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
     "CREDIT_FINISHED":"Credit has finished"
+
 }
 
 VOIP_USER_LOGIN_ERRORS={

@@ -16,7 +16,6 @@
 	    Load Permission Template into admin:
         {/addEditTD}
 	{addEditTD type="right"}
-	    <nobr>
 	    {literal}
 	    <script language="javascript">
 		function showTemplatePerms(){

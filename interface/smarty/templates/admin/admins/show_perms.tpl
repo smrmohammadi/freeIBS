@@ -2,7 +2,7 @@
 	Show Permissions of one category
 *}
 {config_load file=perm_category_names.conf}
-{include file="admin_header.tpl" title="Add Permission to admin [$admin_username]"}
+{include file="admin_header.tpl" title="Add Permission to admin [$admin_username]" selected="Admin List"}
 {include file="err_head.tpl"}
     
 {headerMsg var_name="add_success"}
@@ -31,9 +31,9 @@
 			<!-- Form Title Table -->
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
 			<tr>
-				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
-				<td class="Form_Title_red">Permission: {$perm.name} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
-				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_form_title_red.gif"></td>
+				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/form/begin_form_title_red.gif"></td>
+				<td class="Form_Title_red">Permission: {$perm.name} <img border="0" src="/IBSng/images/arrow/arrow_orange_on_red.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/form/end_form_title_red.gif"></td>
 		    	</tr>
 		    	</table>
 		    <!-- End Form Title Table  -->
@@ -109,8 +109,8 @@
 			    <table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
 					<td class="Form_Foot_Begin_Line_red"></td>
-					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/add.gif"></td>
+					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/list/end_of_line_bottom_of_table.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/icon/add.gif"></td>
 				</tr>
 				<tr>
 					<td class="Form_Foot_Below_Line_red"></td>

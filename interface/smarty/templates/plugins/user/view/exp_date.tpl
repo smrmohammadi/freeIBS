@@ -1,4 +1,4 @@
-{userInfoTable title="User Expiration Date"} 
+{userInfoTable title="User Expiration Date" nofoot="TRUE"} 
     {userInfoTD type="user_left"}
 	{if $can_change}{editCheckBox edit_tpl_name="rel_exp_date"}{/if}Relative Expiration Date:
     {/userInfoTD}

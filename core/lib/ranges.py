@@ -23,6 +23,9 @@ class RangeString:
     def __iter__(self):
 	return iter(self.all_strings)
 	
+    def __in__(self,obj):
+	return obj in self.all_strings
+
     def __len__(self):
 	return len(self.all_strings)
 

@@ -55,7 +55,7 @@ class AddUserSaveHandler(handler.Handler):
 	handler.Handler.__init__(self,"addUserSave")
 	self.registerHandlerMethod("listAddUserSaves")
     
-    def __findAdminName(self,request)
+    def __findAdminName(self,request):
 	requester=request.getAuthNameObj()
 	if request.has_key["admin_name"]: admin_name=request["admin_name"]
 	else: admin_name=None

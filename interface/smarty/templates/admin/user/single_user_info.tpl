@@ -14,10 +14,15 @@
 
 
     {include file="plugins/user/view/single_user_info.tpl"}
+    <br>
     {include file="plugins/user/view/normal_username.tpl"}
+    <br>
     {include file="plugins/user/view/exp_date.tpl"}
+    <br>
     {include file="plugins/user/view/multi_login.tpl"}
+    <br>
     {include file="plugins/user/view/normal_charge.tpl"}
+    <br>
 
 {attrTableFoot action_icon="edit"}
 {/attrTableFoot}

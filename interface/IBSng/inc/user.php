@@ -36,5 +36,14 @@ class UpdateUserAttrs extends Request
     }
 }
 
+class CheckNormalUsernameForAdd extends Request
+{
+    function CheckNormalUsernameForAdd($username,$current_username)
+    {
+	parent::Request("user.checkNormalUsernameForAdd",array("normal_username"=>$username,
+							       "current_username"=>$current_username));
+    }
+}
+
 
 ?>

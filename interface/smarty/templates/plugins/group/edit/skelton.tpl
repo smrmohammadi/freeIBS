@@ -5,7 +5,7 @@
 *}
 {include file="admin_header.tpl" title="Edit Group Attributes" selected="Group List"}
 {include file="err_head.tpl"}
-{viewTable title="Group Information"}
+{viewTable title="Group Information" nofoot="TRUE"}
     {addEditTD type="left"}
 	Group ID
     {/addEditTD}
@@ -22,7 +22,7 @@
 	    {$group_name}
     {/addEditTD}
 {/viewTable}
-
+<br>
 <form method=POST action="/IBSng/admin/plugins/edit.php">
 
     <input type=hidden name="target" value="group">

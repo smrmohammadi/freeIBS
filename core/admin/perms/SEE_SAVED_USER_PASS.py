@@ -3,9 +3,9 @@ from core.admin import perm_loader
 from core.errors import errorText
 
 def init():
-    perm_loader.getLoader().registerPerm("SEE SAVED USERNAME PASSWORDS",SerrSaveUserPass)
+    perm_loader.getLoader().registerPerm("SEE SAVED USERNAME PASSWORDS",SeeSavedUserPass)
 
-class SeeSavedUserPAss (AllRestrictedSingleValuePermission,UserCatPermission,Permission):
+class SeeSavedUserPass (AllRestrictedSingleValuePermission,UserCatPermission,Permission):
     def init(self):
 	self.setDescription("""	Can See List of Saved Username/Password.
 	 When adding Internet or VoIP username/password attribute to a user, it's possible to save the
