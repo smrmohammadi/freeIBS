@@ -70,19 +70,19 @@ class ChargeHandler(handler.Handler):
     def addInternetChargeRule(self,request):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("charge_name","rule_start","rule_end","cpm","cpk","assumed_kps","bandwidth_limit_kbytes",
-			  "ras","ports","dows")
+			  "ras","ports","dows","tx_leaf_name","rx_leaf_name")
 	request.getAuthNameObj().canDo("CHANGE CHARGE")
 	(ras,ports)=self.__checkRasAndPortWildcards(request)
 
 	return charge_main.getActionManager().addInternetChargeRule(request["charge_name"],
 			request["rule_start"],request["rule_end"],
 			request["dows"].values(),request["cpm"],request["cpk"],request["assumed_kps"],
-			request["bandwidth_limit_kbytes"],ras,ports)
+			request["bandwidth_limit_kbytes"],request["tx_leaf_name"],request["rx_leaf_name"],ras,ports)
 
     def updateInternetChargeRule(self,request):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("charge_name","charge_rule_id","rule_start","rule_end","cpm","cpk","assumed_kps","bandwidth_limit_kbytes",
-			  "ras","ports","dows")
+			  "ras","ports","dows","tx_leaf_name","rx_leaf_name")
 	request.getAuthNameObj().canDo("CHANGE CHARGE")
 	(ras,ports)=self.__checkRasAndPortWildcards(request)
 
@@ -90,7 +90,7 @@ class ChargeHandler(handler.Handler):
 	return charge_main.getActionManager().updateInternetChargeRule(request["charge_name"],
 			request["charge_rule_id"],request["rule_start"],request["rule_end"],
 			request["dows"].values(),request["cpm"],request["cpk"],request["assumed_kps"],
-			request["bandwidth_limit_kbytes"],ras,ports)
+			request["bandwidth_limit_kbytes"],request["tx_leaf_name"],request["rx_leaf_name"],ras,ports)
 
 
 

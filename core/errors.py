@@ -72,7 +72,8 @@ USER_LOGIN_ERRORS={
     "CREDIT_FINISHED":"Credit has finished",
     "REL_EXP_DATE_REACHED":"Relative expiration date has reached",
     "WRONG_PASSWORD":"Wrong password",
-    "MAX_CONCURRENT":"Maximum number of concurrent logins reached"
+    "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
+    "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s"
 
 }
 
@@ -146,7 +147,8 @@ CHARGE_ERRORS={
     "INVALID_CHARGE_RULE_ID":"Invalid Charge Rule ID %s",
     "CHARGE_RULE_NOT_IN_CHARGE":"Charge Rule with ID %s is not in charge %s",
     "CHARGE_USED_IN_USER":"Charge %s is used in user(s) with id(s) '%s' ",
-    "CHARGE_USED_IN_GROUP":"Charge %s is used in group(s) with id(s) '%s' "
+    "CHARGE_USED_IN_GROUP":"Charge %s is used in group(s) with id(s) '%s' ",
+    "BW_LEAF_NAMES_SHOULD_BOTH_SET":"Bandwidth leafs should both be disabled or both be enabled"
 
 }
 
@@ -180,6 +182,34 @@ IPPOOL_ERRORS={
     "IPPOOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
 }
 
+BANDWIDTH_ERRORS={
+    "NO_FREE_ID":"No ID is available from pool %s",
+    "INVALID_INTERFACE_ID":"Interface ID %s is invalid",
+    "INVALID_INTERFACE_NAME":"Interface Name %s is invalid",
+    "INVALID_NODE_ID":"Node ID %s is invalid",
+    "INVALID_LEAF_ID":"Leaf ID %s is invalid",
+    "INVALID_LEAF_NAME":"Leaf Name %s is invalid",
+    "LEAF_ID_NOT_FOUND":"Leaf with id %s not found",
+    "NODE_ID_NOT_FOUND":"Node with id %s not found",
+    "INTERFACE_NAME_ALREADY_EXISTS":"Interface %s already defined",
+    "INVALID_INTERFACE_NAME":"Invalid Interface name %s",
+    "INTERFACE_HAS_ROOT_NODE":"Interface %s already has root node",
+    "INVALID_LIMIT_KBITS":"Limits Kbit/s '%s' should be greater or equals zero integer",
+    "INVALID_LEAF_NAME":"Invalid Leaf name %s",
+    "INVALID_TOTAL_LIMIT_KBITS":"Total Limit Kbit/s '%s' should be an integer",
+    "LEAF_NAME_ALREADY_EXISTS":"Leaf name %s already defined",
+    "INVALID_PROTOCOL":"Invalid Protocol %s",
+    "LEAF_HAS_THIS_FILTER":"Leaf %s already has filter %s %s",
+    "INVALID_FILTER":"Invalid Filter %s",
+    "LEAF_DOESNT_HAVE_SERVICE":"Leaf %s doesn't have service with id %s",
+    "NODE_HAS_CHILDREN":"Node has children, delete them first",
+    "LEAF_USED_IN_CHARGE":"Leaf used in charge %s",
+    "CANT_DELETE_ROOT_NODE":"You can't delete root node, delete interface instead",
+    "LEAF_HAS_SERVICES":"Leaf has services, delete them first"
+
+}
+
+
 PLUGIN_ERRORS={
     "INVALID_HOOK":"Invalid Hook name %s"
 }
@@ -207,7 +237,8 @@ def errorText(event,error,add_error_key=True):
 		   "GROUPS":GROUP_ERRORS,
 		   "CHARGES":CHARGE_ERRORS,
 		   "RAS":RAS_ERRORS,
-		   "IPPOOL":IPPOOL_ERRORS
+		   "IPPOOL":IPPOOL_ERRORS,
+		   "BANDWIDTH":BANDWIDTH_ERRORS
 		  }
 		   
 	err_str=error_map[event][error]

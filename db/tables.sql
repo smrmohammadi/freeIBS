@@ -60,6 +60,7 @@ create table ippool_ips(
     ippool_id integer references ippool,
     ip	inet
 );
+create unique index ippool_ips_index on ippool_ips (ippool_id,ip);
 
 -- *********************** RAS
 create table ras (
@@ -121,7 +122,9 @@ create table internet_charge_rules (
     cpm numeric(12,2),
     cpk numeric(12,2),
     assumed_kps integer,
-    bandwidth_limit_kbytes integer default -1
+    bandwidth_limit_kbytes integer default -1,
+    bw_transmit_leaf_id integer references bw_leaf,
+    bw_receive_leaf_id integer references bw_leaf
 ) inherits (charge_rules);
 
 
@@ -274,6 +277,42 @@ create table connection_log_details (
 
 create index connection_log_details_userid_index on connection_log_details (connection_log_id);
 create sequence connection_log_id;
+-- *********************** BANDWIDTH MANAGER
+create table bw_interface (
+    interface_id integer primary key,
+    interface_name text,
+    comment text
+);
+create sequence bw_interface_interface_id_seq;
+
+create table bw_node (
+    node_id integer primary key,
+    interface_id integer references bw_interface,
+    parent_id integer references bw_node,
+    limit_kbits integer
+);
+create sequence bw_node_node_id_seq;
+
+create table bw_leaf (
+    leaf_id integer primary key,
+    leaf_name text,
+    interface_id integer references bw_interface,
+    parent_id integer references bw_node,
+    default_limit_kbits integer,
+    total_limit_kbits integer
+);
+create sequence bw_leaf_leaf_id_seq;
+
+create table bw_leaf_services (
+    leaf_service_id integer primary key,
+    leaf_id integer references bw_leaf,
+    protocol text,
+    filter text,
+    limit_kbits integer
+);
+create sequence bw_leaf_services_leaf_service_id_seq;    
+
+
 
 
 -- ********************* TO BE CHECKED!
@@ -286,19 +325,3 @@ create table admin_deposit_log(
     remote_addr inet,
     comment text
 );
-
-create table internet_connection_log (
-    username text,
-    ras_id integer,
-    port text,
-    start_time timestamp without time zone,
-    end_time timestamp without time zone,
-    caller_id text,
-    credit_used numeric(12,2),
-    in_bytes	bigint,
-    out_bytes   bigint,
-    successful boolean,
-    reason text
-);
-
-

@@ -962,7 +962,7 @@ td.List_Title_End{
 td.List_Title_Top_Line{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #909090; 
+	color: #555555; 
 	font-weight:bold;
 	height:17;
 	background-color:#FFFFFF ;
@@ -974,7 +974,7 @@ td.List_Title_Top_Line{
 table.List_Top_Line{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #909090; 
+	color: #555555; 
 	font-weight:bold;
 	background-color:#FFFFFF;
 	white-space:nowrap;
@@ -1224,13 +1224,13 @@ td.Tab_Title_Top_Line{
 	font-size: 6pt; 
 	color: #c0c0c0; 
 	font-weight:bold;
-	height:18;
+	height:17;
 	background-color:#FFFFFF;
 	text-align:right;
 	width:100%
 }
 td.Tab_Title_End_Line{ 
-	height:2;
+	height:3;
 	background-color:#9A1111;
 	font-size: 1px; 
 }
@@ -1251,7 +1251,7 @@ td.Tab_Title_gray{
 	white-space:nowrap
 }
 td.Tab_Foot_line{ 
-	height:2;
+	height:3;
 	background-color:#9A1111;
 }
 
@@ -1270,17 +1270,6 @@ td.Form_Content_multi_left{
 	width:10
 }
 
-td.Form_Content_multi_right{
-	font-family: Tahoma; 
-	font-size: 8pt;
-	padding-left:3px;
-	paddibg-right:3px; 
-	color: #353535; 
-	font-weight:bold; 
-	direction:ltr ;
-	text-align:left ;
-	white-space:nowrap
-}
 
 /*------------------------------*/
 /* 	Search Page		*/
@@ -1313,4 +1302,39 @@ font.page_num
     font-family: Tahoma; 
     color: #000000;
     font-weight:bold; 
+}
+
+/*------------------------------*/
+/* 	BW_node			*/
+/*------------------------------*/
+
+td.bw_leaf_limit_content{
+	font-family: Tahoma; 
+	font-size: 8pt;
+	color: #353535; 
+	direction:ltr ;
+	text-align:left ;
+	white-space:nowrap ;
+	background-color:#ECECEC
+
+}
+
+a:link.bw_node{
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #FFFFFF;
+    text-decoration:none
+}
+
+a:visited.bw_node{
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #FFFFFF;
+    text-decoration:none
+}
+a:hover.bw_node{ 
+    font-size: 8pt;
+    font-family: Tahoma; 
+    color: #CC6600;
+    text-decoration:none
 }

@@ -1,8 +1,9 @@
 <?php
 
-function smarty_block_listTD($params,$content,&$smarty,&$repeat)
+function smarty_block_listTD($params,$content,&$smarty)
 {/*	Create an Add edit style column (TD).
 	icon(boolean,optional): set style suitable for icon TDs
+	extra(str,optional): optionally add extra attributes to td tag
 */
     
     if(!is_null($content))

@@ -1,6 +1,6 @@
 <?php
 
-function smarty_block_listTable($params,$content,&$smarty,&$repeat)
+function smarty_block_listTable($params,$content,&$smarty)
 {
 /*
     create header and footer of an List Style table

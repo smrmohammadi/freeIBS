@@ -57,7 +57,7 @@
 	    {/addEditTD}
 	    {addEditTD type="right1" double="TRUE"}
 		<input class="medium_text" type=text name=assumed_kps value="{ifisinrequest name="assumed_kps" default_var="assumed_kps" }"> <FONT SIZE=1>KBytes/S</FONT>
-	    <input type=hidden name=charge_name value="{$charge_name}">
+		<input type=hidden name=charge_name value="{$charge_name}">
 	    {/addEditTD}
 	    {addEditTD type="left2" double="TRUE" err="bw_limit_err"}
 		    Bandwidth Limit
@@ -65,6 +65,20 @@
 	    {addEditTD type="right2" double="TRUE"}
 		<input class="medium_text" type=text name=bandwidth_limit_kbytes value="{ifisinrequest name="bandwidth_limit_kbytes" default_var="bandwidth_limit" }"> <FONT SIZE=1>KBytes/S</FONT>
 	    {/addEditTD}
+
+    	    {addEditTD type="left1" double="TRUE" err="tx_leaf_err"}
+		BW Manager Send Leaf
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+	    	{html_options name="tx_leaf_name" output=$leaf_names values=$leaf_names selected=$tx_leaf_selected}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE" err="rx_leaf_err"}
+		BW Manager Receive Leaf
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+	    	{html_options name="rx_leaf_name" output=$leaf_names values=$leaf_names selected=$rx_leaf_selected}
+	    {/addEditTD}
+
     <tr>
     <tr>
 	<td colspan=9 height=9></td>

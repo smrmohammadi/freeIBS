@@ -13,8 +13,8 @@ class UtilHandler(handler.Handler):
 
 
     def multiStrGetAll(self,request):
-    	request.checkArgs("str")
-	return map(lambda x:x,MultiStr(request["str"]))
+    	request.checkArgs("str","left_pad")
+	return map(lambda x:x,MultiStr(request["str"],request["left_pad"]))
 
     def runDebugCode(self,request):
 	request.needAuthType(request.ADMIN)

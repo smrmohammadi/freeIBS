@@ -12,6 +12,7 @@ $GLOBALS["IBSngMenu"]=Array("user"=>array("User Information"=>"/IBSng/admin/user
 		"setting"=>array("Charge"=>"/IBSng/admin/charge/charge_list.php",
 				"RAS"=>"/IBSng/admin/ras/ras_list.php",
 				"IPPool"=>"/IBSng/admin/ippool/ippool_list.php",
+				"Bandwidth"=>"/IBSng/admin/bw/interface_list.php",
 				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php"),
 		"home"=>array(""=>"/IBSng/admin/admin_index.php"),		       
 		);

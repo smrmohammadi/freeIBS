@@ -10,6 +10,8 @@ from core.db.ibs_query import IBSQuery
 from core.ras import ras_main
 from core.user import user_main
 from core.group import group_main
+from core.bandwidth_limit import bw_main
+
 
 class ChargeActions:
     CHARGE_TYPES=["Internet","VoIP"]
@@ -96,23 +98,24 @@ class ChargeActions:
 ###########################################################
 
     def addInternetChargeRule(self,charge_name,start_time,end_time,day_of_weeks,cpm,cpk,\
-		    		   assumed_kps,bandwidth_limit_kbytes,ras_id,ports):
+		    		   assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports):
 	"""
 	    add a charge rule to charge with id "charge_id" and reload the charge
 	    it will add charge_rule and it's ports to db too
 	"""
 	start_time,end_time,day_of_weeks=self.__chargeRuleTimesCheck(start_time,end_time,day_of_weeks)
-	self.__internetChargeRuleCheckInput(charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,ras_id,ports)
+	self.__internetChargeRuleCheckInput(charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports)
 	charge_obj=charge_main.getLoader().getChargeByName(charge_name)
 	day_of_weeks_container=self.__createDayOfWeekContainer(day_of_weeks)
+	tx_leaf_id,rx_leaf_id=self.__convertBwLeaves(tx_leaf_name,rx_leaf_name)
 	rule_obj=self.__createInternetChargeRuleObject(charge_obj,start_time,end_time,day_of_weeks_container,\
-				cpm,cpk,assumed_kps,bandwidth_limit_kbytes,ras_id,ports)
+				cpm,cpk,assumed_kps,bandwidth_limit_kbytes,tx_leaf_id,rx_leaf_id,ras_id,ports)
         self.__checkRuleConflict(charge_obj,rule_obj)
         self.__addInternetChargeRuleToDB(rule_obj)
         charge_main.getLoader().loadCharge(charge_obj.getChargeID())
 
 
-    def __internetChargeRuleCheckInput(self,charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,ras_id,ports):
+    def __internetChargeRuleCheckInput(self,charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports):
 	self.__chargeRuleCheckInput(charge_name,"Internet",ras_id,ports)
 	try:
 	    assumed_kps=int(assumed_kps)
@@ -146,6 +149,15 @@ class ChargeActions:
 	if cpk<0:
 	    raise GeneralException(errorText("CHARGES","CPK_NOT_POSITIVE"))
 
+	if len(tx_leaf_name)!=0 and len(rx_leaf_name)!=0:
+    	    bw_main.getLoader().getLeafByName(tx_leaf_name)
+	    bw_main.getLoader().getLeafByName(rx_leaf_name)
+
+	elif (len(tx_leaf_name)==0 and len(rx_leaf_name)!=0) or (len(tx_leaf_name)!=0 and len(rx_leaf_name)==0):
+	    raise GeneralException(errorText("CHARGES","BW_LEAF_NAMES_SHOULD_BOTH_SET"))
+	    
+
+
     def __addInternetChargeRuleToDB(self,rule_obj):
 	"""
 	    add rule_obj properties to DB
@@ -174,10 +186,8 @@ class ChargeActions:
 	"""
 	    return query for inserting rule_obj properties into charge_rules table
 	"""
-	if rule_obj.getRasID() == charge_rule.ChargeRule.ALL:
-	    ras_id="NULL"
-	else:
-	    ras_id=rule_obj.getRasID()
+	ras_id=self.__convertRasID(rule_obj.getRasID())
+	
 	return ibs_db.createInsertQuery("internet_charge_rules",{"charge_id":rule_obj.charge_obj.getChargeID(),
 							"charge_rule_id":rule_obj.getRuleID(),
 							"start_time":dbText(rule_obj.start_time),
@@ -186,6 +196,8 @@ class ChargeActions:
 							"cpk":float(rule_obj.cpk),
 							"assumed_kps":integer(rule_obj.assumed_kps),
 							"bandwidth_limit_kbytes":integer(rule_obj.bandwidth_limit),
+							"bw_transmit_leaf_id":dbNull(rule_obj.bw_tx_leaf_id),
+							"bw_receive_leaf_id":dbNull(rule_obj.bw_rx_leaf_id),
 							"ras_id":ras_id
 							})
 
@@ -233,7 +245,7 @@ class ChargeActions:
 	return dows_container
 
     def __createInternetChargeRuleObject(self,charge_obj,start_time,end_time,day_of_week_container,cpm,cpk,\
-		    			 assumed_kps,bandwidth_limit_kbytes,ras_id,ports,charge_rule_id=None):
+		    			 assumed_kps,bandwidth_limit_kbytes,tx_leaf_id,rx_leaf_id,ras_id,ports,charge_rule_id=None):
 	"""
 	    create an half complete rule object from arguments and return it
 	    this object is useful for checking conflict
@@ -247,6 +259,9 @@ class ChargeActions:
 	rule_info["bandwidth_limit_kbytes"]=bandwidth_limit_kbytes
 	rule_info["assumed_kps"]=assumed_kps
 	rule_info["ras_id"]=ras_id
+	rule_info["bw_transmit_leaf_id"]=tx_leaf_id
+	rule_info["bw_receive_leaf_id"]=rx_leaf_id
+
 	return charge_types.getChargeRuleObjForType("Internet",rule_info,charge_obj,day_of_week_container,ports)
 
 
@@ -297,30 +312,49 @@ class ChargeActions:
 		raise GeneralException(errorText("CHARGES","NO_PORT_SELECTED"))
 
     
+    def __convertBwLeaves(self,tx_leaf_name,rx_leaf_name):
+	"""
+	    convert bw leaf names to their id, or to None if they are not specified
+	"""
+	if tx_leaf_name=='':
+	    return (None,None)
+	else:
+	    return (bw_main.getLoader().getLeafByName(tx_leaf_name).getLeafID(),
+		    bw_main.getLoader().getLeafByName(rx_leaf_name).getLeafID())
+
+    def __convertRasID(self,ras_id):
+	"""
+	    convert ras_id to be ready for db insertion, ras_id wildcard is shown by null
+	"""	
+	if ras_id == charge_rule.ChargeRule.ALL:
+	    ras_id="NULL"
+	return ras_id
 
 #######################################################3
     def updateInternetChargeRule(self,charge_name,charge_rule_id,start_time,end_time,day_of_weeks,cpm,cpk,\
-		    		   assumed_kps,bandwidth_limit_kbytes,ras_id,ports):
+		    		   assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports):
 	"""
 	    add a charge rule to charge with id "charge_id" and reload the charge
 	    it will add charge_rule and it's ports to db too
 	"""
 	start_time,end_time,day_of_weeks=self.__chargeRuleTimesCheck(start_time,end_time,day_of_weeks)
 	charge_rule_id=self.__updateInternetChargeRuleCheckInput(charge_name,charge_rule_id,start_time,end_time,day_of_weeks,cpm,cpk,\
-		    		   assumed_kps,bandwidth_limit_kbytes,ras_id,ports)
+		    		   assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports)
 	
 	charge_obj=charge_main.getLoader().getChargeByName(charge_name)
 	day_of_weeks_container=self.__createDayOfWeekContainer(day_of_weeks)
+	tx_leaf_id,rx_leaf_id=self.__convertBwLeaves(tx_leaf_name,rx_leaf_name)
 	rule_obj=self.__createInternetChargeRuleObject(charge_obj,start_time,end_time,day_of_weeks_container,\
-				cpm,cpk,assumed_kps,bandwidth_limit_kbytes,ras_id,ports,charge_rule_id)
+				cpm,cpk,assumed_kps,bandwidth_limit_kbytes,tx_leaf_id,rx_leaf_id,ras_id,\
+				ports,charge_rule_id)
         self.__checkRuleConflict(charge_obj,rule_obj,[charge_rule_id])
         self.__updateInternetChargeRuleDB(rule_obj)
         charge_main.getLoader().loadCharge(charge_obj.getChargeID())
 
 
     def __updateInternetChargeRuleCheckInput(self,charge_name,charge_rule_id,start_time,end_time,day_of_weeks,cpm,cpk,\
-		    		   assumed_kps,bandwidth_limit_kbytes,ras_id,ports):
-	self.__internetChargeRuleCheckInput(charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,ras_id,ports)
+		    		   assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports):
+	self.__internetChargeRuleCheckInput(charge_name,cpm,cpk,assumed_kps,bandwidth_limit_kbytes,tx_leaf_name,rx_leaf_name,ras_id,ports)
 	try:
 	    charge_rule_id=int(charge_rule_id)
 	except:
@@ -355,18 +389,16 @@ class ChargeActions:
 	"""
 	    return query for inserting rule_obj properties into charge_rules table
 	"""
-	if rule_obj.getRasID() == charge_rule.ChargeRule.ALL:
-	    ras_id="NULL"
-	else:
-	    ras_id=rule_obj.getRasID()
-	    
+	ras_id=self.__convertRasID(rule_obj.getRasID())
 	return ibs_db.createUpdateQuery("internet_charge_rules",{"start_time":dbText(rule_obj.start_time),
 							"end_time":dbText(rule_obj.end_time),
 							"cpm":float(rule_obj.cpm),
 							"cpk":float(rule_obj.cpk),
 							"assumed_kps":integer(rule_obj.assumed_kps),
 							"bandwidth_limit_kbytes":integer(rule_obj.bandwidth_limit),
-							"ras_id":ras_id
+							"ras_id":ras_id,
+							"bw_transmit_leaf_id":dbNull(rule_obj.bw_tx_leaf_id),
+							"bw_receive_leaf_id":dbNull(rule_obj.bw_rx_leaf_id),
 							},"charge_rule_id=%s"%rule_obj.getRuleID())
 
 
@@ -485,3 +517,4 @@ class ChargeActions:
 	"""
 	return ibs_db.createDeleteQuery("charges","charge_id=%s"%charge_id)
 
+    ##########################################

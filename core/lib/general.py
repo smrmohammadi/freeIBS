@@ -84,14 +84,18 @@ def isFloat(var):
     return False
 
 
-def to_int(_str,var_name):
+def to_int(_str,excp):
     """
-	convert _str to int, raise an GeneralException on error	with var_name
+	convert _str to int, 
+	excp(str or Exception instance): raise this exception if _str is not convertable to integer
     """
     try:
 	_int=int(_str)
     except:
-	raise GeneralException(errorText("GENERAL","INVALID_INT_VALUE")%var_name)
+	if type(excp)==types.StringType:
+	    raise GeneralException(errorText("GENERAL","INVALID_INT_VALUE")%excp)
+	else:
+	    raise excp
     return _int
 
 def to_float(_str,var_name):

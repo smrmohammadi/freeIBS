@@ -7,7 +7,7 @@ def init():
 class ChangeUsersOwner (NoValuePermission,UserCatPermission,Permission):
     def init(self):
 	self.setDescription("""
-		Can Change User owners when deleting/editing users
+		Can Change User owners when adding/editing users
 		each user has an admin owner.It's important for resellers that 
 		    1- should not be able to change owners
 		    2- should be owner of their own users

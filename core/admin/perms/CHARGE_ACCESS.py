@@ -15,7 +15,8 @@ class ChargeAccess (MultiValuePermission,ChargeCatPermission,Permission):
 		    1- if admin is GOD => PASS
 		    2- if admin has pemission ACCESS ALL CHARGE  => PASS
 		    3- if charge is in CHARGE ACCESS values => PASS
-		    4- FAIL
+		    4- if charge is visible to all => PASS
+		    5- FAIL
 		
 		Related Permissions: ACCESS ALL CHARGES,CHANGE CHARGE
 	       """)

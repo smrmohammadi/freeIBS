@@ -321,9 +321,9 @@ class UserActions:
 	"""
 	self.__delUserCheckInput(user_ids,comment,del_connections,admin_name,remote_address)
 	admin_obj=admin_main.getLoader().getAdminByName(admin_name)
-	loaded_users=self.getLoadedUsersByUserID(user_ids)
 	map(lambda user_id:user_main.getUserPool().addToBlackList,user_ids)
 	try:
+	    loaded_users=self.getLoadedUsersByUserID(user_ids)
 	    total_credit=self.__delUserCheckUsers(loaded_users)
 	    admin_deposit=total_credit*-1
 	    ibs_query=IBSQuery()

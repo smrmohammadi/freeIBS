@@ -13,7 +13,8 @@
 	</tr>
 	</table>
     {/listTableHeader}
-        <tr><td colspan=30>{multiTable}
+        <tr><td colspan=30>
+	{multiTable}
 	{multiTableTR}
 	    {reportToShowCheckBox name="show__normal_username" output="Normal Username" default_checked="TRUE" always_in_form="search" value="normal_username" form_name="search_user" container_name="attrs"}
 	    {reportToShowCheckBox name="show__credit" output="Credit" default_checked="TRUE" always_in_form="search" form_name="search_user" container_name="attrs"}

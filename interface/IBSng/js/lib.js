@@ -13,10 +13,10 @@ function showHelp(subject,category)
     open("/IBSng/help/show_help.php?subject="+subject+"&category="+category,"","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes,resizable=yes");
 }
 
-function showMultiStr(form_name,input_name)
+function showMultiStr(form_name,input_name,left_pad)
 {
     input_obj=eval("document."+form_name+"."+input_name);
-    open("/IBSng/util/show_multistr.php?str="+input_obj.value,"","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes,resizable=yes");
+    open("/IBSng/util/show_multistr.php?str="+input_obj.value+"&left_pad="+left_pad,"","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes,resizable=yes");
 }
 
 function updateUserAddCheckImage(user_type,current_username,update_timer)
@@ -26,15 +26,15 @@ function updateUserAddCheckImage(user_type,current_username,update_timer)
 //    alert(update_timer);
     if(update_timer>=0)
     {
-	if ((window.user_add_check_timer && window.user_add_check_timer<=0) || undefined==window.user_add_check_timer)
+	if ((window.user_add_check_timer && window.user_add_check_timer<=0) || !window.user_add_check_timer)
 	    setTimeout("updateUserAddCheckImage('"+user_type+"','"+current_username+"',-1)",500);
 	window.user_add_check_timer=update_timer*1000+500;
+
     }
     else if (update_timer<0)
     {
 	if (window.user_add_check_timer==0)
 	{
-	    window.user_add_check_timer=undefined;
 	    img_obj=eval("document."+user_type+"_user_exists");
 	    username=eval("document.user_edit."+user_type+"_username");
 	    img_obj.src="/IBSng/admin/user/check_user_for_add.php?image=t&username="+username.value+"&type="+user_type+"&current_username="+current_username;
@@ -75,16 +75,30 @@ function getObjCurrentStyle(obj)
 	return obj.currentStyle;
 }
 
-function showReportLayer(layer_id,show_obj)
+function showReportLayer(layer_id,show_obj,hpos)
 {
     layer_obj=document.getElementById(layer_id)
+    toggleDisplay(layer_obj);
     obj_top=findPosY(show_obj) + show_obj.offsetTop;
     if(show_obj.firstChild.height) //ie
 	obj_top+=show_obj.firstChild.height;
     
     layer_obj.style.top=obj_top;
-    layer_obj.style.left=findPosX(show_obj) - layer_obj.offsetWidth;
-    toggleVisibility(layer_obj);
+    obj_left=findPosX(show_obj);
+    if(!hpos || hpos=="left")
+	obj_left -= layer_obj.offsetWidth;
+    else if(hpos=="right") 
+	obj_left += show_obj.offsetWidth;
+    
+    layer_obj.style.left=obj_left;
+}
+
+function toggleDisplay(obj)
+{
+    if(obj.style.display=='none')
+	obj.style.display='';
+    else
+	obj.style.display='none';
 }
 
 
@@ -143,3 +157,4 @@ function findPosY(obj)
 		curtop += obj.y;
 	return curtop;
 }
+

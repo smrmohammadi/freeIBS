@@ -30,7 +30,6 @@ def init():
     from core.db import db_main
     db_main.init()
 
-
     import core.defs
     core.defs.init()
 
@@ -67,9 +66,12 @@ def init():
     import core.report.report_main
     core.report.report_main.init()
     
+    import core.bandwidth_limit.bw_main
+    core.bandwidth_limit.bw_main.init()
+
     import radius_server.rad_server
     radius_server.rad_server.init()
-
+    
     core.event.daily_events.postInit()
     core.event.periodic_events.postInit()
 

@@ -13,10 +13,11 @@
     {/addEditTD}
 
     {addEditTD type="right"}
+	<input type=hidden name=current_normal_username value='{attrDefault target="user" default_var="normal_username" default_request="current_normal_username"}'>
 	<input id="normal_username" type=text  class=text name="normal_username" 
 	    value="{attrDefault target="user" default_var="normal_username" default_request="normal_username"}" 
-	    onChange="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',0);" 
-	    onKeyUp="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',1);"
+	    onChange="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="current_normal_username"}',0);" 
+	    onKeyUp="updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="current_normal_username"}',1);"
 	> 
 	{multistr form_name="user_edit" input_name="normal_username"}
 	{helpicon subject="normal username" category="user"}
@@ -24,7 +25,7 @@
 	    <img border=0 name="normal_user_exists" src="/IBSng/admin/user/check_user_for_add.php?image=t&username=&type=normal&current_username=" title="Users Exist">
 	</a>
 	<script language=javascript>
-	    updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="normal_username"}',1);
+	    updateUserAddCheckImage('normal','{attrDefault target="user" default_var="normal_username" default_request="current_normal_username"}',1);
 	</script>
     {/addEditTD}
 

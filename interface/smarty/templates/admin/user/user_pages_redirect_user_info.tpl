@@ -1,10 +1,12 @@
 {headerMsg}
     {$msg}
 {/headerMsg}
-<center>
+<font style="font-size:10pt" face="tahoma" color="#333333">
+<B>
     You'll redirect to <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}">UserInfo</a> 
-    Page in <b><span id="redir_timer">&nbsp;</span></b> Seconds
-</center>
+    Page in <b><font color="#9a1100"><span  id="redir_timer">&nbsp;</span></font></b> Seconds
+</b>    
+</font>
 
 <script language="javascript">
     user_id="{$user_id|escape:"url"}";

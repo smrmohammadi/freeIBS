@@ -10,8 +10,9 @@ from core.lib import ranges
 import itertools
 
 class MultiStr:
-    def __init__(self,string):
+    def __init__(self,string,left_pad=True):
 	self.string=string
+	self.left_pad=left_pad
 	sp_strs=self.__splitMulti()
 	self.ranges_list=self.__createRangeList(sp_strs)
 	self._len=self.__calculateLength()
@@ -80,4 +81,4 @@ class MultiStr:
 	"""
 	    create a RangeString instance of _str
 	"""
-	return ranges.RangeString(_str)
+	return ranges.RangeString(_str,self.left_pad)

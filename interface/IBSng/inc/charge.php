@@ -47,7 +47,7 @@ class GetChargeInfo extends Request
 class AddInternetChargeRule extends Request
 {
     function AddInternetChargeRule($charge_name,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras,$ports,$dows)
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras,$ports,$dows)
     {
 	parent::Request("charge.addInternetChargeRule",array("charge_name"=>$charge_name,
 							     "rule_start"=>$rule_start,
@@ -56,6 +56,8 @@ class AddInternetChargeRule extends Request
 							     "cpk"=>$cpk,
 							     "assumed_kps"=>$assumed_kps,
 							     "bandwidth_limit_kbytes"=>$bandwidth_limit_kbytes,
+							     "tx_leaf_name"=>$tx_leaf_name,
+							     "rx_leaf_name"=>$rx_leaf_name,
 							     "ras"=>$ras,
 							     "ports"=>$ports,
 							     "dows"=>$dows
@@ -87,7 +89,7 @@ class ListCharges extends Request
 class UpdateInternetChargeRule extends Request
 {
     function UpdateInternetChargeRule($charge_name,$charge_rule_id,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras,$ports,$dows)
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras,$ports,$dows)
     {
 	parent::Request("charge.updateInternetChargeRule",array("charge_name"=>$charge_name,
 							     "charge_rule_id"=>$charge_rule_id,
@@ -97,6 +99,8 @@ class UpdateInternetChargeRule extends Request
 							     "cpk"=>$cpk,
 							     "assumed_kps"=>$assumed_kps,
 							     "bandwidth_limit_kbytes"=>$bandwidth_limit_kbytes,
+							     "tx_leaf_name"=>$tx_leaf_name,
+							     "rx_leaf_name"=>$rx_leaf_name,
 							     "ras"=>$ras,
 							     "ports"=>$ports,
 							     "dows"=>$dows

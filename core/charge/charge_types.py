@@ -29,7 +29,8 @@ def getChargeRuleObjForType(_type,rule_info,charge_obj,day_of_weeks,ports):
     if _type=="Internet":
         return InternetChargeRule(rule_info["charge_rule_id"],charge_obj,rule_info["cpm"],rule_info["cpk"],day_of_weeks,\
 			  rule_info["start_time"],rule_info["end_time"],rule_info["bandwidth_limit_kbytes"],\
-			  rule_info["assumed_kps"],rule_info["ras_id"],ports)
+			  rule_info["bw_transmit_leaf_id"],rule_info["bw_receive_leaf_id"],rule_info["assumed_kps"],\
+			  rule_info["ras_id"],ports)
 
 
     elif _type=="VoIP":

@@ -2,6 +2,8 @@ from core.charge import charge_main
 from core.threadpool import thread_main
 from core.user import user_main
 from core.lib.time_lib import *
+from core.ibs_exceptions import *
+from core.errors import errorText
 import time
 import copy
 
@@ -11,8 +13,23 @@ class NormalUser:
 
 ##############################################
     def getInOutBytes(self,instance):
+	"""
+	    return (tx_bytes,rx_bytes) tuple of send/receive of "instance" of user
+	"""
 	user_msg=self.user_obj.createUserMsg(instance,"GET_INOUT_BYTES")
 	return user_msg.send()
+#############################################
+    def getClientAddr(self,instance):
+	"""
+	    return ip address of "instance" of user
+	"""
+	user_attrs=self.user_obj.getInstanceInfo(instance)["attrs"]
+	if user_attr.has_key("remote_ip"):
+	    return user_attrs["remote_id"]
+	elif user_attr.has_key("ip_pool_assigned_ip"):
+	    return user_attrs["ip_pool_assigned_ip"]
+	else:
+	    raise GeneralException(errorText("USER_LOGIN","USER_IP_NOT_AVAILABLE")%self.user_obj.getUserID())
 
 ##############################################
     def killInstance(self,instance):

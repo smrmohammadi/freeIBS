@@ -2,8 +2,13 @@
     var user_ids=new CheckBoxContainer();
 </script>
 
-Total Results: <b> {$result_count} </b>
-{listTable title="List of Users" cols_num=20}
+{listTable no_header=TRUE} 
+    {listTableHeader cols_num=30 type="left"}
+	List of Users
+    {/listTableHeader}
+    {listTableHeader type="right"}
+	Total Results:  <font color="#9a1111">{$result_count}</font> 
+    {/listTableHeader}
     {listTR type="header" }
     {if $can_change}
 	{listTD}

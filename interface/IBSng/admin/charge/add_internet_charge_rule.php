@@ -3,31 +3,32 @@ require_once("../../inc/init.php");
 require_once(IBSINC."ras_face.php");
 require_once(IBSINC."charge_face.php");
 require_once(IBSINC."charge.php");
+require_once(IBSINC."bw_face.php");
+
 
 needAuthType(ADMIN_AUTH_TYPE);
 
-if(isInRequest("charge_name","rule_start","rule_end","cpm","cpk","assumed_kps","bandwidth_limit_kbytes","ras"))
+if(isInRequest("charge_name","rule_start","rule_end","cpm","cpk","assumed_kps","bandwidth_limit_kbytes","tx_leaf_name","rx_leaf_name","ras"))
     intAddInternetRule($_REQUEST["charge_name"],$_REQUEST["rule_start"],$_REQUEST["rule_end"],
 		       $_REQUEST["cpm"],$_REQUEST["cpk"],$_REQUEST["assumed_kps"],$_REQUEST["bandwidth_limit_kbytes"],
-		       $_REQUEST["ras"]);
+		       $_REQUEST["tx_leaf_name"],$_REQUEST["rx_leaf_name"],$_REQUEST["ras"]);
 else if (isInRequest("charge_name"))
     interface($_REQUEST["charge_name"],TRUE);
 else
     redirectToChargeList();
 
 function intAddInternetRule($charge_name,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras_ip)
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras_ip)
 {
     $dows=intFindDowsInRequest();
     $ports=intGetRasPortsRequest(escapeIP($ras_ip));
     $add_req=new AddInternetChargeRule($charge_name,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras_ip,$ports,$dows);
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras_ip,$ports,$dows);
     list($success,$err)=$add_req->send();
     if($success)
 	redirectToChargeInfo($charge_name);
     else
-	interface($charge_name,FALSE,$err);
-    
+	interface($charge_name,FALSE,$err);    
 }
 
 
@@ -54,6 +55,11 @@ function intAssignValues(&$smarty,$charge_name,$first_view)
     $smarty->assign("charge_name",$charge_name);
     $smarty->assign("check_all_days",$first_view);
     $smarty->assign("is_editing",FALSE);
+
+    $smarty->assign("tx_leaf_selected",requestVal("tx_leaf_name"));
+    $smarty->assign("rx_leaf_selected",requestVal("rx_leaf_name"));
+
+    intAssignBwLeafNames($smarty);
 }
 
 function intSetFieldErrors(&$smarty,$err_keys)

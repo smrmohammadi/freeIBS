@@ -165,12 +165,12 @@ class UserPool:
 	user_id=self.__fixUserID(user_id)
 	self.loading_users.loadingStart(user_id)
 	try:
-	    self.__checkBlackList(user_id)
 	    loaded_user=self.__isInPoolByID(user_id)
 	    if loaded_user==None:
 		loaded_user=self.__loadUserByID(user_id)
 	    
 	    if online_flag: #it should be done here, because we don't want to release this user while he's trying to log in
+	        self.__checkBlackList(user_id)
 		loaded_user.setOnlineFlag(True)
 	finally:
 	    self.loading_users.loadingEnd(user_id)
@@ -211,6 +211,8 @@ class UserPool:
     def addToBlackList(self,user_id):
 	"""
 	    add user_id to blacklist
+	    blacklist is used to not allow users to get online, not allowing them to set
+	    online flag
 	"""
 	user_id=self.__fixUserID(user_id)
 	self.__black_list.append(user_ids)

@@ -29,7 +29,9 @@ function searchUser(&$smarty,&$conds,$from,$to,$order_by,$desc)
 }
 
 function redirectToUserSearch($url_conds)
-{
+{/*
+    WARNING: change redirectToUsreSearchInc method up to date too
+*/
     $redirect_url="/IBSng/admin/user/search_user.php?search=1&show__normal_username=1&show__group=1&show__credit=1&show__owner=1";
     if($url_conds!="") 
 	$redirect_url.="&{$url_conds}";
@@ -46,7 +48,7 @@ function redirectToUserSearchInc($conds)
 	$_REQUEST["show__credit"]=1;
 	$_REQUEST["show__owner"]=1;
     }
-    foreach($cond as $key=>$value)
+    foreach($conds as $key=>$value)
 	$_REQUEST[$key]=$value;
     intDoSearch(new IBSSmarty());
 }

@@ -2,15 +2,16 @@
 
 class MultiStrGetAll extends Request
 {
-    function MultiStrGetAll($str)
+    function MultiStrGetAll($str,$left_pad)
     {
-	parent::Request("util.multiStrGetAll",array("str"=>$str));
+	parent::Request("util.multiStrGetAll",array("str"=>$str,
+						    "left_pad"=>$left_pad));
     }
 }
 
-function getAllMultiStrs($str)
+function getAllMultiStrs($str,$left_pad=True)
 {
-    $req=new MultiStrGelAll($str);
+    $req=new MultiStrGelAll($str,$left_pad);
     list($success,$str_arr)=$req->send();
     if($success)
 	return $str_arr;
@@ -19,7 +20,7 @@ function getAllMultiStrs($str)
     
 function isMultiString($str)
 {
-    return preg_match("/,|{[0-9]+-[0-9]+}/",$str);
+    return preg_match("/,|{[nl]{0,1}[0-9]+-[0-9]+}/",$str);
 }
 
 function getFirstOfMultiStr($str)

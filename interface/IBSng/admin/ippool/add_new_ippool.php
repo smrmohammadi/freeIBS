@@ -12,10 +12,10 @@ else
 
 function intAddIPpool($ippool_name,$comment)
 {
-    $add_new_ippool=new AddNewIPpool($_REQUEST["ippool_name"],$_REQUEST["comment"]);
+    $add_new_ippool=new AddNewIPpool($ippool_name,$comment);
     list($success,$err)=$add_new_ippool->send();
     if($success)
-      	redirectToIPpoolInfo($_REQUEST["ippool_name"]);
+      	redirectToIPpoolInfo($ippool_name);
     else
 	interface($err);
 }

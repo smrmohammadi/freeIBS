@@ -3,6 +3,7 @@ require_once("../../inc/init.php");
 require_once(IBSINC."ras_face.php");
 require_once(IBSINC."charge_face.php");
 require_once(IBSINC."charge.php");
+require_once(IBSINC."bw_face.php");
 
 needAuthType(ADMIN_AUTH_TYPE);
 
@@ -12,19 +13,19 @@ $smarty=new IBSSmarty();
 if(isInRequest("charge_name","charge_rule_id","rule_start","rule_end","cpm","cpk","assumed_kps","bandwidth_limit_kbytes","ras"))
     intUpdateInternetRule($smarty,$_REQUEST["charge_name"],$_REQUEST["charge_rule_id"],$_REQUEST["rule_start"],$_REQUEST["rule_end"],
 		       $_REQUEST["cpm"],$_REQUEST["cpk"],$_REQUEST["assumed_kps"],$_REQUEST["bandwidth_limit_kbytes"],
-		       $_REQUEST["ras"]);
+		       $_REQUEST["tx_leaf_name"],$_REQUEST["rx_leaf_name"],$_REQUEST["ras"]);
 else if (isInRequest("charge_name","charge_rule_id"))
     intEditInternetRule($smarty,$_REQUEST["charge_name"],$_REQUEST["charge_rule_id"]);
 else
     redirectToChargeList();
 
 function intUpdateInternetRule(&$smarty,$charge_name,$charge_rule_id,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras_ip)
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras_ip)
 {
     $dows=intFindDowsInRequest();
     $ports=intGetRasPortsRequest(escapeIP($ras_ip));
     $update_req=new UpdateInternetChargeRule($charge_name,$charge_rule_id,$rule_start,$rule_end,$cpm,$cpk,
-			    $assumed_kps,$bandwidth_limit_kbytes,$ras_ip,$ports,$dows);
+			    $assumed_kps,$bandwidth_limit_kbytes,$tx_leaf_name,$rx_leaf_name,$ras_ip,$ports,$dows);
     list($success,$err)=$update_req->send();
     if($success)
 	redirectToChargeInfo($charge_name,"update_charge_rule_success=1");
@@ -66,6 +67,9 @@ function intSetRuleInfo(&$smarty,$rule_info)
     $smarty->assign_array($rule_info);
     intSetDayOfWeeksParams($smarty,$rule_info);
     intSetRasParams($smarty,$rule_info);
+    $smarty->assign("tx_leaf_selected",requestVal("tx_leaf_name",$rule_info["bw_tx_leaf_name"]));
+    $smarty->assign("rx_leaf_selected",requestVal("rx_leaf_name",$rule_info["bw_rx_leaf_name"]));
+
 }
 
 function intSetDayOfWeeksParams(&$smarty,$rule_info)
@@ -95,6 +99,7 @@ function intAssignValues(&$smarty,$charge_name)
     $smarty->assign("charge_name",$charge_name);
     $smarty->assign("check_all_days",FALSE);
     $smarty->assign("is_editing",TRUE);
+    intAssignBwLeafNames($smarty);
 }
 
 function intSetFieldErrors(&$smarty,$err_keys)

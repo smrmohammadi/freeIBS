@@ -35,7 +35,7 @@
 		{multiTableTD type="left"}
 		    {math equation="index+1" index=$index}.
 		{/multiTableTD}
-		{multiTableTD type="right"}
+		{multiTableTD type="right" width="25%"}
 		    {$str}
 		{/multiTableTD}
 	    {/foreach}

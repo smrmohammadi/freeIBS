@@ -9,13 +9,14 @@ from core.ibs_exceptions import *
 
 
 class RangeString:
-    range_match=re.compile("({[0-9]+-[0-9]+})")
-    def __init__(self,string):
+    range_match=re.compile("({[nl]{0,1}[0-9]+-[0-9]+})")
+    def __init__(self,string,left_pad=True):
 	"""
 	    "string" is raw String, we'll decompose this string to a list
 	    "string" may contain zero or more ranges, that will generate the final list of strings
 	"""
 	self.string=string
+	self.left_pad=left_pad
 	raw_str_list=self.__decomposeString(string)
 	iter_list=self.__createIterativeList(raw_str_list)
 	self.all_strings=self.__createList(iter_list)
@@ -61,7 +62,7 @@ class RangeString:
 	"""
 	    create a range object from raw_range (ex. "{1-10}")
 	"""
-	return Range(raw_range)
+	return Range(raw_range,self.left_pad)
 
     def __createList(self,iter_list):
 	"""	
@@ -81,17 +82,25 @@ class RangeString:
 
     
 class Range:
-    def __init__(self,raw_range):
+    def __init__(self,raw_range,left_pad=True):
 	"""
 	    raw_range is a string like {1-10} that represents raw range
+	    left_pad(boolean): if set to true, all string within the range are left zero padded to length
+				of maximum range member
 	"""
 	self.raw_range=raw_range
+	self.left_pad=left_pad
 	(start_str,end_str)=self.__decompose(raw_range)
 	(start,end)=self.__findStartEnd(start_str,end_str)
-	self.__findRangeStrLength(start,end)
 	self.__checkStartEnd(start,end)
+
 	int_range=self.__generateIntRange(start,end)
-	self.range=self.__leftPadIntRange(int_range)
+
+	if self.left_pad:
+	    self.__findRangeStrLength(start,end)
+	    self.range=self.__leftPadIntRange(int_range)
+	else:
+	    self.range=map(str,int_range)
 
     def __iter__(self):
 	return iter(self.range)
@@ -123,7 +132,7 @@ class Range:
 	    start=int(start_str)
 	    end=int(end_str)
 	except ValueError:
-	    raise GeneralException(errorText("RANGE_ERROR","GENERAL"))
+	    raise GeneralException(errorText("GENERAL","RANGE_ERROR"))
 	return (start,end)
 	
     def __checkStartEnd(self,start,end):
@@ -132,16 +141,22 @@ class Range:
 	"""
 	
 	if end<=start:
-	    raise GeneralException(errorText("RANGE_END_LESS_THAN_START","GENERAL")%self.raw_range)
+	    raise GeneralException(errorText("GENERAL","RANGE_END_LESS_THAN_START")%self.raw_range)
     
 	if start-end>1024*1024:
-	    raise GeneralException(errorText("RANGE_IS_TOO_LARGE","GENERAL")%self.raw_range)	
+	    raise GeneralException(errorText("GENERAL","RANGE_IS_TOO_LARGE")%self.raw_range)	
     
     def __decompose(self,raw_range):
 	_range=raw_range[1:-1]
+	if _range[0]=="n":
+	    self.left_pad=False
+	    _range=_range[1:]
+	elif _range[0]=="l":
+	    self.left_pad=True
+	    _range=_range[1:]
 	range_sp=_range.split("-")
 	if len(range_sp)!=2:
-	    raise GeneralException(errorText("RANGE_ERROR","GENERAL"))
+	    raise GeneralException(errorText("GENERAL","RANGE_ERROR"))
 	start_str=range_sp[0]
 	end_str=range_sp[1]
 	return (start_str,end_str)
@@ -153,7 +168,7 @@ class Range:
 	"""
 	num_str=str(num)
 	if len(num_str)>self.str_length:
-	    raise GeneralException(errorText("RANGE_ERROR","GENERAL"))
+	    raise GeneralException(errorText("GENERAL","RANGE_ERROR"))
 	
 	while (len(num_str)<self.str_length): num_str="0%s"%num_str
 	return num_str

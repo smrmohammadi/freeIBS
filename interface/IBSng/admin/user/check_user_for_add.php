@@ -35,7 +35,7 @@ function returnText($resp)
 	$smarty->assign("alerts",$resp->getResult());
     else
     {
-	$smarty->set_page_error($resp->getError());
+	$resp->setErrorInSmarty($smarty);
 	$smarty->assign("alerts",array());
     }
     $smarty->display("admin/user/check_user_for_add.tpl");

@@ -1,9 +1,12 @@
 <?php
 require_once("user_info_funcs.php");
+require_once(IBSINC."large_url.php");
+
 
 needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();
+largeUrlRestore("user_id_multi");
 
 if(isInRequest("user_id"))
     intShowSingleUserInfo($smarty,$_REQUEST["user_id"]);

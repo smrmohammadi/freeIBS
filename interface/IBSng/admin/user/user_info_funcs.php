@@ -13,7 +13,7 @@ function intShowMultiUserInfo(&$smarty,$user_id)
     if(!isMultiString($user_id))
 	intShowSingleUserInfo($smarty,$user_id);
     else
-	redirectToUserSearch("user_id={$user_id}");
+	redirectToUserSearchInc(array("user_id"=>$user_id));
 }
 //********************************************
 function intShowMultiNormalUserInfo(&$smarty,$normal_username)
@@ -41,7 +41,6 @@ function intShowSingleUserInfoAssignValues(&$smarty,$user_id,$user_info)
 {
     $smarty->assign("can_change",canDo("CHANGE USER ATTRIBUTES",null,(int)$user_id,$user_info[0]["basic_info"]["owner_id"]));
     $smarty->assign("can_delete",canDo("DELETE USER",null,(int)$user_id,$user_info[0]["basic_info"]["owner_id"]));
-
     intSetSingleUserGroupAttrs($smarty,$user_info[0]);
 }
 

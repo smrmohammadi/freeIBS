@@ -50,11 +50,11 @@ class IPpoolHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE IPPOOL")
     	request.checkArgs("ippool_name","ip")
-	ippool_main.getActionsManager().delIPfromPool(request["ippool_name"],multi_strs.MultiStr(request["ip"]))
+	ippool_main.getActionsManager().delIPfromPool(request["ippool_name"],multi_strs.MultiStr(request["ip"],False))
     
     def addIPtoPool(self,request):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE IPPOOL")
     	request.checkArgs("ippool_name","ip")
-	ippool_main.getActionsManager().addIPtoPool(request["ippool_name"],multi_strs.MultiStr(request["ip"]))
+	ippool_main.getActionsManager().addIPtoPool(request["ippool_name"],multi_strs.MultiStr(request["ip"],False))
 

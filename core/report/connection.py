@@ -58,7 +58,10 @@ class ConnectionSearchHelper(SearchHelper):
 	for connection in connections:
 	    connection["login_time_formatted"]=AbsDate(connection["login_time"],"gregorian").getDate(date_type)
 	    connection["logout_time_formatted"]=AbsDate(connection["logout_time"],"gregorian").getDate(date_type)
-	    connection["ras_ip"]=ras_main.getLoader().getRasByID(connection["ras_id"]).getRasIP()
+	    try:
+	        connection["ras_ip"]=ras_main.getLoader().getRasByID(connection["ras_id"]).getRasIP()
+	    except GeneralException:
+		connection["ras_ip"]="id:%s"%connection["ras_id"]
     	    connection["service_type"]=user_main.getConnectionLogManager().getIDType(connection["service"])
 	    try:
 		connection["details"]=details_dic[connection["connection_log_id"]]

@@ -1,4 +1,4 @@
-{listTable title="Internet Charge Rule List" cols_num=10}
+{listTable title="Internet Charge Rule List" cols_num=12}
 	{if $can_change and !$is_editing}
 	    {listTableHeaderIcon action="edit"}
 	    {listTableHeaderIcon action="delete" close_tr=TRUE}
@@ -25,6 +25,15 @@
 	    {listTD}
 		BL KPS	
 	    {/listTD}
+
+	    {listTD}
+		BW Send
+	    {/listTD}
+
+	    {listTD}
+		BW Recv
+	    {/listTD}
+
 	    {listTD}
 		RAS
 	    {/listTD}
@@ -61,6 +70,15 @@
 		{listTD}
 		    {$rule.bandwidth_limit}
 		{/listTD}
+
+		{listTD}
+		    {$rule.bw_tx_leaf_name}
+		{/listTD}
+
+		{listTD}
+		    {$rule.bw_rx_leaf_name}
+		{/listTD}
+
 		{listTD}
 		    {$rule.ras}
 		{/listTD}

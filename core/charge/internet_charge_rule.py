@@ -1,8 +1,9 @@
 from core.charge.charge_rule import ChargeRule
 from core.bandwidth_limit import simple_bw_limit
+from core.bandwidth_limit import bw_main
 
 class InternetChargeRule(ChargeRule):
-    def __init__(self,rule_id,charge_obj,cpm,cpk,day_of_weeks,start,end,bandwidth_limit,assumed_kps,ras_id,ports):
+    def __init__(self,rule_id,charge_obj,cpm,cpk,day_of_weeks,start,end,bandwidth_limit,bw_tx_leaf_id,bw_rx_leaf_id,assumed_kps,ras_id,ports):
 	"""
 	    rule_id (integer) : unique id of this rule
 
@@ -17,6 +18,10 @@ class InternetChargeRule(ChargeRule):
 	    end (integer):        Rule end Time, seconds from 00:00:00
 
 	    bandwidth_limit (integer): bandwidth limit KiloBytes, now useful for lan (vpn) users only
+	    
+	    bw_tx_leaf_id (integer): id of leaf, used for bandwidth manager to shape user transmit, 
+				     can be None that means no leaf_id specified
+	    bw_rx_leaf_id (integer): same as bw_tx_leaf_id but used for user recieve shaping
 	
 	    assumed_kps (integer): assumed (maximum) transfer rate for this rule in KiloBytes per seconds
 				   this is used to determine maximum user transfer rate and the soonest time
@@ -34,7 +39,8 @@ class InternetChargeRule(ChargeRule):
 	self.assumed_kps=assumed_kps
 	self.cpm=cpm
 	self.cpk=cpk
-
+	self.bw_tx_leaf_id=bw_tx_leaf_id
+	self.bw_rx_leaf_id=bw_rx_leaf_id
 
     def __str__(self):
 	return "Internet Charge Rule with id %s belongs to charge %s"%(self.rule_id,self.charge_obj.getChargeName())
@@ -47,6 +53,12 @@ class InternetChargeRule(ChargeRule):
 	dic["assumed_kps"]=self.assumed_kps
 	dic["cpm"]=self.cpm
 	dic["cpk"]=self.cpk
+	if self.bw_tx_leaf_id==None:
+	    dic["bw_tx_leaf_name"]=''
+	    dic["bw_rx_leaf_name"]=''
+	else:
+	    dic["bw_tx_leaf_name"]=bw_main.getLoader().getLeafByID(self.bw_tx_leaf_id).getLeafName()
+	    dic["bw_rx_leaf_name"]=bw_main.getLoader().getLeafByID(self.bw_rx_leaf_id).getLeafName()
 	return dic
     
     def start(self,user_obj,instance):
@@ -61,7 +73,7 @@ class InternetChargeRule(ChargeRule):
 
 	if self.bandwidth_limit>0:
 	    simple_bw_limit.applyLimitOnUser(user_obj,instance,self.bandwidth_limit)
-
+	self.__applyBwLimit(user_obj,instance,"apply")
 
     def end(self,user_obj,instance):
 	"""
@@ -73,6 +85,7 @@ class InternetChargeRule(ChargeRule):
 	ChargeRule.end(self,user_obj,instance)
 	if self.bandwidth_limit>0:
 	    simple_bw_limit.removeLimitOnUser(user_obj,instance)
+	self.__applyBwLimit(user_obj,instance,"remove")
 
     def calcRuleInOutUsage(self,user_obj,instance):
 	"""
@@ -89,3 +102,24 @@ class InternetChargeRule(ChargeRule):
 	cur_rule_inout=self.calcRuleInOutUsage(user_obj,instance)
 	return cur_rule_inout[0]+cur_rule_inout[1]
     
+    def __applyBwLimit(self,user_obj,instance,action):
+	"""
+	    apply bandwidth limit on user, this is seperate from simple bandwidth limit
+
+	    user_obj (User.User instance): object of user that we want to apply limit on
+	    instance (integer): instance number of user 
+	    action (integer): can be "apply" and "remove"
+	    
+	"""
+	if self.bw_tx_leaf_id==None and self.bw_rx_leaf_id==None:
+	    return
+	try:
+	    ip_addr=user_obj.getTypeObj().getClientAddr(instance)
+	except GeneralException:
+	    logException(LOG_ERROR,"Can't apply bandwidth limit on user")
+
+	if action=="apply":
+	    bw_main.getManager().applyBwLimit(ip_addr,self.bw_tx_leaf_id.self.bw_rx_leaf_id)
+	else:
+	    bw_main.getManager().removeBwLimit(ip_addr)
+

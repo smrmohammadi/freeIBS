@@ -54,7 +54,7 @@ function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
 				<td class="Form_Title_{$color}">{$title} <img border="0" src="/IBSng/images/arrow/arrow_{$arrow_color}_on_{$color}.gif"></td>
 				<td class="Form_Title_End"><img border="0" src="/IBSng/images/form/end_form_title_{$color}.gif"></td>
 			</tr>
-			</table>
+		</table>
 		<!-- End Form Title Table  -->
 		</td>
 	</tr>
