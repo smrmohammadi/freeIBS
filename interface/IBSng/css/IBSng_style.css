@@ -49,20 +49,20 @@ td.Header_Submenu{
 	font-size: 7pt; 
 	color: #222222; 
 	font-weight:bold; 
-	height:17;
+	height:18;
 	text-align:right;
 	direction:ltr ;
-	background-color:#FF9C00 
+	background-color:#FFAA00 
 }
 Table.Header_Submenu{ 
 	font-family: Tahoma; 
 	font-size: 7pt; 
 	color: #222222; 
 	font-weight:bold; 
-	height:17;
+	height:18;
 	text-align:right;
 	direction:ltr ;
-	background-color:#FF9C00 
+	background-color:#FFAA00 
 }
 td.Header_Line_Between_Submenus{ 
 	text-align:center;
@@ -622,11 +622,11 @@ td.Form_Content_Row_Left_textarea_line_light{
 }
 td.Form_Content_Row_Right_textarea_line_dark{ 
 	font-size: 1pt; 
-	background-color:#ECECEC
+	background-color:#D9D9D9
 }
 td.Form_Content_Row_Left_textarea_line_dark{ 
 	font-size: 1pt; 
-	background-color:#ECECEC
+	background-color:#D9D9D9
 }
 
 /*-------------------------------------------------*/
@@ -806,7 +806,7 @@ textarea.text {
 td.error_messages{ 
 	font-family: Tahoma; 
 	font-size: 9pt; 
-	color: red; 
+	color: #BB0000; 
 	font-weight:bold; 
 	height:18;
 	direction:ltr ;

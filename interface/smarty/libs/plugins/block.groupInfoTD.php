@@ -22,7 +22,7 @@ function smarty_block_groupInfoTD($params,$content,&$smarty,&$repeat)
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content}</nobr></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content}&nbsp;:</nobr></td>
 				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
@@ -69,7 +69,7 @@ END;
 		$ret=<<<END
 	<tr>
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_{$color}"><nobr>{$content}</nobr></td>
+		<td class="Form_Content_Row_Left_{$color}"><nobr>{$content}&nbsp;:</nobr></td>
 END;
 	    }
 	    else //type is right
@@ -90,4 +90,4 @@ END;
     }
     
 }
-
+?>

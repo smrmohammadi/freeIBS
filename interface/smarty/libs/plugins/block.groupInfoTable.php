@@ -45,8 +45,16 @@ END;
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
 					<td class="Form_Foot_Begin_Line"></td>
+END;
+	if($smarty->get_assigned_value("can_change"))
+	{
+	    $footer.=<<<END
 					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
-					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/ok.gif"></td>
+					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/edit.gif"></td>
+END;
+	}
+	$footer.=<<<END
+
 				</tr>
 				<tr>
 					<td class="Form_Foot_Below_Line"></td>

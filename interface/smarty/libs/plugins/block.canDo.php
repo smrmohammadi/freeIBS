@@ -25,3 +25,4 @@ function smarty_block_canDo($params,$content,&$smarty,&$repeat)
 	return $content;
     
 }
+?>

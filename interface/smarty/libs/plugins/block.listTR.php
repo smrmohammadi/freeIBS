@@ -22,3 +22,4 @@ function smarty_block_listTR($params,$content,&$smarty,&$repeat)
 
 }
 
+?>

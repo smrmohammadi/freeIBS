@@ -7,8 +7,8 @@
 		<td rowspan="3" width="107"><img border="0" src="/IBSng/images/logoibsng.gif"></td>
 		<td rowspan="3" width="100%" class="Header_Color"></td>
 		<!-- Top right Link -->
-		<td class="Header_Color" width="190"></td>
-		<td width="194">
+		<td class="Header_Color" width="126"></td>
+		<td width="194" height="19">
 		<table height="19" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr class="Header_Top_link">
 				<td width="7"><img border="0" src="/IBSng/images/top_right_links_begin.gif"></td>
@@ -23,15 +23,13 @@
 		<!-- End Top right Link-->
 	</tr>
 	<tr>
-		<td colspan="2" width="384" height="17" class="Header_Color"></td>
+		<td colspan="2" width="320" height="18" class="Header_Color"></td>
 	</tr>
 	<tr>
-		<td colspan="2" width="384">
+		<td colspan="2" width="320" height="24">
 		<!-- Links Button -->
-		<table border="0" width="384" cellspacing="0" cellpadding="0">
+		<table border="0" width="320" cellspacing="0" cellpadding="0">
 			<tr>
-				<td>
-					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
 				<td>
 					<img border="0" src="/IBSng/images/button_deactive.gif" width="64" height="24"></td>
 				<td>

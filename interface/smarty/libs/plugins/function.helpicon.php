@@ -15,7 +15,7 @@ function smarty_function_helpicon($params,&$smarty)
     if(isset($params["body"]))
 	$body=$params["body"];
     else
-	$body="<img src=\"/IBSng/images/help_icon.png\" border=0 height=10>";
+	$body="<img src=\"/IBSng/images/help_icon.gif\" border=0>";
 	
     return <<<EOF
 	    <a href="javascript:showHelp('{$params["subject"]}','{$params["category"]}')" title="{$alt}" style="text-decoration: none">{$body}</a>

@@ -21,6 +21,7 @@ else
 function intGroupInfo(&$smarty,$group_name)
 {
     intSetGroupInfo($smarty,$group_name);    
+    $smarty->assign("can_change",canDo("CHANGE_GROUP",null,$group_name));
     interface($smarty);
 }
 
@@ -28,3 +29,5 @@ function interface(&$smarty)
 {
     $smarty->display("admin/group/group_info.tpl");
 }
+
+?>

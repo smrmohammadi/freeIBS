@@ -4,9 +4,9 @@
 	    Relative Expiration Date 
     {/groupInfoTD}
     {groupInfoTD type="right"}
-		{ifhasattr object="group" var_name="has_rel_exp"}
+		{ifHasAttr object="group" var_name="has_rel_exp"}
 		    {$rel_exp_date} {$rel_exp_date_unit}
-		{/ifhasattr}
+		{/ifHasAttr}
     {/groupInfoTD}
 
   {/groupInfoTable}

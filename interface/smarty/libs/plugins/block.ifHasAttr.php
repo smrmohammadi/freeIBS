@@ -9,20 +9,35 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
     parameter object(string,required): can be "user" or "group"
     parameter var_name(string,required): variable name that will be checked that if exists
 					 and set !== FALSE , we suppose we have the attribute 
-    XXX: TODO
+
 */
     if(is_null($content))
     {
-	if($params["object"]=="user")
-	    $attrs=$smarty->get_assigned_value("user_attrs");
-	else if ($params["object"]=="group")
-	    $attrs=$smarty->get_assigned_value("group_attrs");
-
-	if (isset($attrs[$params["var_name"]]))
-	    $repeat=FALSE;
+	if(hasAttr($params,$smarty))
+	{
+	    $repeat=TRUE;
+	}
 	else
-	    $repeat=TRYE;
-    }else
+	{
+	    $repeat=FALSE;
+	    print "<center>-------------</center>";    
+	}
+    }
+    else
 	return $content;
     
+}
+
+function hasAttr(&$params,&$smarty)
+{
+	$attrs=getAttrsArray($params,$smarty);
+	return (isset($attrs[$params["var_name"]]) and $attrs[$params["var_name"]]!==FALSE);
+}
+
+function getAttrsArray(&$params,&$smarty)
+{
+    if($params["object"]=="user")
+        return $smarty->get_assigned_value("user_attrs");
+    else if ($params["object"]=="group")
+        return $smarty->get_assigned_value("group_attrs");
 }

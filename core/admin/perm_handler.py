@@ -7,6 +7,7 @@ class PermHandler(handler.Handler):
     def __init__(self):
 	handler.Handler.__init__(self,"perm")
 	self.registerHandlerMethod("hasPerm")
+	self.registerHandlerMethod("canDo")
 	self.registerHandlerMethod("getPermsOfAdmin")
 	self.registerHandlerMethod("getAllPerms")
 	self.registerHandlerMethod("getAdminPermVal")
@@ -19,9 +20,26 @@ class PermHandler(handler.Handler):
 	self.registerHandlerMethod("loadPermTemplateToAdmin")
 	self.registerHandlerMethod("deletePermTemplate")
 	
+
+    def canDo(self,request):
+	"""
+	    return True if "admin_username" canDo "perm_name" with params
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("perm_name","admin_username","params")
+	if request.auth_name!=request["admin_username"]:	
+	    request.getAuthNameObj().canDo("SEE ADMIN PERMISSIONS")
+	args=[request["perm_name"]]
+	args.extend(request["params"])
+	try:
+	    apply(admin_main.getLoader().getAdminByName(request["admin_username"]).canDo,args)
+	    return True
+	except PermissionException:
+	    return False
+
     def hasPerm(self,request):
 	"""
-	    return 1 if admin has permission and else 0
+	    return True if admin has permission and else False
 	"""
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("perm_name","admin_username")

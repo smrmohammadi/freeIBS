@@ -13,7 +13,7 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
-	$err_star_img_link="<img src='/IBSng/images/star.gif'> ";
+	$err_star_img_link="<img src='/IBSng/images/error.gif'> ";
 	if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
         {
 	    $err_star=$err_star_img_link;

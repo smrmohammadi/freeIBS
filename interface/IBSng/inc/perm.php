@@ -5,9 +5,21 @@ class AdminHasPerm extends Request
 {
     function AdminHasPerm($perm_name,$admin_username)
     {
-	parent::Request("perm.hasPerm",array("perm_name"=>$perm_name,"admin_username"=>$admin_username));
+	parent::Request("perm.hasPerm",array("perm_name"=>$perm_name,
+					     "admin_username"=>$admin_username));
     }
 }
+
+class AdminCanDo extends Request
+{
+    function AdminCanDo($perm_name,$admin_username,$params)
+    {
+	parent::Request("perm.canDo",array("perm_name"=>$perm_name,
+					   "admin_username"=>$admin_username,
+					   "params"=>$params));
+    }
+}
+
 
 class AdminPermValue extends Request
 {
@@ -36,11 +48,28 @@ function hasPerm($perm_name,$admin_username=null)
     return $ret_val==1?TRUE:FALSE;
 }
 
-function canDo($perm_name)
+function canDo($perm_name,$admin_username=null)
 {/*check if authenticated admin can do a job needed permission with $perm_name
-   admin should be god or has $perm_name
+    perm_name(string) name of permission
+    admin_username(string) if not null check canDo for this username, else use current logged on username
+    other parameters of this function will be passed to core canDo function as optional arguments of permission
  */
-    return amIGod() or hasPerm($perm_name);
+    if(is_null($admin_username))
+	$admin_username=getAuthUsername();
+
+    $arg_list=func_get_args();
+    $params=array();
+    for($i=2;$i<func_num_args();$i++)
+	$params[]=$arg_list[$i];
+
+    $can_do_request=new AdminCanDo($perm_name,$admin_username,$params);
+    list($success,$ret_val)=$can_do_request->send();
+    if(!$success)
+    {
+	toLog("canDo Error:".$ret_val->getErrorMsg());
+	return FALSE;
+    }	
+    return $ret_val==TRUE?TRUE:FALSE;
 }
 
 function amIGod()
