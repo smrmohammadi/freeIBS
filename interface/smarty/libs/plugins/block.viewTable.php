@@ -58,6 +58,7 @@ END;
 	</tr>
 	<!-- End List Foot-->
 </table>
+<br />
 END;
     return $header.$content.$footer;    
     }

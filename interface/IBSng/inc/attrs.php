@@ -82,9 +82,6 @@ function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
 
 function normalChargePluginUpdate(&$update_helper)
 {
-    $to_del_attrs=array();
-    $update_attrs=array();
-
     if(!isInRequest("has_normal_charge"))
 	$update_helper->addToDelAttrs("normal_charge");
     else

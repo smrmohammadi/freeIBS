@@ -13,6 +13,7 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
+	$ret="";
 	$err_star_img_link="<img src='/IBSng/images/error.gif'> ";
 	if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
         {
@@ -25,15 +26,70 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 	    $err=False;
         }
 
-	if(isset($params["double"])and $params["double"]=="TRUE")
+	if(isset($params["double"])and $params["double"]=="TRUE" and isset($params["comment"]) and $params["comment"]=="TRUE")
+	{
+	    if($params["type"]=="left")
+	    {
+	    	$color=getTRColor(TRUE);
+		$ret=<<<END
+	<tr>
+		<!-- Form Text Area -->
+		<td class="Form_Content_Row_Left_Textarea_2col" valign="top" colspan="2">
+		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+			<tr>
+				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content}</nobr></td>
+				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
+			</tr>
+		</table>
+		</td>
+
+END;
+	    }
+	    else if ($params["type"]=="right")
+	    {
+	    	$color=getTRColor();
+		$ret=<<<END
+
+		<td colspan="7" class="Form_Content_Row_Right_Textarea_2col">
+		<table border="0" width="100%" cellspacing="0" cellpadding="0" >
+			<tr>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Top_textarea_line_{$color}"></td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
+			</tr>
+			<tr>
+				<td class="Form_Content_Row_Left_textarea_line_{$color}">&nbsp;</td>
+				<td class="Form_Content_Row_Right_textarea_td_{$color}">{$content}</td>
+				<td class="Form_Content_Row_Right_textarea_line_{$color}">&nbsp;</td>
+			</tr>
+			<tr>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
+				<td class="Form_Content_Row_Bottom_textarea_line_{$color}">&nbsp;</td>
+				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_right_of_comment_{$color}.gif"></td>
+			</tr>
+		</table>
+		</td>
+		<!-- End Form Text Area -->
+		<tr>
+		    <td colspan="9" class="Form_Content_Row_Space"></td>
+		</tr>
+
+END;
+	    }
+	
+	} //end comment double
+
+
+	else if(isset($params["double"])and $params["double"]=="TRUE")
 	{
 	    if($params["type"]=="left1")
 	    {
 	    	$color=getTRColor(TRUE);
 		$ret=<<<END
 	<tr>
-		<td class="Form_Content_Row_Begin">	<img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}" >{$content}</td>
+		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content}</nobr></td>
 END;
 	    }
 	    else if ($params["type"]=="right1")
@@ -51,7 +107,8 @@ END;
 		<td class="Form_Content_Col_Space">&nbsp;</td>
 		
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}" >{$content}</td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content}</nobr></td>
+
 END;
 	    }
 	    else if ($params["type"]=="right2")
@@ -62,8 +119,13 @@ END;
 		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 		
 	</tr>
+		<tr>
+		    <td colspan="9" class="Form_Content_Row_Space"></td>
+		</tr>
+
 END;
 	    }
+
 	    
 	} //end double
 	else if (isset($params["comment"]) and $params["comment"]=="TRUE")

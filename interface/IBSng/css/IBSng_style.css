@@ -123,7 +123,7 @@ a:visited.Header_Top_Links{
 
 a:hover.Header_Top_Links{ 
     color: #FF9C00;
-    text-decoration:underline
+    text-decoration:none
 }
 
 
@@ -482,7 +482,7 @@ td.Form_Content_Row_Right_userinfo_dark{
 	background-color:#D9D9D9
 }
 
-td.Form_Content_Row_groupinfo_dark{ 
+td.Form_Content_Row_groupinfo_dark{
 	font-family: Tahoma; 
 	font-size: 8pt; 
 	color: #800000; 
@@ -515,6 +515,8 @@ td.Form_Content_Row_groupinfo_dark{
 /*	16.Form_Content_Row_Left_textarea_line_light 			*/
 /*	17.Form_Content_Row_Right_textarea_line_dark 			*/
 /*	18.Form_Content_Row_Left_textarea_line_dark			*/
+/*	19.td.Form_Content_Row_Left_textarea_2col			*/
+/*	20.td.Form_Content_Row_Right_textarea_2col			*/
 /*----------------------------------------------------------------------*/
 
 td.Form_Content_Row_Left_textarea{ 
@@ -633,6 +635,19 @@ td.Form_Content_Row_Left_textarea_line_dark{
 	font-size: 1pt; 
 	background-color:#D9D9D9
 }
+
+td.Form_Content_Row_Left_textarea_2col{ 
+	width:25%;
+	direction:ltr ;
+	background-color:#FFFFFF
+}
+
+td.Form_Content_Row_Right_textarea_2col{ 
+	width:25%;
+	direction:ltr ;
+	background-color:#FFFFFF
+}
+
 
 /*-------------------------------------------------*/
 /*  List Main 					   */
@@ -934,6 +949,7 @@ a:visited.RightSide_Links{
 a:hover.RightSide_Links{ 
     color: #CC6600
 }
+
 td.RightSide_about_title{
 	font-family: Tahoma; 
 	font-size: 8pt; 

@@ -13,6 +13,6 @@ class ChangeCharge (NoValuePermission,ChargeCatPermission,Permission):
 		Related Permissions: ACCESS ALL CHARGES,CHARGE ACCESS
 	       """)
 
-	self.addDependency("LIST ALL CHARGES")
+	self.addDependency("ACCESS ALL CHARGES")
 	self.addAffectedPage("Setting->Charge->Charge List")
 

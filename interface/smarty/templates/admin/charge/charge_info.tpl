@@ -19,7 +19,6 @@
 {include file="admin_header.tpl" title="Charge Information"}
 {include file="err_head.tpl"}
 
-<center>
 {headerMsg var_name="update_success"}
 	Charge Updated Successfully.
 {/headerMsg}
@@ -36,67 +35,104 @@
     <form action="/IBSng/admin/charge/charge_info.php" method=POST>
     <input name=charge_id value="{$charge_id}" type=hidden>
     <input name=old_charge_name value="{$charge_name}" type=hidden>
+    	{addEditTable title="Charge Information" double="TRUE"}
+	    {addEditTD type="left1" double="TRUE"}
+		    Charge Name
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		<input class="text" type=text name=charge_name value="{$charge_name}">
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"}
+	    	    Charge ID
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    {$charge_id}
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE"}
+		    Charge Type
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		    {$charge_type}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"} 
+	    	    Visible To All
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    <input class="checkbox" type=checkbox name=visible_to_all {$visible_to_all_checked}>
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE"}
+		    Creator Admin
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		    {$creator}
+	    {/addEditTD}
+	    {addEditTD type="left2"  double="TRUE"}
+		    
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    
+	    {/addEditTD}
+	    {addEditTD type="left" comment="TRUE" double="TRUE"}
+	    	    Comment
+	    {/addEditTD}
+	    {addEditTD type="right" comment="TRUE" double="TRUE"}
+		    <textarea class="text" name=comment>{$comment|strip}</textarea>
+	    {/addEditTD}
+	{/addEditTable}
+</form>
+{else}
+	{viewTable title="Charge Information" double="TRUE"}
+	    {addEditTD type="left1" double="TRUE"}
+		    Charge Name
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		{$charge_name}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"}
+	    	    Charge ID
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    {$charge_id}
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE"}
+		    Charge Type
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		    {$charge_type}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"} 
+	    	    Visible To All
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    {$visible_to_all}
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE"}
+		    Creator Admin
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		    {$creator}
+	    {/addEditTD}
+	    {addEditTD type="left2"  double="TRUE"}
+		    
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		    
+	    {/addEditTD}
+	    {addEditTD type="left" comment="TRUE" double="TRUE"}
+	    	    Comment
+	    {/addEditTD}
+	    {addEditTD type="right" comment="TRUE" double="TRUE"}
+		    {$comment}
+	    {/addEditTD}
+	{/viewTable}
 {/if}
-
-<table>
-    <tr>
-	<td>
-	    Charge Name:
-	<td>
-	    {if $is_editing}
-		<input type=text name=charge_name value="{$charge_name}">
-	    {else}
-        	{$charge_name}
-	    {/if}
-	<td>
-	    Charge ID:
-	<td>
-	    {$charge_id}
-    <tr>
-	<td>
-	    Charge Type:
-	<td>
-		{$charge_type}
-	<td>
-	    Visible To All:
-	<td>
-	    {if $is_editing}
-		<input type=checkbox name=visible_to_all {$visible_to_all_checked}>
-	    {else}
-		{$visible_to_all}
-	    {/if}
-
-    <tr>
-	<td>
-	    Comment:
-	<td>
-	    {if $is_editing}
-		<textarea name=comment>{$comment|strip}</textarea>
-	    {else}
-		{$comment}
-	    {/if}
-	<td>
-	    Creator Admin:
-	<td>
-	    {$creator}
-	    
-</table>
-
-{if $is_editing}
-    <input type=submit value=change>
-    </form>
-{/if}
-
-{if not $is_editing}
-    {if $charge_type eq "Internet"}
+{if $charge_type eq "Internet"}
 	{include file="admin/charge/internet_charge_rule_list.tpl"}
     {else}
     
-    {/if}
-
 {/if}
 
-{if not $is_editing and $can_change}
+{if !$is_editing and  $can_change}
     {addRelatedLink}
         <a href="/IBSng/admin/charge/charge_info.php?charge_name={$charge_name|escape:"url"}&edit=1" class="RightSide_links">
         	Edit Charge Information
@@ -109,4 +145,16 @@
     {/addRelatedLink}
 
 {/if}
+    {addRelatedLink}
+        <a href="/IBSng/admin/charge/charge_list.php" class="RightSide_links">
+        	Charge List
+        </a>
+    {/addRelatedLink}
+
+    {addRelatedLink}
+        <a href="/IBSng/admin/charge/add_new_charge.php" class="RightSide_links">
+        	Add New Charge 
+        </a>
+    {/addRelatedLink}
+
 {include file="admin_footer.tpl"}

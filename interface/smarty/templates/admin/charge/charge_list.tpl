@@ -39,7 +39,7 @@
 		    {$charge_info.visible_to_all}
     		{/listTD}
 		{listTD icon=TRUE}
-		    <a href="/IBSng/admin/charge/charge_info.php?charge_name={$charge_name|escape:"url"}"{listTableBodyIcon action="view" cycle_color="TRUE"}</a>
+		    <a href="/IBSng/admin/charge/charge_info.php?charge_name={$charge_name|escape:"url"}">{listTableBodyIcon action="view" cycle_color="TRUE"}</a>
     		{/listTD}
 		
 	    {/listTR}

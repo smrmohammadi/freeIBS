@@ -1,4 +1,5 @@
-{* Ras Info
+{* 
+Ras Info
     Shows one ras information, including ports and attributes
     on fatal errors that no info can be shown, client is redirected to admin_list
     else error is shown on top of page
@@ -6,50 +7,33 @@
     Variables:
     
 *}
-{include file="admin_header.tpl" title="Ras Information"}
 
+{include file="admin_header.tpl" title="Ras Information"}
 {include file="err_head.tpl"}
 
-<center>
+{headerMsg var_name="update_ras_info_success"}
+    Ras Info Updated Successfully.
+{/headerMsg}
 
-{if isset($update_ras_info_success) and $update_ras_info_success}
-    <h2>
-	Ras Info Updated Successfully
-    </h2>
-{/if}
+{headerMsg var_name="update_ras_attrs_success}
+    Ras Attributes Updated Successfully.
+{/headerMsg}
 
-{if isset($update_ras_attrs_success) and $update_ras_attrs_success}
-    <h2>
-	Ras Attributes Updated Successfully
-    </h2>
-{/if}
+{headerMsg var_name="reset_ras_attrs_success"}
+    Ras Attributes Reset Successfully.
+{/headerMsg}    
 
+{headerMsg var_name="del_port_success"}
+    Port(s) Deleted Successfully.
+{/headerMsg}
 
-{if isset($reset_ras_attrs_success) and $reset_ras_attrs_success}
-    <h2>
-	Ras Attributes Reset Successfully
-    </h2>
-{/if}
+{headerMsg var_name="add_ippool_success"}
+    IP Pool Added To Ras Successfully.
+{/headerMsg}
 
-{if isset($del_port_success) and $del_port_success}
-    <h2>
-	Port(s) Deleted Successfully
-    </h2>
-{/if}
-
-{if isset($add_ippool_success) and $add_ippool_success}
-    <h2>
-	IP Pool Added To Ras Successfully
-    </h2>
-{/if}
-
-{if isset($del_ippool_success) and $del_ippool_success}
-    <h2>
-	IP Deleted From Ras Successfully
-    </h2>
-{/if}
-
-</center>
+{headerMsg var_name="del_ippool_success"}
+    	IP Deleted From Ras Successfully.
+{/headerMsg}
 
 
 {if $is_editing or $attr_editing}

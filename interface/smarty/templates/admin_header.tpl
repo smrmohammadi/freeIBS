@@ -7,13 +7,15 @@
 		<td rowspan="3" width="107"><img border="0" src="/IBSng/images/logoibsng.gif"></td>
 		<td rowspan="3" width="100%" class="Header_Color"></td>
 		<!-- Top right Link -->
-		<td class="Header_Color" width="126"></td>
-		<td width="194" height="19">
+		<td class="Header_Color" width="100"></td>
+		<td width="220" height="19">
 		<table height="19" border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr class="Header_Top_link">
 				<td width="7"><img border="0" src="/IBSng/images/top_right_links_begin.gif"></td>
-				<td class="Page_Top_Link">Admin</td>
+				<td class="Page_Top_Link"><a class="Header_Top_links" href="/IBSng/admin/admin_index.php">Home</a></td>
 				<td class="Page_Top_Link">|</td>
+				<td class="Page_Top_Link">Admin</td>
+				<td class="Page_Top_Link"></td>
 				<td class="Page_Top_Link">Username:{$auth_name}</td>
 				<td class="Page_Top_Link">|</td>
 				<td class="Page_Top_Link"><a class="Header_Top_links" href="/IBSng/admin/?logout=1">Logout</a></td>

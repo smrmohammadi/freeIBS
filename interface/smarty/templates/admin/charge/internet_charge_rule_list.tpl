@@ -1,5 +1,5 @@
 {listTable title="Internet Charge Rule List" cols_num=10}
-	{if $can_change}
+	{if $can_change and !$is_editing}
 	    {listTableHeaderIcon action="edit"}
 	    {listTableHeaderIcon action="delete" close_tr=TRUE}
 	{/if}
@@ -70,7 +70,7 @@
 		{listTD}
 		    {arrayJoin array=`$rule.day_of_weeks` glue=", " truncate_each=3} 
     		{/listTD}
-		{if $can_change}
+		{if $can_change and !$is_editing}
 		    {listTD icon=TRUE}
 			<a href="/IBSng/admin/charge/edit_internet_charge_rule.php?charge_rule_id={$rule.rule_id}&charge_name={$charge_name|escape:"url"}">{listTableBodyIcon action="edit" cycle_color="TRUE"}</a>
     		    {/listTD}
