@@ -21,14 +21,18 @@ class RelativeDate:
 	    return factor for unit type to convert date to hours
 	    so, factor for hours is 1 , for days is 24 and so on..
 	"""
+	foctor=3600
 	if unit=="Hours":
-	    return 1
-	elif unit=="Days":
-	    return 24
-	elif unit=="Months":
-	    return 24*30
-	elif unit=="Years":
-	    return 24*30*365
+	    return factor
+	factor*=24
+	if unit=="Days":
+	    return factor
+	factor*=30
+	if unit=="Months":
+	    return factor
+	factor*=365
+	if unit=="Years":
+	    return factor
 	else:
 	    raise GeneralException(errorText("GENERAL","INVALID_REL_DATE_UNIT")%unit)
 
@@ -37,15 +41,14 @@ class RelativeDate:
 	    find which unit is suitable for "date_hours"
 	    date_hours is an integer containing relative date with unit "Hours"
 	"""
-	if date_hours==0 or date_hours%24:
+	if date_hours%(3600):
 	    return "Hours"
-	elif date_hours%(24*30):
+	elif date_hours%(3600*24):
 	    return "Days"
-	elif date_hours%(24*365):
+	elif date_hours%(3600*24*30):
 	    return "Months"
 	else:
 	    return "Years"
-    
 
     def check(self):
 	"""
@@ -60,7 +63,7 @@ class RelativeDate:
     def getDBDate(self):
 	"""
 	    return date(integer) useful for inserting in database.
-	    it's the date in number of hours
+	    it's the date in number of seconds
 	"""
 	return self.getDateHours()
 	

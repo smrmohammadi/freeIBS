@@ -6,6 +6,8 @@ from core.lib.multi_strs import MultiStr
 from core.db import db_main,ibs_db
 from core.bandwidth_limit.node import Node
 from core.charge import charge_main
+from core.lib import ip
+
 
 class BWActions:
     def __checkLimitKbits(self,limit_kbits):
@@ -408,4 +410,88 @@ class BWActions:
 							    "rate_kbits":rate_kbits,
 							    "ceil_kbits":ceil_kbits}
 							    ,"leaf_service_id=%s"%leaf_service_id)
+    ####################################################
+    def addBwStaticIP(self,ip_addr,tx_leaf_name,rx_leaf_name):
+	self.__addBwStaticIPCheckInput(ip_addr,tx_leaf_name,rx_leaf_name)
+	static_ip_id=self.__getNewStaticIPID()
+	tx_leaf_obj=bw_main.getLoader().getLeafByName(tx_leaf_name)
+	rx_leaf_obj=bw_main.getLoader().getLeafByName(rx_leaf_name)
+	self.__addBwStaticIPDB(static_ip_id,ip_addr,tx_leaf_obj.getLeafID(),rx_leaf_obj.getLeafID())
+	bw_main.getLoader().loadStaticIP(static_ip_id)
+	bw_main.getLoader().getStaticIPByID(static_ip_id).apply()
+	
+    def __addBwStaticIPCheckInput(self,ip_addr,tx_leaf_name,rx_leaf_name):
+	bw_main.getLoader().getLeafByName(tx_leaf_name)
+	bw_main.getLoader().getLeafByName(rx_leaf_name)
+	self.__bwStaticIPCheckIP(ip_addr)
+
+    def __bwStaticIPCheckIP(self,ip_addr):
+	if not ip.checkIPAddr(ip_addr):
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)
+	self.__checkIPAddrExistence(ip_addr)
+	
+
+    def __checkIPAddrExistence(self,ip_addr):
+	ips=bw_main.getLoader().getAllStaticIPs()
+	for ip in ips:
+	    if bw_main.getLoader().getStaticIPByIP(ip).hasIP(ip_addr):
+		raise GeneralException(errorText("BANDWIDTH","STATIC_IP_EXISTS")%(ip_addr,ip))
+	
+    def __getNewStaticIPID(self):
+	return db_main.getHandle().seqNextVal("bw_static_ip_bw_static_ip_id_seq")
     
+    def __addBwStaticIPDB(self,static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id):
+	db_main.getHandle().transactionQuery(
+			    self.__addBwStaticIPQuery(static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id))
+
+    def __addBwStaticIPQuery(self,static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id):
+	return ibs_db.createInsertQuery("bw_static_ip",{"bw_static_ip_id":static_ip_id,
+							"ip":dbText(ip_addr),
+							"transmit_leaf_id":tx_leaf_id,
+							"receive_leaf_id":rx_leaf_id})
+    ##################################################
+    def updateBwStaticIP(self,static_ip_id,ip_addr,tx_leaf_name,rx_leaf_name):
+	self.__updateBwStaticIPCheckInput(static_ip_id,ip_addr,tx_leaf_name,rx_leaf_name)
+	static_ip_obj=bw_main.getLoader().getStaticIPByID(static_ip_id)
+	tx_leaf_obj=bw_main.getLoader().getLeafByName(tx_leaf_name)
+	rx_leaf_obj=bw_main.getLoader().getLeafByName(rx_leaf_name)
+	self.__updateBwStaticIPDB(static_ip_id,ip_addr,tx_leaf_obj.getLeafID(),rx_leaf_obj.getLeafID())
+	bw_main.getLoader().loadStaticIP(static_ip_id)
+	static_ip_obj.remove()
+	bw_main.getLoader().getStaticIPByID(static_ip_id).apply()
+
+    def __updateBwStaticIPCheckInput(self,static_ip_id,ip_addr,tx_leaf_name,rx_leaf_name):
+	bw_main.getLoader().getLeafByName(tx_leaf_name)
+	bw_main.getLoader().getLeafByName(rx_leaf_name)
+	static_ip_obj=bw_main.getLoader().getStaticIPByID(static_ip_id)
+	if static_ip_obj.getIP()!=ip_addr:
+	    self.__bwStaticIPCheckIP(ip_addr)
+
+    def __updateBwStaticIPDB(self,static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id):
+	db_main.getHandle().transactionQuery(
+				self.__updateBwStaticIPQuery(static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id))
+
+    def __updateBwStaticIPQuery(self,static_ip_id,ip_addr,tx_leaf_id,rx_leaf_id):
+	return ibs_db.createUpdateQuery("bw_static_ip",{"ip":dbText(ip_addr),
+							"transmit_leaf_id":tx_leaf_id,
+							"receive_leaf_id":rx_leaf_id},
+							"bw_static_ip_id=%s"%static_ip_id)
+						
+							
+    #####################################################
+    def delBwStaticIP(self,ip_addr):
+	self.__delBwStaticIPCheckInput(ip_addr)
+	self.__delBwStaticIPDB(ip_addr)
+	static_ip_obj=bw_main.getLoader().getStaticIPByIP(ip_addr)
+	static_ip_obj.remove()
+	bw_main.getLoader().unloadStaticIP(static_ip_obj.getStaticIPID())
+	
+    def __delBwStaticIPCheckInput(self,ip_addr):
+	bw_main.getLoader().getStaticIPByIP(ip_addr)
+
+    def __delBwStaticIPDB(self,ip_addr):
+	db_main.getHandle().transactionQuery(self.__delBwStaticIPQuery(ip_addr))
+	
+    def __delBwStaticIPQuery(self,ip_addr):
+	return ibs_db.createDeleteQuery("bw_static_ip","ip=%s"%dbText(ip_addr))
+	

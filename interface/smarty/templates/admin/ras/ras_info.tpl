@@ -184,7 +184,7 @@ Ras Info
 	        Ports(s)
 	    {/addEditTD}
 	    {addEditTD type="right"}
-		<input class="text" type=text name=port_name> {multistr form_name="edit_port" input_name="edit_port"}		
+		<input class="text" type=text name=port_name> {multistr form_name="edit_port" input_name="port_name"}		
     	    {/addEditTD}
 	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
         {/addEditTable}

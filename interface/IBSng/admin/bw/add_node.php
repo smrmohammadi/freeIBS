@@ -35,15 +35,10 @@ function editInterface($interface_name,$node_id,$err=null)
     $req=new GetNodeInfo($node_id);
     $resp=$req->sendAndRecv();
     if($resp->isSuccessful())
-    {
 	$smarty->assign_array($resp->getResult());
-	interface($smarty,$err);
-    }	
     else
-    {
 	$resp->setErrorInSmarty($smarty);
-	interface($smarty,$err);
-    }
+    interface($smarty,$err);
 }
 
 function intAddNode($interface_name,$parent_id,$rate_kbits,$ceil_kbits)
@@ -53,7 +48,7 @@ function intAddNode($interface_name,$parent_id,$rate_kbits,$ceil_kbits)
     if($resp->isSuccessful())
       	redirectToInterfaceInfo($interface_name);
     else
-	interface($interface_name,$parent_id,$resp->getError());
+	addInterface($interface_name,$parent_id,$resp->getError());
 }
 
 function addInterface($interface_name,$parent_id,$err=NULL)

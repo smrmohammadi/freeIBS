@@ -273,6 +273,14 @@ create table bw_leaf_services (
 );
 create sequence bw_leaf_services_leaf_service_id_seq;    
 
+create table bw_static_ip (
+    bw_static_ip_id integer primary key,
+    ip inet unique,
+    transmit_leaf_id integer references bw_leaf,
+    receive_leaf_id integer references bw_leaf
+);
+create sequence bw_static_ip_bw_static_ip_id_seq;    
+
 -- ******************* CHARGES ***********
 create table charges (
     charge_id integer primary key,

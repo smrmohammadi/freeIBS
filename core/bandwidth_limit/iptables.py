@@ -34,7 +34,7 @@ class IPTables:
 	    protocol=leaf_service.getProtocol()
 	    if protocol in ("udp","tcp"):
 		cond+=" -m multiport "
-	    cond+=" -p %s --%s"%(ip_addr,protocol,leaf_service.getFilter())
+	    cond+=" -p %s --%s"%(protocol,leaf_service.getFilter())
 	return cond
 
     def runIPTables(self,command):

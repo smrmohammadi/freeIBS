@@ -205,7 +205,10 @@ BANDWIDTH_ERRORS={
     "NODE_HAS_CHILDREN":"Node has children, delete them first",
     "LEAF_USED_IN_CHARGE":"Leaf used in charge %s",
     "CANT_DELETE_ROOT_NODE":"You can't delete root node, delete interface instead",
-    "LEAF_HAS_SERVICES":"Leaf has services, delete them first"
+    "LEAF_HAS_SERVICES":"Leaf has services, delete them first",
+    "INVALID_STATIC_IP_ID":"BW StaticIP ID %s is invalid",
+    "INVALID_STATIC_IP":"BW StaticIP %s is invalid",
+    "STATIC_IP_EXISTS":"BW StaticIP %s is already exists in %s",
 
 }
 

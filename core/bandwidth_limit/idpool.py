@@ -12,7 +12,7 @@ class IDPool:
 	self.name=name
 
     def __getIDsFromRange(self,_count,_range):
-	if _range[0]+_count<_range[1]:
+	if _range[0]+_count<=_range[1]:
 	    return range(_range[0],_range[0]+_count)
 	else:
 	    return range(_range[0],_range[1]+1)
@@ -60,9 +60,9 @@ class IDPool:
 	while len(ids)!=_count:
 	    free_range=self.__popFreeRange()
 	    ids.extend(self.__getIDsFromRange(_count,free_range))
-	    if ids[-1]!=free_range[1]:
-		self.__insertToFreeRanges([ids[-1]+1,free_range[1]])
-		break
+
+	if ids[-1]!=free_range[1]:
+	    self.__insertToFreeRanges([ids[-1]+1,free_range[1]])
 	return ids		
 
     def freeID(self,ids):

@@ -1,4 +1,6 @@
 from core.server import handlers_manager
+from core.event import periodic_events
+
 
 def init():
     global bw_loader
@@ -22,8 +24,9 @@ def init():
     initTree()
 
     global manager
-    from core.bandwidth_limit.bw_manager import BWManager
+    from core.bandwidth_limit.bw_manager import BWManager,UpdateCounters
     manager=BWManager()
+    periodic_events.getManager().register(UpdateCounters())    
     
     global actions
     from core.bandwidth_limit.bw_actions import BWActions
@@ -31,6 +34,8 @@ def init():
     
     from core.bandwidth_limit.bw_handler import BWHandler
     handlers_manager.getManager().registerHandler(BWHandler())
+
+    applyStatics()
 
     
 #################    
@@ -64,3 +69,7 @@ def registerInParents():
 def initTree():
     map(lambda interface_name:getLoader().getInterfaceByName(interface_name).createTree(),
 	getLoader().getAllInterfaceNames())
+
+def applyStatics():
+    map(lambda ip:getLoader().getStaticIPByIP(ip).apply(),
+	getLoader().getAllStaticIPs())

@@ -45,6 +45,19 @@
 	Add New Interface
     </a>
 {/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/bw/static_ip_list.php" class="RightSide_links">
+	StaticIP list
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/bw/active_leaves.php" class="RightSide_links">
+	Active Leaves list
+    </a>
+{/addRelatedLink}
+
 {setAboutPage title="Interface List"}
 
 {/setAboutPage}

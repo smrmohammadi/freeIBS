@@ -3,15 +3,21 @@ from core.errors import errorText
 from core.bandwidth_limit.node import Node
 from core.bandwidth_limit.leaf import LeafService,Leaf
 from core.bandwidth_limit.interface import Interface
+from core.bandwidth_limit.static_ip import StaticIP
 from core.db import db_main
 
 class BWLoader:
     def __init__(self):
 	self.__interfaces_id={}
 	self.__interfaces_name={}
+
 	self.__nodes_id={}
+
 	self.__leaves_id={}
 	self.__leaves_name={}
+
+	self.__static_ips_id={}
+	self.__static_ips_ip={}
 
     def getInterfaceByID(self,interface_id):
 	try:
@@ -43,12 +49,25 @@ class BWLoader:
 	    return self.__leaves_name[leaf_name]
 	except KeyError:
 	    raise GeneralException(errorText("BANDWIDTH","INVALID_LEAF_NAME")%leaf_name)
+
+    def getStaticIPByID(self,static_ip_id):
+	try:
+	    return self.__static_ips_id[static_ip_id]
+	except KeyError:
+	    raise GeneralException(errorText("BANDWIDTH","INVALID_STATIC_IP_ID")%static_ip_id)
+
+    def getStaticIPByIP(self,static_ip_addr):
+	try:
+	    return self.__static_ips_ip[static_ip_addr]
+	except KeyError:
+	    raise GeneralException(errorText("BANDWIDTH","INVALID_STATIC_IP")%static_ip_addr)
 #############################################################
     def loadAll(self):
 	interface_ids=self.__getAllInterfaceIDs()
 	map(self.loadInterface,interface_ids)
 	map(self.loadNodesByInterfaceID,interface_ids)
 	map(self.loadLeavesByInterfaceID,interface_ids)
+	self.loadAllStaticIPs()
 
     def __getAllInterfaceIDs(self):
 	int_ids_db=self.__getAllInterfaceIDsDB()
@@ -175,3 +194,35 @@ class BWLoader:
 
     def __getLeafServicesDB(self,leaf_id):
 	return db_main.getHandle().get("bw_leaf_services","leaf_id=%s"%leaf_id)
+    ###########################################################
+    def loadAllStaticIPs(self):
+	static_ip_ids=self.__getAllStaticIPIDs()
+	map(self.loadStaticIP,static_ip_ids)
+
+    def loadStaticIP(self,static_ip_id):
+	static_ip_obj=self.__createStaticIPObj(static_ip_id)
+	self.__keepStaticIP(static_ip_obj)
+
+    def unloadStaticIP(self,static_ip_id):
+	static_ip_obj=self.getStaticIPByID(static_ip_id)
+	del(self.__static_ips_id[static_ip_id])
+	del(self.__static_ips_ip[static_ip_obj.getIP()])
+
+    def getAllStaticIPs(self):
+	return self.__static_ips_ip.keys()
+
+    def __getAllStaticIPIDs(self):
+	ids_db=db_main.getHandle().get("bw_static_ip","",0,-1,"bw_static_ip_id",["bw_static_ip_id"])
+	return map(lambda x:x["bw_static_ip_id"],ids_db)
+
+    def __keepStaticIP(self,static_ip_obj):
+	self.__static_ips_ip[static_ip_obj.getIP()]=static_ip_obj
+	self.__static_ips_id[static_ip_obj.getStaticIPID()]=static_ip_obj
+
+    def __createStaticIPObj(self,static_ip_id):
+	info=self.__getStaticIPInfo(static_ip_id)
+	return StaticIP(info["bw_static_ip_id"],info["ip"],info["transmit_leaf_id"],info["receive_leaf_id"])
+
+    def __getStaticIPInfo(self,static_ip_id):
+	return db_main.getHandle().get("bw_static_ip","bw_static_ip_id=%s"%static_ip_id)[0]
+	

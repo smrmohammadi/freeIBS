@@ -24,8 +24,13 @@ class BWHandler(handler.Handler):
 	self.registerHandlerMethod("updateNode")
 	self.registerHandlerMethod("updateLeaf")
 	self.registerHandlerMethod("updateLeafService")
-
-
+	self.registerHandlerMethod("addBwStaticIP")
+	self.registerHandlerMethod("updateBwStaticIP")
+	self.registerHandlerMethod("delBwStaticIP")
+	self.registerHandlerMethod("getAllBwStaticIPs")
+	self.registerHandlerMethod("getBwStaticIPInfo")
+	self.registerHandlerMethod("getActiveLeaves")
+	
     def addInterface(self,request):
 	request.needAuthType(request.ADMIN)
 	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
@@ -168,4 +173,45 @@ class BWHandler(handler.Handler):
 					    request["filter"],
 					    self.__fixLimitKbits(request["rate_kbits"]),
 					    self.__fixLimitKbits(request["ceil_kbits"]))
-            	
+
+    ######################################
+    def addBwStaticIP(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("ip_addr","tx_leaf_name","rx_leaf_name")
+	bw_main.getActionsManager().addBwStaticIP(request["ip_addr"],request["tx_leaf_name"],request["rx_leaf_name"])
+
+    ######################################
+    def updateBwStaticIP(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("static_ip_id","ip_addr","tx_leaf_name","rx_leaf_name")
+	bw_main.getActionsManager().updateBwStaticIP(to_int(request["static_ip_id"],"StaticIP ID"),
+						  request["ip_addr"],
+						  request["tx_leaf_name"],
+						  request["rx_leaf_name"]
+						  )
+
+    ########################################
+    def delBwStaticIP(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("ip_addr")
+	bw_main.getActionsManager().delBwStaticIP(request["ip_addr"])
+    ########################################
+    def getAllBwStaticIPs(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+	return bw_main.getLoader().getAllStaticIPs()
+    
+    ########################################
+    def getBwStaticIPInfo(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+    	request.checkArgs("ip_addr")
+	return bw_main.getLoader().getStaticIPByIP(request["ip_addr"]).getInfo()
+    ########################################
+    def getActiveLeaves(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE BANDWIDTH MANGER")
+	return bw_main.getManager().getAllUserLeavesInfo()

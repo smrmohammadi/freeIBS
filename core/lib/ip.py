@@ -12,11 +12,10 @@ def isIPAddrIn(ip_addr,ip_addrrange):
 	return 1 if it is, and 0 if it's not
     """
     try:
-	ip=IPy.IP(ip_addr)
 	iprange=IPy.IP(ip_addrrange)
-	if ip in iprange:
-	    return 1
-	return 0
+	if ip_addr in iprange:
+	    return True
+	return False
     except:
 	logException(LOG_ERROR,"isIPAddrIn")
 	raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)

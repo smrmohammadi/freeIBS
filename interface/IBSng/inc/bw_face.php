@@ -9,6 +9,14 @@ function redirectToInterfaceList($msg="")
     redirect($url);
 }
 
+function redirectToBwStaticIPList($msg="")
+{
+    $url="/IBSng/admin/bw/static_ip_list.php";
+    if($msg!="")
+	$url.="?msg={$msg}";
+    redirect($url);
+}
+
 function redirectToInterfaceInfo($interface_name)
 {
     redirect("/IBSng/admin/bw/interface_info.php?interface_name={$interface_name}");
@@ -49,5 +57,29 @@ function intSetInterfaceInfo(&$smarty,$interface_name)
 	$resp->setErrorInSmarty($smarty);
 }
 
+function intSetAllBwStaticIPsInfo(&$smarty)
+{
+    $req=new GetAllBwStaticIPs();
+    $resp=$req->sendAndRecv();
+    if(!$resp->isSuccessful())
+    {
+	$resp->setErrorInSmarty($smarty);
+	$smarty->assign("bw_static_ips",array());
+	return;
+    }
+    $req=new GetBwStaticIPInfo("");
+    $ips=$resp->getResult();
+    $infos=array();
+    foreach($ips as $ip)
+    {
+	$req->changeParam("ip_addr",$ip);
+	$resp=$req->sendAndRecv();
+	if($resp->isSuccessful())
+	    $infos[$ip]=$resp->getResult();
+	else
+	    $resp->setErrorInSmarty($smarty);
+    }
+    $smarty->assign("bw_static_ips",$infos);
+}
 
 ?>

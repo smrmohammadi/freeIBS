@@ -17,15 +17,69 @@ class UserLeaf:
 	
 	self.minor_ids=[]
 
+	self.total_minor_id=None
+	self.default_minor_id=None
+	self.service_minor_ids=[]
+
+    def getIP(self):
+	return self.ip_addr
+    
+    def getDirection(self):
+	return self.direction
+    
     def getLeafObj(self):
 	return self.leaf_obj
 
+    def getTotalMinorTC_ID(self):
+	return self.total_minor_id
+
+    def getDefaultMinorTC_ID(self):
+	return self.default_minor_id
+
+    def getServiceMinorTC_IDs(self):
+	return self.service_minor_ids
+
+    def getInterfaceName(self):
+	return self.getLeafObj().getInterfaceName()
     ##############################
     def __getNewMinorTC_ID(self):
 	_id=self.getLeafObj().getInterface().getMinorIDPool().getID(1)[0]
 	self.minor_ids.append(_id)
 	return _id
+    ##############################
+    def getInfo(self):
+	bytes,pkts,rate=self.getCounters()
+	return {"leaf_name":self.getLeafObj().getLeafName(),
+		"interface_name":self.getInterfaceName(),
+		"pkts":pkts,
+		"bytes":bytes,
+		"rate":rate,
+		"ip":self.getIP(),
+		"direction":self.getDirection()}
 	
+	
+    ##############################
+    def getCounters(self):
+	"""
+	    return tuple of (bytes,packets,rate) for this user leaf
+	"""
+	if self.getTotalMinorTC_ID()!=None:
+	    return self.__getCountersForID(self.getTotalMinorTC_ID())
+	else:
+	    return self.__getCountersFromServices()
+
+    def __getCountersForID(self,_id):
+	return bw_main.getManager().getCounters(self.getInterfaceName(),_id)
+	
+    def __getCountersFromServices(self):
+	bytes,pkts,rate=self.__getCountersForID(self.getDefaultMinorTC_ID())
+	for service_id in self.getServiceMinorTC_IDs():
+	    tbytes,tpkts,trate=self.__getCountersForID(service_id)
+	    bytes+=tbytes
+	    pkts+=tpkts
+	    rate+=trate
+	return bytes,pkts,rate
+    
     ###############################
     def addToTC(self):
 	self.__addClassesAndFilters()
@@ -34,6 +88,7 @@ class UserLeaf:
 	all_parent_id=self.__addTotalClass()
 	services=self.getLeafObj().getServices()
 	self.__setMarks(services)
+	
 	map(self.__addService,
 	    services,
 	    self.service_marks,
@@ -53,6 +108,7 @@ class UserLeaf:
 	    parent_id(int): parent minor id of class
 	"""
 	minor_id=self.__getNewMinorTC_ID()
+	self.service_minor_ids.append(minor_id)
 	bw_main.getTCRunner().addClass(self.getLeafObj().getInterfaceName(),
 				       "parent 1:%s"%parent_id,
 				       "classid 1:%s"%minor_id,
@@ -75,6 +131,7 @@ class UserLeaf:
 	    parent_id(int): parent minor id of default class
 	"""
 	minor_id=self.__getNewMinorTC_ID()
+	self.default_minor_id=minor_id
 	bw_main.getTCRunner().addClass(self.getLeafObj().getInterfaceName(),
 				       "parent 1:%s"%parent_id,
 				       "classid 1:%s"%minor_id,
@@ -95,6 +152,7 @@ class UserLeaf:
 	"""
 	if self.getLeafObj().getTotalRate()>=0:
 	    _id=self.__getNewMinorTC_ID()
+	    self.total_minor_id=_id
 	    bw_main.getTCRunner().addClass(self.getLeafObj().getInterfaceName(),
 				           "parent 1:%s"%self.getLeafObj().getParentNode().getTC_ID(),
 					   "classid 1:%s"%_id,
@@ -136,9 +194,6 @@ class UserLeaf:
 					"prio 1",
 					"handle %s fw"%mark_id)
     
-
-    
-
     def __delMarks(self):
 	map(self.__delMark,self.service_marks,self.getLeafObj().getServices())
 	self.__delMark(self.default_mark,None)

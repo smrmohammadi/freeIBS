@@ -1,8 +1,10 @@
 """
     tc command line wrapper
 """
-import os
+import os,re
 from core.ibs_exceptions import *
+
+
 class TC:
     def addQdisc(self,interface,*args):
 	self.runTC("qdisc add dev %s %s"%(interface," ".join(args)))
@@ -25,8 +27,34 @@ class TC:
     def delFilter(self,interface,*args):
     	self.runTC("filter del dev %s %s"%(interface," ".join(args)))
 
+
     def runTC(self,command):
 	ret_val=os.system("%s %s"%(defs.BW_TC_COMMAND,command))
 	if ret_val!=0:
 	    toLog("tc command '%s %s' returned non zero value %s"%(defs.BW_TC_COMMAND,command,ret_val),LOG_DEBUG)
 
+    ########################################
+    def getCounters(self,interface):
+	"""
+	    return dictionary in format {minor tc id: (transmitted bytes,transmitted pkts,rate in bytes)
+	"""
+	output=self.getOutput("-s -d class list dev %s"%interface)
+	return self.__parseCounters(output)
+	
+    def __parseCounters(self,output):
+        groups=re.findall("\nclass htb 1:([0-9]+) .*\n Sent ([0-9]+) bytes ([0-9]+) pkts .*\n( rate ([0-9]+)bit)?",output)
+	dic={}
+	    
+	for _tuple in groups:
+	    if _tuple[4]=="":
+		rate=0
+	    else:
+		rate=int(_tuple[4])
+	    dic[int(_tuple[0])]=(int(_tuple[1]),int(_tuple[2]),rate)
+	return dic
+
+    def getOutput(self,command):
+	fd=os.popen("%s %s"%(defs.BW_TC_COMMAND,command))
+	lines=fd.readlines()
+	fd.close()
+	return "".join(lines)

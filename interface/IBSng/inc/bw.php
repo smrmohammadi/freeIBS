@@ -170,6 +170,57 @@ class UpdateLeafService extends Request
     }
 }
 
+class AddBwStaticIP extends Request
+{
+    function addBwStaticIP($ip_addr,$tx_leaf_name,$rx_leaf_name)
+    {
+	parent::Request("bw.addBwStaticIP",array("ip_addr"=>$ip_addr,
+					      "tx_leaf_name"=>$tx_leaf_name,
+					      "rx_leaf_name"=>$rx_leaf_name));
+    }
+}
 
+class UpdateBwStaticIP extends Request
+{
+    function UpdateBwStaticIP($static_ip_id,$ip_addr,$tx_leaf_name,$rx_leaf_name)
+    {
+	parent::Request("bw.updateBwStaticIP",array("ip_addr"=>$ip_addr,
+					      "tx_leaf_name"=>$tx_leaf_name,
+					      "rx_leaf_name"=>$rx_leaf_name,
+					      "static_ip_id"=>$static_ip_id));
+    }
+}
+
+class DelBwStaticIP extends Request
+{
+    function DelBwStaticIP($ip_addr)
+    {
+	parent::Request("bw.delBwStaticIP",array("ip_addr"=>$ip_addr));
+    }
+}
+
+class GetAllBwStaticIPs extends Request
+{
+    function GetAllBwStaticIPs()
+    {
+	parent::Request("bw.getAllBwStaticIPs",array());
+    }
+}
+
+class GetBwStaticIPInfo extends Request
+{
+    function GetBwStaticIPInfo($ip_addr)
+    {
+	parent::Request("bw.getBwStaticIPInfo",array("ip_addr"=>$ip_addr));
+    }
+}
+
+class GetAllActiveLeaves extends Request
+{
+    function GetAllActiveLeaves()
+    {
+	parent::Request("bw.getActiveLeaves",array());
+    }
+}
 
 ?>
