@@ -120,7 +120,7 @@ function createLeafHtml(&$smarty,$leaf_info,$line)
 {
     $total_limit=price($leaf_info["total_limit_kbits"]);
     $default_limit=price($leaf_info["default_limit_kbits"]);
-    $n_table="<table cellspacing=0 cellpadding=0>";
+    $n_table="<table cellspacing=0 cellpadding=0 align=center>";
     $n_table.="<tr><td align=center>".getLine($line)."</td></tr>";
     $n_table.="<tr><td align=center>".verticalLineImage()."</td>";
     $n_table.="<tr><td>";
