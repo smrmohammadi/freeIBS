@@ -1,7 +1,7 @@
 from core.server import handler
 from core.ippool import ippool_main
 
-class RasHandler(handler.Handler):
+class IPpoolHandler(handler.Handler):
     def __init__(self):
 	handler.Handler.__init__(self,"ippool")
 	self.registerHandlerMethod("addNewIPpool")
@@ -11,7 +11,6 @@ class RasHandler(handler.Handler):
 	self.registerHandlerMethod("deleteIPpool")
 	self.registerHandlerMethod("delIPfromPool")
 	self.registerHandlerMethod("addIPtoPool")
-
 
     def addNewIPpool(self,request):
 	request.needAuthType(request.ADMIN)

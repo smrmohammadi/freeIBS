@@ -6,7 +6,7 @@
 #### WARNING: all of variables should be defined in python syntax
 
 #######  SERVER IP/PORT
-IBS_SERVER_PORT=1234
+IBS_SERVER_PORT=1235
 IBS_SERVER_IP="127.0.0.1"
 
 ###### RADIUS SERVER

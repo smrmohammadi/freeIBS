@@ -155,7 +155,7 @@ class RasActions:
 	    rulez=charge_obj.getRules()
 	    for rule_obj in rulez.values():
 		if rule_obj.getRasID()==ras_obj.getRasID():
-		    raise GeneralException(errorText("RAS","RAS_USED_IN_RULE"%rule_obj))
+		    raise GeneralException(errorText("RAS","RAS_USED_IN_RULE")%rule_obj)
 	charge_main.getLoader().runOnAllCharges(checkRasUsageInRules)
 
     def __deActiveRasDB(self,ras_obj):

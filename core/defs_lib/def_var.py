@@ -1,5 +1,4 @@
 import pickle
-from core.errors import errorText
 from core.ibs_exceptions import *
 from core.lib.general import *
 import types
@@ -58,7 +57,7 @@ class RawDefVar:
 		self.value=self.value.values()
 	    self.value=to_list(self.value,self.name)
 	else:
-	    raise GeneralException(errorText("DEFS","UNSUPPORTED_TYPE")%(self.name,_type))
+	    raise GeneralException("%s has unsupported type %s"%(self.name,_type))
 	    
     def insertToDefsQuery(self):
 	"""
