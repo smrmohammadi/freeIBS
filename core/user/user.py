@@ -6,10 +6,13 @@ from core.user import normal_user,user_main
 from core.ras.msgs import UserMsg
 import operator
 
+
 class User:
     """
 	Base User Class, for online users
     """
+    remove_ras_attrs=["pap_password","chap_password"]
+
     def __init__(self, loaded_user, _type):
 	"""
 	    loaded_user(LoadedUser instance): Loaded user instance
@@ -111,6 +114,13 @@ class User:
 	    instance_info["attrs"]["kill_reason"]=reason
 
 ##################################################
+    def __filterRasAttrs(self,attrs):
+	cattrs=attrs.copy()
+	for attr_name in self.remove_ras_attrs:
+	    if cattrs.has_key(attr_name):
+		del(cattrs[attr_name])
+	return cattrs
+##################################################
     def login(self,ras_msg):
 	self.instances+=1
 	self.__instance_info.append({})
@@ -118,7 +128,7 @@ class User:
 	instance_info["auth_ras_msg"]=ras_msg
 	instance_info["unique_id"]=ras_msg["unique_id"]
 	instance_info["unique_id_val"]=ras_msg.getUniqueIDValue()
-	instance_info["attrs"]=ras_msg.getAttrs()
+	instance_info["attrs"]=self.__filterRasAttrs(ras_msg.getAttrs())
 	instance_info["ras_id"]=ras_msg.getRasID()
 	try:
 	    user_main.getUserPluginManager().callHooks("USER_LOGIN",self,[ras_msg])
@@ -151,7 +161,7 @@ class User:
 	    plugins can update themeselved whenever we recieved an update packet, with updated info 
 	    from radius server
 	"""
-	user_main.getUserPluginManager().callHooks("UPDATE",self,[instance,ras_msg])
+	user_main.getUserPluginManager().callHooks("UPDATE",self,[ras_msg])
 
     def canStayOnline(self):
 	return reduce(operator.add,user_main.getUserPluginManager().callHooks("USER_CAN_STAY_ONLINE",self))

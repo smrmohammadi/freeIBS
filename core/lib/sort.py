@@ -39,7 +39,7 @@ class SortedList:
 	    return cmp( m1_val , m2_val )
 	
 	self.list.sort(__sortFunc)
-	if desc==1:
+	if desc:
 	    self.list.reverse()
 
     def getList(self):

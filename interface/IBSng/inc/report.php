@@ -133,4 +133,14 @@ class ReportCollector
     }
 }
 
+class GetOnlineUsers extends Request
+{
+    function GetOnlineUsers($sort_by,$desc)
+    {
+	parent::Request("report.getOnlineUsers",array("sort_by"=>$sort_by,
+						    "desc"=>$desc));
+    }
+}
+
+
 ?>

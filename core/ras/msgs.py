@@ -54,6 +54,15 @@ class RasMsg(Msg):
     def getRasID(self):
 	return self.ras_obj.getRasID()
 
+    def createNew(self,request_pkt,reply_pkt,ras_obj):
+	"""
+	    create a new RasMsg with unique_id and unique_id_value attributes set
+	"""
+	new_ras_msg=RasMsg(request_pkt,reply_pkt,ras_obj)
+	new_ras_msg["unique_id"]=self["unique_id"]
+	new_ras_msg[self["unique_id"]]=self.getUniqueIDValue()
+	return new_ras_msg
+
     
     def setRequestToAttr(self,request_key,attr_name):
 	"""

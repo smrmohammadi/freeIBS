@@ -1,3 +1,6 @@
+from core.ibs_exceptions import *
+from core.errors import errorText
+
 class Group:
     def __init__(self,group_id,group_name,comment,owner_id,attributes):
 	self.group_id=group_id

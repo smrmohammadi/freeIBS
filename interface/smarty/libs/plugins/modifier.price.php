@@ -1,35 +1,25 @@
 <?php
 function smarty_modifier_price($string)
-{
-	$price=(int)$string;
-	$neg = false;
-	if($price < 0){
-	    $price = -$price;
-	    $neg = true;
-	}
-	$str="{$price}";
-	$len=strlen($str);
-	$priceString="";
-	for($i=$len;$i>0;$i-=3)
+{	/*
+	    put , between each 3 digits, take care of 2 digits of floating point
+	*/
+	$price=(float)$string;
+	$sign=$price<0?-1:1;
+	$price*=$sign;
+	$int_price=(int)$price;
+	$float_part=round(($price-$int_price)*100);
+	$str="";
+	while($int_price>1000)
 	{
-		$temp=$priceString;
-		if($i-3>0)
-		{
-			$start=$i-3;
-			$len=3;
-		}
-		else
-		{
-			$start=0;
-			$len=$i;
-		}
-		
-		$priceString=substr($str,$start,$len);
-		$priceString.=",{$temp}";
+	    $part=$int_price%1000;
+	    $int_price=(int)($int_price/1000);
+	    $str=",{$part}{$str}";
 	}
-	$priceString=substr($priceString,0,strlen($priceString)-1);
-	if($neg)
-	    $priceString = "-" . $priceString;
-	return $priceString;
+	$str="{$int_price}{$str}";
+	if($float_part>0)
+	    $str.=".{$float_part}";
+	if($sign==-1)
+	    $str="-{$str}";
+	return $str;
 }
 ?>

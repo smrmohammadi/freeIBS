@@ -9,12 +9,22 @@ def init():
 class ChargeUserPlugin(user_plugin.UserPlugin):
     def __init__(self,user_obj):
 	user_plugin.UserPlugin.__init__(self,user_obj)
-	if user_obj.isNormalUser():
-	    self.charge_id=int(user_obj.getUserAttrs()["normal_charge"])
-	self.charge_obj=charge_main.getLoader().getChargeByID(self.charge_id)
+	self.charge_defined=True
+	try:
+	    if user_obj.isNormalUser():
+	    	self.charge_id=int(user_obj.getUserAttrs()["normal_charge"])
+	    
+	except GeneralException:
+	    self.charge_defined=False
+	    
+	if self.charge_defined:
+	    self.charge_obj=charge_main.getLoader().getChargeByID(self.charge_id)
 
  
     def login(self,ras_msg):
+	if not self.charge_defined:
+	    raise GeneralException(errorText("USER_LOGIN","NO_CHARGE_DEFINED")%self.user_obj.getType())
+
 	self.charge_obj.initUser(self.user_obj)
 
     def logout(self,instance,ras_msg):

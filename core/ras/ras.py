@@ -140,8 +140,12 @@ class Ras:
 	    try:
 		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).getUsableIP()
 		reply["Framed-IP-Address"]=ip
-		ras_msg["ippool_id"]=ippool_id
-		ras_msg["ippool_assigned_ip"]=ip
+		update_msg=ras_msg.createNew(None,None,self)
+		update_msg.setAction("INTERNET_UPDATE")
+		update_msg["update_attrs"]=["ippool_id","ippool_assigned_ip"]
+		update_msg["ippool_id"]=ippool_id
+		update_msg["ippool_assigned_ip"]=ip
+		update_msg.send()
 		break
 	    except IPpoolFullException:
 		pass
@@ -190,6 +194,14 @@ class Ras:
 	"""
 	return (0,0)
 	
+    def applySimpleBwLimit(self,user_msg):
+	"""
+	    apply or remove bandwidth limit on user
+	    should return True on Success and False on Error
+	    user_msg has an attribute action, that shows the action ("apply" or "remove") that should be taken
+	"""
+	return True
+
 class GeneralUpdateRas(Ras):
     """
 	This class has an update method, that will be called for update_inout_bytes intervals,

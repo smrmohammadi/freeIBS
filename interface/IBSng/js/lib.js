@@ -69,3 +69,12 @@ function changeTRColor(obj,color)
     	obj.style.backgroundColor=color;
     }
 }
+
+function toggleVisibility(id)
+{
+    obj=document.getElementById(id)
+    if(obj.style.visibility=='hidden')
+	obj.style.visibility='visible';
+    else
+	obj.style.visibility='hidden';
+}

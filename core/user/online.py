@@ -23,20 +23,9 @@ class OnlineUsers:
 	
 
 ############################################
-    def getUserOnlines(self):
+    def getOnlineUsers(self):
 	return copy.copy(self.user_onlines)
 
-############################################
-    def reloadUser(self,user_id):
-	self.loading_user.loadingStart(loaded_user.getUserID())
-	try:
-	    user_obj=getUserObj(user_id)
-	    if user_obj==None:
-		toLog("Reload User called while user is not online",LOG_ERROR)
-	    else:
-		user_obj._reload()
-	finally:
-	    self.loading_user.loadingEnd(loaded_user.getUserID())
 
 ############################################
     def isUserOnline(self,user_id):
@@ -51,6 +40,41 @@ class OnlineUsers:
 	except KeyError:
 	    return None
 
+    def getUserObjByUniqueID(self,ras_id,unique_id_val):
+	"""
+	    return User instance of online user, or None if no user is online
+	"""
+	try:
+	    return self.ras_onlines[(ras_id,unique_id_val)]
+	except KeyError:
+	    return None
+	
+
+
+############################################
+    def reloadUser(self,user_id):
+	self.loading_user.loadingStart(loaded_user.getUserID())
+	try:
+	    user_obj=getUserObj(user_id)
+	    if user_obj==None:
+		toLog("Reload User called while user is not online for user_id: %s"%user_id,LOG_ERROR)
+	    else:
+		user_obj._reload()
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())
+
+##############################################
+    def updateUser(self,ras_msg):
+	user_obj=self.getUserObjByUniqueID(ras_msg.getRasID(),ras_msg.getUniqueIDValue())
+	if user_obj==None:
+	    toLog("Update User called while user is not online for ras_id: %s unique_id_value:%s"%(ras_msg.getRasID(),ras_msg.getUniqueIDValue()),LOG_ERROR)
+	    return None
+	self.loading_user.loadingStart(user_obj.getUserID())
+	try:
+	    user_obj.update(ras_msg)
+	finally:
+	    self.loading_user.loadingEnd(user_obj.getUserID())
+
 #############################################
     def internetAuthenticate(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"],True)
@@ -64,7 +88,6 @@ class OnlineUsers:
 		self.internetAuthenticateSuccessfull(user_obj)
 	    except:
 		loaded_user.setOnlineFlag(False)
-		#log to connection log
 		raise
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
@@ -90,6 +113,7 @@ class OnlineUsers:
 	    if user_obj.instances==0:
 		self.__removeFromOnlines(user_obj,global_unique_id)
 		self.__removePrevUserEvent(user_obj.getUserID())
+		loaded_user.setOnlineFlag(False)
 	    else:
 		self.recalcNextUserEvent(user_obj.getUserID(),True)
 	finally:
@@ -130,4 +154,4 @@ class OnlineUsers:
 	for instance in kill_dic:
 	    user_obj.setKillReason(instance,kill_dic[instance])
 	    user_obj.getTypeObj().killInstance(instance)
-	
+		

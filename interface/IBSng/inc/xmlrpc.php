@@ -13,6 +13,7 @@ class IBSxmlrpc
         $server_port: xml rpc serer port
     */
 	$this->client=new xmlrpc_client("/",$server_ip,$server_port);
+	$this->client->setDebug(FALSE);
     }
 
     function sendRequest($server_method,$params_arr,$timeout=XMLRPC_TIMEOUT)

@@ -4,8 +4,8 @@ import time
 import ibs_exceptions
 from core.lib.general import *
 
-SHUTDOWN=0
-NO_LOGIN=1
+SHUTDOWN=False
+NO_LOGIN=True
 
 def init():
     ibs_exceptions.init()
@@ -63,6 +63,9 @@ def init():
     
     import core.ippool.ippool_main
     core.ippool.ippool_main.init()
+
+    import core.report.report_main
+    core.report.report_main.init()
     
     import radius_server.rad_server
     radius_server.rad_server.init()
@@ -92,37 +95,31 @@ def mainThreadShutdown():
     db_main.getHandle().close()
     thread_main.shutdown(30)
 
-def mts():
-    mainThreadShutdown()
-    sys.exit()
-
 def shutdown():
     event.addEvent(0,mts,[],-100)
 ########################    
     
 def isShuttingDown(): #check for this in long last jobs, and see wether we must release out thread
-    global SHUTDOWN
     return SHUTDOWN
     
 def setShutdownFlag():
     global SHUTDOWN
-    SHUTDOWN=1
+    SHUTDOWN=True
 
 def unSetShutdownFlag():
     global SHUTDOWN
-    SHUTDOWN=0
+    SHUTDOWN=False
 
 def noLoginSet():
-    global NO_LOGIN
     return NO_LOGIN
 
 def setNoLoginFlag():
     global NO_LOGIN
-    NO_LOGIN=1
+    NO_LOGIN=True
 
 def unSetNoLoginFlag():
     global NO_LOGIN
-    NO_LOGIN=0
+    NO_LOGIN=False
 
 
 def sys_except_hook(_type,value,tback):

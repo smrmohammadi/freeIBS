@@ -1,4 +1,5 @@
 from core.charge.charge_rule import ChargeRule
+from core.bandwidth_limit import simple_bw_limit
 
 class InternetChargeRule(ChargeRule):
     def __init__(self,rule_id,charge_obj,cpm,cpk,day_of_weeks,start,end,bandwidth_limit,assumed_kps,ras_id,ports):
@@ -59,7 +60,7 @@ class InternetChargeRule(ChargeRule):
 	user_obj.charge_info.rule_start_inout[instance-1]=user_obj.getTypeObj().getInOutBytes(instance)
 
 	if self.bandwidth_limit>0:
-	    bandwidth_limit.applyLimitOnUser(user_obj,instance,self.bandwidth_limit)
+	    simple_bw_limit.applyLimitOnUser(user_obj,instance,self.bandwidth_limit)
 
 
     def end(self,user_obj,instance):
@@ -71,7 +72,7 @@ class InternetChargeRule(ChargeRule):
 	"""
 	ChargeRule.end(self,user_obj,instance)
 	if self.bandwidth_limit>0:
-	    bandwidth_limit.removeLimitOnUser(user_obj,instance)
+	    simple_bw_limit.removeLimitOnUser(user_obj,instance)
 
     def calcRuleInOutUsage(self,user_obj,instance):
 	"""

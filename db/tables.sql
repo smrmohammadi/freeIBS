@@ -273,13 +273,15 @@ create table connection_log (
     ras_id integer
 );
 
+create index connection_log_userid_index on connection_log (user_id);
+
 create table connection_log_details (
     connection_log_id bigint references connection_log,
     name text, 
     value text
 );
 
-create index connection_log_details_userid_index on connection_log_details (user_id);
+create index connection_log_details_userid_index on connection_log_details (connection_log_id);
 create sequence connection_log_id;
 
 

@@ -8,7 +8,7 @@ def init():
     ras_main.getFactory().register(PPPDRas,"pppd")
 
 class PPPDRas(GeneralUpdateRas):
-    type_attrs={"pppd_kill_port_command":"%s/pppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%s/pppd/list_users"%defs.IBS_ADDONS}
+    type_attrs={"pppd_kill_port_command":"%s/pppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%s/pppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%s/pppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%s/pppd/remove_bw_limit"%defs.IBS_ADDONS}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
@@ -92,9 +92,37 @@ class PPPDRas(GeneralUpdateRas):
 	ras_msg["unique_id"]="port"
 	if status_type=="Start":
 	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
+	    request_pkt=ras_msg.getRequestPacket()
+	    ras_msg["update_attrs"]=["remote_ip"]
 	    ras_msg.setAction("INTERNET_UPDATE")
 	elif status_type=="Stop":
 	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})
 	    ras_msg.setAction("INTERNET_STOP")
 	else:
 	    toLog("PPPDRas: handleRadAcctPacket: invalid status_type %s"%status_type,LOG_ERROR)
+####################################
+    def applySimpleBwLimit(self,user_msg):
+	"""
+	    run apply/remove limit script. Name of script is in "pppd_apply_bandwidth_limit" attribute.
+	    Parameters ras_ip port limit_rate_kbytes will be passed to script. If ras is on seperate machin,
+	    Admin can change the script to apply limit on another ras or change pppd_apply_bandwidth_limit attribute
+	    
+	    WARNING: return Success even if script fails
+	    WARNING: script should not sleep or wait, it should return immediately
+	"""
+	if user_msg["action"]=="apply":
+	    try:
+		return os.system("%s %s %s %s"%(self.getAttribute("pppd_apply_bandwidth_limit"),self.getRasIP(),user_msg["port"],user_msg["limit_kbytes"]))
+	    except:
+		logException(LOG_ERROR)
+		return False
+		
+	elif user_msg["action"]=="remove":
+	    try:
+		return os.system("%s %s %s"%(self.getAttribute("pppd_remove_bandwidth_limit"),self.getRasIP(),user_msg["port"]))
+	    except:
+		logException(LOG_ERROR)
+		return False
+		
+	return True
+	

@@ -19,18 +19,13 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
     {
 	if(in_array($params["type"],array("left","left1","left2")) and trim($content)!="")
 	    $content.=" :";
+
 	$ret="";
 	$err_star_img_link="<img src='/IBSng/images/msg/error.gif'> ";
 	if (isset($params["err"]) and $smarty->is_assigned($params["err"]) and $smarty->get_assigned_value($params["err"])==TRUE)
-        {
 	    $err_star=$err_star_img_link;
-	    $err=True;
-	}
         else
-	{
 	    $err_star="";
-	    $err=False;
-        }
 
 	$id=isset($params["id"])?"id={$params["id"]}":"";
 
