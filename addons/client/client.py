@@ -20,7 +20,7 @@ def readFile(file_name):
     return contents
 
 def sendRequest(contents,system_password):
-    server=xmlrpclib.ServerProxy("http://localhost:1234")
+    server=xmlrpclib.ServerProxy("http://localhost:1235")
     return getattr(server,"util.runDebugCode")({"command":contents,
 						"auth_name":"system",
 						"auth_pass":system_password,

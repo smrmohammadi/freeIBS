@@ -11,7 +11,7 @@ function smarty_function_jsconfirm($params,&$smarty)
     else if (isset($params["raw_msg"]))
 	$msg=$params["raw_msg"];
     else
-	$msg="'Are You Sure?'";
+	$msg="\"Are You Sure?\"";
     return " onClick='return confirm({$msg})' ";
 }
 

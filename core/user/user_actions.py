@@ -5,7 +5,7 @@ from core.db import ibs_db,db_main
 from core.db.ibs_query import IBSQuery
 from core.errors import errorText
 from core.admin import admin_main
-from core.lib import password_lib,ip
+from core.lib import password_lib,iplib
 from core.group import group_main
 from core.lib.multi_strs import MultiStr
 import re
@@ -114,7 +114,7 @@ class UserActions:
 	"""
 	    check credit changed related inputs and raise exception on errors
 	"""
-	if ip.checkIPAddrWithoutMask(remote_address)==0:
+	if iplib.checkIPAddrWithoutMask(remote_address)==0:
 	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_address)
 
 ####################################################

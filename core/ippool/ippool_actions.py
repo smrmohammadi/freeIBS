@@ -1,9 +1,9 @@
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.general import *
-from core.db import db_main,ibs_db
+from core.db import db_main,ibs_db,ibs_query
 from core.ippool import ippool_main
-from core.lib import ip,multi_strs
+from core.lib import iplib,multi_strs
 
 class IPpoolActions:
     def addNewPool(self,ippool_name,comment):
@@ -43,8 +43,8 @@ class IPpoolActions:
     def updatePool(self,ippool_id,ippool_name,comment):
 	self.__updatePoolCheckInput(ippool_id,ippool_name,comment)
 	self.__updatePoolDB(ippool_id,ippool_name,comment)
-	ippool_main.getLoader().unloadIPpoolByID(ippool_name)
-	ippool_main.getLoader().loadIPpoolByID(ippool_name)
+	ippool_main.getLoader().unloadIPpoolByID(ippool_id)
+	ippool_main.getLoader().loadIPpoolByID(ippool_id)
 	
     def __updatePoolCheckInput(self,ippool_id,ippool_name,comment):
 	ippool_main.getLoader().checkIPpoolID(ippool_id)
@@ -61,8 +61,8 @@ class IPpoolActions:
 	db_main.getHandle().transactionQuery(self.__updatePoolQuery(ippool_id,ippool_name,comment))
 
     def __updatePoolQuery(self,ippool_id,ippool_name,comment):
-	ibs_db.createUpdateQuery("ippool",{"ippool_name":dbText(ippool_name),
-					   "comment":dbText(comment)},
+	return ibs_db.createUpdateQuery("ippool",{"ippool_name":dbText(ippool_name),
+					   "ippool_comment":dbText(comment)},
 					   "ippool_id=%s"%ippool_id)
 #########################################################
     def deletePool(self,ippool_name):
@@ -75,7 +75,7 @@ class IPpoolActions:
 	self.__deletePoolCheckInput(ippool_name)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__deletePoolDB(ippool_obj.getIPpoolID())
-	ippool_main.getLoader().unloadIPPoolByID(ippool_obj.getIPpoolID())
+	ippool_main.getLoader().unloadIPpoolByID(ippool_obj.getIPpoolID())
     
     def __deletePoolCheckInput(self,ippool_name):
 	ippool_main.getLoader().checkIPpoolName(ippool_name)
@@ -86,10 +86,10 @@ class IPpoolActions:
 	db_main.getHandle().transactionQuery(query)
     
     def __deletePoolQuery(self,ippool_id):
-	ibs_db.createDeleteQuery("ippool","ippool_id=%s"%ippool_id)
+	return ibs_db.createDeleteQuery("ippool","ippool_id=%s"%ippool_id)
 	
     def __deletePoolIPsQuery(self,ippool_id):
-	ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s"%ippool_id)
+	return ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s"%ippool_id)
 
 ###########################################################
     def addIPtoPool(self,ippool_name,ip):
@@ -108,7 +108,7 @@ class IPpoolActions:
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	map(self.__checkIPAddr,ips)
 
-	def checkIPAvailabilityInPool(self,ip):
+	def checkIPAvailabilityInPool(ip):
 	    if ippool_obj.hasIP(ip):
 	        raise GeneralException(errorText("IPPOOL","IP_ALREADY_IN_POOL")%ip)
 
@@ -119,7 +119,7 @@ class IPpoolActions:
 	"""
 	    check if "ip" is valid, raise an exception if not
 	"""
-	if not ip.checkIPAddrWithoutMask(ip):
+	if not iplib.checkIPAddrWithoutMask(ip):
 	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip)
 
 
@@ -132,6 +132,7 @@ class IPpoolActions:
     def __addIPToPoolQuery(self,ippool_id,ip):
 	return ibs_db.createInsertQuery("ippool_ips",{"ippool_id":ippool_id,
 						      "ip":dbText(ip)})
+
 
 
 ##########################################################
@@ -150,7 +151,7 @@ class IPpoolActions:
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	map(self.__checkIPAddr,ips)
 
-	def checkIPExistencyInPool(self,ip):
+	def checkIPExistencyInPool(ip):
 	    if not ippool_obj.hasIP(ip):
 	        raise GeneralException(errorText("IPPOOL","IP_NOT_IN_POOL")%ip)
 
@@ -163,5 +164,5 @@ class IPpoolActions:
 	query.runQuery()
     
     def __delIPfromPoolQuery(self,ippool_id,ip):
-	return ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s and ip=%s"%(ippool_id,ip))
+	return ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s and ip=%s"%(ippool_id,dbText(ip)))
 

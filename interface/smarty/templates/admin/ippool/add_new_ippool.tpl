@@ -27,9 +27,7 @@
 	    <td>
 		Comment:
 	    <td>
-		<textarea name=comment>
-		    {$comment}
-		</textarea>
+		<textarea name=comment>{$comment|strip}</textarea>
 	    <td>
 
 	<tr>

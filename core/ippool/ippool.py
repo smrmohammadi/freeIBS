@@ -78,5 +78,5 @@ class IPPool:
 	"""
 	    return true if ippool has "ip" in its iplist
 	"""
-	return self.ip_list.has_key(ip)
+	return ip in self.ip_list
 

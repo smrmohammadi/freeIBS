@@ -15,7 +15,7 @@ class UpdateIPpool extends Request
     function UpdateIPpool($ippool_id,$ippool_name,$comment)
     {
 	parent::Request("ippool.updateIPpool",array("ippool_id"=>$ippool_id,
-					    	    "ippool_name"=>$ippool_comment,
+					    	    "ippool_name"=>$ippool_name,
 					    	    "comment"=>$comment));
     }
 }
@@ -32,7 +32,7 @@ class GetIPpoolInfo extends Request
 {
     function GetIPpoolInfo($ippool_name)
     {
-	parent::Request("ippool.getIPpoolNames",array("ippool_name"=>$ippool_name));
+	parent::Request("ippool.getIPpoolInfo",array("ippool_name"=>$ippool_name));
     }
 }
 
@@ -59,6 +59,31 @@ class AddIPtoPool extends Request
     {
 	parent::Request("ippool.addIPtoPool",array("ippool_name"=>$ippool_name,
 						   "ip"=>$ip));
+    }
+}
+
+function getIPpoolInfos()
+{/*    
+    Return an array of all ip pool infos in format (ippool_name=>associative_ippool_info_array)
+ */
+    $ippool_list_req=new GetIPpoolNames();
+    list($success,$ippool_names)=$ippool_list_req->send();
+    if(!$success)
+	return array(FALSE,$ippool_names);
+    else
+    {
+	$ippools_info=array();
+	$ippool_info_req=new GetIPpoolInfo("");
+	foreach($ippool_names as $ippool_name)
+	{
+	    $ippool_info_req->changeParam("ippool_name",$ippool_name);
+	    list($success,$ippool_info)=$ippool_info_req->send();
+	    if(!$success)
+		return array(FALSE,$ippool_info);
+	    else
+		$ippools_info[$ippool_name]=$ippool_info;
+	}
+	return array(TRUE,$ippools_info);
     }
 }
 

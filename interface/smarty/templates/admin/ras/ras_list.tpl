@@ -92,6 +92,5 @@
 
 
 </center>
-</form>
 
 {include file="footer.tpl"}

@@ -12,10 +12,19 @@ class IPpoolLoader:
     def checkIPpoolID(self,ippool_id):
 	"""
 	    check if pool with id "ippool_id" exists
-	    raise a GeneralException if don't!
+	    raise a GeneralException if !
 	"""
 	if not self.pool_id.has_key(ippool_id):
 	    raise GeneralException(errorText("IPPOOL","INVALID_IP_POOL_ID")%ippool_id)
+
+    def checkIPpoolName(self,ippool_name):
+	"""
+	    check if pool with name "ippool_name" exists
+	    raise a GeneralException if not
+	"""
+	if not self.pool_names.has_key(ippool_name):
+	    raise GeneralException(errorText("IPPOOL","INVALID_IP_POOL_NAME")%ippool_id)
+
 
     def getIPpoolByID(self,ippool_id):
 	"""

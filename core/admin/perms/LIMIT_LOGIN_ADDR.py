@@ -1,6 +1,6 @@
 from core.admin.admin_perm import *
 from core.admin import perm_loader
-from core.lib import ip
+from core.lib import iplib
 from core.errors import errorText
 
 
@@ -18,10 +18,10 @@ class LimitLoginAddr (MultiValuePermission,AdminCatPermission,Permission):
 	
     def check(self,admin_obj,admin_perm_obj,ip_address):
 	for iprange in admin_perm_obj.getValue():
-	    if ip.isIPAddrIn(ip_address,iprange):
+	    if iplib.isIPAddrIn(ip_address,iprange):
 		return
 	raise PermissionException(errorText("ADMIN_LOGIN","ADDRESS_BANNED"))
 
     def checkNewValue(self,new_val):
-	if not ip.checkIPAddr(new_val):
+	if not iplib.checkIPAddr(new_val):
 	    self.newValueException(errorText("GENERAL","INVALID_IP_ADDRESS",0)%new_val)

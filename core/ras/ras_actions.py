@@ -1,7 +1,7 @@
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.ras import ras_main,ras
-from core.lib import ip
+from core.lib import iplib
 from core.lib.general import *
 from core.db import db_main,ibs_db
 from core.charge import charge_main
@@ -58,7 +58,7 @@ class RasActions:
 	return ras_id
 	
     def __addNewRasCheckInput(self,ras_ip,ras_type,radius_secret):
-	if not ip.checkIPAddrWithoutMask(ras_ip):
+	if not iplib.checkIPAddrWithoutMask(ras_ip):
 	    raise GeneralException(errorText("RAS","INVALID_RAS_IP")%ras_ip)
 
 	if ras_main.getLoader().rasIPExists(ras_ip):
@@ -107,7 +107,7 @@ class RasActions:
     def __updateRasCheckInput(self,ras_id,ras_ip,ras_type,radius_secret):
 	ras_obj=ras_main.getLoader()[ras_id]
 	if ras_obj.getRasIP()!=ras_ip:
-	    if not ip.checkIPAddrWithoutMask(ras_ip):
+	    if not iplib.checkIPAddrWithoutMask(ras_ip):
 		raise GeneralException(errorText("RAS","INVALID_RAS_IP")%ras_ip)
 
 	    if ras_main.getLoader().rasIPExists(ras_ip):
