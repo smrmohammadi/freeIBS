@@ -44,7 +44,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 	    $arrow_color="orange";
 
 	$action_icon="ok";
-	if(isset($params["action_icon"]) and in_array($params["action_icon"],array("edit","delete","add","ok")))
+	if(isset($params["action_icon"]) and in_array($params["action_icon"],array("edit","delete","add","ok","load","save")))
 	    $action_icon=$params["action_icon"];
 
 	$table_width=isset($params["table_width"])?$params["table_width"]:$table_width_default;

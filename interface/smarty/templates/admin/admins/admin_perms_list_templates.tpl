@@ -1,5 +1,5 @@
 <form method=POST action="admin_perms_list.php">
-    {addEditTable title="Save Permission Template" table_width="400"}
+    {addEditTable title="Save Permission Template" table_width="400" action_icon="save"} 
         {addEditTD type="left"}
 	    Save This Admin Permissions into template:
         {/addEditTD}
@@ -11,7 +11,7 @@
     {/addEditTable} 
 </form>
 <form method=POST action="admin_perms_list.php" name="load_template">
-    {addEditTable title="Load Permission Template Into $admin_username" table_width="400"}
+    {addEditTable title="Load Permission Template Into $admin_username" table_width="400" action_icon="load"}
         {addEditTD type="left"}
 	    Load Permission Template into admin:
         {/addEditTD}

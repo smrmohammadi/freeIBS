@@ -1,3 +1,5 @@
+from core.lib.general import *
+
 class SearchUserHelper:
     def __init__(self,cond_dic):
 	self.__tables=[]
@@ -14,10 +16,19 @@ class SearchUserHelper:
     def getConditionsDic(self):
 	return self.cond_dic
     
+    def hasConditionFor(self,key):
+	return self.cond_dic.has_key(key)
+
+    def getConditionValue(self,key):
+	return self.cond_dic[key]
+
+    def getDBConditionValue(self,key):
+	return dbText(self.getConditionValue(key))
+	
 class SearchUserGroup:
     def __init__(self):
 	self.__groups=[]
-	self.__operator=None
+	self.__operator=""
 
     def setOperator(self,operator):
 	"""

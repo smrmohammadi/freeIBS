@@ -1,6 +1,7 @@
 from core.user import user_plugin,user_main,attribute
 from core.user.attr_updater import AttrUpdater
 from core.user.attr_holder import AttrHolder
+from core.user.attr_searcher import AttrSearcher
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.lib.general import *
@@ -34,9 +35,13 @@ class NormalChargeAttrUpdater(AttrUpdater):
 	    dargs["admin_obj"].canUseCharge(self.charge_name)
 
 
+class NormalChargeAttrSearcher(AttrSearcher):
+    def run(self):
+	self.exactSearchForAttr("normal_charge","normal_charge",lambda x:charge_main.getLoader().getChargeByName(x).getChargeID())
+
 class NormalChargeAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
 	self.registerAttrUpdaterClass(NormalChargeAttrUpdater,["normal_charge"])
 	self.registerAttrHolderClass(NormalChargeAttrHolder,["normal_charge"])
-	
+	self.registerAttrSearcherClass(NormalChargeAttrSearcher)

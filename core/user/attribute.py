@@ -61,7 +61,10 @@ class AttributeHandler:
 	self.attr_searcher=attr_searcher
 
     def getAttrSearcher(self):
-	return self.attr_searcher
+	if hasattr(self,"attr_searcher"):
+	    return self.attr_searcher
+	else:
+	    return None
 
 class UserAttributes:
     def __init__(self,attributes,group_id):
