@@ -219,4 +219,3 @@ class GroupCatPermission:
 class MiscCatPermission:
     def getCategory(self):
 	return "MISC"
-    

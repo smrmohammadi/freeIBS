@@ -12,6 +12,7 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("addNewUsers")
 	self.registerHandlerMethod("getUserInfo")
 	self.registerHandlerMethod("updateUserAttrs")
+	self.registerHandlerMethod("normalUsernameExists")
 	
     def addNewUsers(self,request):
 	request.needAuthType(request.ADMIN)
@@ -81,4 +82,15 @@ class UserHandler(handler.Handler):
 							    request["attrs"],
 							    to_del_attrs
 							    )
+############################################################
+    def normalUsernameExists(self,request):
+	"""
+	    check if normal_username multi str arg is exists, and return a list of existing users if any
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("normal_username")
+	request.getAuthNameObj().canDo("CHANGE NORMAL USER ATTRIBUTES")
+	return user_main.getActionManager().normalUsernameExists(MultiStr(request["normal_username"]))
+
+############################################################
     

@@ -245,3 +245,14 @@ class UserActions:
 	return user_infos
 
 ##########################################################
+    def normalUsernameExists(self,normal_username):
+	"""
+	    check if normal_username currently exists
+	    normal_username(iterable object can be multistr or list): username that will be checked
+	    return a list of exists usernames
+	    NOTE: This is not thread safe 
+	    XXX: test & check where_clause length
+	"""
+	where_clause=" or ".join(map(lambda username:"normal_username=%s"%dbText(username),normal_username))
+	users_db=db_main.getHandle().get("normal_users",where_clause)
+	return [m["normal_username"] for m in users_db]

@@ -1,6 +1,10 @@
+from core.server import handler
 from core.db import ibs_db,db_main
 from core.lib.general import *
-import operator
+from core.ibs_exceptions import *
+from core.errors import errorText
+
+
 import itertools
 
 class AddUserSaveActions:
@@ -44,3 +48,33 @@ class AddUserSaveActions:
 
     def __getTypeID(self,_type):
 	return self.TYPES[_type]
+
+
+class AddUserSaveHandler(handler.Handler):
+    def __init__(self):    
+	handler.Handler.__init__(self,"addUserSave")
+	self.registerHandlerMethod("listAddUserSaves")
+    
+    def __findAdminName(self,request)
+	requester=request.getAuthNameObj()
+	if request.has_key["admin_name"]: admin_name=request["admin_name"]
+	else: admin_name=None
+	if not requester.isGod():
+	    try:
+		admin_perm_obj=requester.getPerms()["SEE SAVED USERNAME PASSWORDS"]
+	    except KeyError:
+		raise PermissionException(errorText("USER_ACTIONS","ACCESS_TO_SAVED_USER_LIST_DENIED"))
+	    if admin_perm_obj.getValue()=="Restricted":
+		admin_name=requester.getUsername()
+	return admin_name
+
+    def listAddUserSaves(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("type","from","to")
+	admin_name=self.__findAdminName(request)
+	return getActionsManager().listAddUserSaves(admin_name,request["type"],request["from"],request["to"])
+
+    def getAddUserSaveDetailes(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("add_user_save_id")
+	
