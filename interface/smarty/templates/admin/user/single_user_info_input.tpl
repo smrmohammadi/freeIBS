@@ -1,13 +1,14 @@
 {include file="admin_header.tpl" title="User Information" selected="User Information"}
 {include file="err_head.tpl"}
-<form method=POST action="/IBSng/admin/user/user_info.php">
+<form method=POST action="/IBSng/admin/user/user_info.php" name="user_info">
     {addEditTable title="User ID"}
 	{addEditTD type="left"}
 	    User ID
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=user_id class=text value="{ifisinrequest name="user_id"}">
+	    <input type=text name=user_id_multi class=text value="{ifisinrequest name="user_id"}">
+	    {multistr form_name="user_info" input_name="user_id_multi"}
 	{/addEditTD}
 		
     {/addEditTable}
@@ -20,7 +21,8 @@
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=normal_username class=text value="{ifisinrequest name="normal_username"}">
+	    <input type=text name=normal_username_multi class=text value="{ifisinrequest name="normal_username"}">
+	    {multistr form_name="user_info" input_name="normal_username_multi"}
 	{/addEditTD}
 		
     {/addEditTable}

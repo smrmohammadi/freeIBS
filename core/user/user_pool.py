@@ -173,10 +173,13 @@ class UserPool:
 	    self.lock.acquire()
 	    try:
 	        if loaded_user_obj.isOnline() or self.loading_users.isLoading(loaded_user_obj.getUserID()):
-			self.__releaseOneUser()
-		        self.rel_candidates.addUser(loaded_user)
+		    self.__releaseOneUser()
+		    self.rel_candidates.addUser(loaded_user)
 		else:
-			self.__delFromPool(loaded_user_obj.getUserID())
+		    try:
+		        self.__delFromPool(loaded_user_obj.getUserID())
+		    except KeyError: #user has been deleted previously by userChanged method
+		        self.__releaseOneUser()
 	    finally:
 	        self.lock.release()
 

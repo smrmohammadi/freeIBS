@@ -12,7 +12,7 @@
 			<a href="/IBSng/admin/user/user_info.php" class="page_menu">User Informaion</a>
 		    {/menuTR}
 		    {menuTR}
-			<a href="/IBSng/admin/user/user_list.php" class="page_menu">User List</a>
+			<a href="/IBSng/admin/user/search_user.php" class="page_menu">Search User</a>
 		    {/menuTR}
 		    {menuTR}
 			<a href="/IBSng/admin/user/add_new_users.php" class="page_menu">Add New User</a>

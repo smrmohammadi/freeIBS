@@ -14,6 +14,8 @@
 	<p>
     {include file="plugins/search/owner.tpl"}
 	<p>
+    {include file="plugins/search/credit.tpl"}
+	<p>
     {include file="plugins/search/multi_login.tpl"}
 	<p>
     {include file="plugins/search/normal_user.tpl"}
@@ -24,13 +26,15 @@
 
     {include file="admin/user/search_user_select_attrs.tpl"}     
     <input type=hidden name=search value=1>
+    <input type=hidden name=page value=1>
     <input type=submit value=search>
 </form> 
 
 {if $show_results}
 <p>
-Total Results: <b> {$result_count} </b>
-{reportPages total_results=$result_count}
+<a name="show_results"></a>
+{include file="admin/user/user_list.tpl"}
+{reportPages total_results=$result_count }
 {/if}
 
 {addRelatedLink}
@@ -48,6 +52,5 @@ Total Results: <b> {$result_count} </b>
 {setAboutPage title="Search User"}
 You can search through user attributes
 {/setAboutPage}
-
 
 {include file="admin_footer.tpl"}

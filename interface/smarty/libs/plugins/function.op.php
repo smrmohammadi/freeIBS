@@ -20,7 +20,7 @@ function smarty_function_op($params,&$smarty)
 	$val=array("equals","like","ilike","starts_with");
 	$face=$val;
     }
-    $selected=isset($_REQUEST["selected"])?$selected:"";
+    $selected=(isset($params["selected"]) and isset($_REQUEST[$params["selected"]]))?$_REQUEST[$params["selected"]]:"";
     $select_arr=array("output"=>$face,"values"=>$val,"name"=>$params["name"],"selected"=>$selected);
     if(isset($params["id"]))
 	$select_arr["id"]=$params["id"];

@@ -5,14 +5,14 @@ function smarty_function_attrUpdateMethod($params,&$smarty)
     parameter update_method(string,required): update method that will be runned for update
     NOTE: string "PluginUpdate" will be concatanated to the method before actually running
 */
-    $id=getAttrUPdateMethodID();
+    $id=getAttrUpdateMethodID();
     return <<<END
     <input type=hidden name="attr_update_method_{$id}" value="{$params["update_method"]}">
 END;
 }
 
 
-function getAttrUPdateMethodID()
+function getAttrUpdateMethodID()
 {/*
     return a unique id for each attr update hidden input
 */

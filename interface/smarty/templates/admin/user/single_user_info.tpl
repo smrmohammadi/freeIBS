@@ -23,6 +23,7 @@
     <br>
     {include file="plugins/user/view/normal_charge.tpl"}
     <br>
+    
 
 {attrTableFoot action_icon="edit"}
 {/attrTableFoot}
@@ -31,8 +32,14 @@
 
 
 {addRelatedLink}
-    <a href="/IBSng/admin/user/user_list.php" class="RightSide_links">
-	User List
+    <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
+	Seach User 
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_info.php?group_name={$user_info.basic_info.group_name|escape:"url"}" class="RightSide_links">
+	Group <b>{$user_info.basic_info.group_name}</b> Info
     </a>
 {/addRelatedLink}
 

@@ -19,7 +19,7 @@ else
     
 function intDoSearch(&$smarty)
 {
-    $user_search_helper=new UserSearch();
+    $user_search_helper=new ReportCollector();
     $report_helper=new ReportHelper();
     intSetConditions($smarty,$user_search_helper);
     list($count,$user_infos)=searchUser($smarty,
@@ -44,6 +44,7 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromRequest(TRUE,"normal_username","normal_username_op");
     $helper->addToCondsFromRequest(TRUE,"rel_exp_date","rel_exp_date_unit","rel_exp_date_op");
     $helper->addToCondsFromRequest(TRUE,"user_id");
+    $helper->addToCondsFromRequest(TRUE,"credit","credit_op");
 }
 
 
@@ -65,7 +66,6 @@ function intShowUserSearchSetVars(&$smarty)
 						    "owner_id"=>"Owner ID",
 						    "group_id"=>"Group ID",
 						    "credit"=>"Credit"));
-
 }
 
 ?>

@@ -44,5 +44,28 @@ function intSetGroupInfo(&$smarty,$group_name)
 	$smarty->set_page_error($group_info->getErrorMsgs());
 }
 
+function getGroupInfoWithCache($group_name)
+{/*
+    return array($success,$group_info) of group with name $group_name
+    of failuer $success is false, and second member of returned array is error message
+*/
+    global $group_info_cache;
+    if(!isset($group_info_cache))
+	$group_info_cache=array();
+    if(isset($group_info_cache[$group_name]))
+	return array(TRUE,$group_info_cache[$group_name]);
+    else
+    {
+	$req=new GetGroupInfo($group_name);
+	$resp=$req->sendAndRecv();
+	if($resp->isSuccessful())
+	{
+	    $group_info_cache[$group_name]=$resp->getResult();
+	    return array(TRUE,$resp->getResult());
+	}
+	else
+	    return array(FALSE,$resp->getError());
+    }
+}
 
 ?>

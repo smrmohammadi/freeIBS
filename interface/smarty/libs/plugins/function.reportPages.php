@@ -10,49 +10,49 @@ function smarty_function_reportPages($params,&$smarty)
     $pages_to_show=isset($params["pages_to_show"])?(int)$params["pages_to_show"]:12;
     $total_pages=calcTotalPages($params["total_results"],getRPP());
     $cur_page=min(getCurrentPage(),$total_pages);
-    $pages=createReportPagesArray("{$file_path}?{$url_params}",$cur_page,$total_pages,$pages_to_show);
-    return createReportPagesTable($pages,$cur_page);
+    $link="{$file_path}?{$url_params}";
+    $pages=createReportPagesArray($link,$cur_page,$total_pages,$pages_to_show);
+    return createReportPagesTable($pages,$cur_page,$link,$total_pages);
 }
 
-function createReportPagestable($pages,$cur_page)
+function createReportPagestable($pages,$cur_page,$link,$total_pages)
 {
     $page_nos=array_keys($pages);
     $ret="<table><tr>";
     
+    $ret.=linkedPageTD("first",createReportPageLink($link,1));
+	
     if(in_array($cur_page-1,$page_nos))
-	$ret.=<<<END
-	<td>
-	    <a href="{$pages[$cur_page-1]}">back</a>
-	</td>
-END;
+	$ret.=linkedPageTD("back",$pages[$cur_page-1]);
     
-    foreach($pages as $page=>$link)
+    foreach($pages as $page=>$complete_link)
 	if($page==$cur_page)
 	{
 	    $ret.=<<<END
-	<td>
-	    {$page}
-	</td>
+	    <td>
+		{$page}
+	    </td>
 END;
 	}
 	else
-	{
-	    $ret.=<<<END
-	<td>
-	    <a href="{$link}">{$page}</a>
-	</td>
-END;
-	}
+	    $ret.=linkedPageTD($page,$complete_link);
 	
     if(in_array($cur_page+1,$page_nos))
-	$ret.=<<<END
-	<td>
-	    <a href="{$pages[$cur_page+1]}">next</a>
-	</td>
-END;
+	$ret.=linkedPageTD("next",$pages[$cur_page+1]);
+
+    $ret.=linkedPageTD("last",createReportPageLink($link,$total_pages));
 
     $ret.="</tr></table>";
     return $ret;
+}
+
+function linkedPageTD($face,$link)
+{
+    return <<<END
+    	<td>
+	    <a href="{$link}">{$face}</a>
+	</td>
+END;
 }
 
 function getCurrentPage()
@@ -76,9 +76,14 @@ function createReportPagesArray($link,$cur_page,$total_pages,$pages_to_show)
     $pages=array();
     $to_show_pages=calcToShowPages($total_pages,$cur_page,$pages_to_show);
     foreach($to_show_pages as $page_no)
-	$pages[$page_no]=$link."&page={$page_no}";
+	$pages[$page_no]=createReportPageLink($link,$page_no);
     return $pages;
 }
+
+function createReportPageLink($link,$page_no)
+{
+    return $link."&page={$page_no}#show_results";
+}	
 
 function calcToShowPages($total_pages,$cur_page,$pages_to_show)
 {/*
@@ -86,16 +91,16 @@ function calcToShowPages($total_pages,$cur_page,$pages_to_show)
     $pages_to_show should be an even number or else it will be floored to
 */
     $neigh_pages=floor($pages_to_show/2);
-    $pre_default_pages=min($cur_page-1,$neigh_pages-1);//pages we normally want to see, $neigh-1 causes to show 1 fewer page than post
-    $post_default_pages=min($total_pages-$cur_page-1,$neigh_pages);
-    $pre_pages=min(max($pre_default_pages,1+$pre_default_pages+($neigh_pages-($total_pages-$cur_page))),$cur_page-1);
-    $post_pages=min(max($post_default_pages,$post_default_pages+($neigh_pages-$cur_page)),$total_pages-$cur_page-1);
-    return range($cur_page-$pre_pages,$cur_page+$post_pages+1);
+    $pre_default_pages=min($cur_page-1,$neigh_pages);
+    $post_default_pages=min($total_pages-$cur_page,$neigh_pages);
+    $pre_pages=min(max($pre_default_pages,$pre_default_pages+($neigh_pages-($total_pages-$cur_page))),$cur_page-1);
+    $post_pages=min(max($post_default_pages,$post_default_pages+($neigh_pages-$cur_page)),$total_pages-$cur_page);
+    return range($cur_page-$pre_pages,$cur_page+$post_pages);
 }
 
 function calcTotalPages($total_results,$rpp)
 {
-    return floor($total_results/$rpp)+1;
+    return (int)floor($total_results/$rpp)+1;
 }
 
 ?>

@@ -5,6 +5,8 @@ require_once(IBSINC."util.php");
 require_once(IBSINC."perm.php");
 require_once(IBSINC."user_face.php");
 require_once(IBSINC."group_face.php");
+require_once(IBSINC."user_search.php");
+
 
 needAuthType(ADMIN_AUTH_TYPE);
 
@@ -25,8 +27,8 @@ function intShowMultiUserInfo(&$smarty,$user_id)
 {
     if(!isMultiString($user_id))
 	intShowSingleUserInfo($smarty,$user_id);
-
-
+    else
+	redirectToUserSearch("user_id={$user_id}");
 }
 //********************************************
 function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
