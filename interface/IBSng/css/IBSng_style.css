@@ -809,6 +809,15 @@ input.Num{
 	direction:ltr
 }
 
+input.checkbox{
+	border:1px solid #c0c0c0; 
+	font-weight:bold; 
+	font-size: 8pt;
+	font-family:Tahoma;
+	color: #800000;
+	height:13px;
+}
+
 /*----------------------------------------------------*/
 /*  Select 					      */
 /*   Classes:					      */									  
@@ -844,6 +853,7 @@ textarea.text {
 /* 	Error Table & Message				*/
 /*	  Classes 					*/
 /*	     1.td.error_messages			*/
+/*	     2.span.messages				*/
 /*------------------------------------------------------*/	
 
 td.error_messages{ 
@@ -856,6 +866,15 @@ td.error_messages{
 	background-color:#FFFFFF
 }
 
+span.message{ 
+	font-family: Tahoma; 
+	font-size: 9pt; 
+	color: #BB0000; 
+	font-weight:bold; 
+	height:18;
+	direction:ltr ;
+	background-color:#FFFFFF
+}
 
 /*--------------------------------------------------------*/
 /*  Right Side Bar					  */

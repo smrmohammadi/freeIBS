@@ -55,4 +55,17 @@ function intGetRasPortsRequest($ras)
     return $ports;	    
 }
 
+function intSetInternetChargeNames(&$smarty)
+{/* set name of all internet charges in smarty variable "charge_names" */
+    $charge_names=new ListCharges("Internet");
+    list($success,$charge_names)=$charge_names->send();
+    if (!$success)
+    {
+	$smarty->set_page_error($charge_names->getErrorMsgs());
+	$smarty->assign("charge_names",array());
+    }
+    else
+	$smarty->assign("charge_names",$charge_names);
+}
+
 ?>

@@ -22,7 +22,7 @@ function smarty_function_listTableHeaderIcon($params,&$smarty)
     	
     return <<<EOF
                 
-		<td Rowspan=2 class="List_Title_Icon">
+		<td valign="bottom" Rowspan=2 class="List_Title_Icon">
 		<img border="0" src="{$link}" title="{$action}"></td>	
 	    {$close_tr}
 EOF;

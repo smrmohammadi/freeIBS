@@ -29,8 +29,10 @@ class ChargeActions:
 	checkDBBool(visible_to_all,"Visible to all")
 	self.__checkChargeType(charge_type)
 	if charge_main.getLoader().chargeNameExists(name):
-		raise GeneralException(errorText("CHARGES","CHARGE_NAME_EXISTS") % name)
+	    raise GeneralException(errorText("CHARGES","CHARGE_NAME_EXISTS") % name)
 	
+	if not isValidName(name):
+	    raise GeneralException(errorText("CHARGES","INVALID_CHARGE_NAME") % name)
 
     def __checkChargeType(self,charge_type):
 	if charge_type not in self.CHARGE_TYPES:
@@ -75,6 +77,9 @@ class ChargeActions:
 	checkDBBool(visible_to_all,"Visible To All")
 	if charge_obj.getChargeName() != name and charge_main.getLoader().chargeNameExists(name):
 		raise GeneralException(errorText("CHARGES","CHARGE_NAME_EXISTS") % name)
+
+	if not isValidName(name):
+	    raise GeneralException(errorText("CHARGES","INVALID_CHARGE_NAME") % name)
 
     def __updateCharge(self,charge_id,name,comment,visible_to_all):
 	"""

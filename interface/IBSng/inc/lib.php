@@ -175,4 +175,33 @@ function getTargetAttrsFromSmarty(&$smarty,$target)
     return $target_attrs;
 }
 
+function getSelectedAttrFromSmartyParams(&$smarty,&$params)
+{/* Get selected value of an attr, from smarty object and smarty params.
+    This function is useful for smarty plugins that needs to get what is value of selected
+
+    param default_request(string,required): name of request key, that if has been set, will be returned as
+					    default, request is always prefered over other methods
+
+    param target(string,required): attribute target, should be "user" or "group" that attribute default
+				    would be seek in it
+
+    param default_var(string,required): name of target attribute, that if has been set, will be returned as
+					    default, this is preffered after default_request
+					    target attributes are searched through target array as set it target parameter
+					    
+
+    param default(string,optional): optional string that will be returned if none of other default values matched
+*/
+    $selected="";
+    if(isset($params["default"]))
+	$selected=$params["default"];
+
+    if(isset($params["default_var"]) and isset($params["default_request"]) and isset($params["target"]))
+	$selected=attrDefault(getTargetAttrsFromSmarty($smarty,$params["target"]),
+			      $params["default_var"],
+			      $params["default_request"],
+			      $selected);
+    return $selected;
+}
+
 ?>

@@ -17,17 +17,7 @@ function smarty_function_relative_units($params,&$smarty)
     if(isset($params["id"]))
 	$select_arr["id"]=$params["id"];
     
-    $selected="";
-    if(isset($params["default"]))
-	$selected=$params["default"];
-
-    if(isset($params["default_var"]) and isset($params["default_request"]) and isset($params["target"]))
-	$selected=attrDefault(getTargetAttrsFromSmarty($smarty,$params["target"]),
-			      $params["default_var"],
-			      $params["default_request"],
-			      $selected);
-
-
+    $selected=getSelectedAttrFromSmartyParams(&$smarty,&$params);
     $select_arr["selected"]=$selected;
     return smarty_function_html_options($select_arr,$smarty);
 }

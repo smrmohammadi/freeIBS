@@ -21,22 +21,22 @@
 
 <center>
 {if isset($update_success) and $update_success}
-    <h2>
-	Charge Updated Successfully
-    </h2>        
+    <span class="message">
+	Charge Updated Successfully.
+    </span>        
 {/if}
 
 {if isset($del_charge_rule_success) and $del_charge_rule_success}
-    <h2>
-	Charge Rule Deleted Successfully
-    </h2>        
+    <span class="message">
+	Charge Rule Deleted Successfully.
+    </span>        
 {/if}
 
 
 {if isInRequest("update_charge_rule_success") }
-    <h2>
-	Charge Rule Updated Successfully
-    </h2>        
+    <span class="message">
+	Charge Rule Updated Successfully.
+    </span>        
 {/if}
 
 
@@ -96,8 +96,6 @@
     </form>
 {/if}
 
-</center>
-
 {if not $is_editing}
     {if $charge_type eq "Internet"}
 	{include file="admin/charge/internet_charge_rule_list.tpl"}
@@ -108,19 +106,16 @@
 {/if}
 
 {if not $is_editing and $can_change}
-<table>
-    <tr>
-	<td>
-	    <a href="/IBSng/admin/charge/charge_info.php?charge_name={$charge_name|escape:"url"}&edit=1">
-		Edit
-	    </a>
-    <tr>
-	<td>
-	    <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}">
-		Add Charge Rule
-	    </a>
+    {addRelatedLink}
+        <a href="/IBSng/admin/charge/charge_info.php?charge_name={$charge_name|escape:"url"}&edit=1" class="RightSide_links">
+        	Edit Charge Information
+        </a>
+    {/addRelatedLink}
+    {addRelatedLink}
+        <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}" class="RightSide_links">
+        	Add Charge Rule
+        </a>
+    {/addRelatedLink}
 
 {/if}
-
-
 {include file="admin_footer.tpl"}
