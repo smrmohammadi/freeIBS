@@ -1,5 +1,5 @@
 <?php
-$GLOBALS["IBSngMenu"]=Array("user"=>array(),
+$GLOBALS["IBSngMenu"]=Array("user"=>array("User Information"=>"/IBSnd/admin/single_user_info.php"),
 		"group"=>array("Group List"=>"/IBSng/admin/group/group_list.php",
 			       "Add Group"=>"/IBSng/admin/group/add_new_group.php"),
 		"report"=>array(),

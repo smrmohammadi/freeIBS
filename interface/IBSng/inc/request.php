@@ -34,8 +34,8 @@ class Request
     */
 	if(is_null($date_type) and isInRequest("date_type"))
 	    $date_type=$_REQUEST["date_type"];
-	
-	$this->params_arr["date_type"]=$date_type;
+	else if(!is_null($date_type))
+	    $this->params_arr["date_type"]=$date_type;
     }
 
     function changeParam($key,$value)

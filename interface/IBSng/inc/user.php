@@ -26,6 +26,15 @@ class GetUserInfo extends Request
     }
 }
 
+class UpdateUserAttrs extends Request
+{
+    function UpdateUserAttrs($user_id,$attrs,$to_del_attrs)
+    {
+	parent::Request("user.updateUserAttrs",array("user_id"=>$user_id,
+						       "attrs"=>$attrs,
+						       "to_del_attrs"=>$to_del_attrs));
+    }
+}
 
 
 ?>

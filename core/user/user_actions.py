@@ -205,9 +205,9 @@ class UserActions:
 	    loaded_users(list of LoadedUser instances):
 	    
 	"""
-	self.__updateUserAttrsCheckInput(user_ids,admin_obj,attrs,to_del_attrs)
-	changed_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(attrs)
-	deleted_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(to_del_attrs)
+	self.__updateUserAttrsCheckInput(loaded_users,admin_obj,attrs,to_del_attrs)
+	changed_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(attrs,"change")
+	deleted_attr_updaters=user_main.getAttributeManager().getAttrUpdaters(to_del_attrs,"delete")
 	users=self.__createUsersDic(loaded_users)
 	ibs_query=IBSQuery()
 	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_attr_updaters)
@@ -215,7 +215,7 @@ class UserActions:
 	ibs_query.runQuery()
 	self.__broadcastChange(users)
 
-    def __updateUserAttrsCheckInput(self,user_ids,admin_obj,attrs,to_del_attrs):
+    def __updateUserAttrsCheckInput(self,loaded_users,admin_obj,attrs,to_del_attrs):
 	pass #nothing to check here for now, everything is checked or will be checked
     
     def __createUsersDic(self,loaded_users):
@@ -228,12 +228,12 @@ class UserActions:
 	return users
 
     def __getChangedQuery(self,ibs_query,users,admin_obj,changed_attr_updaters):
-	return changed_attr_updaters.getQuery("user","change",{"users":users,
-							      "admin_obj":admin_obj})
+	return changed_attr_updaters.getQuery(ibs_query,"user","change",{"users":users,
+							                 "admin_obj":admin_obj})
 	
     def __getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters):
-	return deleted_attr_updaters.getQuery("user","delete",{"users":users,
-							      "admin_obj":admin_obj})
+	return deleted_attr_updaters.getQuery(ibs_query,"user","delete",{"users":users,
+							                 "admin_obj":admin_obj})
 
     def __broadcastChange(self,users):
 	"""
@@ -243,35 +243,6 @@ class UserActions:
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,users.keys())
 
-
-######################################################
-    def updateUsers(self,loaded_users,user_ids,group_name,owner_name=""):
-	"""
-	    update "loaded_users", set owner to "owner_name" and group to "group_name"
-	"""
-	self.__updateUsersCheckInput(loaded_users,group_name,owner_name)
-	if owner_name=="":
-	    owner_id=admin_main.getLoader().getAdminByName(owner_name).getAdminID()
-	else:
-	    owner_id=""
-	group_obj=group_main.getLoader().getGroupByName(group_name)
-	self.__updateUsersDB(user_ids,group_obj.getGroupID(),owner_id)
-	
-    def __updateUsersCheckInput(self,loaded_users,group_name,owner_name):
-	group_main.getLoader().checkGroupName(group_name)
-
-    def __updateUsersDB(self,user_ids,group_id,owner_id=""):
-	ibs_query=IBSQuery()
-	for user_id in user_ids:
-	    ibs_query+=self.__updateUsersQuery(user_id,group_id,owner_id)
-	ibs_query.runQuery()
-
-    def __updateUsersQuery(self,user_id,group_id,owner_id=""):
-	if owner_id=="":
-	    return ibs_db.createUpdateQuery("users",{"group_id":group_id})
-	else:
-	    return ibs_db.createUpdateQuery("users",{"owner_id":owner_id,
-						 "group_id":group_id})
 
 #######################################################
     def getLoadedUsersByUserID(self,user_ids):

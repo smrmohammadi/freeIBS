@@ -83,9 +83,7 @@ class GroupHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("group_name","attrs","to_del_attrs")
 	request.getAuthNameObj().canDo("CHANGE GROUP",request["group_name"])
-	to_del_attrs=request["to_del_attrs"]
-	if type(to_del_attrs)==types.DictType:
-	    to_del_attrs=to_del_attrs.values()
+	to_del_attrs=requestDictoList(request["to_del_attrs"])
 	return group_main.getActionManager().updateGroupAttrs(request["group_name"],
 							      request["attrs"],
 							      to_del_attrs,

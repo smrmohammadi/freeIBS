@@ -44,7 +44,7 @@ class UpdateAttrsHelper
 	if($this->target=="group")
 	    list($success,$ret)=$this->updateGroupAttrs($this->target_id,$updated_attrs,$to_del_attrs);
 	else if($this->target=="user")
-	    {}
+	    list($success,$ret)=$this->updateUserAttrs($this->target_id,$updated_attrs,$to_del_attrs);
 
 	if($return_after_send)
 	    return array($success,$ret);
@@ -66,12 +66,22 @@ class UpdateAttrsHelper
 	list($success,$ret)=$update_grp_attrs->send();
 	return array($success,$ret);
     }
+
+    function updateUserAttrs($user_id,$attrs,$to_del_attrs)
+    {
+	$update_usr_attrs=new UpdateUserAttrs($user_id,$attrs,$to_del_attrs);
+	list($success,$ret)=$update_usr_attrs->send();
+	return array($success,$ret);
+    }
     
     function redirectToTargetInfo()
     {/*	redirect to Target info, normally called when update was sucessful
     */
 	if($this->target=="group")
 	    redirectToGroupInfo($this->target_id);
+	else if($this->target=="user")
+	    redirectToUserInfo($this->target_id);
+
     }
     
     function setPageError($err)
@@ -87,6 +97,8 @@ class UpdateAttrsHelper
 	$this->setPageError($err);
 	if($this->target=="group")
 	    intEditGroup($this->smarty,$this->target_id);
+	else if($this->target=="user")
+	    intEditUser($this->smarty,$this->target_id);
 
 	exit();
     }

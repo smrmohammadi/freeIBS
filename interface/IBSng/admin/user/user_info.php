@@ -1,6 +1,7 @@
 <?php
 require_once("../../inc/init.php");
 require_once(IBSINC."user.php");
+require_once(IBSINC."perm.php");
 require_once(IBSINC."user_face.php");
 require_once(IBSINC."group_face.php");
 
@@ -23,15 +24,16 @@ function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
     $resp=intSetSingleUserInfo(&$smarty,$user_id,$normal_username);
     if($resp->isSuccessful())
     {
-        intShowSingleUserInfoAssignValues($smarty,array_values($resp->getResult()));
+        intShowSingleUserInfoAssignValues($smarty,$user_id,array_values($resp->getResult()));
 	intShowSingleUserInfoInterface($smarty);
     }
     else
 	intShowSingleUserInfoInput($smarty);
 }
 
-function intShowSingleUserInfoAssignValues(&$smarty,$user_info)
+function intShowSingleUserInfoAssignValues(&$smarty,$user_id,$user_info)
 {
+    $smarty->assign("can_change",canDo("CHANGE USER ATTRIBUTES",null,(int)$user_id,$user_info[0]["basic_info"]["owner_id"]));
     intSetSingleUserGroupAttrs($smarty,$user_info[0]);
 }
 

@@ -96,7 +96,7 @@ class ChargeHandler(handler.Handler):
 	if request["ports"]=="_ALL_":
 	    ports=[charge_rule.ChargeRule.ALL]
 	else:
-	    ports=request["ports"].values()
+	    ports=requestDicToList(request["ports"])
 	    
 	if request["ras"]=="_ALL_":
 	    ras=charge_rule.ChargeRule.ALL

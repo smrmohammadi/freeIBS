@@ -38,6 +38,16 @@ def dbNull(var):
     return var
 
 
+def requestDicToList(var):
+    """
+	some xml implementions return dictionaries even the unserialized data was in array.
+	This function convert it to list if it's a dic
+    """
+    if type(var)==types.DictType:
+	return var.values()
+    else:
+	return var
+
 ###############################
 def integer(_str):
     """
@@ -145,3 +155,4 @@ def checkDBBool(bool_var,name=""):
     """
     if bool_var != "t" and bool_var != "f":
 	raise GeneralException(errorTexT("GENERAL","INVALID_BOOL_VALUE")%name)
+

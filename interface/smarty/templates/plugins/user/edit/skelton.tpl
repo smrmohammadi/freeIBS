@@ -1,16 +1,14 @@
 {*
 
-
-
 *}
-{include file="admin_header.tpl" title="Edit Group Attributes" selected="Group List"}
+{include file="admin_header.tpl" title="Edit User Attributes" selected="User Information"}
 {include file="err_head.tpl"}
-Group Name: {$group_name}
 
+User ID: {$user_id}
 <form method=POST action="/IBSng/admin/plugins/edit.php">
 
-    <input type=hidden name="target" value="group">
-    <input type=hidden name="target_id" value="{$group_name}">
+    <input type=hidden name="target" value="user">
+    <input type=hidden name="target_id" value="{$user_id}">
     <input type=hidden name="update" value="1">
     <input type=hidden name="edit_tpl_cs" value="{$edit_tpl_cs}">
 
@@ -20,11 +18,10 @@ Group Name: {$group_name}
 <input type=submit value=update>
 </form>
 {addRelatedLink}
-    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name|escape:"url"}" class="RightSide_links">
-	Group Info
+    <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}" class="RightSide_links">
+	User Info
     </a>
 {/addRelatedLink}
-
 
 {addRelatedLink}
     <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
@@ -33,7 +30,7 @@ Group Name: {$group_name}
 {/addRelatedLink}
 
 {setAboutPage title="Group Info"}
-    You can edit attributes of group that you have selected.
+    You can edit attributes of users that you have selected.
 {/setAboutPage}
 
 {include file="admin_footer.tpl"}

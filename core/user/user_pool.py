@@ -142,11 +142,12 @@ class UserPool:
 	    Save LoadedUser instance into pool
 	"""
 	self.__checkPoolSize()
+	self.__addToPool(loaded_user)
 
     def __addToPool(self,loaded_user):
     	self.lock.acquire()
         try:
-	    self.__pool[loaded_user.getUserID()]=loaded_user
+	    self.__pool_by_id[loaded_user.getUserID()]=loaded_user
 	finally:
 	    self.lock.release()
 

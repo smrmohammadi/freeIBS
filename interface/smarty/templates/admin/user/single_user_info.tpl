@@ -5,11 +5,11 @@
 	$group_attrs: parsed attributes of group
 
 *}
-{include file="admin_header.tpl" title="User Information" selected="User Information"}
-{include file="err_head.tpl"}
+
+{include file="admin_header.tpl" title="User Information" selected="User Information"} 
+{include file="err_head.tpl"} 
 <form method=POST action="/IBSng/admin/plugins/edit.php">
     <input type=hidden name="user_id" value="{$user_id}">
-    <input type=hidden name="edit_tpl_name" value="{$params["edit_tpl_name"]}">
     <input type=hidden name="edit_user" value="1">
 
 
@@ -21,8 +21,11 @@
     <br>
     {include file="plugins/user/view/normal_charge.tpl"}
     <br>
-    *}
+    *}    
+<input type=submit value="edit">
 </form> 
+
+
 
 {addRelatedLink}
     <a href="/IBSng/admin/user/user_list.php" class="RightSide_links">

@@ -206,5 +206,5 @@ class Admin:
 	    raise an PermissionException if admin can not change user loaded in "loaded_user"
 	    Admin should have CHANGE_USER_ATTRS permission to be able to change users
 	"""
-	self.canDo("CHANGE USER ATTRIBUTES",loaded_user)
+	self.canDo("CHANGE USER ATTRIBUTES",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 

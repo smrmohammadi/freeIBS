@@ -15,6 +15,10 @@ class ChangeUserAttrs (AllRestrictedSingleValuePermission,UserCatPermission,Perm
 	self.addAffectedPage("User->Edit Attributes")
 	self.addDependency("GET USER INFORMATION")	
 
-    def check(self,admin_obj,admin_perm_obj,loaded_user):
-	if admin_perm_obj.getValue()=="Restricted" and loaded_user.getBasicInfo().getOwnerObj().getAdminID()!=admin_obj.getAdminID():
-	    raise PermissionException(errorText("ADMIN","ACCESS_TO_USER_DENIED")%loaded_user.getUserID())
+    def check(self,admin_obj,admin_perm_obj,user_id,owner_id):
+	"""
+	    user_id: id of user we want to check if we can change
+	    owner_id: owner of user
+	"""
+	if admin_perm_obj.getValue()=="Restricted" and owner_id!=admin_obj.getAdminID():
+	    raise PermissionException(errorText("ADMIN","ACCESS_TO_USER_DENIED")%user_id)

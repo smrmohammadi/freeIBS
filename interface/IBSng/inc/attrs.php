@@ -88,5 +88,20 @@ function normalChargePluginUpdate(&$update_helper)
 	$update_helper->addToUpdateAttrs("normal_charge",$_REQUEST["normal_charge"]);
 }
 
+//************************************* Group Name
+function groupNamePluginUpdate(&$update_helper)
+{
+    if(isInRequest("group_name"))
+	$update_helper->addToUpdateAttrs("group_name",$_REQUEST["group_name"]);
+}
+//************************************* Owner Name
+
+function ownerNamePluginUpdate(&$update_helper)
+{
+    if(isInRequest("owner_name"))
+	$update_helper->addToUpdateAttrs("owner_name",$_REQUEST["owner_name"]);
+}
+
+
 
 ?>

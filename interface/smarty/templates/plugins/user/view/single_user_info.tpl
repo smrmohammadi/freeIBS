@@ -8,14 +8,6 @@
     {/addEditTD}
 
     {addEditTD type="left"}
-	Group Name:
-    {/addEditTD}
-
-    {addEditTD type="right"}
-	{$user_info.basic_info.group_name}
-    {/addEditTD}
-
-    {addEditTD type="left"}
 	Credit:
     {/addEditTD}
 
@@ -24,6 +16,16 @@
     {/addEditTD}
 
     {addEditTD type="left"}
+	{if $can_change} {editCheckBox edit_tpl_name="group_name"} {/if}
+	Group Name:
+    {/addEditTD}
+
+    {addEditTD type="right"}
+	{$user_info.basic_info.group_name}
+    {/addEditTD}
+
+    {addEditTD type="left"}
+	{if $can_change and canDo("CHANGE USERS OWNER")} {editCheckBox edit_tpl_name="owner_name"} {/if}
 	Owner Admin:
     {/addEditTD}
 
