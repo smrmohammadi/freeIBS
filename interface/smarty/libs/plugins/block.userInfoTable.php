@@ -21,7 +21,7 @@ function smarty_block_userInfoTable($params,$content,&$smarty,&$repeat)
 				<td class="Form_Title_Begin" rowspan="2"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
 				<td class="Form_Title_red" rowspan="2">{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
 				<td class="Form_Title_End" rowspan="2"><img border="0" src="/IBSng/images/end_of_list_title_red.gif"></td>
-				<td class="Form_Title_Top_Line" align="right">Group Info<img border="0" src="/IBSng/images/arrow_orange_bg_white.gif"></td>
+				<td class="Form_Title_Top_Line" align="right">Group Value<img border="0" src="/IBSng/images/arrow_orange_bg_white.gif"></td>
 			</tr>
 			<tr>
 				<td class="Form_Title_End_Line"></td>

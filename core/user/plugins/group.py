@@ -20,9 +20,9 @@ class GroupNameAttrUpdater(AttrUpdater):
 	group_main.getLoader().checkGroupName(self.group_name)	
 
     def updateQuery(self,ibs_query,src,action,**args):
-	group_obj=getLoader().getGroupByName(self.group_name)
-	for user in args["users"]:
-	    ibs_query+=ibs_db.createUpdateQuery("users",{"group_id":group_obj.getGroupID()})
+	group_obj=group_main.getLoader().getGroupByName(self.group_name)
+	for user_id in args["users"]:
+	    ibs_query+=ibs_db.createUpdateQuery("users",{"group_id":group_obj.getGroupID()},"user_id=%s"%user_id)
 	return ibs_query
 
     def changeInit(self,group_name):

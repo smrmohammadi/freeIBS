@@ -27,8 +27,8 @@ class OwnerNameAttrUpdater(AttrUpdater):
 
     def updateQuery(self,ibs_query,src,action,**args):
 	admin_obj=admin_main.getLoader().getAdminByName(self.admin_name)
-	for user in args["users"]:
-	    ibs_query+=ibs_db.createUpdateQuery("users",{"admin_id":admin_obj.getAdminID()})
+	for user_id in args["users"]:
+	    ibs_query+=ibs_db.createUpdateQuery("users",{"owner_id":admin_obj.getAdminID()},"user_id=%s"%user_id)
 	return ibs_query
 
     def changeInit(self,owner_name):

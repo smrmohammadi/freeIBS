@@ -1,5 +1,4 @@
 {attrUpdateMethod update_method="multiLogin"}
-
   {viewTable title="Multi Login" table_width=300}
     {addEditTD type="left"}
 	Has Multi Login

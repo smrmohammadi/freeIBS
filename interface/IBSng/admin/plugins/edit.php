@@ -9,8 +9,6 @@ require_once(IBSINC."attr_update.php");
 require_once(IBSINC."user.php");
 require_once(IBSINC."user_face.php");
 
-
-
 needAuthType(ADMIN_AUTH_TYPE);
 
 $smarty=new IBSSmarty();

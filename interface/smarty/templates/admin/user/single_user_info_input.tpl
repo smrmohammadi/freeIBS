@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="User Information"}
+{include file="admin_header.tpl" title="User Information" selected="User Information"}
 {include file="err_head.tpl"}
 <form method=POST action="/IBSng/admin/user/user_info.php">
     {addEditTable title="User ID"}
@@ -25,5 +25,16 @@
 		
     {/addEditTable}
 </form>
+
+{addRelatedLink}
+    <a href="/IBSng/admin/user/user_list.php" class="RightSide_links">
+	User List
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="User Info"}
+You can enter user id or normal username of one user to see his information
+{/setAboutPage}
+
 
 {include file="admin_footer.tpl"}

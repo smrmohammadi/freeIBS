@@ -231,7 +231,7 @@ class UserActions:
 	return changed_attr_updaters.getQuery(ibs_query,"user","change",{"users":users,
 							                 "admin_obj":admin_obj})
 	
-    def __getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters):
+    def __getDeletedQuery(self,ibs_query,users,admin_obj,deleted_attr_updaters):
 	return deleted_attr_updaters.getQuery(ibs_query,"user","delete",{"users":users,
 							                 "admin_obj":admin_obj})
 

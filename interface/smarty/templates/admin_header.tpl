@@ -13,8 +13,8 @@
 			<tr class="Header_Top_link">
 				<td width="7"><img border="0" src="/IBSng/images/top_right_links_begin.gif"></td>
 				<td class="Page_Top_Link">Admin</td>
-				<td class="Page_Top_Link"></td>
-				<td class="Page_Top_Link">Username:{$auth_name}</td>
+				<td class="Page_Top_Link">&nbsp;</td>
+				<td class="Page_Top_Link">Username:<font color="#FF9C00">{$auth_name|capitalize}</font></td>
 				<td class="Page_Top_Link">|</td>
 				<td class="Page_Top_Link"><a class="Header_Top_links" href="/IBSng/admin/?logout=1">Logout</a></td>
 			</tr>

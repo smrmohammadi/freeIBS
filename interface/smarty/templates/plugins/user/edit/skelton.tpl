@@ -5,6 +5,9 @@
 {include file="err_head.tpl"}
 
 User ID: {$user_id}
+{if not $single_user}
+    Warning: When editing multiple users, user default values and group values are empty and ambigious
+{/if}
 <form method=POST action="/IBSng/admin/plugins/edit.php">
 
     <input type=hidden name="target" value="user">
@@ -17,6 +20,7 @@ User ID: {$user_id}
 {/foreach}
 <input type=submit value=update>
 </form>
+
 {addRelatedLink}
     <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}" class="RightSide_links">
 	User Info
@@ -29,7 +33,7 @@ User ID: {$user_id}
     </a>
 {/addRelatedLink}
 
-{setAboutPage title="Group Info"}
+{setAboutPage title="User Info"}
     You can edit attributes of users that you have selected.
 {/setAboutPage}
 

@@ -9,7 +9,8 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
     parameter object(string,required): can be "user" or "group"
     parameter var_name(string,required): variable name that will be checked that if exists
 					 and set !== FALSE and is not null , we suppose we have the attribute 
-
+    parameter alternate(string,optional): string that will be shown if object has not attr
+					  if not specified default it used
 */
     if(is_null($content))
     {
@@ -18,7 +19,11 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
 	else
 	{
 	    $repeat=FALSE;
-	    print "<center>---------------";    
+	    if(isset($params["alternate"]))
+		$alternate=$params["alternate"];
+	    else
+		$alternate="---------------";
+	    print "<center>{$alternate}";
 	}
     }
     else

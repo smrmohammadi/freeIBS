@@ -15,6 +15,7 @@ class LoadedUser:
 	self.basic_user=basic_user
 	self.user_attrs=user_attrs
 	self.user_locks=user_locks
+	self.online_flag=False
 
     def getBasicUser(self):
 	return self.basic_user
@@ -42,5 +43,9 @@ class LoadedUser:
     		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttributes(),date_type),
 		"raw_attrs":self.getUserAttrs().getAllAttributes()
 	       }	
-    
-    
+        
+    def setOnlineFlag(self,new_status):
+	self.online_flag=new_status
+
+    def isOnline(self):
+	return self.online_flag

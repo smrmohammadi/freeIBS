@@ -177,8 +177,7 @@ function getSelectedAttrFromSmartyParams(&$smarty,&$params)
     if(isset($params["default_var"]) and isset($params["default_request"]) and isset($params["target"]))
 	$selected=attrDefault(getTargetAttrsFromSmarty($smarty,$params["target"]),
 			      $params["default_var"],
-			      $params["default_request"],
-			      $selected);
+			      $params["default_request"]);
     else if (isset($params["default_request"]) and isInRequest($params["default_request"]))
 	$selected=$_REQUEST[$params["default_request"]];
     else if(isset($params["default_smarty"]) and $smarty->is_assigned($params["default_smarty"]))

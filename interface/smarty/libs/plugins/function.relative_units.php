@@ -13,7 +13,7 @@ function smarty_function_relative_units($params,&$smarty)
 
     require_once $smarty->_get_plugin_filepath('function', 'html_options');
     $rel_units=array("Hours","Days","Months","Years");
-    $select_arr=array("selected"=>$default,"output"=>$rel_units,"values"=>$rel_units,"name"=>$params["name"]);
+    $select_arr=array("output"=>$rel_units,"values"=>$rel_units,"name"=>$params["name"]);
     if(isset($params["id"]))
 	$select_arr["id"]=$params["id"];
     

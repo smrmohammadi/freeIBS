@@ -1,6 +1,7 @@
 from core.db import ibs_db,ibs_query
 from core.lib.general import *
 from core.group import group_main
+from core.user import user_main
 
 class AttrUpdaterContainer:
     def __init__(self):
@@ -165,16 +166,18 @@ class AttrUpdater:
     	return ibs_query
 
     def __changeUserAttr(self,ibs_query,attrs,users):
-	for user in users:
+	for user_id in users:
+	    user=users[user_id]
 	    for attr_name in attrs:
 		if user.hasAttr(attr_name):
-		    ibs_query+=user_main.getActionManager().updateUserAttrQuery(user.getUserID(),attr_name,attr_value)
+		    ibs_query+=user_main.getActionManager().updateUserAttrQuery(user.getUserID(),attr_name,attrs[attr_name])
 		else:
-		    ibs_query+=user_main.getActionManager().insertUserAttrQuery(user.getUserID(),attr_name,attr_value)
+		    ibs_query+=user_main.getActionManager().insertUserAttrQuery(user.getUserID(),attr_name,attrs[attr_name])
 	return ibs_query
 
     def __deleteUserAttr(self,ibs_query,attrs,users):
-	for user in users:
+	for user_id in users:
+	    user=users[user_id]	
 	    for attr_name in attrs:
 		    ibs_query+=user_main.getActionManager().deleteUserAttrQuery(user.getUserID(),attr_name)
 	return ibs_query

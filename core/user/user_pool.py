@@ -182,7 +182,7 @@ class UserPool:
 	self.lock.acquire()
 	try:
 	    self.__pool_len-=1
-	    del(self.__pool[loaded_user_obj.getUserID()])
+	    del(self.__pool_by_id[user_id])
 	finally:
 	    self.lock.release()
 
@@ -220,7 +220,7 @@ class UserPool:
 	    XXX: current implemention can be optimized by not querying normal_users table twice
 	    return a LoadedUser instance of user with normal username "normal_username"
 	"""
-	user_id=user_main.getUserLoader().getLoadedUserByUserID(normal_username)
+	user_id=user_main.getUserLoader().normalUsername2UserID(normal_username)
 	return self.getUserByID(user_id)
 
 #################################
@@ -230,10 +230,10 @@ class UserPool:
 	"""
 	self.loading_users.loadingStart(user_id)
 	try:
-	    loaded_user=self.__isInPool(user_id)
+	    loaded_user=self.__isInPoolByID(user_id)
 	    if loaded_user!=None:
-	        if loaded_instance.isOnline():
-		    loaded_instance.reload()
+	        if loaded_user.isOnline():
+		    loaded_user.reload()
 	        else:
 	    	    self.__delFromPool(user_id)
 	finally:

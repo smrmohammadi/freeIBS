@@ -15,13 +15,9 @@
 
     {include file="plugins/user/view/single_user_info.tpl"}
     {include file="plugins/user/view/exp_date.tpl"}
-    {*
-    <br>
     {include file="plugins/user/view/multi_login.tpl"}
-    <br>
     {include file="plugins/user/view/normal_charge.tpl"}
-    <br>
-    *}    
+
 <input type=submit value="edit">
 </form> 
 

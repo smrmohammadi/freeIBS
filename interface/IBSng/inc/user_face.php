@@ -3,7 +3,11 @@ require_once("init.php");
 require_once("attr_parser.php");
 
 
-
+function redirectToUserInfo($user_id)
+{
+    $redirect_str="/IBSng/admin/user/user_info.php?user_id_multi={$user_id}";
+    redirect($redirect_str);
+}
 
 function intSetSingleUserInfo(&$smarty,$user_id,$normal_username=null)
 {

@@ -6,7 +6,7 @@ function smarty_function_editCheckBox($params,&$smarty)
 */
     $id=getAttrEditCheckboxID();
     return <<<END
-    <input type=checkbox name="attr_edit_checkbox_{$id}" value="{$params["edit_tpl_name"]}" class=checkbox>
+    <input type=checkbox name="attr_edit_checkbox_{$id}" value="{$params["edit_tpl_name"]}" class=checkbox style="height: 12px">
 END;
 }
 
