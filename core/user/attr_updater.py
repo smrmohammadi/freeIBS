@@ -169,7 +169,7 @@ class AttrUpdater:
 	for user_id in users:
 	    user=users[user_id]
 	    for attr_name in attrs:
-		if user.hasAttr(attr_name):
+		if user.userHasAttr(attr_name):
 		    ibs_query+=user_main.getActionManager().updateUserAttrQuery(user.getUserID(),attr_name,attrs[attr_name])
 		else:
 		    ibs_query+=user_main.getActionManager().insertUserAttrQuery(user.getUserID(),attr_name,attrs[attr_name])

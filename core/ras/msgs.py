@@ -1,7 +1,9 @@
+import time
 class Msg:
     def __init__(self):
 	self.action=None
 	self.attrs={}
+	self.time=time.time()
 	
     def __getitem__(self,key):
 	return self.attrs[key]
@@ -9,11 +11,20 @@ class Msg:
     def __setitem__(self,key,value):
 	self.attrs[key]=value    
 
+    def hasAttr(self,attr_name):
+	return self.attrs.has_key(attr_name)
+	
+    def getAttrs(self):
+	return self.attrs
+
     def setAction(self,action):
 	self.action=action
 
     def getAction(self):
 	return self.action
+
+    def getTime(self):
+	return self.time()
 
     def send(self):
 	assert(self.action!=None)
@@ -24,13 +35,23 @@ class RasMsg(Msg):
 	self.request_pkt=request_pkt
 	self.reply_pkt=reply_pkt
 	self.ras_obj=ras_obj
+    
+    def getRequestPacket(self):
+	return self.request_pkt
 
-    def getAttrs(self):
-	return self.attrs
+    def getReplyPacket(self):
+	return self.reply_pkt
+
 
     def getRequestAttr(self,attr_name):
 	return self.request_pkt[attr_name]
-	
+
+    def getRasID(self):
+	return self.ras_obj.getRasID()
+
+    def getUniqueIDValue(self):
+	return self[self["unique_id"]]
+    
     def setRequestToAttr(self,request_key,attr_name):
 	"""
 	    request_key(string): Request Attribute Name
@@ -79,7 +100,7 @@ class RasMsg(Msg):
 	    Send this Message to Ras Message Dispatcher
 	"""
 	Msg.send(self)
-
+	user_main.getRasMsgDispatcher().dispatch(self)
 
 class UserMsg(Msg):
     def __init__(self):

@@ -111,11 +111,12 @@ class UserActions:
 	"""
 	    _count(integer): count of users
 	    owner_name(string): name of owner admin
-	    credit(integer or empty string): amount of credit users will have, if credit is an empty string, group initial_credit
-		is used, or an exception is raised if there's no initial_credit for user
+	    credit(float): amount of credit users will have, 
 	    group_name(string): name of group string
 	    ibs_query(IBSQuery instance): IBSQuery instance we'll add query to
 	    
+	    XXX: add this: if credit is an empty string, group initial_credit
+		is used, or an exception is raised if there's no initial_credit for user
 	    return a list of user ids of newly added users
 	"""
 
@@ -156,6 +157,45 @@ class UserActions:
 	return db_main.getHandle().seqNextVal("users_user_id_seq")
 
 ######################################################
+    def changeCredit(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment):
+	"""
+	    change credit of user(s) with user_id in "user_ids"
+	    user_ids(iterable object, list or multi_str): user_ids that credit will be changed
+	    credit(float): amount of credit change, can be negative
+	    changer_admin_name(string): username of admin that initiate the change. He should have enough deposit
+	    remote_address(string): changer client ip address 
+	    credit_change_comment(string): comment that will be stored in credit change log
+	"""
+	self.__changeCreditCheckInput(user_ids,credit,changer_admin_name,remote_address,credit_change_comment)
+	admin_consumed_credit=credit*len(user_ids)
+	ibs_query=IBSQuery()
+    	ibs_query+=admin_main.getActionManager().consumeDeposit(changer_admin_name,admin_consumed_credit)
+	try:
+	    changer_admin_obj=admin_main.getLoader().getAdminByName(changer_admin_name)
+	    ibs_query+=self.__changeCreditQuery(user_ids,credit)
+    	    ibs_query+=user_main.getCreditChangeLogActions().logCreditChangeQuery("CHANGE_CREDIT",changer_admin_obj.getAdminID(),user_ids,credit,\
+					admin_consumed_credit,remote_address,credit_change_comment)
+	    ibs_query.runQuery()
+	except:
+	    admin_main.getActionManager().consumeDeposit(changer_admin_name,-1*admin_consumed_credit,False) #re-add deposit to admin
+	    raise
+	self.__broadcastChange(user_ids)
+
+
+    def __changeCreditCheckInput(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment):
+	if not isFloat(credit):
+	    raise GeneralException(errorText("USER_ACTIONS","CREDIT_NOT_FLOAT"))
+	admin_main.getLoader().checkAdminName(changer_admin_name)
+	if not iplib.checkIPAddr(remote_address):
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)
+	if len(user_ids)==0:
+	    raise GeneralException(errorText("USER_ACTIONS","INVALID_USER_COUNT")%0)
+	    
+    def __changeCreditQuery(self,user_ids,credit):
+	where_clause=" or ".join(map(lambda user_id:"user_id = %s"%user_id,user_ids))
+	return ibs_db.createUpdateQuery("users",{"credit":"credit+%s"%credit},where_clause)
+
+######################################################
     def updateUserAttrs(self,loaded_users,admin_obj,attrs,to_del_attrs):
 	"""
 	    loaded_users(list of LoadedUser instances):
@@ -169,7 +209,7 @@ class UserActions:
 	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_attr_updaters)
 	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters)
 	ibs_query.runQuery()
-	self.__broadcastChange(users)
+	self.__broadcastChange(users.keys())
 
     def __updateUserAttrsCheckInput(self,loaded_users,admin_obj,attrs,to_del_attrs):
 	pass #nothing to check here for now, everything is checked or will be checked
@@ -191,14 +231,13 @@ class UserActions:
 	return deleted_attr_updaters.getQuery(ibs_query,"user","delete",{"users":users,
 							                 "admin_obj":admin_obj})
 
-    def __broadcastChange(self,users):
+    def __broadcastChange(self,user_ids):
 	"""
 	    broadcast that users with id in "users" has been change
 	    normally user_pool should be told to refresh the user
 	"""
 	userChanged=user_main.getUserPool().userChanged
-	map(userChanged,users.keys())
-
+	map(userChanged,user_ids)
 
 #######################################################
     def getLoadedUsersByUserID(self,user_ids):
@@ -274,3 +313,4 @@ class UserActions:
 
     def __searchUsersCheckInput(self,conds,_from,to,order_by,desc,admin_obj):
 	report_lib.checkFromTo(_from,to)
+###########################################################

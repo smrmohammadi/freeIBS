@@ -2,6 +2,7 @@ from core.lib import jalali
 from core.lib.general import *
 from core.ibs_exceptions import *
 from core.errors import errorText
+import time_lib
 
 class RelativeDate:
     def __init__(self,date,unit):
@@ -52,12 +53,15 @@ class RelativeDate:
 	if self.date_hours>24*30*365*20: #20 years!
 	    raise GeneralException(errorText("GENERAL","INVALID_REL_DATE")%self.date)
 	
+    def getDateHours(self):
+	return self.date_hours
+
     def getDBDate(self):
 	"""
 	    return date(integer) useful for inserting in database.
 	    it's the date in number of hours
 	"""
-	return self.date_hours
+	return self.getDateHours()
 	
     def getFormattedDate(self):
 	"""
@@ -188,4 +192,7 @@ class AbsDate:
 	else:
 	    return self.getGregorianDate()
 	
+
+def AbsDateFromEpoch(epoch_time):
+    	return AbsDate(time_lib.dbTimeFromEpoch(epoch_time),"gregorian")
 	

@@ -130,7 +130,7 @@ class ChargeWithRules(Charge):
 	user_obj.charge_info.credit_prev_usage+=user_obj.calcInstanceCreditUsage(instance)
 	user_obj.charge_info.logout(instance)
 
-    def getEffectiveRule(user_obj,instance):
+    def getEffectiveRule(self,user_obj,instance):
 	"""
 	    return currently applicable rule
 	    
@@ -148,11 +148,11 @@ class ChargeWithRules(Charge):
 		max_applicable_rule=rule
 		
 	if max_priority==-1:
-	    raise loginException(errorText("USER_LOGIN","NO_APPLICABLE_RULE"))
+	    raise LoginException(errorText("USER_LOGIN","NO_APPLICABLE_RULE"))
 
 	return max_applicable_rule
 	
-    def getNextMoreApplicableRule(user_obj, instance):
+    def getNextMoreApplicableRule(self,user_obj, instance):
 	"""
 	    return next more applicable rule or None when there's no next more applicable rule
 	    
@@ -188,7 +188,7 @@ class ChargeWithRules(Charge):
 	
 
     def commit(self,user_obj):
-	self.__commitRuleUsages(user_obj)
+	pass
 	
     def __getRule(self,rule_id):
 	"""

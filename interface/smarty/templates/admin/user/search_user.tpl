@@ -38,13 +38,13 @@
 	    <script>
 		function submitEdit(var_name)
 		{
-		    document.search_user.action="/IBSng/admin/user/search_user_edit.php";
-		    document.search_user.elements["var_name"]=1;
+		    document.search_user.action="/IBSng/admin/user/search_user_edit.php?"+var_name+"=1";
 		    document.search_user.submit();
 		}
 	    </script>
 	    {/literal}
-	    <input type=submit name=edit value=edit {literal} onClick="javascript: if( user_ids.allUnChecked() ) {alert('No user(s) selected');} else {submitEdit('edit')} return false;  " {/literal}>
+	    <input type=submit name=edit value=edit {literal} onClick="javascript: if( user_ids.allUnChecked() ) {alert('No user(s) selected');} else {submitEdit('edit');} return false;  " {/literal}>
+	    <input type=submit name=changecredit value="Change Credit" {literal} onClick="javascript: if( user_ids.allUnChecked() ) {alert('No user(s) selected');} else {submitEdit('change_credit');} return false;  " {/literal}>
 	{/if}
     
 {/if}

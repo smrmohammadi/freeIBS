@@ -29,8 +29,8 @@
 </form>
 
 {addRelatedLink}
-    <a href="/IBSng/admin/user/user_list.php" class="RightSide_links">
-	User List
+    <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
+	Seach User 
     </a>
 {/addRelatedLink}
 

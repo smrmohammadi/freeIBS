@@ -155,7 +155,6 @@ class Ras:
 	"""
 	pass
 
-
     def getInOutBytes(self,user_msg):
 	"""
 	    user_msg(UserMsg instance): User Message to get inout bytes

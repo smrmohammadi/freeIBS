@@ -2,13 +2,12 @@ from core.charge.charge import ChargeWithRules
 from core.user.can_stay_online_result import CanStayOnlineResult
 
 class InternetCharge(ChargeWithRules):
-
     def checkLimits(self,user_obj):
 	result=CanStayOnlineResult()
 
 	credit=user_obj.calcCurrentCredit()
 	if credit<=0: #now set reasons for all instances to credit finished
-	    result.setKillForAllInstances(errorText("NORMAL_USER_LOGIN","CREDIT_FINISHED"))
+ 	    result.setKillForAllInstances(errorText("NORMAL_USER_LOGIN","CREDIT_FINISHED"),user_obj.instances)
 	    return result
 
 	credit_usage_per_second=0
@@ -18,7 +17,7 @@ class InternetCharge(ChargeWithRules):
 	kill_users={}
 	
 	for _index in range(user_obj.instances):
-	    cur_rule = user_obj.effective_rules[_index]
+	    cur_rule = user_obj.charge_info.effective_rules[_index]
 	    
 	    # find new rule
 	    effective_rule = self.getEffectiveRule(user_obj,_index+1)
@@ -38,7 +37,7 @@ class InternetCharge(ChargeWithRules):
 		    next_more_applicable=min(next_more_applicable_rule.interval.getStartSeconds()-seconds_from_morning,next_more_applicable)
 		    
 	    #change current effective rule
-	    user_obj.effective_rules[_index] = effective_rule
+	    user_obj.charge_info.effective_rules[_index] = effective_rule
 	
 	    earliest_rule_end=min(earliest_rule_end,effective_rule.interval.getEndSeconds()-seconds_from_morning)
 
@@ -57,13 +56,13 @@ class InternetCharge(ChargeWithRules):
 	    during --EFFECTIVE-- rule only
 	"""
 	
-	effective_rule=user_obj.effective_rules[instance-1]
+	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	now=time.time()
-	in_out=user_obj.getInOutbytes(instance)
+	in_out=user_obj.getTypeObj().getInOutbytes(instance)
 	credit_used=0
 	if effective_rule.cpm>0:
-	    credit_used+=effective_rule.cpm * (now - user_obj.rule_start[instance-1])/60
+	    credit_used+=effective_rule.cpm * (now - user_obj.charge_info.rule_start[instance-1])/60
 	if effective_rule.cpk>0:
-	    credit_used+=effective_rule.cpk * (in_out[0] - user_obj.rule_start_inout[0] + in_out[1] -\
-					   user_obj.rule_start_inout[1])/1024.0
+	    credit_used+=effective_rule.cpk * (in_out[0] - user_obj.charge_info.rule_start_inout[0] + in_out[1] -\
+					   user_obj.charge_info.rule_start_inout[1])/1024.0
 	return credit_used

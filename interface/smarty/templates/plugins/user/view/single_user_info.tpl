@@ -13,7 +13,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	{$user_info.basic_info.credit|price} <a class="link_in_body" href="change_credit.php">Change Credit</a>
+	{$user_info.basic_info.credit|price} <a class="link_in_body" href="change_credit.php?user_id={$user_id|escape:"url"}">Change Credit</a>
     {/addEditTD}
 
     {addEditTD type="left"}

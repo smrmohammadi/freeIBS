@@ -10,16 +10,7 @@
 {/headerMsg}    
 {/if}
 
-{viewTable title="User  Information" table_width="380" nofoot="TRUE"}
-
-    {addEditTD type="left"}
-	User ID
-    {/addEditTD}
-    {addEditTD type="right"}
-	{$user_id}
-    {/addEditTD}
-
-{/viewTable}
+{include file="admin/user/user_pages_user_id_header.tpl"}
 <br>
 <form method=POST action="/IBSng/admin/plugins/edit.php" name="user_edit">
 
@@ -38,7 +29,7 @@
 
 {addRelatedLink}
     <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}" class="RightSide_links">
-	User <b>{$user_id}</b> Info
+	User <b>{$user_id|truncate:15}</b> Info
     </a>
 {/addRelatedLink}
 

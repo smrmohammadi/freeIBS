@@ -297,6 +297,7 @@ create table internet_connection_log (
     credit_used numeric(12,2),
     in_bytes	bigint,
     out_bytes   bigint,
+    successful boolean,
     reason text
 );
 

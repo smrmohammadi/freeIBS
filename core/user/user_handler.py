@@ -5,7 +5,7 @@ from core.errors import errorText
 from core.lib.multi_strs import MultiStr
 from core.lib.general import *
 import string
-
+import itertools
 
 class UserHandler(handler.Handler):
     def __init__(self):
@@ -14,8 +14,9 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("getUserInfo")
 	self.registerHandlerMethod("updateUserAttrs")
 	self.registerHandlerMethod("checkNormalUsernameForAdd")
-	self.registerHandlerMethod("searchUser")	
-	
+	self.registerHandlerMethod("changeCredit")
+	self.registerHandlerMethod("searchUser")
+		
     def addNewUsers(self,request):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("count","credit","owner_name","group_name","credit_comment")
@@ -111,6 +112,26 @@ class UserHandler(handler.Handler):
 	if len(exist_usernames)!=0:
 	    ret[errorText("USER_ACTIONS","NORMAL_USERNAME_EXISTS",False)]=exist_usernames
 	return ret
+############################################################
+    def changeCredit(self,request):
+	"""
+	    change credit of user
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("user_id","credit","credit_comment")
+	requester=request.getAuthNameObj()
+	user_id_multi=MultiStr(request["user_id"])
+	loaded_users=user_main.getActionManager().getLoadedUsersByUserID(user_id_multi)
+	itertools.imap(self.__canChangeCredit,loaded_users,itertools.repeat(requester))
+	return user_main.getActionManager().changeCredit(user_id_multi,
+							 to_float(request["credit"],"credit"),
+							 requester.getUsername(),
+							 request.getRemoteAddr(),
+							 request["credit_comment"])
+
+    def __canChangeCredit(self,loaded_user,requester):
+	requester.canChangeUser(loaded_user)
+	requester.canDo("CHANGE USER CREDIT",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 ############################################################
     def searchUser(self,request):
 	"""

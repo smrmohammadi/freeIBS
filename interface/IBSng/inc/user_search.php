@@ -30,7 +30,10 @@ function searchUser(&$smarty,&$conds,$from,$to,$order_by,$desc)
 
 function redirectToUserSearch($url_conds)
 {
-    redirect("/IBSng/admin/user/search_user.php?search=1&show__normal_username=1&show__group=1&show__credit=1&show__owner=1&{$url_conds}");
+    $redirect_url="/IBSng/admin/user/search_user.php?search=1&show__normal_username=1&show__group=1&show__credit=1&show__owner=1";
+    if($url_conds!="") 
+	$redirect_url.="&{$url_conds}";
+    redirect($redirect_url);
 }
 
 function redirectToUserSearchInc($conds)

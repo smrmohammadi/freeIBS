@@ -52,3 +52,4 @@ class AdminHandler(handler.Handler):
 	request.getAuthNameObj().canDo("CHANGE ADMIN INFO")
 	request.checkArgs("admin_username","name","comment")
 	return admin_main.getActionManager().updateInfo(request["admin_username"],request["name"],request["comment"])
+	

@@ -45,6 +45,16 @@ class CheckNormalUsernameForAdd extends Request
     }
 }
 
+class ChangeUserCredit extends Request
+{
+    function ChangeUserCredit($user_id,$credit,$credit_comment)
+    {
+	parent::Request("user.changeCredit",array("user_id"=>$user_id,
+						  "credit"=>$credit,
+						  "credit_comment"=>$credit_comment));
+    }
+}
+
 
 function getUsersInfoByUserID(&$smarty,$user_ids)
 {/*return a list of user_infos of users with id in $user_ids

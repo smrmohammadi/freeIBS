@@ -7,7 +7,7 @@ from core.lib.general import *
 import itertools
 
 class CreditChangeLogActions:
-    CREDIT_CHANGE_ACTIONS={"ADD_USER":1}
+    CREDIT_CHANGE_ACTIONS={"ADD_USER":1,"CHANGE_CREDIT":2}
 
     def logCreditChangeQuery(self,action,admin_id,user_ids,per_user_credit,admin_credit,remote_address,comment):
 	"""

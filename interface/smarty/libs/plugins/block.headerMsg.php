@@ -4,7 +4,7 @@ function smarty_block_headerMsg($params,$content,&$smarty,&$repeat)
 {
 /*
     used for messages on header of files, usually when some actions was done, and we want to inform user
-    parameter var_name(string,required): smarty variable name that if has been set to True, 
+    parameter var_name(string,optional): smarty variable name that if has been set to True, 
 	    the message will be shown
 
 */

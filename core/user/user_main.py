@@ -30,11 +30,18 @@ def init():
     from core.user.add_user_save import AddUserSaveActions
     add_user_save_actions=AddUserSaveActions()
 
+    global ras_msg_dispatcher
+    from core.user.ras_msg_dispatcher import RasMsgDispatcher
+    ras_msg_dispatcher=RasMsgDispatcher()
+    
+    global online
+    from core.user.online import OnlineUsers
+    online=OnlineUsers()
+    
     plugin_loader.loadPlugins(defs.IBS_CORE+"/user/plugins")
 
     from core.user.user_handler import UserHandler
     handlers_manager.getManager().registerHandler(UserHandler())
-
 
 def getActionManager():
     return user_action_manager
@@ -56,3 +63,9 @@ def getCreditChangeLogActions():
 
 def getAddUserSaveActions():
     return add_user_save_actions
+
+def getRasMsgDispatcher():
+    return ras_msg_dispatcher
+
+def getOnline():
+    return online

@@ -18,6 +18,7 @@ class Admin:
 	self.deposit=integer(deposit)
 	self.creator_id=integer(creator_id)
 	self.due=due
+	self.deposit_lock=threading.RLock()
 
 
     def getAdminID(self):
@@ -109,7 +110,11 @@ class Admin:
 	"""
 	    consume admin deposit in loaded instance
 	"""
-	self.deposit-=credit
+	self.deposit_lock.acquire()
+	try:
+	    self.deposit-=credit
+	finally:
+	    self.deposit_lock.release()
 	return self.deposit
 
     def checkPass(self,password):

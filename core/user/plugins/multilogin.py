@@ -9,23 +9,17 @@ attr_handler_name="multi login"
 def init():
     user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"],["multi_login"],[])
 
-class MultiLogin(user_plugin.UserPlugin): ### XXX To ChecK!
+class MultiLogin(user_plugin.UserPlugin): 
     def __init__(self,user_obj):
 	user_plugin.UserPlugin(self,user_obj)
-	self.multilogin=1
-	if user_obj.user_obj_type == "normal":
-	    if user_obj.extended_attrs.has_key("MULTILOGIN"):
-		self.multilogin=user_obj.extended_attrs["MULTILOGIN"]
+	self.multi_login=1
+	if user_obj.getUserAttrs().hasAttr("multi_login"):
+	    self.multi_login=int(user_obj.getUserAttrs()["multi_login"])
 	
     def login(self,args):
-	if self.instances>self.multilogin:
-	    if self.user_obj.user_obj_type == "normal":
-		error_text=errorText("NORMAL_USER_LOGIN","MAX_CONCURRENT")
-	    elif self.user_obj.user_obj_type == "voip":
-		error_text=errorText("VOIP_USER_LOGIN","MAX_CONCURRENT")
+	if self.instances>self.multi_login:
+	    raise LoginException(errorText("LOGIN","MAX_CONCURRENT"))
 	
-	raise loginException(error_text)
-
 class MultiLoginAttrUpdater(AttrUpdater):
     def __init__(self):
 	AttrUpdater.__init__(self,attr_handler_name)

@@ -10,7 +10,10 @@ class Group:
 	return self.attributes.has_key(attr_name)
 
     def getAttr(self,attr_name):
-	return self.attributes[attr_name]
+	try:
+	    return self.attributes[attr_name]
+	except KeyError:
+	    raise GeneralException(errorText("GENERAL","ATTR_NOT_FOUND")%attr_name)
 
     def getGroupName(self):
 	return self.group_name

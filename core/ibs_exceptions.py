@@ -10,18 +10,16 @@ LOG_RADIUS=4
 LOG_SERVER=8
 LOG_QUERY=16
 
-
 class DBException (Exception):
     def __init__(self,str_error):
-        toLog("dbException: %s"% str_error,LOG_ERROR)
+        toLog("DBException: %s"% str_error,LOG_ERROR)
         self.str_error=str_error
     def __str__(self):
         return self.str_error
 
-
 class ThreadException (Exception):
     def __init__(self,str_error):
-        toLog("threadException: %s" % str_error,LOG_ERROR)
+        toLog("ThreadException: %s" % str_error,LOG_ERROR)
         self.str_error=str_error
     def __str__(self):
         return self.str_error
@@ -36,8 +34,6 @@ class IBSException(Exception):
     def __str__(self):
         return self.str_error
 
-
-
 class PermissionException (Exception):
     def __init__(self,str_error):
         toLog("PermissionException: %s"%str_error,LOG_DEBUG,defs.DEBUG_ALL)
@@ -45,7 +41,6 @@ class PermissionException (Exception):
     def __str__(self):
         return self.str_error
 		
-
 class HandlerException (Exception):
     def __init__(self,strError):
         toLog("HandlerException: ",LOG_ERROR)
@@ -88,11 +83,7 @@ class LoginException (IBSError):
     def __str__(self):
         return self.str_error
 
-
-
 class Logger:
-
-    
     def __init__(self,file_name):
 
         self.re_open=0
@@ -144,7 +135,6 @@ class Logger:
     def reOpenFD(self):
         self.fd.close()
         self.open()
-
 
 
 def init():

@@ -78,8 +78,8 @@ class InternetChargeRule(ChargeRule):
 	    returns (in_bytes,out_bytes) usage for this instance of user during this rule
 	    assuming this rule is the effective rule for this instance
 	"""
-	cur_in_out=user_obj.getInOutBytes(instance)
-	return (cur_in_out[0]-user_obj.rule_start_inout[0],cur_in_out[1]-user_obj.rule_start_inout[1])
+	cur_in_out=user_obj.getTypeObj().getInOutBytes(instance)
+	return (cur_in_out[0]-user_obj.charge_info.rule_start_inout[0],cur_in_out[1]-user_obj.charge_info.rule_start_inout[1])
 
     def calcRuleTransferUsage(self,user_obj,instance):
 	"""

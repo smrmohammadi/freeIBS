@@ -14,9 +14,9 @@ class AttributeManager:
     def registerHandler(self,handler_obj,change_attr_list=[],delete_attr_list=[],parse_attr_list=[]):
 	"""
 	    handler_obj(AttributeHandler instance): Attribute Handler that generate an attr_updater and attr_holder
-	    change_attr_list(list of strs): list of attributes for change action
-	    delete_attr_list(list of strs): list of attributes for delete action
-	    parse_attr_list(list of strs): list of attributes that this attr handle can parse
+	    change_attr_list(list of strs): list of attributes for change action, one would be enough
+	    delete_attr_list(list of strs): list of attributes for delete action, one would be enough
+	    parse_attr_list(list of strs): list of attributes that this attr handle can parse, one attribute per parser
 	    register a attr_handler, that will be called when we encounter an attribute in attr_list
 	"""
 	self.all_handlers.append(handler_obj)
@@ -68,13 +68,13 @@ class AttributeManager:
     def getAttrHolders(self,attrs):
 	"""
 	    attrs(dic or list): dic of all attributes in format name:value
-	    return a dic of attr holders for attrs in format {attr handler name:AttrHandler instance}
+	    return a list of attr holders for attrs 
 	"""
-	attr_holders={}
+	attr_holders=[]
 	for attr_name in attrs:
 	    handler=self.__getAttrHandlerForHolder(attr_name)
 	    if handler!=None:
-		attr_holders[handler.getName()]=handler.getAttrHolder(attr_name,attrs)
+		attr_holders.append(handler.getAttrHolder(attr_name,attrs))
 	return attr_holders
 
     def parseAttrs(self,attrs,date_type):
@@ -82,7 +82,7 @@ class AttributeManager:
 	    return a dic of attrs containing the parsed attributes of attrs
 	"""
 	attrs=copy.copy(attrs) #make sure we don't change user/group attributes
-    	attr_holders=self.getAttrHolders(attrs).values()
+    	attr_holders=self.getAttrHolders(attrs)
 	map(lambda x:x.setDateType(date_type),attr_holders)
 	map(lambda x:attrs.update(x.getParsedDic()),attr_holders)
 	return attrs

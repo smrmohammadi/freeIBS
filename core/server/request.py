@@ -78,7 +78,7 @@ class Request:
 	"""
 	for arg in args:
 	    if not self.params.has_key(arg):
-		self.raiseIncompeleteRequest(arg)
+		self.raiseIncompleteRequest(arg)
 
     def raiseIncompleteRequest(self,missing_arg):
 	raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%missing_arg)

@@ -1,42 +1,13 @@
 from core.lib.general import *
 from core.errors import errorText
 from core.ibs_exceptions import *
+import time
 
-def timeCondition(condValue,condType):
-    if condType=="fromDays":
-	return ">= now() - interval '"+str(integer(condValue))+" days'"
+def dbTimeFromEpoch(epoch_time):
+    return time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(epoch_time))
 
-    if condType=="fromYears":
-	return ">= now() - interval '"+str(integer(condValue))+" years'"
 
-    if condType=="fromMonths":
-	return ">= now() - interval '"+str(integer(condValue))+" months'"
-
-    if condType=="fromHours":
-	return ">= now() - interval '"+str(integer(condValue))+" hours'"
-
-    if condType=="from":#add some checkings, also for persian calender
-	return ">= "+dbText(condValue)
-    
-
-    if condType=="toDays":
-	return "< now() + interval '"+str(integer(condValue))+" days'"
-
-    if condType=="toYears":
-	return "< now() + interval '"+str(integer(condValue))+" years'"
-
-    if condType=="toMonths":
-	return "< now() + interval '"+str(integer(condValue))+" months'"
-	
-    if condType=="toHours":
-	return "< now() + interval '"+str(integer(condValue))+" hours'"
-
-    if condType=="to":#add some checkings, also for persian calender
-	return "< "+dbText(condValue)
-
-    raise generalException("timeCondition: invalid condition")
-    
-
+#############################33
 def cur_day_of_week():
     return time.localtime()[6]
     
@@ -60,12 +31,6 @@ def dbTimeToList(dbTime):
 	logException()
 	raise generalException("Invalid dbTime: " + str(dbTime))
 	
-def dbTimeFromEpoch(epochTime,forDbInsert=1):
-    ret=time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(epochTime))
-    if forDbInsert:
-	return dbText(ret)
-    else:
-	return ret
 
 def getEpochTimeFromHourOfDay(hour,_min=0,sec=0,dayToAdd=0):
     tm=list(time.localtime())

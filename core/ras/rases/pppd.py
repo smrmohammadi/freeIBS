@@ -12,8 +12,9 @@ class PPPDRas(GeneralUpdateRas):
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
-	self.onlines={}
+	self.onlines={}# dic in format port=>{"username":,"in_bytes":,"out_bytes":}
 
+####################################
     def killUser(self,user_msg):
 	"""
 	    kill user, this will call "kill_port_command" attribute, 
@@ -24,7 +25,7 @@ class PPPDRas(GeneralUpdateRas):
 	except:
 	    logException(LOG_ERROR)
 
-
+####################################
     def getOnlines(self):
 	"""
 	    return a dic of onlines users in format {port_name:{"username":username,"in_bytes":in_bytes,"out_bytes":out_bytes}}
@@ -35,27 +36,38 @@ class PPPDRas(GeneralUpdateRas):
 	    port_no username in_bytes out_bytes
 
 	"""
+	lines=self.__getOnlinesFromCLI()
+	return self.__parseCLIOnline(self,lines)
+    
+    def __getOnlinesFromCLI(self):
+	fd=os.popen(self.getAttribute("pppd_list_users_command"))
+	out_lines=fd.readlines()
+	fd.close()
+	return out_lines
+	
+    def __parseCLIOnlines(self,lines):
 	try:
-	    fd=os.popen(self.getAttribute("pppd_list_users_command"))
-	    out_lines=fd.readlines()
-	    fd.close()
 	    online_list={}
-	    for line in out_lines:
+	    for line in lines:
 		sp=line.strip().split()
 		if len(sp)!=4:
-		    toLog("PPPd getonlines: invalid line %s"%line,LOG_ERROR)
+		    toLog("PPPd getOnlines: Can't line %s"%line,LOG_ERROR)
 		    continue
 		online_list[sp[0]]={"username":None,"in_bytes":sp[2],"out_bytes":sp[3]}
 	except:
 	    logException(LOG_ERROR)
 	return online_list
-
+####################################
+    def updateOnlines(self):
+	self.online=self.getOnlines()
+	
+####################################    
     def updateInOutBytes(self):
-	self.onlines=self.getOnlines()
-
+	self.updateOnlines()
+####################################
     def isOnline(self,user_msg):
 	return self.onlines.has_key(user_msg["port"])
-	
+####################################
     def getInOutBytes(self, user_msg):
 	try:
 	    port=user_msg["port"]
@@ -66,12 +78,15 @@ class PPPDRas(GeneralUpdateRas):
 	except:
 	    logException(LOG_ERRROR)
 	    return (-1,-1)
+####################################
 
     def handleRadAuthPacket(self,ras_msg):
-	ras_msg.setInAttrs({"User-Name":"username","port":"NAS-Port","unique_id":"port"})
+	ras_msg["unique_id"]="port"
+	ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port"})
 	ras_msg.setInAttrsIfExists({"User-Password":"pap_password","CHAP-Password":"chap_password"})
 	ras_msg.setAction("INTERNET_AUTHENTICATE")
 
+####################################
     def handleRadAcctPacket(self,ras_msg):
 	status_type=ras_msg.getRequestAttr("Acct-Status-Type")[0]
 	if status_type=="Start":

@@ -2,15 +2,17 @@
 
 function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 {/*	Create an Add edit style column. Also TR s are created when needed
+	parameter type("string",required): show td type, for 1 column table can be "left" and "right"
+					   and for 2 column tables can be "left1" "right1" "left2" "right2"
+
 	parameter double(boolean,optional): if true, create a td suitable for double column tables
 					    all of "left1" "left2" "right1" "right2" td s should have
 					    this flag set
 	parameter comment(boolean,optional): if true, create a td suitable for comments, both
 					    "left" and "right" tds should have this flag set
-	parameter type("string",required): show td type, for 1 column table can be "left" and "right"
-					   and for 2 column tables can be "left1" "right1" "left2" "right2"
 
 	parameter id("string",optional): set optional id tag of td WARNING XXX: not set for all type
+	parameter err(string,optional)
 */
     
     if(!is_null($content))

@@ -27,6 +27,7 @@ GENERAL_ERRORS={
     "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found",
     "FROM_VALUE_INVALID":"Invalid From value %s",
     "TO_VALUE_INVALID":"Invalid To value %s",
+    "ATTR_NOT_FOUND":"Attribute %s not found"
 }
 
 USER_ACTIONS_ERRORS={
@@ -53,24 +54,23 @@ USER_ERRORS={
     "UNKNOWN_ATTRIBUTE_ACTION":"Unknown attribute action %s",
     "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
     "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
-    "ACCESS_TO_USER_DENIED":"You have not access to user id %s"
+    "ACCESS_TO_USER_DENIED":"You have not access to user id %s",
+    "CANT_FIND_INSTANCE":"User %s is not online on %s %s",
+    "REL_EXP_DATE_REACHED":"Relative expiration date has reached",
+    "WRONG_PASSWORD":"Wrong password",
+    "CREDIT_FINISHED":"Credit has finished",
+    "MAX_CONCURRENT":"Maximum number of concurrent logins reached"
 }
 
 NORMAL_USER_LOGIN_ERRORS={
-    "WRONG_PASSWORD":"505:Wrong password",
-    "LOCKED":"647:User is locked",
-    "MAX_CONCURRENT":"502:Maximum number of concurrent logins reached",
-    "NO_APPLICABLE_RULE":"646: No rule can be applied",
-    "REL_EXP_DATE_REACHED":"708:relative expiration date has reached",
-    "ABS_EXP_DATE_REACHED":"708:absoloute expiration date has reached",
+    "LOCKED":"User is locked",
+    "NO_APPLICABLE_RULE":"No rule can be applied",
+    "ABS_EXP_DATE_REACHED":"absoloute expiration date has reached",
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
-    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded",
-    "CREDIT_FINISHED":"Credit has finished"
-
+    "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
 }
 
 VOIP_USER_LOGIN_ERRORS={
-    "MAX_CONCURRENT":"502:Maximum number of concurrent logins reached"
 }
 
 ADMIN_LOGIN_ERRORS={

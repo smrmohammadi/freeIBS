@@ -27,21 +27,24 @@ class LoadedUser:
 	return self.getBasicUser().getUserID()
 
     def hasNormalLogin(self):
-	return self.user_attrs.hasAttribute("normal_username")
+	return self.getUserAttrs().hasAttr("normal_username")
     
     def getNormalUsername(self):
-	return self.user_attrs.getAttribute("normal_username")
+	return self.getUserAttrs().getAttr("normal_username")
 	
     def hasAttr(self,attr_name):
-	return self.getUserAttrs().hasAttribute(attr_name)
+	return self.getUserAttrs().hasAttr(attr_name)
+
+    def userHasAttr(self,attr_name):
+	return self.getUserAttrs().userHasAttr(attr_name)
 
     def getUserInfo(self,date_type):
 	"""
 	    return a dic of user informations, useful for passing to interface
 	"""
 	return {"basic_info":self.getBasicUser().getInfo(date_type),
-    		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttributes(),date_type),
-		"raw_attrs":self.getUserAttrs().getAllAttributes()
+    		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttrs(),date_type),
+		"raw_attrs":self.getUserAttrs().getAllAttrs()
 	       }	
         
     def setOnlineFlag(self,new_status):

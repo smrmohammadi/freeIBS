@@ -1,9 +1,11 @@
+from core.group import group_main
 class AttributeHandler:
     def __init__(self,attr_updater_name):
 	"""
 	    attr_handler_name: name string representation of info holder we generate
 	"""
 	self.attr_handler_name=attr_updater_name
+	self.attr_holders=[]
 
     def getName(self):
 	return self.attr_handler_name
@@ -41,8 +43,7 @@ class AttributeHandler:
 	    attr_holder_class(Class): the class to be registered
 	    holder_attrs(list): list of attributes that will be passed to initializer of attr_holder
 	"""
-	self.attr_holder_class=attr_holder_class
-	self.attr_holder_attrs=holder_attrs
+	self.attr_holders.append((attr_holder_class,holder_attrs))
 
     def getAttrHolder(self,attr_name,attrs):
 	"""
@@ -50,8 +51,14 @@ class AttributeHandler:
 			       and all other relevant attributes
 	    attrs(dic or list): dic of attributes 
 	"""
-	arg_list=map(lambda x:attrs[x],self.attr_holder_attrs)
-	return apply(self.attr_holder_class,arg_list)
+	(attr_holder_class,attr_holder_attrs)=self.__findAttrHolder(attr_name)
+	arg_list=map(lambda x:attrs[x],attr_holder_attrs)
+	return apply(attr_holder_class,arg_list)
+
+    def __findAttrHolder(self,attr_name):
+	for (attr_holder_class,holder_attrs) in self.attr_holders:
+	    if attr_name in holder_attrs:
+		return (attr_holder_class,holder_attrs)
 
     ##########################################################
     def registerAttrSearcherClass(self,attr_searcher):
@@ -74,6 +81,9 @@ class UserAttributes:
 	"""
 	self.attributes=attributes
 	self.group_id=group_id
+
+    def __getitem__(self,key):
+	return self.getAttr(key)
     
     def __getGroupObj(self):
 	"""
@@ -81,14 +91,17 @@ class UserAttributes:
 	"""
 	return group_main.getLoader().getGroupByID(self.group_id)
     
-    def getAttribute(self,attr_name):
-	if self.hasAttribute(attr_name):
+    def getAttr(self,attr_name):
+	if self.userHasAttr(attr_name):
 	    return self.attributes[attr_name]
 	
-	return self.__getGroupObj().getAttribute(attr_name) 
+	return self.__getGroupObj().getAttr(attr_name) 
 
-    def hasAttribute(self,attr_name):
+    def userHasAttr(self,attr_name):
 	return self.attributes.has_key(attr_name)
 	
-    def getAllAttributes(self):
+    def hasAttr(self,attr_name):
+	return self.userHasAttr(attr_name) or self.__getGroupObj().hasAttr(attr_name)
+    
+    def getAllAttrs(self):
 	return self.attributes
