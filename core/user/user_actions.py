@@ -11,8 +11,6 @@ from core.user import user_main
 import re
 
 class UserActions:
-    CREDIT_CHANGE_ACTIONS={"ADD_USER":1}
-
     def insertUserAttrQuery(self,user_id,attr_name,attr_value):
 	"""
 	    XXX:change to use stored procedures
@@ -72,51 +70,6 @@ class UserActions:
 	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
 	
 
-#####################################################3
-    def logCreditChangeQuery(self,action,admin_id,user_ids,per_user_credit,admin_credit,remote_address,comment):
-	"""
-	    XXX: TO BE MOVED IN SEPERATE FILE    
-	
-	    log credit change to credit_change table
-	    action(string): action that credit changed in, should be referenced by self.CREDIT_CHANGE_ACTIONS
-			    WARNING: Always use self.CREDIT_CHANGE_ACTIONS members for action
-	    admin_id(integer): Admin issueing the credit change for user
-	    user_ids(list of integers): user ids that credit being changed
-	    per_user_credit(float): credit change for each of users
-	    admin_credit(float): credit admin spent, equals to count of users * per_user_credit
-	    remote_address(str): remote ip of admin while changing credit
-	    comment(str): comment of credit change
-	"""
-	change_id=self.__getNewCreditChangeID()
-	ibs_query=IBSQuery()
-	ibs_query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
-							"action":action,
-							"admin_id":admin_id,
-							"per_user_credit":per_user_credit,
-							"admin_credit":admin_credit,
-							"remote_addr":dbText(remote_address),
-							"comment":dbText(comment)
-							})
-	
-	def insertToCreditChangeUserID(user_id):
-	    ibs_query+=ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
-								    "credit_change_id":change_id})
-	map(insertToCreditChangeUserID,user_ids)
-	return ibs_query
-
-    def __getNewCreditChangeID(self):
-	"""
-	    return a new unique credit change id
-	"""
-    	return db_main.getHandle().seqNextVal("credit_change_id")
-
-    def __creditChangeCheckInput(self,remote_address,credit_change_comment):
-	"""
-	    check credit changed related inputs and raise exception on errors
-	"""
-	if iplib.checkIPAddrWithoutMask(remote_address)==0:
-	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_address)
-
 ####################################################
     def addNewUsers(self,_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment):
 	self.__addNewUsersCheckInput(_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment)
@@ -126,12 +79,12 @@ class UserActions:
 	try:
 	    user_ids=self.addNewUsersQuery(_count,credit,owner_name,group_name,ibs_query)
 	    creator_admin_obj=admin_main.getLoader().getAdminByName(creator_name)
-    	    ibs_query+=self.logCreditChangeQuery(self.CREDIT_CHANGE_ACTIONS["ADD_USER"],creator_admin_obj.getAdminID(),user_ids,credit,\
+    	    ibs_query+=user_main.getCreditChangeLogActions().logCreditChangeQuery("ADD_USER",creator_admin_obj.getAdminID(),user_ids,credit,\
 					admin_consumed_credit,remote_address,credit_change_comment)
 	    ibs_query.runQuery()
 	    return user_ids
 	except:
-	    admin_main.getActionManager().consumeDeposit(creator_name,-1*admin_consumed_credit,False) #readd deposit to admin
+	    admin_main.getActionManager().consumeDeposit(creator_name,-1*admin_consumed_credit,False) #re-add deposit to admin
 	    raise
 
 

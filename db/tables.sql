@@ -153,7 +153,7 @@ create table group_attrs (
 
 -- *************** USERS
 create table users (
-    user_id integer primary key,
+    user_id bigint primary key,
     owner_id integer references admins,
     credit numeric(12,2),
     group_id integer ,
@@ -162,36 +162,39 @@ create table users (
 
 create table normal_users (
     user_id integer references users,
-    normal_username text unique, 
+    normal_username text primary key, 
     normal_password text,
 );
 
-create sequence normal_user_add_save_id_seq;
+create sequence add_user_save_id_seq;
 
-create table normal_user_add_saves(
-    user_add_save_id integer,
-    add_date	timestamp
+create table add_user_saves(
+    add_user_save_id integer primary key,
+    add_date	timestamp without time zone default CURRENT_TIMESTAMP,
+    admin_id	integer references admins,
+    type	integer --1:Normal 2:VoIP
+    
 );
 
-create table normal_user_add_details(
-    user_add_save_id integer,
+create table add_user_save_details(
+    add_user_save_id integer references add_user_saves,
+    user_id bigint,
     username text,
     password text
 );
 
-
-
 create table voip_users (
-    user_id integer references users,
-    voip_username text unique, 
+    user_id bigint references users,
+    voip_username text primary key, 
+    voip_password text
 );
 
 create sequence users_user_id_seq;
 
 create table user_locks(
-    lock_id bigint,
+    lock_id bigint primary key,
     admin_id integer references admins,
-    user_id integer references users,
+    user_id bigint references users,
     reason text
 );
 
@@ -221,7 +224,6 @@ create table user_attrs (
 );
 
 create index user_attrs_user_id_index on user_attrs(user_id);
-
 -- ************************ CONFIGURATION
 
 create table defs (

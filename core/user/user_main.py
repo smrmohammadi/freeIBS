@@ -22,6 +22,14 @@ def init():
     global user_plugin_manager
     user_plugin_manager=user_plugin.UserPluginManager()
 
+    global credit_change_log_actions
+    from core.user.credit_change_log import CreditChangeLogActions
+    credit_change_log_actions=CreditChangeLogActions()
+
+    global add_user_save_actions
+    from core.add_user_save import AddUserSaveActions
+    add_user_save_actions=AddUserSaveActions()
+
     plugin_loader.loadPlugins(defs.IBS_CORE+"/user/plugins")
 
     from core.user.user_handler import UserHandler
@@ -42,3 +50,9 @@ def getUserLoader():
 
 def getUserPool():
     return user_pool
+
+def getCreditChangeLogActions():
+    return credit_change_log_actions
+
+def getAddUserSaveActions():
+    return add_user_save_actions

@@ -1,4 +1,5 @@
 from core.db import db_main
+import types
 
 class IBSQuery:
     """
@@ -15,8 +16,8 @@ class IBSQuery:
 	return self.__queries[_index]
     
     def __add__(self,query):
-	if isinstance(query,IBSQuery):
-	    map(self.addQuery,query.getQueries())
+	if type(query)==types.ListType or isinstance(query,IBSQuery):
+	    map(self.addQuery,query)
 	else:
 	    self.addQuery(query)
 	return self
