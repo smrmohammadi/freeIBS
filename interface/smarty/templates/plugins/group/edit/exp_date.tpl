@@ -19,7 +19,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input type=checkbox name="has_rel_exp" class=checkbox {if $group_attrs.has_rel_exp}checked{/if} onClick='rel_exp_select.toggle("rel_exp_date")'>
+	<input type=checkbox name="has_rel_exp" value="t" class=checkbox {if attrDefault($group_attrs,"has_rel_exp","has_rel_exp")!=""}checked{/if} onClick='rel_exp_select.toggle("rel_exp_date")'>
     {/addEditTD}
 
     {addEditTD type="left"}
@@ -27,7 +27,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input id="rel_exp_date" type=text name="rel_exp_date" value="{$group_attrs.rel_exp_date|default:""}" class=small_text > 
+	<input id="rel_exp_date" type=text name="rel_exp_date" value="{$group_attrs.rel_exp_date}" class=small_text > 
 	{relative_units default=`$group_attrs.rel_exp_date_unit` name="rel_exp_date_unit" id="rel_exp_date_unit" }
 	{$group_attrs.rel_exp_date_unit}
     {/addEditTD}
@@ -36,7 +36,7 @@
 {/editTemplate}
 <script language="javascript">
 	rel_exp_select.addByID("rel_exp_date",Array("rel_exp_date_unit"));
-{if $group_attrs.has_rel_exp}
+{if attrDefault($group_attrs,"has_rel_exp","has_rel_exp")!=""}
     rel_exp_select.select("rel_exp_date");
 {else}
     rel_exp_select.select(null);

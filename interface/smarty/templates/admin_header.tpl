@@ -16,7 +16,7 @@
 				<td class="Page_Top_Link">|</td>
 				<td class="Page_Top_Link">Username:{$auth_name}</td>
 				<td class="Page_Top_Link">|</td>
-				<td class="Page_Top_Link"><a class="Header_Top_links">Logout</a></td>
+				<td class="Page_Top_Link"><a class="Header_Top_links" href="/IBSng/admin/?logout=1">Logout</a></td>
 			</tr>
 		</table>
 		</td>

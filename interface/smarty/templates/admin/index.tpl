@@ -55,7 +55,7 @@
 		<td align="center">		
     {include file="err_head.tpl"}
 
-    <form method=POST>
+    <form method=POST action="/IBSng/admin/">
         {addEditTable title="Admin Login"}
 	{addEditTD type="left"}
 	    Username

@@ -2,10 +2,19 @@
 require_once("../inc/init.php");
 
 
-if (isset($_REQUEST["username"]) and isset($_REQUEST["password"]))
-    doLogin($_REQUEST["username"],$_REQUEST["password"]);    
+if (isInRequest("logout"))
+    doLogout();
+else if (isInRequest("username","password"))
+    doLogin($_REQUEST["username"],$_REQUEST["password"]);
 else
     interface();
+
+function doLogout()
+{
+    session_unset();
+    auth_init();
+    interface();
+}
 
 function doLogin($username,$password)
 {
@@ -22,11 +31,11 @@ function goAdminIndex()
 }
 
 
-function interface($msg=NULL)
+function interface($err=NULL)
 {
     $smarty=new IBSSmarty();
-    if(!is_null($msg))
-	$smarty->assign("err_msgs",$msg->getErrorMsgs());
+    if(!is_null($err))
+	$smarty->set_page_error($err->getErrorMsgs());
     $smarty->display("admin/index.tpl");    
 }
 

@@ -17,7 +17,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input class=text type=text name="group_name" value="{$group_name}">
+	<input class=text type=text name="group_name" value="{ifisinrequest name="group_name" default_var="group_name"}">
     {/addEditTD}
 
     {addEditTD type="left"}
@@ -26,7 +26,7 @@
 
     {addEditTD type="right"}
 	{if canDo("SEE ADMIN INFO")}
-	    {admin_names_select name=owner_name default=$owner_name}
+	    {admin_names_select name=owner_name default_request="owner_name" default="owner_name" }
 	{else}
 	    <input type=hidden name="owner_name" value="{$owner_name}">
 	    {$owner_name}
@@ -39,7 +39,7 @@
     {/addEditTD}
 
     {addEditTD type="right" comment=TRUE}
-	<textarea name=comment class=text>{$comment|strip}</textarea>
+	<textarea name=comment class=text>{strip}{ifisinrequest name="comment" default_var="comment"}{/strip}</textarea>
     {/addEditTD}
 {/addEditTable}
 {/editTemplate}

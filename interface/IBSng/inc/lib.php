@@ -151,4 +151,26 @@ function getTRColor($swap=FALSE)
     return $tr_last_color;
 }
 
+
+function attrDefault($target_attrs,$default_var,$default_request,$default="")
+{/*
+    return attribute default value, see attrDefault smarty plugin function for info about argumentes
+*/
+    if(isset($_REQUEST[$default_request]))
+	return $_REQUEST[$default_request];
+
+    else if (isset($target_attrs[$default_var]) and !is_null($target_attrs[$default_var]))
+	return $target_attrs[$default_var];
+    else
+	return $default;
+}
+
+function getTargetAttrsFromSmarty(&$smarty,$target)
+{
+    if($target=="user")
+	$target_attrs=$smarty->get_assigned_value(["user_attrs"])
+    else
+	$target_attrs=$smarty->get_assigned_value(["group_attrs"])
+}
+
 ?>

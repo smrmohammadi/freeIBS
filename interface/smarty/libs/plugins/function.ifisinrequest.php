@@ -2,9 +2,10 @@
 function smarty_function_ifisinrequest($params,&$smarty)
 {/*
     param name(string,required): name of key that is searched through request
-    param default_var(strin,optional): if name is not in request, return value of smarty variable
+    param default_var(string,optional): if name is not in request, return value of smarty variable
 				        default_var if it's available. if this param is not available or 
 					value is not set in smarty, default will be returned
+
     param default(string,optional): default value, if name is not in request, and default var is not set in smarty
 				    default is returned.
 				    if this param is not available , return an empty string
