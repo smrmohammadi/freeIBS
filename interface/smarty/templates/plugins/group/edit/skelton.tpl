@@ -5,7 +5,23 @@
 *}
 {include file="admin_header.tpl" title="Edit Group Attributes" selected="Group List"}
 {include file="err_head.tpl"}
-Group Name: {$group_name}
+{viewTable title="Group Information"}
+    {addEditTD type="left"}
+	Group ID
+    {/addEditTD}
+
+    {addEditTD type="right"}
+	{$group_id}
+    {/addEditTD}
+
+    {addEditTD type="left"}
+	Group Name
+    {/addEditTD}
+
+    {addEditTD type="right"}
+	    {$group_name}
+    {/addEditTD}
+{/viewTable}
 
 <form method=POST action="/IBSng/admin/plugins/edit.php">
 
@@ -17,7 +33,10 @@ Group Name: {$group_name}
 {foreach from=$edit_tpl_files item="tpl_file"}
     {include file=$tpl_file}    
 {/foreach}
-<input type=submit value=update>
+
+{attrTableFoot action_icon="ok" table_width="280"}
+{/attrTableFoot}
+
 </form>
 {addRelatedLink}
     <a href="/IBSng/admin/group/group_info.php?group_name={$group_name|escape:"url"}" class="RightSide_links">

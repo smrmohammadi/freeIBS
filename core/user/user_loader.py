@@ -43,8 +43,8 @@ class UserLoader:
 	    return complete user attributes containing voip and normal user attributes
 	"""
 	attrs=self.__fetchUserAttrs(user_id)
-	attrs=self.__mergeDics(attrs,self.__fetchNormalUserAttrsByUserID(user_id))	
-	attrs=self.__mergeDics(attrs,self.__fetchVoipUserAttrsByUserID(user_id))	
+	attrs.update(self.__fetchNormalUserAttrsByUserID(user_id))	
+	attrs.update(self.__fetchVoipUserAttrsByUserID(user_id))	
 	return attrs
 
     def getBasicUser(self,user_id):
@@ -83,15 +83,6 @@ class UserLoader:
 			 basic_user_info["creation_date"])
 			 
 			 
-    def __mergeDics(self,dic_base,dic_merge):
-	"""
-	    merge "dic_merge" into "dic_base"
-	"""
-	for key in dic_merge:
-	    dic_base[key]=dic_merge[key]
-	return dic_base
-
-
     def __fetchBasicUserInfo(self,user_id):
 	"""
 	    fetch basic user info by user id and return a dic of user informations or None if 

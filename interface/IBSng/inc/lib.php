@@ -133,9 +133,8 @@ function attrDefault($target_attrs,$default_var,$default_request,$default="")
 {/*
     return attribute default value, see attrDefault smarty plugin function for info about argumentes
 */
-    if(isset($_REQUEST[$default_request]))
+    if(isInRequest($default_request))
 	return $_REQUEST[$default_request];
-
     else if (isset($target_attrs[$default_var]) and !is_null($target_attrs[$default_var]))
 	return $target_attrs[$default_var];
     else

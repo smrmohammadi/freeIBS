@@ -19,21 +19,23 @@ class NormalUserAttrUpdater(AttrUpdater):
 	    generate_passwd is an integer, 0 means don't generate password and use normal_passwords instead
 	    positive values are same as password_lib.getPasswords _type, see function comments
 	    
-	    normal_save(bool): tells if we should save this username passwords in database so
-				username/passwords can be seen later
-				
+	    normal_save(str): tells if we should save this username passwords in database so
+				username/passwords can be seen later, 
+				If set to False or empty string it means don't save
+				else it'll be passed as comment
 				
 	    NOTE: For delete action none of arguments are necessary, 
 		  so just pass some empty values and it will be trashed when deleting
 	"""
+	self.registerQuery("user","change",self.changeQuery,[])
 	self.normal_username=normal_username
 	self.normal_password=normal_password
 	self.generate_password=generate_password
-	self.password_len=password_len
+	self.password_len=to_int(password_len,"Password Length")
 	self.normal_save=normal_save
 
     def deleteInit(self):
-	pass
+	self.registerQuery("user","delete",self.deleteQuery,[])
 
     def __parseNormalAttrs(self):
 	self.usernames=MultiStr(self.normal_username)
@@ -53,6 +55,8 @@ class NormalUserAttrUpdater(AttrUpdater):
 	
 	map(lambda password:password.checkPasswordChars(),self.passwords)
 	map(lambda username:user_main.getActionManager().checkNormalUsernameChars,self.usernames)
+	if self.password_len<0 or self.password_len>30:
+	    raise GeneralException(errorText("USER_ACTIONS","INVALID_PASSWORD_LENGTH")%password_len)
 
     def changeQuery(self,ibs_query,src,action,**args):
 	admin_obj=args["admin_obj"]
@@ -61,19 +65,27 @@ class NormalUserAttrUpdater(AttrUpdater):
 	self.__parseNormalAttrs()
 	self.__changeCheckInput(users,admin_obj)
 	
-	
 	i=0
 	for user_id in users:
 	    loaded_user=users[user_id]
 	    if loaded_user.hasAttr("normal_username"):
-		ibs_query+=user_main.getActionManager().updateNormalUserAttrsQuery(loaded_user.getUserID(),
+		ibs_query+=user_main.getActionManager().updateNormalUserAttrsQuery(user_id,
 										   self.usernames[i],
-										   self.passwords[i])
+										   self.passwords[i].getPassword())
 	    else:
-		ibs_query+=user_main.getActionManager().insertNormalUserAttrsQuery(loaded_user.getUserID(),
+		ibs_query+=user_main.getActionManager().insertNormalUserAttrsQuery(user_id,
 										   self.usernames[i],
-										   self.passwords[i])
+										   self.passwords[i].getPassword())
 	    i+=1
+
+	if self.normal_save:
+	    user_main.getAddUserSaveActions().newAddUser(ibs_query,
+							 users.keys(),
+							 self.usernames,
+							 self.passwords,
+							 admin_obj.getAdminID(),
+							 "Normal",
+							 self.normal_save)
 	return ibs_query
 
     def deleteQuery(self,ibs_query,src,action,**args):

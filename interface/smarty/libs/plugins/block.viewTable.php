@@ -31,10 +31,6 @@ function smarty_block_viewTable($params,$content,&$smarty,&$repeat)
 	else
 	    $color="red";
 
-	$action_icon="ok";
-	if(isset($params["action_icon"]) and in_array($params["action_icon"],array("edit","delete","add","ok")))
-	    $action_icon=$params["action_icon"];
-
 	$table_width=isset($params["table_width"])?$params["table_width"]:$table_width_default;
 
 	$id=isset($params["id"])?"id={$params["id"]}":"";

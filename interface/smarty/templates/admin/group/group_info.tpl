@@ -14,7 +14,7 @@
 
 
 *}
-{include file="admin_header.tpl" title="Group Information"}
+{include file="admin_header.tpl" title="Group Information" selected="Group List"} 
 {include file="err_head.tpl"}
 <form method=POST action="/IBSng/admin/plugins/edit.php">
     <input type=hidden name="group_name" value="{$group_name}">
@@ -26,7 +26,8 @@
 {include file="plugins/group/view/normal_charge.tpl"}
 
 
-<input type=submit value=edit >
+{attrTableFoot action_icon="edit" table_width="280"}
+{/attrTableFoot}
 
 </form>
 

@@ -66,7 +66,6 @@ function groupInfoPluginUpdate(&$update_helper)
 }
 
 //**************************************************** Normal Charge
-
 function normalChargeParser(&$parsed_arr,&$smarty,&$attrs)
 {
     if(isset($attrs["normal_charge"]))
@@ -101,7 +100,33 @@ function ownerNamePluginUpdate(&$update_helper)
     if(isInRequest("owner_name"))
 	$update_helper->addToUpdateAttrs("owner_name",$_REQUEST["owner_name"]);
 }
-
-
-
+//*************************************
+function normalAttrsPluginUpdate(&$update_helper)
+{
+    if(isInRequest("has_normal_username"))
+    {
+	$update_helper->addToUpdateAttrs("normal_username",$_REQUEST["normal_username"]);
+	$update_helper->addToUpdateAttrs("normal_save_usernames",isInRequest("normal_save_user_add"));
+	if(isInRequest("generate_password"))
+	{
+	    $update_helper->addToUpdateAttrs("normal_password","");
+	    $generate_password=0;
+	    if(isInRequest("password_character"))
+		$generate_password+=1;
+	    if(isInRequest("password_digit"))
+		$generate_password+=2;
+	
+	    $update_helper->addToUpdateAttrs("normal_generate_password",$generate_password);
+	    $update_helper->addToUpdateAttrs("normal_generate_password_len",$_REQUEST["password_len"]);
+	}
+	else
+	{
+	    $update_helper->addToUpdateAttrs("normal_generate_password",0);
+	    $update_helper->addToUpdateAttrs("normal_generate_password_len",0);
+	    $update_helper->addToUpdateAttrs("normal_password",$_REQUEST["password"]);
+	}
+    }
+    else
+	$update_helper->addToDelAttrs("normal_username");
+}
 ?>

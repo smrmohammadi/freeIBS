@@ -14,11 +14,13 @@
 
 
     {include file="plugins/user/view/single_user_info.tpl"}
+    {include file="plugins/user/view/normal_username.tpl"}
     {include file="plugins/user/view/exp_date.tpl"}
     {include file="plugins/user/view/multi_login.tpl"}
     {include file="plugins/user/view/normal_charge.tpl"}
 
-<input type=submit value="edit">
+{attrTableFoot action_icon="edit"}
+{/attrTableFoot}
 </form> 
 
 

@@ -41,17 +41,17 @@ class UserActions:
 	"""
 	    insert user normal attributes in "normal_users" table
 	"""
-	return ibs_db.createInsertQuery("normal_users",{"normal_username":normal_username,
-							"normal_password":normal_password,
-							"user_id=%s":user_id}
+	return ibs_db.createInsertQuery("normal_users",{"normal_username":dbText(normal_username),
+							"normal_password":dbText(normal_password),
+							"user_id":user_id}
 					)
 
     def updateNormalUserAttrsQuery(self,user_id,normal_username,normal_password):
 	"""
 	    update user normal attributes in "normal_users" table
 	"""
-	return ibs_db.createUpdateQuery("normal_users",{"normal_username":normal_username,
-							"normal_password":normal_password,
+	return ibs_db.createUpdateQuery("normal_users",{"normal_username":dbText(normal_username),
+							"normal_password":dbText(normal_password),
 							},"user_id=%s"%user_id
 					)
 

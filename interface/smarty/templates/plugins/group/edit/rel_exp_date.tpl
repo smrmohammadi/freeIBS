@@ -1,6 +1,6 @@
 {attrUpdateMethod update_method="relExpDate"}
 
-  {viewTable title="Expiration Dates" table_width=300}
+  {viewTable title="Expiration Dates"}
     {addEditTD type="left"}
 	Has Relative Expiration Date
     {/addEditTD}

@@ -13,7 +13,8 @@ table.Main_Page {
 	alignment:center;
 	text_alignment:center;
 	height:73%;
-	width:100%
+	width:100%;
+	font-size: 7pt; 
 }
 a:link.link_in_body{
     color: #990000;
@@ -245,7 +246,8 @@ td.Form_Title_red{
 	font-weight:bold; 
 	height:20;
 	direction:ltr ;
-	background-color:#9A1111 
+	background-color:#9A1111 ;
+	white-space:nowrap
 }
 
 td.Form_Title_Begin{ 
@@ -261,10 +263,11 @@ td.Form_Title_End{
 td.Form_Title_Top_Line{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #c0c0c0; 
+	color: #555555; 
 	font-weight:bold;
 	height:17;
-	background-color:#FFFFFF
+	background-color:#FFFFFF ;
+	white-space:nowrap
 }
 td.Form_Title_End_Line{ 
 	height:3;
@@ -277,7 +280,8 @@ td.Form_Title_orange{
 	font-weight:bold; 
 	height:20;
 	direction:ltr ;
-	background-color:#ff9c00 
+	background-color:#ff9c00 ;
+	white-space:nowrap
 }
 
 /*------------------------------------------------------*/
@@ -382,7 +386,8 @@ td.Form_Content_Row_Left_light{
 	height:20;
 	width:50%;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Right_light{ 
@@ -393,7 +398,8 @@ td.Form_Content_Row_Right_light{
 	width:50%;
 	height:20;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Left_2Col_light{ 
@@ -404,7 +410,8 @@ td.Form_Content_Row_Left_2Col_light{
 	height:20;
 	width:25%;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Right_2Col_light{ 
@@ -415,7 +422,8 @@ td.Form_Content_Row_Right_2Col_light{
 	width:25%;
 	height:20;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
 }
 td.Form_Content_Row_Left_dark{ 
 	font-family: Tahoma; 
@@ -425,7 +433,8 @@ td.Form_Content_Row_Left_dark{
 	height:20;
 	width:50%;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9 ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Right_dark{ 
@@ -436,7 +445,8 @@ td.Form_Content_Row_Right_dark{
 	width:50%;
 	height:20;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Left_2Col_dark{ 
@@ -447,7 +457,8 @@ td.Form_Content_Row_Left_2Col_dark{
 	height:20;
 	width:25%;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9 ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Right_2Col_dark{ 
@@ -458,7 +469,8 @@ td.Form_Content_Row_Right_2Col_dark{
 	width:25%;
 	height:20;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_Space{ 
@@ -476,12 +488,14 @@ td.Form_Content_Col_Space{
 td.Form_Content_Row_Left_userinfo_light{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #000000; 
+	color: #353535; 
 	font-weight:bold; 
 	height:20;
 	width:35%;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
+
 }
 
 td.Form_Content_Row_Right_userinfo_light{ 
@@ -492,7 +506,9 @@ td.Form_Content_Row_Right_userinfo_light{
 	width:35%;
 	height:20;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC ;
+	white-space:nowrap
+
 }
 
 td.Form_Content_Row_groupinfo_light{ 
@@ -504,17 +520,21 @@ td.Form_Content_Row_groupinfo_light{
 	height:20;
 	alignment:center ;
 	direction:ltr ;
-	background-color:#ECECEC
+	background-color:#ECECEC;
+	white-space:nowrap
+
 }
 td.Form_Content_Row_Left_userinfo_dark{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #000000; 
+	color: #353535; 
 	font-weight:bold; 
 	height:20;
 	width:35%;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9;
+	white-space:nowrap
+
 }
 
 td.Form_Content_Row_Right_userinfo_dark{ 
@@ -525,7 +545,8 @@ td.Form_Content_Row_Right_userinfo_dark{
 	width:35%;
 	height:20;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9 ;
+	white-space:nowrap
 }
 
 td.Form_Content_Row_groupinfo_dark{
@@ -537,7 +558,8 @@ td.Form_Content_Row_groupinfo_dark{
 	height:20;
 	alignment:center ;
 	direction:ltr ;
-	background-color:#D9D9D9
+	background-color:#D9D9D9 ;
+	white-space:nowrap
 }
 
 /*----------------------------------------------------------------------*/

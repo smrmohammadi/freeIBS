@@ -163,7 +163,7 @@ create table users (
 create table normal_users (
     user_id integer references users,
     normal_username text primary key, 
-    normal_password text,
+    normal_password text
 );
 
 create sequence add_user_save_id_seq;
@@ -172,8 +172,8 @@ create table add_user_saves(
     add_user_save_id integer primary key,
     add_date	timestamp without time zone default CURRENT_TIMESTAMP,
     admin_id	integer references admins,
-    type	integer --1:Normal 2:VoIP
-    
+    type	integer, --1:Normal 2:VoIP
+    comment	text
 );
 
 create table add_user_save_details(

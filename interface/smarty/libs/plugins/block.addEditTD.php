@@ -9,6 +9,8 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 					    "left" and "right" tds should have this flag set
 	parameter type("string",required): show td type, for 1 column table can be "left" and "right"
 					   and for 2 column tables can be "left1" "right1" "left2" "right2"
+
+	parameter id("string",optional): set optional id tag of td WARNING XXX: not set for all type
 */
     
     if(!is_null($content))
@@ -26,6 +28,8 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 	    $err=False;
         }
 
+	$id=isset($params["id"])?"id={$params["id"]}":"";
+
 	if(isset($params["double"])and $params["double"]=="TRUE" and isset($params["comment"]) and $params["comment"]=="TRUE")
 	{
 	    if($params["type"]=="left")
@@ -38,7 +42,7 @@ function smarty_block_addEditTD($params,$content,&$smarty,&$repeat)
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content}</nobr></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content} :</nobr></td>
 				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
@@ -89,7 +93,7 @@ END;
 		$ret=<<<END
 	<tr>
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content}</nobr></td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
 END;
 	    }
 	    else if ($params["type"]=="right1")
@@ -107,7 +111,7 @@ END;
 		<td class="Form_Content_Col_Space">&nbsp;</td>
 		
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content}</nobr></td>
+		<td class="Form_Content_Row_Left_2col_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
 
 END;
 	    }
@@ -140,7 +144,7 @@ END;
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content}</nobr></td>
+				<td class="Form_Content_Row_Left_textarea_td_{$color}"><nobr>{$content} :</nobr></td>
 				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
@@ -185,9 +189,9 @@ END;
 	    {
 		$color=getTRColor(TRUE);
 		$ret=<<<END
-	<tr>
+	<tr {$id}>
 		<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/begin_of_row_{$color}.gif"></td>
-		<td class="Form_Content_Row_Left_{$color}">{$err_star}<nobr>{$content}</nobr></td>
+		<td class="Form_Content_Row_Left_{$color}">{$err_star}<nobr>{$content} :</nobr></td>
 END;
 	    }
 	    else //type is right

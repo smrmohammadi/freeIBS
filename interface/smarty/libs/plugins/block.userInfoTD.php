@@ -73,7 +73,7 @@ END;
 				<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/top_right_of_comment_{$color}.gif"></td>
 			</tr>
 			<tr>
-				<td colspan="3" class="Form_Content_Row_Right_textarea_td_{$color}">{$content}</td>
+				<td colspan="3" class="Form_Content_Row_Right_textarea_td_{$color}"><nobr>{$content}</td>
 			</tr>
 			<tr>
 			<td class="Form_Content_Row_Textarea_corner"><img border="0" src="/IBSng/images/bottom_left_of_comment_{$color}.gif"></td>
@@ -116,7 +116,7 @@ END;
 	    {
 		$color=getTRColor();
 		return <<<END
-		<td class="Form_Content_Row_groupinfo_{$color}" align=center>{$content}</td>
+		<td class="Form_Content_Row_groupinfo_{$color}" align=center><nobr>{$content}</td>
 		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_{$color}.gif"></td>
 	<tr>
 		<td colspan="7" class="Form_Content_Row_Space"></td>

@@ -22,7 +22,7 @@ def generateRandomPassword(chars,_len):
     """
 	generate a random password from characters in "chars" and length of "_len"
     """
-    return "".join(lambda x:chars[random.randint(0,len(chars))],range(_len))
+    return "".join(map(lambda x:chars[random.randint(0,len(chars)-1)],range(_len)))
     
 
 class Password:

@@ -13,7 +13,7 @@ function smarty_function_ifisinrequest($params,&$smarty)
 				 , this param value will be returned. default behaviour is return value of name in $_REQUEST
 				  when this param is not available
 */
-    if(isset($_REQUEST[$params["name"]]))
+    if(isInRequest($params["name"]))
     {
 	if (isset($params["value"]))
 	    return $params["value"];

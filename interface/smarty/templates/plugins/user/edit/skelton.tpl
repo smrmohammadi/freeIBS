@@ -4,11 +4,24 @@
 {include file="admin_header.tpl" title="Edit User Attributes" selected="User Information"}
 {include file="err_head.tpl"}
 
-User ID: {$user_id}
 {if not $single_user}
+{headerMsg}
     Warning: When editing multiple users, user default values and group values are empty and ambigious
+{/headerMsg}    
 {/if}
-<form method=POST action="/IBSng/admin/plugins/edit.php">
+
+{viewTable title="User  Information" table_width="370"}
+
+    {addEditTD type="left"}
+	User ID
+    {/addEditTD}
+    {addEditTD type="right"}
+	{$user_id}
+    {/addEditTD}
+
+{/viewTable}
+
+<form method=POST action="/IBSng/admin/plugins/edit.php" name="user_edit">
 
     <input type=hidden name="target" value="user">
     <input type=hidden name="target_id" value="{$user_id}">
@@ -18,12 +31,14 @@ User ID: {$user_id}
 {foreach from=$edit_tpl_files item="tpl_file"}
     {include file=$tpl_file}    
 {/foreach}
-<input type=submit value=update>
+
+{attrTableFoot action_icon="ok"}
+{/attrTableFoot}
 </form>
 
 {addRelatedLink}
     <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}" class="RightSide_links">
-	User Info
+	User <b>{$user_id}</b> Info
     </a>
 {/addRelatedLink}
 

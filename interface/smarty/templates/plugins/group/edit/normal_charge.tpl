@@ -1,6 +1,6 @@
 {attrUpdateMethod update_method="normalCharge"}
 
-  {viewTable title="Internet Charge" table_width=300}
+  {viewTable title="Internet Charge"}
     {addEditTD type="left"}
 	Has Internet Charge
     {/addEditTD}

@@ -27,7 +27,7 @@ def init():
     credit_change_log_actions=CreditChangeLogActions()
 
     global add_user_save_actions
-    from core.add_user_save import AddUserSaveActions
+    from core.user.add_user_save import AddUserSaveActions
     add_user_save_actions=AddUserSaveActions()
 
     plugin_loader.loadPlugins(defs.IBS_CORE+"/user/plugins")

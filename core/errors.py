@@ -31,8 +31,6 @@ USER_ACTIONS_ERRORS={
     "INVALID_MULTI_LOGIN":"Invalid Multi Login Value",
     "CREDIT_NOT_FLOAT":"Credit must be a float number",
     "CREDIT_MUST_BE_POSTIVE":"Credit must be positive number",
-    "DUE_NOT_INTEGER":"Due must be an integer",
-    "PAID_MONEY_NOT_INTEGER":"Paid Money must be an integer",
     "INVALID_CREDIT_ACTION":"Invalid credit change action %s",
     "BAD_USERNAME":"Bad characters in username",
     "BAD_PASSWORD":"Bad characters in password",
@@ -40,7 +38,8 @@ USER_ACTIONS_ERRORS={
     "INVALID_REL_EXP_DATE":"Relative Expiration Date is Invalid",
     "INVALID_USER_COUNT":"Invalid count of users %s",
     "COUNT_NOT_INTEGER":"User count should be positive integer",
-    "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames"
+    "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
+    "INVALID_PASSWORD_LENGTH":"Invalid password length %s"
 }
 
 USER_ERRORS={

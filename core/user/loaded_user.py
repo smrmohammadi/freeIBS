@@ -33,7 +33,7 @@ class LoadedUser:
 	return self.user_attrs.getAttribute("normal_username")
 	
     def hasAttr(self,attr_name):
-	self.getUserAttrs().hasAttribute(attr_name)
+	return self.getUserAttrs().hasAttribute(attr_name)
 
     def getUserInfo(self,date_type):
 	"""
