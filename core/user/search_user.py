@@ -11,6 +11,7 @@ intersect
     and group_attrs.attr_name='charge_id' and group_attrs.attr_value='2' );
 """
 from core.lib.general import *
+from core.lib.multi_strs import MultiStr
 
 class Condition:
     def __init__(self,cond_dic):
@@ -41,15 +42,19 @@ class SearchTable:
     ############################# some helpers
     def getParsedValue(self,search_helper,dic_key,value_parser_method):
 	value=search_helper.getCondValue(dic_key)
-	if type(value)==types.StringType:
-	    value=(value,)
-	if value_parser_method!=None:
-	    value=map(lambda val:apply(value_parser_method,[val]),value)
+	if value_parser_method==MultiStr:
+	    value=MultiStr(value)
+	else:
+	    if type(value)==types.StringType:
+		value=(value,)
+		
+	    if value_parser_method!=None:
+	        value=map(lambda val:apply(value_parser_method,[val]),value)
 	
 	return value
 
     def createColGroup(self,col_name,value,op):
-	return "%s.%s %s %s"%(self.getTableName(),col_name,dbText(value),op)
+	return "%s.%s %s %s"%(self.getTableName(),col_name,op,dbText(value))
 
     def searchOnConds(self,search_helper,cond_key,attr_db_name,value_parser_method,op):
 	values=self.getParsedValue(search_helper,cond_key,value_parser_method)
@@ -57,8 +62,8 @@ class SearchTable:
 
     def search(self,db_name,values,op):
 	group=SearchUserGroup("or")
-	groups=map(lambda value:group.addGroup(self.createColGroup(db_col_name,dbText(value),op)),values)
-	self.addGroups(groups)
+	map(lambda value:group.addGroup(self.createColGroup(db_name,value,op)),values)
+	self.addGroup(group)
 
     def ltgtSearch(self,cond_key,cond_op_key,attr_db_name,value_parser_method=None):
 	"""
@@ -83,10 +88,11 @@ class SearchTable:
 	if search_helper.hasCondFor(cond_key):
 	    self.searchOnConds(search_helper,cond_key,db_col_name,value_parser_method,"=")
 
-    def likeStrSearch(self,search_helper,cond_key,cond_op_key,value_parser_method=None):
+    def likeStrSearch(self,search_helper,cond_key,cond_op_key,db_col_name,value_parser_method=None):
 	"""
 	"""
-	if search_helper.hasCondFor(cond_key):
+
+	if search_helper.hasCondFor(cond_key,cond_op_key):
 	    op=search_helper.getCondValue(cond_op_key)
 	    values=self.getParsedValue(search_helper,cond_key,value_parser_method)
 	    (op,values)=self.__applyLikeStrSearch(values,op)
@@ -94,9 +100,9 @@ class SearchTable:
 
     def __applyLikeStrSearch(self,values,op):
 	if op in ("like","ilike"):
-	    method=lambda x:"%"+`x`+"%"
+	    method=lambda x:"%"+str(x)+"%"
 	elif op == "starts_with":
-	    method=lambda x:"%"+`x`
+	    method=lambda x:"%"+str(x)
 	    op="ilike"
 	elif op == "equals":
 	    method=None
@@ -217,7 +223,23 @@ class SearchUserHelper:
     def getTable(self,table):
 	return self.tables[table]
 
+	
+    ############################################
+    def getSearchQuery(self):
+	"""
+	    return the search query for conditions set in tables. this method take care of empty queries
+	"""
+	query=self.createQuery()
+	if query=="":
+	    query="select user_id from users"
+	return query
+
+
     def createQuery(self):
+	"""
+	    create a database select query, by asking each table to give it's own query.
+	    WARNING: may return an empty string in case of no conditions
+	"""
 	table_query=self.__getTableQueries()
 	attrs_query=self.__createAttrsQuery(table_query["user_attrs"],table_query["group_attrs"])
 	queries=self.__filterNoneQueries(attrs_query,table_query["users"],table_query["normal_users"],table_query["voip_users"])
@@ -248,6 +270,76 @@ class SearchUserHelper:
 
 	return "select user_id from (%s) as filtered_attrs where count=%s"%(sub_query,len(self.getTable("user_attrs").getAttrs()))
     
+
+    ########################################
+    def getUserIDs(self,_from,to,order_by,desc):
+	"""
+	    return a tuple of (result_count,user_id_list) 
+	"""
+	query=self.getSearchQuery()
+	db_handle=db_main.getHandle(TRUE)
+	self.__createResultTable(db_handle,query)
+	result_count=self.__getResultCount()
+	db_dic=self.__applyOrderBy(db_handle,_from,to,order_by,desc)
+	self.__dropResultTable(db_handle)
+	db_handle.releaseHandle()
+	return (result_count,[m["user_id"] for m in db_dic])
+
+    def __createResultTable(self,db_handle,search_query):
+	db_handle.query("create temp table search_user_temp as (%s)"%search_query)
+
+    def __dropResultTable(self,db_handle):
+	db_handle.query("drop table search_user_temp")
+
+    def __getResultCount(self):
+	return db_handle.getCount("search_user_temp","true")
+
+    def __applyOrderBy(self,db_handle,_from,to,order_by,desc):
+	order_by_tables={"normal_username":"normal_users",
+			"user_id":"users",
+			"group_id":"users",
+			"creation_date":"users",
+			"owner_id":"users",
+			"credit":"users"
+		       }
+	if order_by in order_by_tables:
+	    table=order_by_tables[order_by]
+	else:
+	    table=None #no order by
+		
+	if table=="users":
+	    return self.__usersOrderBy(db_handle,_from,to,order_by,desc)
+	elif table=="normal_users":
+	    return self.__normalUsersOrderBy(db_handle,_from,to,order_by,desc)
+	else:
+	    return self.__emptyOrderBy(db_handle,_from,to)
+
+    def __usersOrderBy(self,db_handle,_from,to,order_by,desc):
+	return db_handle.get("users,search_user_temp","users.user_id=search_user_temp.user_id",_from,to,(order_by,desc),("users.user_id"))
+
+    def __emptyOrderBy(self,db_handle,_from,to):
+	return db_handle.get("search_user_temp","true",_from,to,"")
+
+    def __normalUsersOrderBy(self,db_handle,_from,to,order_by,desc):
+	self.__handleBySortCol(db_handle,_from,to,order_by,desc,"normal_users")
+
+    #####################################
+    def __handleBySortCol(self,db_handle,_from,to,order_by,desc,table):
+	self.__addSortCol(db_handle,"text")
+	self.__updateSortCol(db_handle,order_by,table)
+	return self.__sortColOrderBy(self,db_handle,_from,to,desc)
+
+
+    def __addSortCol(self,db_handle,_type):
+	db_handle.query("alter table search_user_temp add sort_col %s"%_type)
+
+    def __updateSortCol(self,db_handle,order_by,table):
+	db_handle.query("update search_user_temp set sort_col=%s from %s where search_user_temp.user_id=%s.user_id"%(order_by,table,table))
+	
+    def __sortColOrderBy(self,db_handle,_from,to,desc):
+	return db_handle.get("search_user_temp","true",_from,to,("sort_col",desc),("user_id"))
+    #######################################
+
 class SearchUserGroup:
     def __init__(self,op=""):
 	self.__groups=[]

@@ -42,14 +42,11 @@ class DBHandleQuery:
     
 def init():
     dbpool.initPool()
-    global handle_query
-    handle_query=DBHandleQuery()
-
     from core.event import daily_events
     daily_events.addLowLoadJob(vacuumDB,[])
 
-def getHandle():
-    return handle_query
+def getHandle(dedicated=False):
+    return DBHandleQuery(dedicated)
 
 def vacuumDB():
     getHandle().query("vacuum analyze")

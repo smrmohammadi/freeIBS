@@ -1,4 +1,4 @@
-Accounting based on mac
+Accounting based on mac address
 Caller ID Based Authentication
 Dialup/E1
 VoIP
@@ -29,7 +29,8 @@ Save Online User States/Update users when crash
 Diffrent Databases/Hosts for log tables
 Session Limit
 Ras Names
-ALLOW ALL USERS FLAG
+"ALLOW ALL USERS LOGIN" FLAG
+attr exists user search
 
 Interface:
         Charge add new voip rule

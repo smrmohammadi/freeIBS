@@ -97,12 +97,13 @@ class NormalUserAttrUpdater(AttrUpdater):
 	return ibs_query
 	
 
-class NorlamUserAttrSearcher(AttrSearcher):
+class NormalUserAttrSearcher(AttrSearcher):
     def run(self):
 	normal_table=self.getSearchHelper().getTable("normal_users")
 	normal_table.likeStrSearch(self.getSearchHelper(),
 			           "normal_username",
 		    		   "normal_username_op",
+				   "normal_username",
 			           MultiStr
 				  )
 
@@ -115,3 +116,5 @@ class NormalUserAttrHandler(attribute.AttributeHandler):
 				      "normal_generate_password",
 				      "normal_generate_password_len",
 				      "normal_save_usernames"])
+	self.registerAttrSearcherClass(NormalUserAttrSearcher)
+	

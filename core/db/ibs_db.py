@@ -1,5 +1,7 @@
+import types
 from core.ibs_exceptions import *
 from core import defs
+
 
 class ibs_db: #abstract parent class for all db implementions. Children must implement esp. query and connect 
     connHandle=None
@@ -54,26 +56,42 @@ class ibs_db: #abstract parent class for all db implementions. Children must imp
 
     
     def get(self,table,condition="true",from_=0,to=-1,orderBy="",rows=[]):
+	"""
+	    orderBy (str or tuple): if it's an string, it will be placed after the order by clause
+				    if it's a tuple, it'll interpreted as (col_name,desc_flag) where desc_flag
+				    is a boolean telling if it should be ordered desc.
+	
+	"""
         query="select "
-        if rows==[]:
+        if len(rows)==0:
             query+="*"
         else:         
-            for m in rows:
-                query+=m+","
-            query=query[:-1]
+            query+=",".join(rows)
 
         query += " from " + table + " where " + condition + " "
         
         if orderBy != "":
-            query += "order by " + orderBy
+	    order_by_clause=self.__createOrderBy(orderBy)
+
+            query += "order by %s"%order_by_clause
+
         if from_ >0:
             query +=" offset " + str(from_)
-
         if to > from_:
             query +=" limit " + str(to-from_)
 
         result=self.query(query)
         return self.getDictResult(result)
+
+    def __createOrderBy(self,order_by):
+	if type(order_by)==types.StringType:
+	    return order_by
+	elif type(order_by)==types.TupleType:
+	    if order_by[1]:	
+	        desc="desc"
+	    else:
+	        desc="asc"
+	    return "%s %s"%(order_by[0],desc)
 
     def selectQuery(self,query):
 	result=self.query(query)
@@ -121,18 +139,11 @@ def createInsertQuery(table,dict_values):
 	create and return an insert query to insert "dict_values" into "table"
 	"dict_values" is in form {column_name=>value}
     """
-    if len(dict_values)<1:
-        raise dbException("Empty values for insert")
+    if len(dict_values)==0:
+        raise DBException("Empty values for insert")
     
-    names="("
-    values="("
-    for name in dict_values:
-        names += str(name)+","
-        values += str(dict_values[name])+","
-    names=names[:-1]
-    values=values[:-1]
-    names+=") "
-    values+=") "
+    names="("+",".join(dict_values.keys())+")"
+    values="("+",".join(dict_values.values())+")"
     return "insert into %s %s VALUES %s ;"%(table,names,values)
 
 
@@ -141,13 +152,10 @@ def createUpdateQuery(table,dict_values,condition):
 	create query to update "dict_values" with condition "condition" on "table" 
 	dict_value is in form {column_name=>value}
     """
-    if len(dict_values)<1:
-        raise dbException("Empty values for update")
-    query="update %s set " % table
-    for name in dict_values:
-        query+=" %s = %s ,"%(name,dict_values[name])
-    query=query[:-1]
-    query+=" where %s ;"%condition
+    if len(dict_values)==0:
+        raise DBException("Empty values for update")
+    set_list=map(lambda name:"%s = %s"%(name,dict_values[name]),dict_values)
+    query="update %s set %s where %s ;" % (table,",".join(set_list),condition)
     return query 
 
 def createDeleteQuery(table,condition):

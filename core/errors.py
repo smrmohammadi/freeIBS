@@ -1,7 +1,7 @@
 from core.ibs_exceptions import *
 
 GENERAL_ERRORS={
-    "ERROR_TEXT":"Can't find Error Text",
+    "NO_ERROR_TEXT":"Can't find Error Text",
     "USER_NOT_FOUND":"User not found",
     "NOT_ONLINE":"User %s is not online on %s , %s", #arguments username,ras_ip,port
     "INVALID_AUTH_TYPE":"Invalid Authentication type",
@@ -24,7 +24,9 @@ GENERAL_ERRORS={
     "INVALID_TIME_STRING":"Invalid Time String %s",
     "TIME_OUT_OF_RANGE":"Time Out of Range",
     "INVALID_DAY_OF_WEEK":"\"%s\" is not a valid day of week",
-    "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found"
+    "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found",
+    "FROM_VALUE_INVALID":"Invalid From value %s",
+    "TP_VALUE_INVALID":"Invalid From value %s",
 }
 
 USER_ACTIONS_ERRORS={
@@ -187,50 +189,26 @@ def errorText(event,error,add_error_key=True):
 	       after the returned string and overrid %s values
     """
     try:
-        if event=="NORMAL_USER_LOGIN":
-	    err_str=NORMAL_USER_LOGIN_ERRORS[error]
-
-        elif event=="USER_ACTIONS":
-	    err_str=USER_ACTIONS_ERRORS[error]
-
-        elif event=="USER":
-	    err_str=USER_ERRORS[error]
-
-        elif event=="VOIP_USER_LOGIN":
-	    err_str=VOIP_USER_LOGIN_ERRORS[error]
-
-        elif event=="GENERAL":
-	    err_str=GENERAL_ERRORS[error]
-
-        elif event=="PLUGINS":
-	    err_str=PLUGIN_ERRORS[error]
-	
-	elif event=="ADMIN_LOGIN":
-	    err_str=ADMIN_LOGIN_ERRORS[error]
-
-	elif event=="ADMIN":
-	    err_str=ADMIN_ERRORS[error]
-
-	elif event=="PERMISSION":
-	    err_str=PERM_ERRORS[error]
-
-	elif event=="DEFS":
-	    err_str=DEFS_ERRORS[error]
-
-	elif event=="GROUPS":
-	    err_str=GROUP_ERRORS[error]
-
-	elif event=="CHARGES":
-	    err_str=CHARGE_ERRORS[error]
-
-	elif event=="RAS":
-	    err_str=RAS_ERRORS[error]
-
-	elif event=="IPPOOL":
-	    err_str=IPPOOL_ERRORS[error]
+	error_map={"NORMAL_USER_LOGIN":NORMAL_USER_LOGIN_ERRORS,
+		   "USER_ACTIONS":USER_ACTIONS_ERRORS,
+		   "USER":USER_ERRORS,
+		   "VOIP_USER_LOGIN":VOIP_USER_LOGIN_ERRORS,
+		   "GENERAL":GENERAL_ERRORS,
+		   "PLUGINS":PLUGIN_ERRORS,
+		   "ADMIN_LOGIN":ADMIN_LOGIN_ERRORS,
+		   "ADMIN":ADMIN_ERRORS,
+		   "PERMISSION":PERM_ERRORS,
+		   "DEFS":DEFS_ERRORS,
+		   "GROUPS":GROUP_ERRORS,
+		   "CHARGES":CHARGE_ERRORS,
+		   "RAS":RAS_ERRORS,
+		   "IPPOOL":IPPOOL_ERRORS
+		  }
+		   
+	err_str=error_map[event][error]
 
 	else:
-	    raise GeneralException(GENERAL_ERRORS["ERROR_TEXT"])
+	    raise GeneralException(GENERAL_ERRORS["NO_ERROR_TEXT"])
 
 	if add_error_key:
 	    err_str="%s|%s"%(error,err_str)
@@ -238,5 +216,5 @@ def errorText(event,error,add_error_key=True):
 
     except:
 	logException(LOG_ERROR,"errorText: can't find error for %s,%s"%(event,error))
-	raise GeneralException(GENERAL_ERRORS["ERROR_TEXT"])
+	raise GeneralException(GENERAL_ERRORS["NO_ERROR_TEXT"])
 
