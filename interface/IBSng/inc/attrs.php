@@ -42,6 +42,20 @@ function multiLoginParser(&$parsed_arr,&$smarty,&$attrs)
     assignToParsedIfExists($parsed_arr,$attrs,"multi_login");
 }
 
+
+function multiLoginPluginUpdate(&$update_helper)
+{
+    $to_del_attrs=array();
+    $update_attrs=array();
+
+    if(!isInRequest("has_multi_login"))
+	$to_del_attrs[]="multi_login";
+    else
+	$update_attrs["multi_login"]=$_REQUEST["multi_login"];
+
+    $update_helper->updateTargetAttrs($update_attrs,$to_del_attrs,FALSE);
+}
+
 //**************************************************** Group Info
 
 function groupInfoPluginUpdate(&$update_helper)

@@ -20,7 +20,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 	}
 	else
 	{
-	    $table_width_default=260;
+	    $table_width_default=280;
 	    $colspans=4;
 	}
 

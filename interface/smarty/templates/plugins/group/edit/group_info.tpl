@@ -44,4 +44,22 @@
 {/addEditTable}
 {/editTemplate}
 
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
+	Group List
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name}" class="RightSide_links">
+	{$group_name} Group Info
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Expiration Date Edit"}
+Basic group informations can be changed here. Also owner of group is changable if you have relevant permission.
+{/setAboutPage}
+
+
+
 {include file="admin_footer.tpl"}

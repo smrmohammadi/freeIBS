@@ -10,33 +10,29 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-<center>
-    <table>
-	<tr>	
-	    <td colspan=2 align=center>
-		Add New Group {helpicon subject="add new group" category="group"}
-	<tr {ifibserr varname="group_name_err" add="bgcolor=red"} >
-	    <td>
-		Group Name:
-	    <td>
-		<input type=text name=group_name value="{$group_name}">
-	    <td>
-		{helpicon subject="group name" category="group"}
-	    
-	<tr {ifibserr varname="comment_err" add="bgcolor=red"}>
-	    <td>
-		Comment:
-	    <td>
-		<textarea name=comment>
-		    {$comment|strip}
-		</textarea>
-	    <td>
+    {addEditTable title="Add New Group"}
 
-	<tr>
-	    <td colspan=2>
-		<input type=submit name=submit>
+	{addEditTD type="left" err="name_err"}
+	    Group Name
+	{/addEditTD}
 
-    </table>
-</center>
+	{addEditTD type="right"}
+	    <input type=text class=text name=group_name value="{$group_name}">
+	    {helpicon subject='group name' category='group'}    
+	{/addEditTD}
+	
+	{addEditTD type="left" err="comment_err" comment=TRUE}
+	    Comment
+	{/addEditTD}
+	{addEditTD type="right" comment=TRUE}
+	    <textarea name=comment class=text>{$comment|strip}</textarea>
+	{/addEditTD}
+	
+    {/addEditTable}
 </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
+	 Group List
+    </a>
+{/addRelatedLink}
 {include file="admin_footer.tpl"}

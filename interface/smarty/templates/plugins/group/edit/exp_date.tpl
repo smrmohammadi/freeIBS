@@ -5,8 +5,7 @@
     <script language="javascript" src="/IBSng/js/dom_container.js"> </script>
     <script language="javascript">
 	rel_exp_select=new DomContainer();
-        rel_exp_select.setOnSelect("visibility","");
-        rel_exp_select.setOnUnSelect("visibility","hidden");
+	rel_exp_select.disable_unselected=true;
     </script>
 {/literal}
 
@@ -27,8 +26,8 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input id="rel_exp_date" type=text name="rel_exp_date" value="{$group_attrs.rel_exp_date}" class=small_text > 
-	{relative_units default=`$group_attrs.rel_exp_date_unit` name="rel_exp_date_unit" id="rel_exp_date_unit" }
+	<input id="rel_exp_date" type=text name="rel_exp_date" value="{attrDefault target="group" default_var="multi_login" default_request="multi_login"}" class=small_text > 
+	{relative_units name="rel_exp_date_unit" id="rel_exp_date_unit" default_var="rel_exp_date_unit" default_request="rel_exp_date_unit" target="group"}
 	{$group_attrs.rel_exp_date_unit}
     {/addEditTD}
 
@@ -42,5 +41,24 @@
     rel_exp_select.select(null);
 {/if}
 </script>
+
+
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
+	Group List
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name}" class="RightSide_links">
+	{$group_name} Group Info
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="Expiration Date Edit"}
+You can set expiration date, for users who are member of this group.
+{/setAboutPage}
+
+
 
 {include file="admin_footer.tpl"}

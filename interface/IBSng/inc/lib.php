@@ -168,9 +168,9 @@ function attrDefault($target_attrs,$default_var,$default_request,$default="")
 function getTargetAttrsFromSmarty(&$smarty,$target)
 {
     if($target=="user")
-	$target_attrs=$smarty->get_assigned_value(["user_attrs"])
+	$target_attrs=$smarty->get_assigned_value("user_attrs");
     else
-	$target_attrs=$smarty->get_assigned_value(["group_attrs"])
+	$target_attrs=$smarty->get_assigned_value("group_attrs");
 }
 
 ?>

@@ -9,7 +9,9 @@ function DomContainer()
     this.set_on_select=Array(); /*array of arrays*/
     this.set_on_unselect=Array(); /*array of arrays*/
     this.__selected="";
+    this.disable_unselected=false;
     
+    this.disable=disable
     this.setAttribute=setAttribute;
     this.__addObj=__addObj;
     this.addByID=addByID;
@@ -19,19 +21,29 @@ function DomContainer()
     this.toggle=toggle;
     this.__getObjByID=__getObjByID;
     this.__setSelectedAttrs=__setSelectedAttrs;
+    this.__setSelectedAttr=__setSelectedAttr;
     this.__setUnselectedsAttrs=__setUnselectedsAttrs;
-    this.__addDependents=__addDependents;
     this.__setUnselectedAttr=__setUnselectedAttr;
+    this.__addDependents=__addDependents;
+
 }
     function setAttribute(obj,attr_name,attr_value)
     {
 	eval("obj.style."+attr_name+"=attr_value");
     }
 
+    function disable(obj,disable_status)
+    {
+	if(obj && obj.disabled!=undefined)
+	    obj.disabled=disable_status;
+    }
+    
     function __addObj(obj)
     {
 	this.objs.push(obj);
     }
+
+
 
     function addByID(dom_id,dependent_ids)
     {/*add a new element with id "dom_id"
@@ -97,14 +109,24 @@ function DomContainer()
 	    
 	obj=arr[0];
 	dependents=arr[1];
+	this.__setSelectedAttr(obj);
+	for (dep_index in dependents)
+	    this.__setSelectedAttr(dependents[dep_index]);
+    }
+
+
+    function __setSelectedAttr(obj)
+    {
 	for (attr_index in this.set_on_select)
 	{
 	    attr_name=this.set_on_select[attr_index][0];
 	    attr_value=this.set_on_select[attr_index][1];
 	    this.setAttribute(obj,attr_name,attr_value);
-	    for (dep_index in dependents)
-		this.setAttribute(dependents[dep_index],attr_name,attr_value);
 	}
+
+	if(this.disable_unselected)
+	    this.disable(obj,false);
+
     }
     
     function __setUnselectedsAttrs(id)
@@ -129,4 +151,8 @@ function DomContainer()
 	    attr_value=this.set_on_unselect[attr_index][1];
 	    this.setAttribute(obj,attr_name,attr_value);
 	}
+
+	if(this.disable_unselected)
+	    this.disable(obj,true);
+
     }

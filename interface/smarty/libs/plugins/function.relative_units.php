@@ -28,7 +28,7 @@ function smarty_function_relative_units($params,&$smarty)
 			      $selected);
 
 
-    $select_arr["selected"]=$selected
+    $select_arr["selected"]=$selected;
     return smarty_function_html_options($select_arr,$smarty);
 }
 ?>
