@@ -198,6 +198,15 @@ class AllRestrictedSingleValuePermission(SingleValuePermission):
 	if new_val not in self.VALUES:
 	    self.newValueException(errorText("PERMISSION","INVALID_PERMISSION_VALUE")%new_val)
 
+    def check(self,admin_obj,admin_perm_obj,user_id,owner_id):
+	"""
+	    user_id: id of user we want to check if we can change credit
+	    owner_id: owner of user
+	"""
+	if admin_perm_obj.getValue()=="Restricted" and owner_id!=admin_obj.getAdminID():
+	    raise PermissionException(errorText("ADMIN","ACCESS_TO_USER_DENIED")%user_id)
+
+
 #CATEGORY CLASSES
 class UserCatPermission:
     def getCategory(self):

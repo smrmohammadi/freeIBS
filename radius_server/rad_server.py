@@ -8,10 +8,10 @@ from core.threadpool import thread_main
 import socket
 
 
+radius_server_started=False
+
 def init():
     global radius_server_started
-    radius_server_started=False
-
     if defs.RADIUS_SERVER_ENABLED==0:
 	return
 

@@ -59,7 +59,7 @@ def start():
 	    print "Successfully initialized, entering event loop ..."
     	    event.startLoop()
 	except:
-#	    core.main.mainThreadShutdown()
+	    core.main.mainThreadShutdown()
 	    err_text=ibs_exceptions.getExceptionText()
 	    print err_text
 	    logToSysLog(err_text)

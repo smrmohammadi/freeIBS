@@ -14,10 +14,3 @@ class ChangeUserCredit (AllRestrictedSingleValuePermission,UserCatPermission,Per
 	self.addAffectedPage("User->Edit Attributes")
 	self.addDependency("GET USER INFORMATION")	
 
-    def check(self,admin_obj,admin_perm_obj,user_id,owner_id):
-	"""
-	    user_id: id of user we want to check if we can change credit
-	    owner_id: owner of user
-	"""
-	if admin_perm_obj.getValue()=="Restricted" and owner_id!=admin_obj.getAdminID():
-	    raise PermissionException(errorText("ADMIN","ACCESS_TO_USER_DENIED")%user_id)

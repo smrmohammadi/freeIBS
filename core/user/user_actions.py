@@ -404,4 +404,15 @@ class UserActions:
 		
 	return map(lambda dic:dic["user_id"],user_ids)
 
+##################################################################
+    def killUser(self,user_id,ras_ip,unique_id_val):
+	"""
+	    kill user on "ras_ip" and "unique_id_val" and check that user is "user_id"
+	"""
+	ras_id=ras_main.getLoader().getRasByIP(ras_ip).getRasID()
+	user_obj=user_main.getOnline().getUserObjByUniqueID(ras_id,unique_id_val)
+	if user_obj==None or user_obj.getUserID()!=user_id:
+	    raise GeneralException(errorText("GENERAL","NOT_ONLINE"%(user_id,ras_ip,unique_id_val)))
+	instance=user_obj.getInstanceFromUniqueID(ras_id,unique_id_val)
+	user_obj.getUserType().killInstance(instance)
 	

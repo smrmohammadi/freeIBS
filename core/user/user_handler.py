@@ -179,4 +179,16 @@ class UserHandler(handler.Handler):
 
     def __canDeleteUser(self,loaded_user,requester):
 	requester.canDo("DELETE USER",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
+##############################################################
+    def killUser(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("user_id","ras_ip","unique_id_val")
+	requester=request.getAuthNameObj()
+	user_id=to_int(request["user_id"],"user_id")
+	loaded_user=user_main.getUserPool().getUserByID(user_id)
+	self.__canKillUser(loaded_user,requester)
+	return user_main.getActionManager().killUser(user_id,request["ras_ip"],request["unique_id_val"])
+
+    def __canKillUser(self,loaded_user,requester):
+	requester.canDo("KILL USER",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 	

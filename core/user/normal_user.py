@@ -78,3 +78,4 @@ class NormalUser:
 	"""
 	(in_bytes,out_bytes)=self.getInOutBytes(instance)
     	return {"in_bytes":in_bytes,"out_bytes":out_bytes,"normal_username":self.user_obj.getUserAttrs()["normal_username"]}
+	
