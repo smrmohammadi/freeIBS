@@ -79,7 +79,6 @@ class PPPDRas(GeneralUpdateRas):
 	    logException(LOG_ERROR)
 	    return (-1,-1)
 ####################################
-
     def handleRadAuthPacket(self,ras_msg):
 	ras_msg["unique_id"]="port"
 	ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port"})
@@ -116,7 +115,7 @@ class PPPDRas(GeneralUpdateRas):
 	"""
 	if user_msg["action"]=="apply":
 	    try:
-		return os.system("%s %s %s %s"%(self.getAttribute("pppd_apply_bandwidth_limit"),self.getRasIP(),user_msg["port"],user_msg["limit_kbytes"]))
+		return os.system("%s %s %s %s"%(self.getAttribute("pppd_apply_bandwidth_limit"),self.getRasIP(),user_msg["port"],user_msg["rate_kbytes"]))
 	    except:
 		logException(LOG_ERROR)
 		return False

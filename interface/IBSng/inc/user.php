@@ -55,6 +55,15 @@ class ChangeUserCredit extends Request
     }
 }
 
+class DelUser extends Request
+{
+    function DelUser($user_id,$comment,$del_connection_logs)
+    {
+	parent::Request("user.delUser",array("user_id"=>$user_id,
+		    			     "delete_comment"=>$comment,
+					     "del_connection_logs"=>$del_connection_logs));
+    }
+}
 
 function getUsersInfoByUserID(&$smarty,$user_ids)
 {/*return a list of user_infos of users with id in $user_ids

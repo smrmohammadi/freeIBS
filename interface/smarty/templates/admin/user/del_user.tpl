@@ -1,29 +1,30 @@
 {include file="admin_header.tpl" title="Change Credit" selected="User Information"}
 {include file="err_head.tpl"}
-
-{if isset($change_successfull) and $change_successfull}
-    {include file="admin/user/user_pages_redirect_user_info.tpl" msg="Credit Changed Successfully"}
-{else}
-    {include file="admin/user/user_pages_user_id_header.tpl"}    
-    <form method=POST action="change_credit.php">
+{headerMsg var_name="delete_successful"}
+    User(s) Deleted Successfully
+{/headerMsg}
+{include file="admin/user/user_pages_user_id_header.tpl"}    
+<form method=POST action="del_user.php">
     <input type=hidden name=user_id value="{$user_id}">
-    {addEditTable title="Change Credit"}
-	{addEditTD type="left" err="credit_err"}
-	    Credit Change Amount
-	{/addEditTD}
-	{addEditTD type="right"}
-	    <input name="credit" value="{ifisinrequest name="credit"}" class=text>
-	{/addEditTD}
+    <input type=hidden name="delete" value=1>
+    {addEditTable title="Delete User"}
 	
 	{addEditTD type="left"}
-	    Credit Change Comment
+	    Comment
 	{/addEditTD}
 	{addEditTD type="right"}
-	    <input name="credit_comment" value="{ifisinrequest name="credit_comment"}" class=text>
+	    <input name="delete_comment" value="{ifisinrequest name="delete_comment"}" class=text>
 	{/addEditTD}
+
+	{addEditTD type="left"}
+	    Delete User(s) Connection Logs
+	{/addEditTD}
+	{addEditTD type="right"}
+	    <input type=checkbox name="delete_connection_logs" {checkBoxValue name="delete_connection_logs"}>
+	{/addEditTD}
+
     {/addEditTable}
-    </form>
-{/if}
+</form>
 
 {addRelatedLink}
     <a href="/IBSng/admin/user/user_info.php?user_id_multi={$user_id|escape:"url"}" class="RightSide_links">
@@ -38,7 +39,7 @@
 {/addRelatedLink}
 
 {setAboutPage title="User Info"}
-You can increase or decrease user credit in this page
+You can delete user(s) here!
 {/setAboutPage}
 
 {include file="admin_footer.tpl"}

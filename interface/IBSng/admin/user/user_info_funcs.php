@@ -40,6 +40,8 @@ function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
 function intShowSingleUserInfoAssignValues(&$smarty,$user_id,$user_info)
 {
     $smarty->assign("can_change",canDo("CHANGE USER ATTRIBUTES",null,(int)$user_id,$user_info[0]["basic_info"]["owner_id"]));
+    $smarty->assign("can_delete",canDo("DELETE USER",null,(int)$user_id,$user_info[0]["basic_info"]["owner_id"]));
+
     intSetSingleUserGroupAttrs($smarty,$user_info[0]);
 }
 

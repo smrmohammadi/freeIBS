@@ -144,7 +144,7 @@
 
 	    {listTD extra="onClick='event.cancelBubble=true;'"}
 		    
-		<a onClick="toggleVisibility('{$info_dic.user_id}'); return false;" href="#">
+		<a onClick="showReportLayer('{$info_dic.user_id}',this); return false;" href="#">
 		    Details
 		</a>
 		{reportDetailLayer name=`$info_dic.user_id` title="Report Details"}

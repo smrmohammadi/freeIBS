@@ -6,7 +6,10 @@ from core.lib.day_of_week import *
 from core.ibs_exceptions import *
 from core.errors import errorText
 from core.db import db_main,ibs_db
+from core.db.ibs_query import IBSQuery
 from core.ras import ras_main
+from core.user import user_main
+from core.group import group_main
 
 class ChargeActions:
     CHARGE_TYPES=["Internet","VoIP"]
@@ -88,6 +91,8 @@ class ChargeActions:
 					      "comment":dbText(comment),
 					      "visible_to_all":dbText(visible_to_all)
 					     },"charge_id=%s"%charge_id)
+
+
 ###########################################################
 
     def addInternetChargeRule(self,charge_name,start_time,end_time,day_of_weeks,cpm,cpk,\
@@ -396,13 +401,20 @@ class ChargeActions:
 	"""
 	    delete charge_rule with id "charge_rule_id" from db
 	"""
+	query=self.__delChargeRuleTotallyQuery(charge_rule_id,charge_obj)
+	db_main.getHandle().transactionQuery(query)
+
+
+    def __delChargeRuleTotallyQuery(self,charge_rule_id,charge_obj):
+	"""
+	    return query for compeletly removing charge rule from database
+	"""
 	query=self.__delChargeRulePortsQuery(charge_rule_id)+ \
 	     self.__delChargeRuleDowsQuery(charge_rule_id) 
 
 	if charge_obj.getType()=="Internet":
 	    query+=self.__delInternetChargeRuleQuery(charge_rule_id)
-	
-	db_main.getHandle().transactionQuery(query)
+	return query
 
     def __delInternetChargeRuleQuery(self,charge_rule_id):
 	"""
@@ -411,43 +423,65 @@ class ChargeActions:
 	"""
 	return ibs_db.createDeleteQuery("internet_charge_rules","charge_rule_id=%s"%charge_rule_id)
 
-######################UNCHECKED
-    def delCharge(self,charge_id):
+###############################
+    def delCharge(self,charge_name):
 	"""
 	    delete a charge from both db and list of active charges
 	"""
-	self.__delChargeCheckInput(charge_id)
-	self.__delChargeFromDB(charge_id)
-	charge_main.getLoader().unloadCharge(charge_id)
+	self.__delChargeCheckInput(charge_name)
+	charge_obj=charge_main.getLoader().getChargeByName(charge_name)
+	self.__checkChargeUsage(charge_obj)
+	self.__delChargeFromDB(charge_obj)
+	charge_main.getLoader().unloadCharge(charge_obj.getChargeID())
     
-    def __delChargeCheckInput(self,charge_id):
+    def __checkChargeUsage(self,charge_obj):
+	"""
+	    check if charge used in any user/group, if so we can't delete it and we raise an exception
+	"""
+	if charge_obj.isInternetCharge():
+	    attr_name="normal_charge"
+	else:
+	    attr_name="voip_charge"
+	self.__checkChargeUsageInUsers(charge_obj,attr_name)
+	self.__checkChargeUsageInGroups(charge_obj,attr_name)
+
+	
+    def __checkChargeUsageInUsers(self,charge_obj,attr_name):
+	user_ids=user_main.getActionManager().getUserIDsWithAttr(attr_name,charge_obj.getChargeID())
+	if len(user_ids)>0:
+	    raise GeneralException(errorText("CHARGES","CHARGE_USED_IN_USER")%(charge_obj.getChargeName(),
+							    ",".join(map(str,user_ids))))
+
+    def __checkChargeUsageInGroups(self,charge_obj,attr_name):
+	group_ids=group_main.getActionManager().getGroupIDsWithAttr(attr_name,charge_obj.getChargeID())
+	if len(group_ids)>0:
+	    raise GeneralException(errorText("CHARGES","CHARGE_USED_IN_GROUP")%(charge_obj.getChargeName(),
+							    ",".join(map(str,group_ids))))
+	
+
+    def __delChargeCheckInput(self,charge_name):
 	"""
 	    check del Charge inputs
 	    raise exception on bad input
 	"""
-	charge_main.getLoader().checkChargeID(charge_id)    
+	charge_main.getLoader().checkChargeName(charge_name)
 
-    def __delChargeFromDB(self,charge_id):
+    def __delChargeFromDB(self,charge_obj):
 	"""
 	    --completely-- delete charge with id "charge_id" from db, also delete
 	    it's rules and ports
 	"""
-	charge_obj=charge_main.getLoader()[charge_id]
-	query=""
+	ibs_query=IBSQuery()
 	for charge_rule_id in charge_obj.getRules():
-	    query+=self.rule_loader.delRuleAndPortsQuery(charge_rule_id)
+	    ibs_query+=self.__delChargeRuleTotallyQuery(charge_rule_id,charge_obj)
 	
-	query+=self.__delChargeQuery(charge_id)
-	db_main.getHandle().transactionQuery(query)
+	ibs_query+=self.__delChargeQuery(charge_obj.getChargeID())
+	ibs_query.runQuery()
 	
 	
     def __delChargeQuery(self,charge_id):
 	"""
 	    return query to delete the charge itself from charges table
-	    it won't return query for deleting rules
 	"""
-	return ibs_db.createDeleteQuery("internet_charge_rules","charge_id=%s"%charge_id)
+	return ibs_db.createDeleteQuery("charges","charge_id=%s"%charge_id)
 
-
-
-	

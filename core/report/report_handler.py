@@ -1,8 +1,7 @@
 from core.server import handler
 from core.ibs_exceptions import *
 from core.errors import errorText
-from core.report import online
-from core.report import connection
+from core.report import online,connection,credit
 from core.lib import report_lib
 
 class ReportHandler(handler.Handler):
@@ -10,6 +9,8 @@ class ReportHandler(handler.Handler):
 	handler.Handler.__init__(self,"report")
 	self.registerHandlerMethod("getOnlineUsers")
 	self.registerHandlerMethod("getConnections")
+	self.registerHandlerMethod("getCreditChanges")
+
 
 
     def getOnlineUsers(self,request):
@@ -30,7 +31,6 @@ class ReportHandler(handler.Handler):
 	    onlines=filter(lambda online_dic:online_dic["owner_id"]==requester.getAdminID(),onlines)
 	return onlines
 	
-	
     def getConnections(self,request):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("conds","from","to","sort_by","desc")
@@ -39,4 +39,13 @@ class ReportHandler(handler.Handler):
 	conds=report_lib.fixConditionsDic(request["conds"])
 	searcher=connection.ConnectionSearcher(conds,requester)
 	return searcher.getConnectionLog(request["from"],request["to"],request["sort_by"],request["desc"],request.getDateType())
-	
+
+    def getCreditChanges(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("conds","from","to","sort_by","desc")
+	requester=request.getAuthNameObj()
+	requester.canDo("SEE CREDIT CHANGES")
+	conds=report_lib.fixConditionsDic(request["conds"])
+	searcher=credit.CreditSearcher(conds,requester)
+	return searcher.getCreditChanges(request["from"],request["to"],request["sort_by"],request["desc"],request.getDateType())
+    

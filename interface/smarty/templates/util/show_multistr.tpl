@@ -9,8 +9,7 @@
 {include file="header.tpl" title="Show Multiple Strings"}
 {include file="err_head.tpl"}
 <table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0" width=100%>
-	<tr>
-		<td colspan="5" valign="bottom">
+	<tr> <td>
 		<!-- List Title Table -->
 		<table border="0" cellspacing="0" cellpadding="0" class="List_Title">
 			<tr>

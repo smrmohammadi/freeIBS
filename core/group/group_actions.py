@@ -128,5 +128,42 @@ class GroupActions:
 					    (dbText(attr_name),to_int(group_id,"group id")))
 
     #########################################
+    def delGroup(self,group_name):
+	"""
+	    delete group with name "group_name"
+    	"""    
+	self.__delGroupCheckInput(group_name)
+	group_obj=group_main.getLoader().getGroupByName(group_name)
+	self.__checkGroupUsageInUsers(group_obj)
+	self.__deleteGroupDB(group_obj.getGroupID())
+	group_main.getLoader().unloadGroup(group_obj.getGroupID())
+	
+    def __delGroupCheckInput(self,group_name):
+	group_main.getLoader().checkGroupName(group_name)
+
+    def __checkGroupUsageInUsers(self,group_obj):
+	user_ids=user_main.getActionManager().getUserIDsWithBasicAttr("group_id",group_obj.getGroupID())
+	if len(user_ids)>0:
+	    raise GeneralException(errorText("GROUPS","GROUP_USED_IN_USER")%(group_obj.getGroupName(),
+							    ",".join(map(str,user_ids))))
     
+    def __deleteGroupDB(self,group_id):
+	query=self.__deleteGroupAttrsQuery(group_id)
+	query+=self.__deleteGroupQuery(group_id)
+	db_main.getHandle().transactionQuery(query)
     
+    def __deleteGroupQuery(self,group_id):
+	return ibs_db.createDeleteQuery("groups","group_id=%s"%group_id)
+
+    def __deleteGroupAttrsQuery(self,group_id):
+	return ibs_db.createDeleteQuery("group_attrs","group_id=%s"%group_id)
+    ############################################
+    def getGroupIDsWithAttr(self,attr_name,attr_value):
+	"""
+	    return group_ids whom attr_name value is attr_value, of course group should have attr_name!
+	"""
+	group_ids=db_main.getHandle().get("group_attrs","attr_name=%s and attr_value=%s"%(dbText(attr_name),dbText(attr_value)),
+					 0,-1,("group_id",True),["group_id"])
+		
+	return map(lambda dic:dic["group_id"],group_ids)
+    	

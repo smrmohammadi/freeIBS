@@ -100,17 +100,17 @@ class UserPluginManager:
     def __init__(self):
 	self.__plugin_classes=([],[],[],[],[],[],[],[],[],[]) #priority:[(plugin_class,plugin_name),(plugin_class,plugin_name),...]
 	
-    def register(self,plugin_name,plugin_class,priority=9):
+    def register(self,plugin_name,plugin_class,priority=5):
 	"""
 	    register new plugin to be called on user hooks
 	    plugin_name(string): name of plugin, plugin class instance would be accessible in user with this name(user_obj.plugin_name)
 	    plugin_class(Class): class of plugin. An instance would be created for each user object
 	    priority(integer): an integer between 0-9. Shows in what order methods should be called
-			       smaller number favored more. For regular operations better set more than 5
+			       smaller number favored more. For regular operations better set 5
 	    
 	"""
 	if priority<0 or priority>9:
-	    priority=9
+	    priority=5
 	self.__plugin_classes[priority].append((plugin_class,plugin_name))
 
     def callHooks(self,hook,user_obj,args=[]):

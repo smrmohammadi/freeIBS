@@ -42,8 +42,9 @@
 		    {menuTR}
 			<a href="/IBSng/admin/report/connections.php" class="page_menu">Connetion Logs</a>
 		    {/menuTR}
+
 		    {menuTR}
-			<a href="/IBSng/admin/" class="page_menu"></a>
+			<a href="/IBSng/admin/report/credit_change.php" class="page_menu">Credit Changes</a>
 		    {/menuTR}
 		{/viewTable}
 	</td>

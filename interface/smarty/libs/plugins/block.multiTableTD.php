@@ -3,6 +3,7 @@
 function smarty_block_multiTableTD($params,$content,&$smarty)
 {/*	Create an Multi Style Table, TD
 	parameter type(string,required): can be either of "left" or "right"
+	parameter width(string,optional): optionally set width of right tds
 */
     
     if(!is_null($content))
@@ -18,9 +19,13 @@ END;
 	}
         else
 	{
+	    if(isset($params["width"]))
+	        $width="style='width:{$params["width"]}'";
+	    else
+		$width="";
 	    return <<<END
 
-	<td class="Form_Content_multi_right">{$content}</td>
+	<td class="Form_Content_multi_right" {$width}>{$content}</td>
 	<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$multi_table_color}.gif"></td>
 
 END;

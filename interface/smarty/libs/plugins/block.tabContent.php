@@ -14,7 +14,7 @@ function smarty_block_tabContent($params,$content,&$smarty,&$repeat)
 	$tab_id=fixTabName($params["tab_name"]);
 	return <<<END
 	<div id="{$table_id}_{$tab_id}_content">
-	    <table border="0" cellspacing="0" cellpadding="0" width="400">
+	    <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	    {$content}
 	    </table>
 	</div>

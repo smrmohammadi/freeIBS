@@ -1,6 +1,10 @@
 from core import ibs_exceptions
 from core.db.ibs_db import *
 import pg
+try:
+    from pg import error as PGError
+except ImportError:
+    from pg import Error as PGError
 
 class db_pg (ibs_db):
     
@@ -9,7 +13,7 @@ class db_pg (ibs_db):
             self.connHandle=pg.connect(dbname,host,port,None,None,user,password)
         except Exception,e:
             raise ibs_exceptions.DBException(str(e))
-        except pg.error,e:
+        except PGError,e:
             raise ibs_exceptions.DBException(str(e))
 
     def _runQuery(self,query):
@@ -31,7 +35,7 @@ class db_pg (ibs_db):
     def __transactionQuery(self,command):
         try:
 	    return self._runQuery(command)
-        except pg.error,e:
+        except PGError,e:
 	    try:
 		self._runQuery("ABORT;")
 	    except:
@@ -53,15 +57,16 @@ class db_pg (ibs_db):
 	ibs_db.query(self,command)
         try:
 	    return self._runQuery(command)
-        except pg.error,e:
+        except PGError,e:
 	    raise ibs_exceptions.DBException("%s query: %s" %(e,command))
 
         except Exception,e:
             raise ibs_exceptions.DBException("%s query: %s" %(e,command))
 
     def runIBSQuery(self,ibs_query):
-	for query in ibs_query:
-	    self.__transactionQuery(query)
+	self.__transactionQuery("BEGIN;")
+	map(self.__transactionQuery,ibs_query)
+	self.__transactionQuery("COMMIT;")
     
     def check(self):
         try:
@@ -71,6 +76,6 @@ class db_pg (ibs_db):
                 self.reset()
             except Exception,e:
                 raise ibs_exceptions.DBException("check function on reseting connection %s"%e)
-            except pg.error,e:
+            except PGError,e:
                 raise ibs_exceptions.DBException("check function on reseting connection %s"%e)
     

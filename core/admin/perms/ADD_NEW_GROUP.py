@@ -7,8 +7,8 @@ def init():
 class AddNewGroup (NoValuePermission,GroupCatPermission,Permission):
     def init(self):
 	self.setDescription("""
-		Can Add new Groups
-		Admins can add new groups, and use them to add usersM
+		Can Add and Delete Groups
+		Admins can add new groups, and use them to add users
 		
 		Related Permissions: GROUP_ACCESS, ACCESS_ALL_GROUPS, CHANGE_GROUP
 	       """)

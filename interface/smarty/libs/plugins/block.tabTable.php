@@ -67,24 +67,25 @@ function createTabTable($buttons,$content,$table_id,$height)
     {$table_id}=new Tab();
 </script>
 
-<table border="0" cellspacing="0" cellpadding="0" width="400" valign="top">
-	<tr>
+<table border="0" cellspacing="0" cellpadding="0" width="430" valign="top">
+	<tr><td>
+	    <table border="0" cellspacing="0" cellpadding="0" width="100%" valign="top">
 		{$buttons}
-		<td class="Tab_Title_Top_Line"></td>	
+		<td class="Tab_Title_Top_Line"></td></tr>	
+		<tr>
+		<td class="Tab_Title_End_Line"></td></tr>
+		</table>
+	</td></tr>
+	<tr>
+		<td  height=1></td>
 	</tr>
 	<tr>
-		<td class="Tab_Title_End_Line"></td>
-	</tr>
-	<tr>
-		<td height=1></td>
-	</tr>
-	<tr>
-		<td colspan="20" height={$height} valign=top>
+		<td  height={$height} valign=top bgcolor="#efefef" width="100%">
 		    {$content}
 		</td>
 	</tr>
 	<tr>
-		<td colspan="20" class="Tab_Foot_line"></td>
+		<td  class="Tab_Foot_line"></td>
 	</tr>
 </table>
 END;

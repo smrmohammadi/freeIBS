@@ -80,8 +80,13 @@ function collectConditions()
     $collector->addToCondsIfNotEq("succesful","All");
     $collector->addToCondsIfNotEq("owner","All");
 	
-    $collector->addToCondsFromRequest(TRUE,"login_time","login_time_unit");
-    $collector->addToCondsFromRequest(TRUE,"logout_time","logout_time_unit");
+    $collector->addToCondsFromRequest(TRUE,"login_time_from","login_time_from_unit");
+    $collector->addToCondsFromRequest(TRUE,"login_time_to","login_time_to_unit");
+
+    $collector->addToCondsFromRequest(TRUE,"logout_time_from","logout_time_from_unit");
+    $collector->addToCondsFromRequest(TRUE,"logout_time_to","logout_time_to_unit");
+
+
     $collector->addToCondsFromRequest(TRUE,"credit_used","credit_used_op");
 
     $collector->addToCondsFromRequest(FALSE,"show_total_credit_used");

@@ -2,38 +2,56 @@
 require_once("../../inc/init.php");
 require_once("search_user_funcs.php");
 require_once("change_credit_funcs.php");
+require_once("del_user_funcs.php");
 require_once("../plugins/edit_funcs.php");
+require_once(IBSINC."report.php");
+
 
 needAuthType(ADMIN_AUTH_TYPE);
 $smarty=new IBSSmarty();
-if(isInRequest("edit"))
-    searchUserEdit($smarty);
+$user_ids=getSelectedUserIDsFromRequest();
+if(sizeof($user_ids)==0)
+{
+    $smarty->set_page_error("No users selected!");
+    intShowUserSearch($smarty);
+}
+else if(isInRequest("edit"))
+    searchUserEdit($smarty,$user_ids);
 else if (isInRequest("change_credit"))
-    changeUserCredit($smarty);
+    changeUserCredit($smarty,$user_ids);
+else if (isInRequest("connection_log"))
+    showConnectionLogs($smarty,$user_ids);
+else if (isInRequest("credit_change"))
+    showCreditChanges($smarty,$user_ids);
+else if (isInRequest("delete_users"))
+    showDeleteUserFace($smarty,$user_ids);
 
-function changeUserCredit(&$smarty)
+
+function showCreditChanges(&$smarty,$user_ids)
 {
-    $user_ids=getSelectedUserIDsFromRequest();
-    if(sizeof($user_ids)==0)
-    {
-	$smarty->set_page_error("No users selected!");
-	intShowUserSearch($smarty);
-    }
-    else
-	intShowChangeCreditFace($smarty,join(",",$user_ids));
+    redirect("/IBSng/admin/report/credit_change.php?user_ids=".join(",",$user_ids));
 }
 
-function searchUserEdit(&$smarty)
+function showConnectionLogs(&$smarty,$user_ids)
 {
-    $user_ids=getSelectedUserIDsFromRequest();
-    if(sizeof($user_ids)==0)
-    {
-	$smarty->set_page_error("No users selected!");
-	intShowUserSearch($smarty);
-    }
-    else
-	intEditUser($smarty,join(",",$user_ids));
+    redirect("/IBSng/admin/report/connections.php?user_ids=".join(",",$user_ids));
 }
+
+function changeUserCredit(&$smarty,$user_ids)
+{
+    intShowChangeCreditFace($smarty,join(",",$user_ids));
+}
+
+function searchUserEdit(&$smarty,$user_ids)
+{
+    intEditUser($smarty,join(",",$user_ids));
+}
+
+function showDeleteUserFace($smarty,$user_ids)
+{
+    intShowDeleteUserFace($smarty,join(",",$user_ids));
+}
+
 
 function getSelectedUserIDsFromRequest()
 {

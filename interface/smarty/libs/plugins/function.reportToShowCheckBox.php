@@ -14,6 +14,9 @@ function smarty_function_reportToShowCheckBox($params,&$smarty)
 
 */
     require_once($smarty->_get_plugin_filepath('function', 'checkBoxValue'));
+
+    require_once($smarty->_get_plugin_filepath('block', 'multiTableTD'));
+
     $checked=smarty_function_checkBoxValue($params,$smarty);
     if(isset($params["container_name"]) and isset($params["form_name"]))
 	$javascript=<<<END
@@ -24,11 +27,9 @@ END;
     else
 	$javascript="";
     $value=isset($params["value"])?$params["value"]:"";
-    return <<<END
-    <input type=checkbox name={$params["name"]} {$checked} value="{$value}"> 
-    {$params["output"]}
-    {$javascript}
-END;
+    $ret=smarty_block_multiTableTD(array("type"=>"left"),"<input type=checkbox name={$params["name"]} {$checked} value='{$value}'>",$smarty);
+    $ret.=smarty_block_multiTableTD(array("type"=>"right"),"{$params["output"]}",$smarty);
+    return $ret.=$javascript;
 }
 
 ?>

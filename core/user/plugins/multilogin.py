@@ -7,6 +7,7 @@ from core.lib.general import *
 
 attr_handler_name="multi login"
 def init():
+    user_main.getUserPluginManager().register("multi_login",MultiLogin)
     user_main.getAttributeManager().registerHandler(MultiLoginAttrHandler(),["multi_login"],["multi_login"],[])
 
 class MultiLogin(user_plugin.UserPlugin): 
@@ -17,8 +18,8 @@ class MultiLogin(user_plugin.UserPlugin):
 	    self.multi_login=int(user_obj.getUserAttrs()["multi_login"])
 	
     def login(self,args):
-	if self.instances>self.multi_login:
-	    raise LoginException(errorText("LOGIN","MAX_CONCURRENT"))
+	if self.user_obj.instances>self.multi_login:
+	    raise LoginException(errorText("USER_LOGIN","MAX_CONCURRENT"))
 	
 class MultiLoginAttrUpdater(AttrUpdater):
     def __init__(self):

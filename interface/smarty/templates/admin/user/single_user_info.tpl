@@ -25,8 +25,10 @@
     <br>
     
 
-{attrTableFoot action_icon="edit"}
-{/attrTableFoot}
+{if $can_change}
+    {attrTableFoot action_icon="edit"}
+    {/attrTableFoot}
+{/if}
 </form> 
 
 
@@ -36,6 +38,15 @@
 	Seach User 
     </a>
 {/addRelatedLink}
+
+{if $can_delete}
+    {addRelatedLink}
+	<a href="/IBSng/admin/user/del_user.php?user_id={$user_id}" class="RightSide_links">
+	    Delete User <b>{$user_id}</b>
+	</a>
+    {/addRelatedLink}
+{/if}
+
 
 {addRelatedLink}
     <a href="/IBSng/admin/group/group_info.php?group_name={$user_info.basic_info.group_name|escape:"url"}" class="RightSide_links">

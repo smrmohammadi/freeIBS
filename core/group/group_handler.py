@@ -14,6 +14,8 @@ class GroupHandler(handler.Handler):
 	self.registerHandlerMethod("getGroupInfo")
 	self.registerHandlerMethod("updateGroup")
 	self.registerHandlerMethod("updateGroupAttrs")
+	self.registerHandlerMethod("delGroup")
+
 	
 	
     def addNewGroup(self,request):
@@ -90,3 +92,14 @@ class GroupHandler(handler.Handler):
 							      request.getAuthNameObj())
 	
 	
+    def delGroup(self,request):
+	"""
+	    delete a group
+	    group_name(string): name of group to be deleted
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("group_name")
+	requester=request.getAuthNameObj()
+	requester.canDo("ADD NEW GROUP")
+	return group_main.getActionManager().delGroup(request["group_name"])
+    

@@ -64,6 +64,7 @@ class UserPool:
     def __init__(self):
 	self.__pool_by_id={} #this is reference pool. All users should be here
 	self.__pool_len=0
+	self.__black_list=[] #user_ids that we should not load
 	self.loading_users=LoadingUser()
 	self.rel_candidate=ReleaseCandidates()
 	self.lock=threading.RLock()
@@ -164,6 +165,7 @@ class UserPool:
 	user_id=self.__fixUserID(user_id)
 	self.loading_users.loadingStart(user_id)
 	try:
+	    self.__checkBlackList(user_id)
 	    loaded_user=self.__isInPoolByID(user_id)
 	    if loaded_user==None:
 		loaded_user=self.__loadUserByID(user_id)
@@ -205,4 +207,22 @@ class UserPool:
 	loaded_user._reload(new_loaded_user)
 	user_main.getOnline().reloadUser(loaded_user.getUserID())
 	
+##################################
+    def addToBlackList(self,user_id):
+	"""
+	    add user_id to blacklist
+	"""
+	user_id=self.__fixUserID(user_id)
+	self.__black_list.append(user_ids)
+
+    def removeFromBlackList(self,user_id):
+	"""
+	    remove user_id from blacklist
+	"""
+	user_id=self.__fixUserID(user_id)
+	self.__black_list.remove(user_id)
+
+    def __checkBlackList(self,user_id):
+	if user_id in self.__black_list:
+	    raise GeneralException(errorText("USER","USER_IN_BLACKLIST")%user_id)
 	

@@ -24,7 +24,7 @@ GENERAL_ERRORS={
     "INVALID_REL_DATE":"Invalid Relative Date %s",
     "INVALID_TIME_STRING":"Invalid Time String %s",
     "TIME_OUT_OF_RANGE":"Time Out of Range",
-    "INVALID_DAY_OF_WEEK":"\"%s\" is not a valid day of week",
+    "INVALID_DAY_OF_WEEK":"'%s' is not a valid day of week",
     "INCOMPLETE_REQUEST":"Incomplete request, argument %s not found",
     "FROM_VALUE_INVALID":"Invalid From value %s",
     "TO_VALUE_INVALID":"Invalid To value %s",
@@ -47,7 +47,8 @@ USER_ACTIONS_ERRORS={
     "INVALID_PASSWORD_LENGTH":"Invalid password length %s",
     "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
     "NORMAL_USERNAME_EXISTS":"Normal username already exists",
-    "INVALID_OPERATOR":"Invalid operator %s"
+    "INVALID_OPERATOR":"Invalid operator %s",
+    "DELETE_USER_IS_ONLINE":"Can't delete user with id %s, because he is online"
 }
 
 USER_ERRORS={
@@ -57,7 +58,8 @@ USER_ERRORS={
     "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
     "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
     "ACCESS_TO_USER_DENIED":"You have not access to user id %s",
-    "CANT_FIND_INSTANCE":"User %s is not online on %s %s"
+    "CANT_FIND_INSTANCE":"User %s is not online on %s %s",
+    "USER_IN_BLACKLIST":"User ID %s is in load black list"
 }
 
 USER_LOGIN_ERRORS={
@@ -115,8 +117,8 @@ GROUP_ERRORS={
     "GROUP_NAME_INVALID":"Group name %s is invalid",
     "GROUP_NAME_TAKEN":"Group name %s already exists",
     "ACCESS_TO_GROUP_DENIED":"You don't have access to group %s",
-    "GROUP_CHANGE_DENIED":"You can't change group %s"
-
+    "GROUP_CHANGE_DENIED":"You can't change group %s",
+    "GROUP_USED_IN_USER":"Group %s used in users '%s' "
 }
 
 CHARGE_ERRORS={
@@ -124,7 +126,7 @@ CHARGE_ERRORS={
     "INVALID_CHARGE_NAME":"Invalid Charge Name %s",
     "CHARGE_NAME_EXISTS":"Charge name %s already exists",
     "RULE_HAS_OVERLAP":"New Rule has overlap with %s",
-    "INVALID_RULE_ID_IN_CHARGE":"Invalid charge_rule_id \"%s\" in %s",
+    "INVALID_RULE_ID_IN_CHARGE":"Invalid charge_rule_id '%s' in %s",
     "INVALID_CHARGE_TYPE":"Invalid charge type %s",
     "ACCESS_TO_CHARGE_DENIED":"You don't have access to charge %s",
     "INVALID_RULE_START_TIME":"Invalid Rule Start Time: %s",#err msg
@@ -142,7 +144,10 @@ CHARGE_ERRORS={
     "NO_PORT_SELECTED":"No Port is selected",
     "RULE_END_LESS_THAN_START":"Rule End time is less than or equal to Start time",
     "INVALID_CHARGE_RULE_ID":"Invalid Charge Rule ID %s",
-    "CHARGE_RULE_NOT_IN_CHARGE":"Charge Rule with ID %s is not in charge %s"
+    "CHARGE_RULE_NOT_IN_CHARGE":"Charge Rule with ID %s is not in charge %s",
+    "CHARGE_USED_IN_USER":"Charge %s is used in user(s) with id(s) '%s' ",
+    "CHARGE_USED_IN_GROUP":"Charge %s is used in group(s) with id(s) '%s' "
+
 }
 
 RAS_ERRORS={
@@ -165,14 +170,14 @@ RAS_ERRORS={
 
 IPPOOL_ERRORS={
     "NO_FREE_IP":"All %s IP Pool IPs are used",
-    "IP_NOT_IN_USED_POOL":"IP %s is not in \"used list\" of IP Pool %s",
+    "IP_NOT_IN_USED_POOL":"IP %s is not in 'used list' of IP Pool %s",
     "INVALID_IP_POOL_ID":"Invalid IP Pool id %s",
     "INVALID_IP_POOL_NAME":"Invalid IP Pool name %s",
     "BAD_IP_POOL_NAME":"Bad IP Pool name %s. IP Pool name should only contain alphanumeric and _(underline)",
     "IP_POOL_NAME_ALREADY_EXISTS":"IP Pool name %s already exists",
     "IP_ALREADY_IN_POOL":"IP %s already exists in IP Pool",
     "IP_NOT_IN_POOL":"IP %s does not exist in IP Pool",
-    "IP_POOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
+    "IPPOOL_USED_IN_RAS":"IP Pool Used In ras %s, delete it from ras first"
 }
 
 PLUGIN_ERRORS={

@@ -27,11 +27,13 @@
 	{include file="plugins/search/credit.tpl"}
 	{include file="plugins/search/multi_login.tpl"}
     {/tabContent}
-
+    <tr><td colspan=20>	
+        {include file="report_foot.tpl"}
+    </td></tr>
+    <tr><td colspan=20>	
+	{include file="admin/user/search_user_select_attrs.tpl"}     
+    </td></tr>
     {/tabTable}
-
-    {include file="report_foot.tpl"}
-    {include file="admin/user/search_user_select_attrs.tpl"}     
     <input type=hidden name=search value=1>
     <input type=hidden name=page value=1>
     <input type=submit value=search>
@@ -48,10 +50,24 @@
 		    document.search_user.action="/IBSng/admin/user/search_user_edit.php?"+var_name+"=1";
 		    document.search_user.submit();
 		}
+		
+		function checkAnyUserChecked()
+		{
+		    if( user_ids.allUnChecked() ) 
+		    {
+			alert('No user(s) selected');
+			return false;
+		    }
+		    return true;
+		}
 	    </script>
 	    {/literal}
-	    <input type=submit name=edit value=edit {literal} onClick="javascript: if( user_ids.allUnChecked() ) {alert('No user(s) selected');} else {submitEdit('edit');} return false;  " {/literal}>
-	    <input type=submit name=changecredit value="Change Credit" {literal} onClick="javascript: if( user_ids.allUnChecked() ) {alert('No user(s) selected');} else {submitEdit('change_credit');} return false;  " {/literal}>
+	    <input type=submit name=edit value=edit onClick="javascript:  if(checkAnyUserChecked()) submitEdit('edit'); return false;">
+	    <input type=submit name=changecredit value="Change Credit" onClick="javascript: if(checkAnyUserChecked()) submitEdit('change_credit'); return false;">
+	    <input type=submit name=connection_log value="View Connection Logs" onClick="javascript: if(checkAnyUserChecked()) submitEdit('connection_log'); return false;">
+	    <input type=submit name=credit_log value="View Credit Changes" onClick="javascript: if(checkAnyUserChecked()) submitEdit('credit_change'); return false;">
+	    <input type=submit name=delete value="Delete" onClick="javascript: if(checkAnyUserChecked()) submitEdit('delete_users'); return false;">
+
 	{/if}
     
 {/if}

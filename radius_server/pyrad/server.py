@@ -8,7 +8,6 @@
 import select, socket
 import host, packet
 import sys
-sys.path.append("/usr/local/ibs")
 from core.ibs_exceptions import *
 from core.lib.general import *
 from core import main
@@ -149,6 +148,10 @@ class Server(host.Host):
 		if not pkt.code in [ packet.AccountingRequest,
 				packet.AccountingResponse ]:
 			raise PacketError, "Received non-accounting packet on accounting port"
+
+		if not pkt.VerifyAcctRequest():
+		    raise PacketError, "AccountingRequest Authenticator is invalid from host %s"%pkt.source[0]
+
 	
 
 	def _GrabPacket(self, pktgen, fd):

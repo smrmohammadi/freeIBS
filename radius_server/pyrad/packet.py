@@ -425,6 +425,19 @@ class AuthPacket(Packet):
 	    ident=self["MS-CHAP2-Response"][0][0]
 	    return ident+mschap.generate_authenticator_response(password,nt_response,peer_challenge,authenticator_challenge,username)
 
+	def addMPPEkeys(self,password,encryption_policy="\x01",encryption_types="\x06"):
+	    """
+		add mppe keys to packet.
+		password(string): clear text password
+		encryption_policy(string):          1      Encryption-Allowed 2      Encryption-Required
+		encryption_types(string):
+	    """
+	    lm_hash=mschap.lm_password_hash(password)
+	    nt_hash=mschap.nt_password_hash(password,False)
+	    self["MS-CHAP-MPPE-Keys"]=self.PwCrypt(lm_hash[:8]+nt_hash+"\0"*8)
+	    self["MS-MPPE-Encryption-Policy"]="\0"*3+encryption_policy
+	    self["MS-MPPE-Encryption-Types"]="\0"*3+encryption_types
+	
 	def PwDecrypt(self, password):
 		"""Unobfuscate a RADIUS password
 

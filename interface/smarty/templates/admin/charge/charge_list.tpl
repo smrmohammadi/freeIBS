@@ -1,4 +1,4 @@
-{M* 
+{* 
     Charge List
     $charge_infos: array of associative arrays containing charge infos
 *}

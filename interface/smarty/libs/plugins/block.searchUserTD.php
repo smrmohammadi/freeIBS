@@ -16,13 +16,15 @@ function smarty_block_searchUserTD($params,$content,&$smarty,&$repeat)
 	$user_attrs=getUserAttrs($smarty,$params["user_id"]);
 	$val=getUserAttrValues($user_attrs,$params["attr_name"],$params["attr_type"]);
 	$class="";
+	$prefix="";
 	if(is_null($val[0]) and $params["attr_type"]=="attrs")
 	{
 	    $group_val=getGroupAttrValues($user_attrs,$params["attr_name"]);
 	    if(!is_null($group_val[0]))
 	    {
-		$class="Form_Content_Row_groupinfo_dark";
-	        $val=$group_val;
+		$class="List_Col_Group";
+	        $prefix="<font size=1 color='#800000'>G-</font>";
+		$val=$group_val;
 	    }
 	}
     
@@ -33,7 +35,7 @@ function smarty_block_searchUserTD($params,$content,&$smarty,&$repeat)
 	}
 	else
 	{
-	    $smarty->assign("search_value",implode(" ",$val));
+	    $smarty->assign("search_value",$prefix.implode(" ",$val));
 	    $smarty->assign("search_class",$class);
 	}
     }

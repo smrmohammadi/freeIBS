@@ -16,6 +16,8 @@ else if (isInRequest("charge_id","charge_name","old_charge_name","comment"))
     intUpdateCharge($smarty,$_REQUEST["charge_id"],$_REQUEST["charge_name"],$_REQUEST["old_charge_name"],isset($_REQUEST["visible_to_all"]),$_REQUEST["comment"]);
 else if (isInRequest("charge_name","edit"))
     intEditCharge($smarty,$_REQUEST["charge_name"]);
+else if (isInRequest("charge_name","delete_charge"))
+    intDeleteCharge($smarty,$_REQUEST["charge_name"]);
 else if (isInRequest("charge_name"))
     intChargeInfo($smarty,$_REQUEST["charge_name"]);
 else
@@ -24,6 +26,18 @@ else
     redirectToChargeList($err->getErrorMsg());
 }
 
+function intDeleteCharge(&$smarty,$charge_name)
+{
+    $del_charge_req=new DelCharge($charge_name);
+    $resp=$del_charge_req->sendAndRecv();
+    if ($resp->isSuccessful())
+        redirectToChargeList("Charge Deleted Successfully");
+    else
+    {
+	$resp->setErrorInSmarty($smarty);
+        intChargeInfo($smarty,$charge_name);
+    }
+}
 
 function intDelChargeRule(&$smarty,$charge_name,$charge_rule_id)
 {

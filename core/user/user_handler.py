@@ -17,6 +17,8 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("checkNormalUsernameForAdd")
 	self.registerHandlerMethod("changeCredit")
 	self.registerHandlerMethod("searchUser")
+	self.registerHandlerMethod("delUser")
+
 		
     def addNewUsers(self,request):
 	request.needAuthType(request.ADMIN)
@@ -123,7 +125,7 @@ class UserHandler(handler.Handler):
 	requester=request.getAuthNameObj()
 	user_id_multi=MultiStr(request["user_id"])
 	loaded_users=user_main.getActionManager().getLoadedUsersByUserID(user_id_multi)
-	itertools.imap(self.__canChangeCredit,loaded_users,itertools.repeat(requester))
+	map(self.__canChangeCredit,loaded_users,itertools.repeat(requester,len(loaded_users)))
 	return user_main.getActionManager().changeCredit(user_id_multi,
 							 to_float(request["credit"],"credit"),
 							 requester.getUsername(),
@@ -131,7 +133,6 @@ class UserHandler(handler.Handler):
 							 request["credit_comment"])
 
     def __canChangeCredit(self,loaded_user,requester):
-	requester.canChangeUser(loaded_user)
 	requester.canDo("CHANGE USER CREDIT",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 ############################################################
     def searchUser(self,request):
@@ -158,3 +159,24 @@ class UserHandler(handler.Handler):
 	    other dics
 	"""
 	return report_lib.fixConditionsDic(conds)
+##########################################################
+    def delUser(self,request):
+	"""
+	    delete users
+	"""
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("user_id","delete_comment","del_connection_logs")
+	requester=request.getAuthNameObj()
+	user_id_multi=MultiStr(request["user_id"])
+	loaded_users=user_main.getActionManager().getLoadedUsersByUserID(user_id_multi)
+	map(self.__canDeleteUser,loaded_users,itertools.repeat(requester,len(loaded_users)))
+	return user_main.getActionManager().delUser(user_id_multi,
+						    request["delete_comment"],
+						    request["del_connection_logs"],
+						    requester.getUsername(),
+						    request.getRemoteAddr()
+						    )
+
+    def __canDeleteUser(self,loaded_user,requester):
+	requester.canDo("DELETE USER",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
+	

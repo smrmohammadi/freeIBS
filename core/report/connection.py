@@ -56,14 +56,14 @@ class ConnectionSearchHelper(SearchHelper):
 	
     def __repairConnectionsDic(self,connections,details_dic,date_type):
 	for connection in connections:
+	    connection["login_time_formatted"]=AbsDate(connection["login_time"],"gregorian").getDate(date_type)
+	    connection["logout_time_formatted"]=AbsDate(connection["logout_time"],"gregorian").getDate(date_type)
+	    connection["ras_ip"]=ras_main.getLoader().getRasByID(connection["ras_id"]).getRasIP()
+    	    connection["service_type"]=user_main.getConnectionLogManager().getIDType(connection["service"])
 	    try:
-		connection["login_time_formatted"]=AbsDate(connection["login_time"],"gregorian").getDate(date_type)
-		connection["logout_time_formatted"]=AbsDate(connection["logout_time"],"gregorian").getDate(date_type)
-		connection["ras_ip"]=ras_main.getLoader().getRasByID(connection["ras_id"]).getRasIP()
-		connection["service_type"]=user_main.getConnectionLogManager().getIDType(connection["service"])
 		connection["details"]=details_dic[connection["connection_log_id"]]
 	    except KeyError:
-		pass
+		connection["details"]={}
     
 	return connections
 	

@@ -40,6 +40,16 @@
     </a>
 {/addRelatedLink}
 
+{if $can_del}
+    {addRelatedLink}
+        <a href="/IBSng/admin/group/group_info.php?delete_group=1&group_name={$group_name|escape:"url"}" 
+		{jsconfirm msg="Are you sure you want to delete Group?\\n Warning: Group should not be used in any user."}
+		 class="RightSide_links">
+	    Delete Group <b>{$group_name}</b>
+	</a>
+    {/addRelatedLink}
+{/if}
+
 {setAboutPage title="Group Info"}
 You can see which attributes this group have. You can edit attribute values if you have relevant permission
 {/setAboutPage}

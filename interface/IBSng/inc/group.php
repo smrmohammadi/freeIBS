@@ -48,6 +48,15 @@ class UpdateGroupAttrs extends Request
     }
 }
 
+class DelGroup extends Request
+{
+    function DelGroup($group_name)
+    {
+	parent::Request("group.delGroup",array("group_name"=>$group_name));
+    }
+}
+
+
 function getAllGroupInfos()
 {
     /*

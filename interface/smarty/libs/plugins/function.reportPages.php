@@ -30,7 +30,7 @@ function createReportPagestable($pages,$cur_page,$link,$total_pages)
 	{
 	    $ret.=<<<END
 	    <td>
-		{$page}
+		<font class="page_num">{$page}</font>
 	    </td>
 END;
 	}
@@ -55,7 +55,7 @@ function linkedPageTD($face,$link)
 {
     return <<<END
     	<td>
-	    <a href="{$link}">{$face}</a>
+	    <a class="page_num" href="{$link}">{$face}</a>
 	</td>
 END;
 }
@@ -105,7 +105,9 @@ function calcToShowPages($total_pages,$cur_page,$pages_to_show)
 
 function calcTotalPages($total_results,$rpp)
 {
-    return (int)floor($total_results/$rpp)+1;
+    if($total_results==0)
+	return 1;
+    return (int)floor(($total_results-1)/$rpp)+1;
 }
 
 ?>

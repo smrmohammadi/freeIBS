@@ -62,17 +62,34 @@ function changeTRColor(obj,color)
     }
     else
     {
-	if(window.getComputedStyle)
-	    obj.original_color=window.getComputedStyle(obj,null).backgroundColor;
-	else if (obj.currentStyle)
-	    obj.original_color=obj.currentStyle.backgroundColor;
+	obj.original_color=getObjCurrentStyle(obj).backgroundColor;
     	obj.style.backgroundColor=color;
     }
 }
 
-function toggleVisibility(id)
+function getObjCurrentStyle(obj)
 {
-    obj=document.getElementById(id)
+    if(window.getComputedStyle)
+	return window.getComputedStyle(obj,null);
+    else if (obj.currentStyle)
+	return obj.currentStyle;
+}
+
+function showReportLayer(layer_id,show_obj)
+{
+    layer_obj=document.getElementById(layer_id)
+    obj_top=findPosY(show_obj) + show_obj.offsetTop;
+    if(show_obj.firstChild.height) //ie
+	obj_top+=show_obj.firstChild.height;
+    
+    layer_obj.style.top=obj_top;
+    layer_obj.style.left=findPosX(show_obj) - layer_obj.offsetWidth;
+    toggleVisibility(layer_obj);
+}
+
+
+function toggleVisibility(obj)
+{
     if(obj.style.visibility=='hidden')
 	obj.style.visibility='visible';
     else
@@ -94,4 +111,35 @@ function absDateSelectChanged(select_obj,calendar_id)
     }
     else
 	calendar_obj.disabled=true;
+}
+function findPosX(obj)
+{
+	var curleft = 0;
+	if (obj.offsetParent)
+	{
+		while (obj.offsetParent)
+		{
+			curleft += obj.offsetLeft
+			obj = obj.offsetParent;
+		}
+	}
+	else if (obj.x)
+		curleft += obj.x;
+	return curleft;
+}
+
+function findPosY(obj)
+{
+	var curtop = 0;
+	if (obj.offsetParent)
+	{
+		while (obj.offsetParent)
+		{
+			curtop += obj.offsetTop
+			obj = obj.offsetParent;
+		}
+	}
+	else if (obj.y)
+		curtop += obj.y;
+	return curtop;
 }

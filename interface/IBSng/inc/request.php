@@ -81,7 +81,6 @@ class Request
      */
 	return array(TRUE,null);
     }
-
 }
 
 class Response
@@ -98,7 +97,7 @@ class Response
     }
     
     function isSuccessful()
-    {/*	return True if request was successfull
+    {/*	return True if request was successful
     
     */
 	return $this->success;
@@ -111,7 +110,7 @@ class Response
     }
     
     function getError()
-    {/* return error of a failed request. Null if request was successfull	
+    {/* return error of a failed request. Null if request was successful
     */
 	return $this->error;
     }

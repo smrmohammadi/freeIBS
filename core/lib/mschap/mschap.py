@@ -268,3 +268,49 @@ def hash_nt_password_hash(password_hash):
 
     res = md4_context.digest()
     return res    
+
+def lm_password_hash(password):
+    """
+   LmPasswordHash(
+   IN  0-to-14-oem-char Password,
+   OUT 16-octet         PasswordHash )
+   {
+      Set UcasePassword to the uppercased Password
+      Zero pad UcasePassword to 14 characters
+
+      DesHash( 1st 7-octets of UcasePassword,
+               giving 1st 8-octets of PasswordHash )
+
+      DesHash( 2nd 7-octets of UcasePassword,
+               giving 2nd 8-octets of PasswordHash )
+   }
+
+    """
+    ucase_password=password.upper()
+    while len(ucase_password)<14:
+	ucase_password+="\0"
+    password_hash=des_hash(ucase_password[:8])
+    password_hash+=des_hash(ucase_password[8:])
+    return password_hash
+
+def des_hash(clear):
+    """
+     DesHash(
+   IN  7-octet Clear,
+   OUT 8-octet Cypher )
+   {
+      /*
+       * Make Cypher an irreversibly encrypted form of Clear by
+       * encrypting known text using Clear as the secret key.
+       * The known text consists of the string
+       *
+       *              KGS!@#$%
+       */
+
+      Set StdText to "KGS!@#$%"
+      DesEncrypt( StdText, Clear, giving Cypher )
+   }
+    """
+    des_obj=des.DES(clear)
+    return des_obj.encrypt("KGS!@#$%")
+    

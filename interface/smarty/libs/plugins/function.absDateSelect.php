@@ -17,8 +17,6 @@ END;
 
 }
 
-
-
 function createSelect(&$params,&$smarty)
 {
     require_once $smarty->_get_plugin_filepath('function', 'html_options');

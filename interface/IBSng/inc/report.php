@@ -164,4 +164,18 @@ class GetConnections extends Request
     }    
 }
 
+
+class GetCreditChanges extends Request
+{
+    function GetCreditChanges($conds,$from,$to,$sort_by,$desc)
+    {
+	parent::Request("report.getCreditChanges",array("conds"=>$conds,
+						      "from"=>$from,
+						      "to"=>$to,
+						      "sort_by"=>$sort_by,
+						      "desc"=>$desc));
+    }    
+}
+
+
 ?>

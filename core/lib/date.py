@@ -3,6 +3,7 @@ from core.lib.general import *
 from core.ibs_exceptions import *
 from core.errors import errorText
 import time_lib
+import re
 
 class RelativeDate:
     def __init__(self,date,unit):
@@ -74,6 +75,7 @@ class RelativeDate:
 	
 
 class AbsDate:
+    split_pattern=re.compile("[\-/]")
     def __init__(self,date,date_type):
 	"""
 	    "date" can be in format of
@@ -122,7 +124,7 @@ class AbsDate:
 	    else:
 		raise GeneralException(errorText("GENERAL","INVALID_DATE")%self.date)
 	
-	    (year,month,day)=map(int,date_sp[0].split("-"))
+	    (year,month,day)=map(int,self.split_pattern.split(date_sp[0]))
 	except ValueError:
 	    raise GeneralException(errorText("GENERAL","INVALID_DATE")%self.date)
 	
@@ -171,7 +173,6 @@ class AbsDate:
     def __getJalaliFromGregorian(self):
 	greg_to_jalali=jalali.GregorianToJalali(self.gyear,self.gmonth,self.gday)
 	return greg_to_jalali.getJalaliList()
-	
     
     def getGregorianDate(self):
 	"""
@@ -184,7 +185,16 @@ class AbsDate:
 	return apply(self.__getFormattedDate,self.getJalaliDateList())
 
     def __getFormattedDate(self,year,month,day,hour,minute,second):
-	return "%s-%s-%s %s:%s"%(year,month,day,hour,minute)
+	return "%s-%s-%s %s:%s"%(year,
+				 self.__zeroLeftPadTo(month,2),
+				 self.__zeroLeftPadTo(day,2),
+				 self.__zeroLeftPadTo(hour,2),
+				 self.__zeroLeftPadTo(minute,2))
+
+    def __zeroLeftPadTo(self,_str,_len):
+	_str=str(_str)
+	while len(_str)!=_len: _str="0%s"%_str
+	return _str
 
     def getDate(self,_type):
 	if _type=="jalali":

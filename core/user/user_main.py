@@ -76,3 +76,4 @@ def getRasMsgDispatcher():
 
 def getOnline():
     return online
+    

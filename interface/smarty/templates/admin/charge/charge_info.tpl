@@ -143,6 +143,13 @@
         </a>
     {/addRelatedLink}
 
+    {addRelatedLink}
+        <a href="/IBSng/admin/charge/charge_info.php?delete_charge=1&charge_name={$charge_name|escape:"url"}" 
+		{jsconfirm msg="Are you sure you want to delete Charge?\\n Warning: You should remove charge from groups and users attributes first"}
+		 class="RightSide_links">
+	    Delete Charge <b>{$charge_name}</b>
+	</a>
+    {/addRelatedLink}
 {/if}
     {addRelatedLink}
         <a href="/IBSng/admin/charge/charge_list.php" class="RightSide_links">

@@ -172,7 +172,8 @@ function getPermsByCategory($perms)
 			     "ADMIN"=>array(),
 			     "RAS"=>array(),
 			     "CHARGE"=>array(),
-			     "MISC"=>array()
+			     "MISC"=>array(),
+			     "GROUP"=>array()
 			    );
     foreach($perms as $perm_arr)
 	$categorized_perms[$perm_arr["category"]][]=$perm_arr;

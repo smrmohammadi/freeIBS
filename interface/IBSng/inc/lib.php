@@ -139,12 +139,14 @@ function convertRequestToUrl($ignore_list=array())
     {
 	if(in_array($key,$ignore_list))
 	    continue;
-	$name_vals[]="{$key}=".urlencode($value);
+
+        if(is_array($value))
+            foreach($value as $x)
+               $name_vals[]=urlencode("{$key}[]")."=".urlencode($x);
+	else
+	    $name_vals[]="{$key}=".urlencode($value);
     }
     return join("&",$name_vals);
 }
-
-
-
 
 ?>

@@ -17,8 +17,8 @@ function createRasTable($prefix)
 	$i=0;
 	foreach($resp->getResult() as $ras_ip)
 	{
-	    if($i!=0 and $i%3==0)
-		$content.="</tr><tr>";
+	    if($i!=0 and $i%4==0)
+		$content.="{multiTableTR}";
 	    $checked=checkBoxValue("{$prefix}_{$i}");
 	    $content.="<td><input type=checkbox name='{$prefix}_{$i}' value='{$ras_ip}' {$checked}> {$ras_ip}</td>";
 	    $i++;
@@ -41,8 +41,9 @@ function createShowHideTable($prefix,$rases_content)
     </tr>
 
     <tr id="{$prefix}_select_ras">
-	<td>
+	<td>{multiTable}
 	    {$rases_content}
+	    {/multiTable}
 	</td>
     </tr>
 </table>

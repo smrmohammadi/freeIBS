@@ -139,9 +139,12 @@ class AdminActions:
 	    raise GeneralException(errorText("ADMIN","NEGATIVE_DEPOSIT_NOT_ALLOWED")%(-1*deposit))
 	
 	if need_query:
-	    return ibs_db.createUpdateQuery("admins",
-					   {"deposit":"deposit + %s"%deposit},
-					    "admin_id=%s"%admin_obj.getAdminID())
+	    return self.consumeDepositQuery(admin_obj.getAdminID(),deposit)
+	
+    def consumeDepositQuery(self,admin_id,deposit):
+	return ibs_db.createUpdateQuery("admins",
+					{"deposit":"deposit - %s"%deposit},
+					"admin_id=%s"%admin_id)
 
 	
 	    

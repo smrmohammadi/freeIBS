@@ -45,13 +45,12 @@
     </table>
 
 </form>
-{if $can_change eq TRUE}
 {addRelatedLink}
     <a href="/IBSng/admin/admins/show_perm_categories.php?admin_username={$admin_username}" class="RightSide_links">
 	Add New Permission to <b>{$admin_username|capitalize}</b>
     </a>
 {/addRelatedLink}
-{/if}
+
 {addRelatedLink}
     <a href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$admin_username}" class="RightSide_links">
 	<b>{$admin_username|capitalize}</b> Permissions

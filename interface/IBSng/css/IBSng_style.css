@@ -295,7 +295,9 @@ td.Form_Title_Top_Line{
 	font-weight:bold;
 	height:17;
 	background-color:#FFFFFF ;
-	white-space:nowrap
+	white-space:nowrap;
+	text-align:right
+	
 }
 td.Form_Title_End_Line{ 
 	height:3;
@@ -875,8 +877,8 @@ tr.List_Row_DarkColor{
 }
 tr.list_Row_Perm{ 
 	font-family: Tahoma; 
-	font-weight:bold; 
 	font-size: 8pt; 
+	font-weight:bold; 
 	color: #222222; 
 	direction:ltr ;
 	background-color:#c0c0c0;
@@ -895,6 +897,10 @@ td.List_col_Body_Icon{
 }
 
 td.List_Col{ 
+	padding-left:3px;
+	padding-right:3px
+}
+td.List_Col_Group{ 
 	padding-left:3px;
 	padding-right:3px
 }
@@ -960,9 +966,21 @@ td.List_Title_Top_Line{
 	font-weight:bold;
 	height:17;
 	background-color:#FFFFFF ;
-	white-space:nowrap
+	white-space:nowrap;
+	text-align:right
 
 }
+
+table.List_Top_Line{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #909090; 
+	font-weight:bold;
+	background-color:#FFFFFF;
+	white-space:nowrap;
+	text-align:right
+}
+
 td.List_Title_End_Line{ 
 	height:3;
 	background-color:#9A1111
@@ -1203,19 +1221,21 @@ td.Tab_Title_end{
 }
 td.Tab_Title_Top_Line{ 
 	font-family: Tahoma; 
-	font-size: 8pt; 
+	font-size: 6pt; 
 	color: #c0c0c0; 
 	font-weight:bold;
 	height:18;
-	background-color:#FFFFFF
+	background-color:#FFFFFF;
+	text-align:right;
+	width:100%
 }
 td.Tab_Title_End_Line{ 
 	height:2;
 	background-color:#9A1111;
-	width:30%
+	font-size: 1px; 
 }
 td.Tab_Title_red{ 
-	width:10;
+	width:15;
 	font-family: Tahoma; 
 	font-size: 8pt; 
 	color: #FFFFFF; 
@@ -1223,7 +1243,7 @@ td.Tab_Title_red{
 	white-space:nowrap
 }
 td.Tab_Title_gray{ 
-	width:10;
+	width:15;
 	font-family: Tahoma; 
 	font-size: 8pt; 
 	color: #FFFFFF; 
@@ -1245,8 +1265,9 @@ td.Form_Content_multi_left{
 	font-size: 8pt; 
 	color: #800000; 
 	font-weight:bold; 
-	width:10;
-	direction:ltr 
+	direction:ltr ;
+	white-space:nowrap ;
+	width:10
 }
 
 td.Form_Content_multi_right{
@@ -1257,5 +1278,39 @@ td.Form_Content_multi_right{
 	color: #353535; 
 	font-weight:bold; 
 	direction:ltr ;
-	text-align:left
+	text-align:left ;
+	white-space:nowrap
+}
+
+/*------------------------------*/
+/* 	Search Page		*/
+/*------------------------------*/
+
+a:link.page_num{
+    font-size: 9pt;
+    font-weight:bold; 
+    font-family: Tahoma; 
+    color: #9a1111;
+}
+
+a:visited.page_num{
+    font-size: 9pt;
+    font-weight:bold; 
+    font-family: Tahoma; 
+    color: #9a1111;
+}
+
+a:hover.page_num{ 
+    font-size: 9pt;
+    font-weight:bold; 
+    font-family: Tahoma; 
+    color: #CC6600;
+}
+
+font.page_num
+{
+    font-size: 10pt;
+    font-family: Tahoma; 
+    color: #000000;
+    font-weight:bold; 
 }

@@ -4,9 +4,9 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
 {
 /*
     create header and footer of an List Style table
-    parameter title(string,optional): Title of table that will be printed on top of table
     parameter table_width(string,optional): width of table, if not set, defaults are used
-    parameter cols_num(integer,required): number of table columns
+    parameter cols_num(integer,required): number of table columns, not required for no_header tables
+    parameter title(string,optional): Title of table that will be printed on top of table
     parameter no_header(any,optional): if set, no header will be included in table
 */
     if(!is_null($content))
@@ -40,7 +40,7 @@ END;
 	$footer=<<<END
 	<!-- List Foot -->
 	<tr class="List_Foot_Line_red">
-		<td colspan=25></td>
+		<td colspan=30></td>
 	</tr>
 	<!-- End List Foot-->
 </table>

@@ -113,5 +113,12 @@ class DelChargeRule extends Request
     }
 }
 
+class DelCharge extends Request
+{
+    function DelCharge($charge_name)
+    {
+	parent::Request("charge.delCharge",array("charge_name"=>$charge_name));
+    }
+}
 
 ?>

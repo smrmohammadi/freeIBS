@@ -50,3 +50,10 @@ class ConnectionLogActions:
 
     def getIDType(self,_id):
 	return self.TYPES_REV[_id]
+	
+	
+    def deleteConnectionLogsForUsersQuery(self,user_ids):
+	condition=" or ".join(map(lambda user_id:"user_id=%s"%user_id,user_ids))
+	details_query=ibs_db.createDeleteQuery("connection_log_details","connection_log_id in (select connection_log_id from connection_log where %s)"%condition)
+	connection_query=ibs_db.createDeleteQuery("connection_log",condition)
+	return details_query+connection_query

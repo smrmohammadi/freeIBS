@@ -116,7 +116,7 @@ Date.prototype.setFullYear = function(p){
 
 Date.prototype.setType = function(c){
                                         if(!c)
-                                            this.DateType = window.DateType;
+                                            alert("jdate.js : invalid date type! ("+c+")");
                                         else
                                             this.DateType = c;
                                     }

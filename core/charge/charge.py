@@ -38,6 +38,9 @@ class Charge:
 	"""
 	return self._type
 
+    def isInternetCharge(self):
+	return self.getType()=="Internet"
+	
     def getChargeID(self):
 	return self.charge_id
 

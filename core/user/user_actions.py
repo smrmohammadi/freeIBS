@@ -11,6 +11,41 @@ from core.user import user_main
 import re
 
 class UserActions:
+#######################################################
+    def getLoadedUsersByUserID(self,user_ids):
+	"""
+	    return a list of LoadedUser instances for users with ids "user_ids"
+	"""
+	user_ids=map(lambda x:to_int(x,"user id"),user_ids)
+	loaded_users=map(user_main.getUserPool().getUserByID,user_ids)
+	return loaded_users
+
+    def getUserInfoByUserID(self,user_id,date_type):
+	"""
+	    return a list of user info dics with user_id in multi string user_id
+	    return dic is in format {user_id=>user_info dic}
+	"""
+	loaded_users=self.getLoadedUsersByUserID(user_id)
+	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
+	
+#######################################################
+    def getLoadedUsersByNormalUsername(self,normal_usernames):
+	"""
+	    return a list of LoadedUser instances for users with normal_usernames "normal_usernames"
+	"""
+	loaded_users=map(user_main.getUserPool().getUserByNormalUsername,normal_usernames)
+	return loaded_users
+    
+    def getUserInfoByNormalUsername(self,normal_username,date_type):
+	"""
+	    return a list of user info dics with normal_username in multi string user_id
+	    return dic is in format {user_id=>user_info dic}
+	"""
+	loaded_users=self.getLoadedUsersByUsername(normal_username)
+	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
+
+########################################################
+
     def insertUserAttrQuery(self,user_id,attr_name,attr_value):
 	"""
 	    XXX:change to use stored procedures
@@ -235,38 +270,6 @@ class UserActions:
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,user_ids)
 
-#######################################################
-    def getLoadedUsersByUserID(self,user_ids):
-	"""
-	    return a list of LoadedUser instances for users with ids "user_ids"
-	"""
-	user_ids=map(lambda x:to_int(x,"user id"),user_ids)
-	loaded_users=map(user_main.getUserPool().getUserByID,user_ids)
-	return loaded_users
-
-    def getUserInfoByUserID(self,user_id,date_type):
-	"""
-	    return a list of user info dics with user_id in multi string user_id
-	    return dic is in format {user_id=>user_info dic}
-	"""
-	loaded_users=self.getLoadedUsersByUserID(user_id)
-	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
-	
-#######################################################
-    def getLoadedUsersByNormalUsername(self,normal_usernames):
-	"""
-	    return a list of LoadedUser instances for users with normal_usernames "normal_usernames"
-	"""
-	loaded_users=map(user_main.getUserPool().getUserByNormalUsername,normal_usernames)
-	return loaded_users
-    
-    def getUserInfoByNormalUsername(self,normal_username,date_type):
-	"""
-	    return a list of user info dics with normal_username in multi string user_id
-	    return dic is in format {user_id=>user_info dic}
-	"""
-	loaded_users=self.getLoadedUsersByUsername(normal_username)
-	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
 
 #########################################################
     def getUserInfosFromLoadedUsers(self,loaded_users,date_type):
@@ -310,3 +313,99 @@ class UserActions:
     def __searchUsersCheckInput(self,conds,_from,to,order_by,desc,admin_obj):
 	report_lib.checkFromTo(_from,to)
 ###########################################################
+    def delUser(self,user_ids,comment,del_connections,admin_name,remote_address):
+	"""
+	    delete users with ids in user_ids
+	    comment: comment when deleting users
+	    del_connection tells if we should delete user(s) connection logs too
+	"""
+	self.__delUserCheckInput(user_ids,comment,del_connections,admin_name,remote_address)
+	admin_obj=admin_main.getLoader().getAdminByName(admin_name)
+	loaded_users=self.getLoadedUsersByUserID(user_ids)
+	map(lambda user_id:user_main.getUserPool().addToBlackList,user_ids)
+	try:
+	    total_credit=self.__delUserCheckUsers(loaded_users)
+	    admin_deposit=total_credit*-1
+	    ibs_query=IBSQuery()
+	    ibs_query+=user_main.getCreditChangeLogActions().logCreditChangeQuery("DEL_USER",
+									      admin_obj.getAdminID(),
+									      user_ids,
+									      0,
+									      admin_deposit,
+									      remote_address,
+									      comment)
+	    ibs_query+=admin_main.getActionManager().consumeDepositQuery(admin_obj.getAdminID(),admin_deposit)
+	    self.__delUserQuery(ibs_query,user_ids,del_connections)
+	    ibs_query.runQuery()
+	    admin_obj.consumeDeposit(admin_deposit)
+	    map(user_main.getUserPool().userChanged,user_ids)
+	finally:
+	    map(lambda user_id:user_main.getUserPool().removeFromBlackList,user_ids)
+
+    def __delUserCheckInput(self,user_ids,comment,del_connections,admin_name,remote_address):
+	admin_main.getLoader().checkAdminName(admin_name)
+	if not iplib.checkIPAddr(remote_address):
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_addr)
+	if len(user_ids)==0:
+	    raise GeneralException(errorText("USER_ACTIONS","INVALID_USER_COUNT")%0)
+
+
+    def __delUserCheckUsers(self,loaded_users):
+	"""
+	    check users and return their total credit
+	    WARNING: XXX this is not safe, checking online, and unloading there! to be fixed
+	"""
+	total_credit=0
+	for loaded_user in loaded_users:
+	    if loaded_user.isOnline():
+	        raise GeneralException(errorText("USER_ACTIONS","DELETE_USER_IS_ONLINE"%loaded_user.getUserID()))
+	    total_credit+=max(0,loaded_user.getBasicUser().getCredit())
+	return total_credit
+
+    def __delUserQuery(self,ibs_query,user_ids,del_connections):
+	user_id_conds=" or ".join(map(lambda user_id:"user_id=%s"%user_id,user_ids))
+	ibs_query+=self.__delUserAttrsQuery(user_id_conds)
+	ibs_query+=self.__delUserNormalAttrsQuery(user_id_conds)
+	ibs_query+=self.__delUserVoIPAttrsQuery(user_id_conds)
+	ibs_query+=self.__delUserLocksQuery(user_id_conds)
+	ibs_query+=self.__delUserFromUsersTableQuery(user_id_conds)
+	if del_connections:
+	    ibs_query+=user_main.getConnectionLogManager().deleteConnectionLogsForUsersQuery(user_ids)
+
+    def __delUserAttrsQuery(self,user_id_conds):
+	"""
+	    user_ids_conds: condition of user_ids
+	"""
+	return ibs_db.createDeleteQuery("user_attrs",user_id_conds)
+
+    def __delUserNormalAttrsQuery(self,user_id_conds):
+	return ibs_db.createDeleteQuery("normal_users",user_id_conds)
+
+    def __delUserVoIPAttrsQuery(self,user_id_conds):
+	return ibs_db.createDeleteQuery("voip_users",user_id_conds)
+
+    def __delUserLocksQuery(self,user_id_conds):
+	return ibs_db.createDeleteQuery("user_locks",user_id_conds)
+	
+    def __delUserFromUsersTableQuery(self,user_id_conds):
+	return ibs_db.createDeleteQuery("users",user_id_conds)
+
+################################################################
+    def getUserIDsWithBasicAttr(self,attr_name,attr_value):
+	"""
+	    return user_ids whom attr_name value in basic attrs is attr_value
+	"""
+	user_ids=db_main.getHandle().get("users","%s=%s"%(attr_name,attr_value),
+					 0,-1,("user_id",True),["user_id"])
+	return map(lambda dic:dic["user_id"],user_ids)
+################################################################
+    def getUserIDsWithAttr(self,attr_name,attr_value):
+	"""
+	    return user_ids whom attr_name value is attr_value, of course user should have attr_name!
+	"""
+	user_ids=db_main.getHandle().get("user_attrs","attr_name=%s and attr_value=%s"%(dbText(attr_name),dbText(attr_value)),
+					 0,-1,("user_id",True),["user_id"])
+		
+	return map(lambda dic:dic["user_id"],user_ids)
+
+	

@@ -7,7 +7,9 @@ from core.lib.general import *
 import itertools
 
 class CreditChangeLogActions:
-    CREDIT_CHANGE_ACTIONS={"ADD_USER":1,"CHANGE_CREDIT":2}
+    CREDIT_CHANGE_ACTIONS={"ADD_USER":1,"CHANGE_CREDIT":2,"DEL_USER":3}
+    CREDIT_CHANGE_ACTIONS_REV={1:"Add User",2:"Change Credit",3:"Delete User"}
+
 
     def logCreditChangeQuery(self,action,admin_id,user_ids,per_user_credit,admin_credit,remote_address,comment):
 	"""
@@ -25,7 +27,7 @@ class CreditChangeLogActions:
 	change_id=self.__getNewCreditChangeID()
 	ibs_query=IBSQuery()
 	ibs_query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
-							"action":self.__getActionID(action),
+							"action":self.getActionID(action),
 							"admin_id":admin_id,
 							"per_user_credit":per_user_credit,
 							"admin_credit":admin_credit,
@@ -33,10 +35,10 @@ class CreditChangeLogActions:
 							"comment":dbText(comment)
 							})
 	
-	def insertToCreditChangeUserID(user_id,ibs_query):
+
+	for user_id in user_ids:
 	    ibs_query+=ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
 								    "credit_change_id":change_id})
-	itertools.imap(insertToCreditChangeUserID,user_ids,itertools.repeat(ibs_query))
 	return ibs_query
 
     def __getNewCreditChangeID(self):
@@ -52,5 +54,9 @@ class CreditChangeLogActions:
 	if iplib.checkIPAddrWithoutMask(remote_address)==0:
 	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_address)
 
-    def __getActionID(self,action):
+    def getActionID(self,action):
 	return self.CREDIT_CHANGE_ACTIONS[action]
+
+    def getIDActionText(self,action_id):
+	return self.CREDIT_CHANGE_ACTIONS_REV[action_id]
+	

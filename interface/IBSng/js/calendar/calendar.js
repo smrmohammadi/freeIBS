@@ -347,7 +347,7 @@ Calendar.tableMouseUp = function(ev) {
         var date = null;
         if (mon) {
                 date = new Date(cal.date);
-                date.setType(this.DateType);
+                date.setType(cal.DateType);
                 if (mon.month != date.getMonth()) {
                         date.setMonth(mon.month);
                         cal.setDate(date);
@@ -358,7 +358,7 @@ Calendar.tableMouseUp = function(ev) {
                 var year = Calendar.findYear(target);
                 if (year) {
                         date = new Date(cal.date);
-                        date.setType(this.DateType);
+                        date.setType(cal.DateType);
                         if (year.year != date.getFullYear()) {
                                 date.setFullYear(year.year);
                                 cal.setDate(date);
@@ -588,7 +588,7 @@ Calendar.cellClick = function(el, ev) {
                         cal.currentDateEl = el;
                 }
                 cal.date = new Date(el.caldate);
-                cal.date.setType(this.DateType);
+                cal.date.setType(cal.DateType);
                 date = cal.date;
                 newdate = true;
                 // a date was clicked
@@ -601,7 +601,7 @@ Calendar.cellClick = function(el, ev) {
                         return;
                 }
                 date = (el.navtype == 0) ? new Date() : new Date(cal.date);
-                date.setType(this.DateType);
+                date.setType(cal.DateType);
                 // unless "today" was clicked, we assume no date was clicked so
                 // the selected handler will know not to close the calenar when
                 // in single-click mode.

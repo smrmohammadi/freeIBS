@@ -5,15 +5,17 @@
 {include file="err_head.tpl"} 
 {include file="util/calendar.tpl"}
 
-<form method=POST>
+<form method=POST action="connections.php" name="connections">
 <input type=hidden name=show value=1>
+<input type=hidden name=page value=1>
+
 {addEditTable double=TRUE title="Connection Log Conditions"}
     {addEditTD type="left1" double=TRUE}
 	User IDs
     {/addEditTD}
 
     {addEditTD type="right1" double=TRUE}
-	<input type=text class=text name=user_ids value="{ifisinrequest name="user_ids"}">
+	<input type=text class=text name=user_ids value="{ifisinrequest name="user_ids"}"> {multistr input_name="user_ids" form_name="connections"}
     {/addEditTD}
 
     {addEditTD type="left2" double=TRUE}
@@ -58,37 +60,6 @@
     {/addEditTD}
 
     {addEditTD type="left1" double=TRUE}
-	Credit Used
-    {/addEditTD}
-
-    {addEditTD type="right1" double=TRUE}
-	{op class="ltgteq" name="credit_used_op" selected="credit_used_op"}
-	<input type=text class=text name=credit_used value="{ifisinrequest name="credit_used"}">
-    {/addEditTD}
-
-    {addEditTD type="left2" double=TRUE}
-    {/addEditTD}
-
-    {addEditTD type="right2" double=TRUE}
-    {/addEditTD}
-
-    {addEditTD type="left1" double=TRUE}
-	Show Total Credit
-    {/addEditTD}
-
-    {addEditTD type="right1" double=TRUE}
-	<input type=checkbox class=checktext name=show_total_credit_used {checkBoxValue name="show_total_credit_used"}">
-    {/addEditTD}
-
-    {addEditTD type="left2" double=TRUE}
-	Show Total Duration
-    {/addEditTD}
-
-    {addEditTD type="right2" double=TRUE}
-	<input type=checkbox class=checktext name=show_total_duration {checkBoxValue name="show_total_duration"}">
-    {/addEditTD}
-
-    {addEditTD type="left1" double=TRUE}
 	Successful Logins
     {/addEditTD}
 
@@ -104,6 +75,36 @@
 	{html_options name="service" values=$services output=$services selected=$services_default}
     {/addEditTD}
 
+    {addEditTD type="left1" double=TRUE}
+	Credit Used
+    {/addEditTD}
+
+    {addEditTD type="right1" double=TRUE}
+	{op class="ltgteq" name="credit_used_op" selected="credit_used_op"}
+	<input type=text class=text name=credit_used value="{ifisinrequest name="credit_used"}"> {$MONEY_UNIT}
+    {/addEditTD}
+
+    {addEditTD type="left2" double=TRUE}
+    {/addEditTD}
+
+    {addEditTD type="right2" double=TRUE}
+    {/addEditTD}
+
+    {addEditTD type="left1" double=TRUE}
+	Show Total Credit
+    {/addEditTD}
+
+    {addEditTD type="right1" double=TRUE}
+	<input type=checkbox class=checktext name=show_total_credit_used {checkBoxValue name="show_total_credit_used"}>
+    {/addEditTD}
+
+    {addEditTD type="left2" double=TRUE}
+	Show Total Duration
+    {/addEditTD}
+
+    {addEditTD type="right2" double=TRUE}
+	<input type=checkbox class=checktext name=show_total_duration {checkBoxValue name="show_total_duration"}>
+    {/addEditTD}
 
     {addEditTD type="left1" double=TRUE}
 	Sort By
@@ -113,7 +114,6 @@
 	{html_options name="order_by" options=$order_bys selected=$order_by_default} 
 	Desc <input name=desc type=checkbox {checkBoxValue name="desc" default_checked=TRUE always_in_form="show"}
     {/addEditTD}
-
 
     {addEditTD type="left2" double=TRUE}
 	Result Per Page
@@ -224,7 +224,7 @@
 	{/listTD}
 
 	{listTD icon=TRUE}
-    	    <a onClick="toggleVisibility('{$row.connection_log_id}'); return false;" href="#">
+    	    <a onClick="showReportLayer('{$row.connection_log_id}',this); return false;" href="#">
 		{listTableBodyIcon cycle_color=TRUE action="details"}
 	    </a>
 		{reportDetailLayer name=`$row.connection_log_id` title="Report Details"}
@@ -250,7 +250,7 @@
 {/listTable}
 
 {listTable title=Totals cols_num=2}
-	{listTR type="body"}
+	{listTR type="body" cycle_color=TRUE}
 	    {listTD}
 		<b>Page</b> Total Credit Used:
     	    {/listTD}
@@ -260,7 +260,7 @@
 
 	{/listTR}
 
-	{listTR type="body"}
+	{listTR type="body" cycle_color=TRUE}
 	    {listTD}
 		<b>Page</b> Total Duration:
     	    {/listTD}
@@ -270,7 +270,7 @@
 
 	{/listTR}
 
-	{listTR type="body"}
+	{listTR type="body" cycle_color=TRUE}
 	    {listTD}
 		Total Number Of Rows:
     	    {/listTD}
@@ -281,8 +281,8 @@
 	{/listTR}
 
 
-    {if $total_credit!=-1}
-	{listTR type="body"}
+    {if isInRequest("show_total_credit_used")}
+	{listTR type="body" cycle_color=TRUE}
 	    {listTD}
 		Total Credit Used:
     	    {/listTD}
@@ -293,8 +293,8 @@
 	{/listTR}
     {/if}
 
-    {if $total_duration!=-1}
-	{listTR type="body"}
+    {if isInRequest("show_total_duration")}
+	{listTR type="body" cycle_color=TRUE}
 	    {listTD}
     		Total Duration: 
 	    {/listTD}
@@ -311,9 +311,25 @@
 {/if}
 
 
+{if requestVal("user_ids") ne ""}
+    {addRelatedLink}
+	<a href="/IBSng/admin/user/user_info.php?user_id_multi={$smarty.request.user_ids}" class="RightSide_links">
+	    User <b>{$smarty.request.user_ids|truncate:15}</b> Info
+        </a>
+    {/addRelatedLink}
+
+{/if}
+
+
 {addRelatedLink}
     <a href="/IBSng/admin/report/online_users.php" class="RightSide_links">
 	Online Users
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/report/credit_change.php" class="RightSide_links">
+	Credit Changes
     </a>
 {/addRelatedLink}
 

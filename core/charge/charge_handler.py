@@ -15,6 +15,8 @@ class ChargeHandler(handler.Handler):
 	self.registerHandlerMethod("listChargeRules")
 	self.registerHandlerMethod("updateInternetChargeRule")
 	self.registerHandlerMethod("delChargeRule")
+	self.registerHandlerMethod("delCharge")
+
 
 	
     def addNewCharge(self,request):
@@ -120,3 +122,10 @@ class ChargeHandler(handler.Handler):
 	request.checkArgs("charge_name","charge_rule_id")
 	request.getAuthNameObj().canDo("CHANGE CHARGE")
 	charge_main.getActionManager().delChargeRule(to_int(request["charge_rule_id"],"charge rule id"),request["charge_name"])
+
+    def delCharge(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("charge_name")
+	request.getAuthNameObj().canDo("CHANGE CHARGE")
+	charge_main.getActionManager().delCharge(request["charge_name"])
+	
