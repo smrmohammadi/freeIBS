@@ -35,12 +35,12 @@ class BasicUser:
 	"""
 	    return a dic containing Basic User Information
 	"""
-	return {"user_id":user_id,
-		"owner_id":owner_id,
-		"credit":credit,
-		"group_id":group_id,
-		"creation_date":creation_date,
+	return {"user_id":self.user_id,
+		"owner_id":self.owner_id,
+		"credit":self.credit,
+		"group_id":self.group_id,
+		"creation_date":self.creation_date,
 		"group_name":self.getGroupObj().getGroupName(),
-		"owner_name":self.getOwnerObj().getAdminName()
+		"owner_name":self.getOwnerObj().getUsername()
 		}
 

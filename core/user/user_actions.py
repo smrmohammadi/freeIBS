@@ -8,6 +8,7 @@ from core.admin import admin_main
 from core.lib import password_lib,iplib
 from core.group import group_main
 from core.lib.multi_strs import MultiStr
+from core.user import user_main
 import re
 
 class UserActions:
@@ -68,7 +69,7 @@ class UserActions:
 	if not len(username) or username[0] not in string.letters:
 	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
 
-        if re.search("[^A-Za-z0-9_]",username) != None:
+        if re.search("[^A-Za-z0-9_\-\.]",username) != None:
 	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
 	
 
@@ -88,8 +89,8 @@ class UserActions:
 	    comment(str): comment of credit change
 	"""
 	change_id=self.__getNewCreditChangeID()
-
-	query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
+	ibs_query=IBSQuery()
+	ibs_query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
 							"action":action,
 							"admin_id":admin_id,
 							"per_user_credit":per_user_credit,
@@ -99,10 +100,10 @@ class UserActions:
 							})
 	
 	def insertToCreditChangeUserID(user_id):
-	    return ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
+	    ibs_query+=ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
 								    "credit_change_id":change_id})
-	query+="".join(map(insertToCreditChangeUserID,user_ids))
-	return query
+	map(insertToCreditChangeUserID,user_ids)
+	return ibs_query
 
     def __getNewCreditChangeID(self):
 	"""
@@ -244,20 +245,45 @@ class UserActions:
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,users.keys())
 #######################################################
+    def getLoadedUsersByUserID(self,user_id):
+	user_ids=MultiStr(user_id)
+	user_ids=map(lambda x:to_int(x,"user id"),user_ids)
+	loaded_users=map(user_main.getUserPool().getUserByID,user_ids)
+	return loaded_users
+
     def getUserInfoByUserID(self,user_id):
 	"""
-	    return a dic of user information from user with id "user_id"
+	    return a list of user info dics with user_id in multi string user_id
+	    return dic is in format {user_id=>user_info dic}
 	"""
-	loaded_user=user_main.getUserPool().getUserByUserID(user_id)
-    	return self.__getUserInfoFromLoadedUser(loaded_user)
+	loaded_users=self.getLoadedUsersByUserID(user_id)
+	return self.getUserInfosFromLoadedUsers(loaded_users)
 	
 #######################################################
-    def getUserInfoByNormalUsername(self,normal_username):
-	"""
-	    return a dic of user information from user with normal username "normal_username"
-	"""
-	loaded_user=user_main.getUserPool().getUserByNormalUsername(normal_username)
-	return self.__getUserInfoFromLoadedUser(loaded_user)
+    def getLoadedUsersByUsername(self,normal_username):
+	usernames=MultiStr(normal_username)
+	loaded_users=map(user_main.getUserPool().getUserByNormalUsername,usernames)
+	return loaded_users
     
+    def getUserInfoByNormalUsername(self,normal_username,admin_obj):
+	"""
+	    return a list of user info dics with normal_username in multi string user_id
+	    return dic is in format {user_id=>user_info dic}
+	"""
+	loaded_users=self.getLoadedUsersByUsername(normal_username)
+	return self.getUserInfosFromLoadedUsers(loaded_users)
 
-        
+#########################################################
+    def getUserInfosFromLoadedUsers(self,loaded_users):
+	"""
+	    return a list of user info dics, from loaded_users list
+	    return dic is in format {user_id=>user_info dic}
+	    loaded_users(list of LoadedUser instances): users that we want info for
+	"""
+	user_infos={}
+	def addToUserInfo(loaded_user):
+	    user_infos[str(loaded_user.getUserID())]=loaded_user.getUserInfo() #python xmlrpc required keys not to be integers
+	    
+    	map(addToUserInfo,loaded_users)
+	return user_infos
+

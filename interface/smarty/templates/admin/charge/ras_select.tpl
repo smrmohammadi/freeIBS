@@ -5,17 +5,31 @@
     ras_select.setOnUnSelect("display","none");
 </script>
 
-<table width=100% border=0 bordercolor="#c9c9c9" style="border-collapse:collapse">
-    <tr>
-	<td>
-	    <input type=radio name=ras value=_ALL_ {if $ras_selected eq "_ALL_"} checked {/if} onClick='ras_select.select("_ALL_")'> All Rases
+	<table border="0"  class="form_Main" cellspacing="0" cellpadding="0" width=100%>
+	<tr>
+		<td  valign="bottom">
+		<!-- view  Title Table -->
+		<table border="0" cellspacing="0" cellpadding="0" class="form_title">
+			<tr>
+				<td class="form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_orange.gif"></td>
+				<td class="form_Title_orange"><nobr><input type=radio name=ras value=_ALL_ {if $ras_selected eq "_ALL_"} checked {/if} onClick='ras_select.select("_ALL_")'>
+				 All RASes</td>
+				<td class="form_Title_End"><img border="0" src="/IBSng/images/end_form_title_orange.gif"></td>
+			</tr>
+		</table>
+		<!-- End view  Title Table -->
+		</td>
+    	<tr>
+		<td height=2 colspan=100></td>
+	</tr>
 
+        <tr>
+	<td>
+	    
 	    <div id="_ALL_"></div>
 	    <script language="javascript">
 		ras_select.addByID("_ALL_");
 	    </script>
-    <tr>
-	<td>
     {foreach from=$rases key=ras_ip item=ports}
 	{ipescape ip=$ras_ip assign="ras_ip_escaped"}
 	<table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0" width=100%>
@@ -38,7 +52,7 @@
 		</td>
 		    <tr>
 			<td>
-			    <table id="{$ras_ip}" width=100% border=0 cellspacing=0 cellpadding=0>
+			    <table id="{$ras_ip}" width="100%" border=0 cellspacing=0 cellpadding=0>
 	{foreach from=$ports key=index item=port}
 	        {if $index%5==0}
 			</tr>
@@ -66,7 +80,16 @@
 	    </table>
 	
     {/foreach}
+	<!-- view table Foot -->
+	<tr class="List_Foot_Line_orange">
+		<td colspan=100></td>
+	</tr>
+	<tr>
+		<td height=2 colspan=100></td>
+	</tr>
+	<!-- End view table Foot-->
 </table>
+
     <script language="javascript">
 	ras_select.select("{$ras_selected}");
     </script>

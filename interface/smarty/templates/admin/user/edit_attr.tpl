@@ -9,3 +9,4 @@
 	{include file=$template_file}
     {/if}
 </form>
+{include file="admin_footer.tpl"}

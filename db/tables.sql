@@ -214,13 +214,13 @@ create sequence user_locks_lock_id_seq;
 --    email_address text ,
 --    charge id
 
-create table users_attrs (
+create table user_attrs (
     user_id integer references users,
     attr_name text,
     attr_value text
 );
 
-create index user_id_index on users_attrs(user_id);
+create index user_attrs_user_id_index on user_attrs(user_id);
 
 -- ************************ CONFIGURATION
 

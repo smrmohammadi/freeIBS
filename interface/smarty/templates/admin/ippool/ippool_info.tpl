@@ -3,7 +3,7 @@
 
 
 *}
-{include file="admin_header.tpl" title="IPpool Information"}
+{include file="admin_header.tpl" title="IPpool Information" selected="IPPool"}
 {include file="err_head.tpl"}
 {if !$is_editing}
 {headerMsg var_name="update_successfull"}IP pool Updated Successfully.{/headerMsg}
@@ -12,7 +12,7 @@
 
 <table border=0 width=100%>
     <tr>
-	<td width=50% align=center valign=top>
+	<td width=48% align=right valign=top>
 	    {viewTable title="IPPool Information" table_width="220"}
 	    {addEditTD type="left" err="IPPool_ID_err"}
 		    IP Pool ID
@@ -37,7 +37,7 @@
 <br>
     {if $can_change}
     	<form method=POST action="ippool_info.php" name="add_ip_form">
-	    {addEditTable title="Add IP(s) To Pool" table_width="220"}
+	    {addEditTable title="Add IP(s) To Pool" table_width="220" action_icon="add"}
 		{addEditTD type="left" err="add_ip_err"}
 		    IP(s)
 	    {/addEditTD}
@@ -50,7 +50,7 @@
 	</form>
 
 	<form method=POST action="ippool_info.php" name="del_ip_form">
-	    {addEditTable title="Del IP(s) From Pool" table_width="220"}
+	    {addEditTable title="Delete IP(s) From Pool" table_width="220" action_icon="delete"}
 		{addEditTD type="left" err="del_ip_err"}
 		    IP(s)
 	    {/addEditTD}
@@ -63,7 +63,8 @@
 	</form>
     {/if}
 </td>
-<td width=50% align=center valign=top>
+<td width=4%></td>
+<td width=48% align=left valign=top>
     {listTable title="IP List" cols_num=2}
 	{if $can_change}
 	    {listTableHeaderIcon action="delete" close_tr=TRUE}
@@ -104,7 +105,14 @@
 {if $can_change}	
 {addRelatedLink}
     <a href="ippool_info.php?edit=1&ippool_name={$ippool_name|escape:"url"}" class="RightSide_links">
-	Edit IPPool ({$ippool_name})
+	Edit IPPool <b>{$ippool_name}</b>
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+        <a href="ippool_info.php?delete=1&ippool_name={$ippool_name|escape:"url"}" 
+		{jsconfirm msg="Are you sure you want to delete IP Pool? Warning: You should remove ippool from ras and users"}
+		 class="RightSide_links">
+	Delete Ippool <b>{$ippool_name}</b>
     </a>
 {/addRelatedLink}
 {/if}
@@ -137,18 +145,20 @@
 	{/addEditTD}
 	{/addEditTable}
 
-{/if}
-
 {addRelatedLink}
-        <a href="ippool_info.php?delete=1&ippool_name={$ippool_name|escape:"url"}" 
-		{jsconfirm msg="Are you sure you want to delete IP Pool? Warning: You should remove ippool from ras and users"}
-		 class="RightSide_links">
-	Delete Ippool ({$ippool_name})
+        <a href="ippool_info.php?ippool_name={$ippool_name}" class="RightSide_links">
+	Ippool <b>{$ippool_name}</b> Info
     </a>
 {/addRelatedLink}
+{/if}
 {addRelatedLink}
     <a href="ippool_list.php" class="RightSide_links">
 	 List IPPool
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/ippool/add_new_ippool.php" class="RightSide_links">
+	Add New IPPool
     </a>
 {/addRelatedLink}
 {setAboutPage title="IPPool information"}

@@ -141,7 +141,7 @@ class UserLoader:
 	"""
 	voip_attrs={}
 	voip_db_attrs=db_main.getHandle().get("voip_users")
-	if len(normal_db_attrs)==1:
+	if len(voip_db_attrs)==1:
 	    voip_attrs["voip_username"]=voip_db_attrs[0]["voip_username"]
 	return voip_attrs
 

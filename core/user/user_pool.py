@@ -148,10 +148,10 @@ class UserPool:
 
     def __checkPoolSize(self):
 	"""
-	    check pool size and release a user if we are more then defs.USER_POOL_SIZE
+	    check pool size and release a user if we are more then defs.MAX_USER_POOL_SIZE
 	"""
 	self.__pool_len+=1
-	if self.__pool_len>defs.USER_POOL_SIZE:
+	if self.__pool_len>defs.MAX_USER_POOL_SIZE:
 	    self.__releaseOneUser()
 
     def __releaseOneUser(self):
@@ -207,6 +207,7 @@ class UserPool:
 		loaded_user.setOnlineFlag(True)
 	finally:
 	    self.loading_users.loadingEnd(user_id)
+	return loaded_user
 	
 #################################
     def getUserByNormalUsername(self,normal_username,online_flag=False):

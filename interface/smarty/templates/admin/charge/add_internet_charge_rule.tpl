@@ -1,14 +1,15 @@
-{* Add New or edit Internet Charge Rule
+{* 
+    Add New or edit Internet Charge Rule
     
     Success: client will be redirected to the charge information page
     Failure: this page is shown again with error message at top of the page
 
 *}
-{include file="admin_header.tpl" title="Internet Charge Rule"}
+{include file="admin_header.tpl" title="Internet Charge Rule" selected="Charge"}
 {include file="err_head.tpl"}
 
 <form method=POST name=add_internet_rule>
-{addEditTable title="Internet Charge Rule" double="TRUE" table_width=620}
+{addEditTable title="Internet Charge Rule" double="TRUE" table_width=580}
     	    {addEditTD type="left1" double="TRUE"}
 		Charge Name
 	    {/addEditTD}

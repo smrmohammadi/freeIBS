@@ -33,7 +33,7 @@ END;
 	$footer=<<<END
 	<!-- List Foot -->
 	<tr class="List_Foot_Line">
-		<td colspan=100></td>
+		<td colspan=25></td>
 	</tr>
 	<!-- End List Foot-->
 </table>

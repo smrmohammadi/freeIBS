@@ -1,11 +1,26 @@
+
 		</td>
-		<td width="180" align="center" valign="top">		
+		<td width="180" align="center" valign="top" id="menu_full">
 		    {include file="admin_right_sidebar.tpl"}
 		</td>
+		<td width="32" align="center" valign="top" id="menu_hidden">
+		    {include file="admin_right_sidebar_hidden.tpl"}
+		</td>
+	
 	</tr>
 </table>
 <!-- End Main Table -->
 
+{literal}
+<script language="javascript">
+    menu_select=new DomContainer();
+    menu_select.addByID("menu_full",[]);
+    menu_select.addByID("menu_hidden",[]);
+    menu_select.setOnSelect("display","");
+    menu_select.setOnUnSelect("display","none");
+    menu_select.select("menu_full");
+</script>
+{/literal}
 
 <!-- Footer -->
 <table border="0" width="100%" cellspacing="0" cellpadding="0">

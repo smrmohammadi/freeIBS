@@ -7,7 +7,7 @@
     Failure: this page is shown again with error message at top of the page
 
 *}
-{include file="admin_header.tpl" title="Add New Ras"}
+{include file="admin_header.tpl" title="Add New Ras" selected="RAS"}
 {include file="err_head.tpl"}
 
 <form method=POST>

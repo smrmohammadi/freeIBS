@@ -11,7 +11,7 @@
     Failure: this page is shown again with error message at top of the page
 
 *}
-{include file="admin_header.tpl" title="Edit Ras Port"}
+{include file="admin_header.tpl" title="Edit Ras Port" selected="RAS"}
 {include file="err_head.tpl"}
     
 {headerMsg}
@@ -25,7 +25,7 @@
     {addEditTable title="Edit RAS Port" table_width=320}
 
 	{addEditTD type="left" err="ras_ip_err"}
-	    Ras IP:
+	    Ras IP
 	{/addEditTD}
 	{addEditTD type="right"}
 	    {$ras_ip}    
@@ -51,7 +51,7 @@
     	{/addEditTD}
 
 	{addEditTD type="left" err="port_type_err"}
-	    Phone No. 
+	    Phone No 
 	{/addEditTD}
 	{addEditTD type="right"}
 		<input type=text name=phone value="{$phone}" class=text>

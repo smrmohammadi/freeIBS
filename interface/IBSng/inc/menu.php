@@ -5,7 +5,10 @@ $GLOBALS["IBSngMenu"]=Array("user"=>array(),
 		"report"=>array(),
 		"admin"=>array("Admin List"=>"/IBSng/admin/admins/admin_list.php",
 			       "Add Admin"=>"/IBSng/admin/admins/add_new_admin.php"),
-		"setting"=>array()
+		"setting"=>array("Charge"=>"/IBSng/admin/charge/charge_list.php",
+				"RAS"=>"/IBSng/admin/ras/ras_list.php",
+				"IPPool"=>"/IBSng/admin/ippool/ippool_list.php",
+				"Advanced Configuration"=>"/IBSng/admin/misc/show_ibs_defs.php")       
 		);
 
 $GLOBALS["IBSngMenuLinks"]=Array("user"=>"/IBSng/admin/user",

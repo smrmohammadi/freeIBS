@@ -198,5 +198,6 @@ class Admin:
 	    raise an PermissionException if admin can not access and get information of  user loaded in "loaded_user"
 	    or return if admin has access to the user. Checking is done with admin permission GET USER INFORMATION
 	"""
-	self.checkPerm("GET USER INFORMATION",loaded_user)
+	
+	self.canDo("GET USER INFORMATION",loaded_user)
 

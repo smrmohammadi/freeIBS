@@ -12,10 +12,17 @@ function smarty_block_headerMsg($params,$content,&$smarty,&$repeat)
     {
 
 	return <<<END
-    <span class="message">
-	{$content}<br><br>
-    </span>        
-	
+<table align=center border=0>
+	<tr>
+	    <td align=left>
+		<img border="0" src="/IBSng/images/before_successful_msg.gif">
+	    </td>
+	    <td align=left class="error_messages">	    
+		{$content}
+	    </td>
+	</tr>
+</table>
+<br>    	
 END;
     }
     else

@@ -9,7 +9,7 @@ table.Main_Page {
 	direction:ltr;
 	alignment:center;
 	text_alignment:center;
-	height:74.4%;
+	height:73%;
 	width:100%
 }
 
@@ -204,11 +204,12 @@ table.Form_Main {
 /*  Form Title						*/
 /*    Classes: 						*/
 /*	1.table.Form_Title				*/
-/*	2.td.Form_Title					*/
+/*	2.td.Form_Title_red				*/
 /*      3.td.Form_Title_Begin				*/
 /*      4.td.Form_Title_End				*/
 /*      5.td.Form_Title_Top_Line			*/
 /*      6.td.Form_Title_End_Line			*/
+/*	7.td.Form_Title_orange				*/
 /*------------------------------------------------------*/
 
 table.Form_Title {  
@@ -219,7 +220,7 @@ table.Form_Title {
 	alignment:center
 }
 
-td.Form_Title{ 
+td.Form_Title_red{ 
 	font-family: Tahoma; 
 	font-size: 9pt; 
 	color: #FFFFFF; 
@@ -228,6 +229,7 @@ td.Form_Title{
 	direction:ltr ;
 	background-color:#9A1111 
 }
+
 td.Form_Title_Begin{ 
 	height:20;
 	width:8
@@ -250,6 +252,15 @@ td.Form_Title_End_Line{
 	height:3;
 	background-color:#9A1111
 }
+td.Form_Title_orange{ 
+	font-family: Tahoma; 
+	font-size: 10pt; 
+	color: #9a1111; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	background-color:#ff9c00 
+}
 
 /*------------------------------------------------------*/
 /*  Form Foot  						*/
@@ -257,9 +268,11 @@ td.Form_Title_End_Line{
 /*	1.table.Form_Foot				*/
 /*	2.td.Form_Foot					*/
 /*      3.td.Form_Foot_End				*/
-/*      4.td.Form_Foot_Below_Line			*/
-/*      5.td.Form_Foot_Begin_Line			*/
+/*      4.td.Form_Foot_Below_Line_red			*/
+/*      5.td.Form_Foot_Begin_Line_red			*/
 /*      6.td.Form_Foot_Buttons  			*/
+/*      7.td.Form_Foot_Below_Line_orange		*/
+/*      8.td.Form_Foot_Begin_Line_orange		*/
 /*------------------------------------------------------*/
 
 table.Form_Foot {  
@@ -275,7 +288,7 @@ td.Form_Foot_End{
 	width:14
 }
 
-td.Form_Foot_Below_Line{ 
+td.Form_Foot_Below_Line_red{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
 	color: #c0c0c0; 
@@ -284,7 +297,7 @@ td.Form_Foot_Below_Line{
 	width:100%;
 	background-color:#FFFFFF
 }
-td.Form_Foot_Begin_Line{ 
+td.Form_Foot_Begin_Line_red{ 
 	height:2;
 	background-color:#9A1111
 }
@@ -293,6 +306,21 @@ td.Form_Foot_Buttons{
 	direction:ltr ;
 	Text-align:right ;
 	background-color:#FFFFFF
+}
+
+td.Form_Foot_Below_Line_orange{ 
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #c0c0c0; 
+	font-weight:bold;
+	height:18;
+	width:100%;
+	background-color:#FFFFFF
+}
+
+td.Form_Foot_Begin_Line_orange{ 
+	height:2;
+	background-color:#ff9c00
 }
 
 /*--------------------------------------------------------------*/
@@ -709,6 +737,10 @@ td.List_Col{
 tr.List_Foot_Line{ 
 	height:3;
 	background-color:#9A1111
+}
+tr.List_Foot_Line_orange{ 
+	height:3;
+	background-color:#FF9c00
 }
 
 /*------------------------------------------------------*/

@@ -1,3 +1,4 @@
+from core.user import user_main
 
 class LoadedUser:
     """
@@ -32,5 +33,14 @@ class LoadedUser:
 	
     def hasAttr(self,attr_name):
 	self.getUserAttrs().hasAttribute(attr_name)
+
+    def getUserInfo(self):
+	"""
+	    return a dic of user informations, useful for passing to interface
+	"""
+	return {"basic_info":self.getBasicUser().getInfo(),
+		"attrs":user_main.getAttributeManager().parseAttrs(self.getUserAttrs().getAllAttributes()),
+		"raw_attrs":self.getUserAttrs().getAllAttributes()
+	       }	
     
     

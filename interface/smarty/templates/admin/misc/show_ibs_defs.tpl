@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="IBS Definitions"}
+{include file="admin_header.tpl" title="IBS Definitions" selected="Advanced Configuration"}
 {include file="err_head.tpl"}
 
 {headerMsg var_name="save_success"}Definitions updated successfully.{/headerMsg}

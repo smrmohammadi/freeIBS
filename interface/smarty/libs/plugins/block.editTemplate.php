@@ -13,7 +13,6 @@ function smarty_block_editTemplate($params,$content,&$smarty,&$repeat)
     if(!is_null($content))
     {
 	$header=<<<END
-<script language="javascript" src="/IBSng/js/dom_container.js"></script>
 <form method=POST action="/IBSng/admin/plugins/edit.php">
     <input type=hidden name="target" value="{$params["target"]}">
     <input type=hidden name="target_id" value="{$params["target_id"]}">

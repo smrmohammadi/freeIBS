@@ -4,6 +4,7 @@ from core.lib.general import *
 from core.db import db_main,ibs_db,ibs_query
 from core.ippool import ippool_main
 from core.lib import iplib
+from core.ras import ras_main
 
 class IPpoolActions:
     def addNewPool(self,ippool_name,comment):

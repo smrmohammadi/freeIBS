@@ -8,7 +8,10 @@
 		<td width="139" height="6" class="RightSide_Color_light"></td>
 	</tr>
 	<tr>
-		<td width="32" background="/IBSng/images/anti_alias_bacground_left.gif"><img border="0" src="/IBSng/images/hide.gif" width="32" height="66"></td>
+		<td width="32" background="/IBSng/images/anti_alias_bacground_left.gif">
+		    <a href="javascript: menu_select.select('menu_hidden');"><img border="0" src="/IBSng/images/hide.gif" width="32" height="66"></a>
+		</td>
+		
 		<td width="139" class="RightSide_Color_light" valign="top">
 		<!-- Related Links -->
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">

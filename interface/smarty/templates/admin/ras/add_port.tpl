@@ -9,11 +9,11 @@
     Failure: this page is shown again with error message at top of the page
 
 *}
-{include file="admin_header.tpl" title="Add Port To Ras"}
+{include file="admin_header.tpl" title="Add Port To Ras" selected="RAS"}
 {include file="err_head.tpl"}
 
 <form method=POST name=add_port>
-    {addEditTable title="Add New Port to Ras" table_width=320}
+    {addEditTable title="Add New Port to Ras" table_width=320 action_icon="add"}
 
 	{addEditTD type="left" err="ras_ip_err"}
 	    Ras IP:

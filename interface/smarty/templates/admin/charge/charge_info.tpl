@@ -16,7 +16,7 @@
     $comment
     
 *}
-{include file="admin_header.tpl" title="Charge Information"}
+{include file="admin_header.tpl" title="Charge Information" selected="Charge"}
 {include file="err_head.tpl"}
 
 {headerMsg var_name="update_success"}

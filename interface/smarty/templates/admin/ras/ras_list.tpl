@@ -5,7 +5,7 @@
 
 *}
 
-{include file="admin_header.tpl" title="Ras List"}
+{include file="admin_header.tpl" title="Ras List" selected="RAS"}
 {include file="err_head.tpl"}
 
 <center>
@@ -18,7 +18,7 @@
 {/if}
 {listTable title="Active Rases" cols_num=4}
 	{listTableHeaderIcon action="view"}
-	{listTableHeaderIcon action="deactive" close_tr=TRUE}
+	{listTableHeaderIcon action="active" close_tr=TRUE}
 	{listTR type="header"}
 	    {listTD}
 		ID
@@ -55,7 +55,7 @@
 	    {if $can_change}
 	    {listTD icon="TRUE"}
 			<a href="/IBSng/admin/ras/ras_list.php?deactive={$ras_info.ras_ip|escape:"url"}">
-			    deactive
+			    {listTableBodyIcon action="active" }
 			</a> 
 	    {/listTD}
 	    {/if}
@@ -66,7 +66,7 @@
 <br>
 {listTable title="Deactive Rases" cols_num=4}
 	{listTableHeaderIcon action="view"}
-	{listTableHeaderIcon action="active" close_tr=TRUE}
+	{listTableHeaderIcon action="deactive" close_tr=TRUE}
 	{listTR type="header"}
 	    {listTD}
 		ID
@@ -103,12 +103,17 @@
 	    {if $can_change}
 	    {listTD icon="TRUE"}
 			<a href="/IBSng/admin/ras/ras_list.php?reactive={$ras_info.ras_ip|escape:"url"}">
-			    Reactive
+			    {listTableBodyIcon action="deactive"}
 			</a> 
 	    {/listTD}
 	    {/if}
 	{/listTR}
 	{/foreach}
 {/listTable}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/add_new_ras.php" class="RightSide_links">
+	Add New RAS
+    </a>
+{/addRelatedLink}
 
 {include file="admin_footer.tpl"}

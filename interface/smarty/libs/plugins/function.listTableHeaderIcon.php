@@ -19,6 +19,10 @@ function smarty_function_listTableHeaderIcon($params,&$smarty)
 	$link.="edit.gif";
     else if ($action=="view")
 	$link.="view.gif";
+    else if ($action=="active")
+	$link.="active.gif";
+    else if ($action=="deactive")
+	$link.="deactive.gif";
     	
     return <<<EOF
                 

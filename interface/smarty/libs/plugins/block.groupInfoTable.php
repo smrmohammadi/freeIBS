@@ -44,7 +44,7 @@ END;
 		<td colspan="{$colspans}">
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
-					<td class="Form_Foot_Begin_Line"></td>
+					<td class="Form_Foot_Begin_Line_red"></td>
 END;
 	if($smarty->get_assigned_value("can_change"))
 	{
@@ -57,7 +57,7 @@ END;
 
 				</tr>
 				<tr>
-					<td class="Form_Foot_Below_Line"></td>
+					<td class="Form_Foot_Below_Line_red"></td>
 				</tr>
 			</table>
 			<!-- End Form Foot Table -->

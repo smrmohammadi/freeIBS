@@ -47,7 +47,7 @@ USER_ERRORS={
     "DUPLICATE_ATTR_REGISTRATION":"Duplicate registration of attribute %s",
     "UNREGISTERED_ATTRIBUTE":"Attribute %s not registered",
     "UNKNOWN_ATTRIBUTE_ACTION":"Unknown attribute action %s",
-    "USERID_DOESNT_EXITS":"User with user id %s does not exists",
+    "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
     "NORMAL_USERNAME_DOESNT_EXITS":"User with normal username %s does not exists",
     "ACCESS_TO_USER_DENIED":"You have not access to user id %s"
 }

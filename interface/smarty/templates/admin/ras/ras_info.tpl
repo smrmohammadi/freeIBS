@@ -1,14 +1,15 @@
 {* 
+
 Ras Info
     Shows one ras information, including ports and attributes
     on fatal errors that no info can be shown, client is redirected to admin_list
     else error is shown on top of page
     
     Variables:
-    
+
 *}
 
-{include file="admin_header.tpl" title="Ras Information"}
+{include file="admin_header.tpl" title="Ras Information" selected="RAS"}
 {include file="err_head.tpl"}
 
 {headerMsg var_name="update_ras_info_success"}
@@ -35,207 +36,256 @@ Ras Info
     	IP Deleted From Ras Successfully.
 {/headerMsg}
 
-
 {if $is_editing or $attr_editing}
     <form method=POST action="/IBSng/admin/ras/ras_info.php">
 {/if}
-{if $is_editing}
-    <input type=hidden name=edit value=1>
-    <input type=hidden name=old_ras_ip value="{$info.ras_ip}">
-    <input type=hidden name=ras_id value="{$info.ras_id}">
-{/if}
-
-{if $attr_editing}
-    <input type=hidden name=attr_editing_done value=1>
-    <input type=hidden name=ras_ip value="{$info.ras_ip}">
-{/if}
-    
-<center>
-    <table border=1>
-	<tr>	
-	    <td>
-
-		Ras IP:
-	    <td {ifibserr varname="ras_ip_err" add="bgcolor=red"}>
-		{if $is_editing}
-		    <input type=text name=ras_ip value="{$info.ras_ip}">
-		    
-		    
-		{else}		
-		    {$info.ras_ip}
-		{/if}
-	    <td>
-		Ras ID:
-	    <td>
+    {if $is_editing}
+	<input type=hidden name=edit value=1>
+        <input type=hidden name=old_ras_ip value="{$info.ras_ip}">
+	<input type=hidden name=ras_id value="{$info.ras_id}">
+	{addEditTable title="RAS Information" double="TRUE"}
+	    {addEditTD type="left1" double="TRUE" err="ras_ip_err"}
+		RAS IP
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		<input class="text" type=text name=ras_ip value="{$info.ras_ip}">
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"}
+	    	RAS ID
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
 		{$info.ras_id}
-	<tr>
-	    <td>
-		Type:
-	    <td {ifibserr varname="ras_type_err" add="bgcolor=red"}>
-		{if $is_editing}
-		    <select name=ras_type>
-			{html_options output=$ras_types values=$ras_types default=$info.ras_type}
-		    </select>
-		{else}		
-		    {$info.ras_type}
-		{/if}
-	    <td>
-		Radius Secret:
-	    <td {ifibserr varname="ras_radius_secret_err" add="bgcolor=red"}>
-		{if $is_editing}
-		    <input type=text name=radius_secret value="{$info.radius_secret}">
-		{else}		
-		    {$info.radius_secret}
-		{/if}
-    </table>
-</center>
-<table width=100% border=1>
-    <tr valign=top>
-	<td>
-	    <table border=1>
-		<tr>
-		    <td colspan=2 align=center>
-			Attributes
-		<tr>
-		    <td align=center>
-			Name
-		    <td align=center>
-			Value
-	    
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE" err="ras_type_err"}
+		Type
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+	        <select name=ras_type>
+		    {html_options output=$ras_types values=$ras_types default=$info.ras_type}
+		</select>
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"} 
+	        Radius Secret:
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+	    	    <input class="text" type=text name=radius_secret value="{$info.radius_secret}">
+    	    {/addEditTD}
+        {/addEditTable}
+    {else}
+	{viewTable title="Edit RAS Information" double="TRUE"}
+	    {addEditTD type="left1" double="TRUE" err="ras_ip_err"}
+		RAS IP
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+		    {$info.ras_ip}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"}
+	    	RAS ID
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+		{$info.ras_id}
+	    {/addEditTD}
+	    {addEditTD type="left1" double="TRUE" err="ras_type_err"}
+		Type
+	    {/addEditTD}
+	    {addEditTD type="right1" double="TRUE"}
+	        {$info.ras_type}
+	    {/addEditTD}
+	    {addEditTD type="left2" double="TRUE"} 
+	        Radius Secret:
+	    {/addEditTD}
+	    {addEditTD type="right2" double="TRUE"}
+	    	    {$info.radius_secret}
+	    {/addEditTD}
+        {/viewTable}
+    {/if}	
+    {if $attr_editing}
+        <input type=hidden name=attr_editing_done value=1>
+	<input type=hidden name=ras_ip value="{$info.ras_ip}">
+	{addEditTable title="Attributes" table_width="480"}
 		{foreach from=$attrs key=attr_name item=attr_value}
-		    <tr>
-			<td>
+		    	{addEditTD type="left"}
 			    {$attr_name}
-			<td>
-			    {if $attr_editing}
-				<input type=text name="attr__{$attr_name}" value="{$attr_value}">
-			    {else}
-				{$attr_value}
-			    {/if}
+			{/addEditTD}
+		        {addEditTD type="right"}
+			    <input class="text" type=text name="attr__{$attr_name}" value="{$attr_value}">
+			{/addEditTD}    
 		{/foreach}
-	    </table>
-	<td>
-	    <table border=1>
-		<tr>
-		    <td colspan=4 align=center>
-			Ports
-		<tr>
-		    <td align=center>
-			Port Name
-		    <td align=center>
-			Type
-		    <td align=center>
-			Phone
-		    <td align=center>
-			Comment
+	{/addEditTable}
+    {else}		    
+	{viewTable title="Attributes" table_width="480"}
+		{foreach from=$attrs key=attr_name item=attr_value}
+		    	{addEditTD type="left"}
+			    {$attr_name}
+			{/addEditTD}
+		        {addEditTD type="right"}
+			    {$attr_value}
+			{/addEditTD}    
+		{/foreach}
+	{/viewTable}
+    {/if}
 
+<table width=100% border=0>
+    <tr valign=top> 
+	<td  valign="top" align="right">
+{if not $is_editing and not $attr_editing and $can_change}
+    <form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
+	{addEditTable title="Delete Port(s)" table_width="220" action_icon="delete"}
+	    {addEditTD type="left" err="del_port_err"}
+	        Ports(s)
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><input class="text" type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}		
+    	    {/addEditTD}
+	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
+    {/addEditTable}
+    </form>
+    <form method=POST action="/IBSng/admin/ras/edit_port.php" name=edit_port>
+	{addEditTable title="Edit Port(s)" table_width="220" action_icon="edit"}
+	    {addEditTD type="left" err="edit_port_err"}
+	        Ports(s)
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><input class="text" type=text name=edit_port> {multistr form_name="edit_port" input_name="edit_port"}		
+    	    {/addEditTD}
+	    <input type=hidden name=ras_ip value="{$info.ras_ip}">
+        {/addEditTable}
+    </form>
+    <form method=POST action="/IBSng/admin/ras/ras_info.php">
+	{addEditTable title="Add IPPool" table_width="220" action_icon="add"}
+	    {addEditTD type="left" err="edit_port_err"}
+	        Add IPpool To Ras
+	    {/addEditTD}
+	    {addEditTD type="right"}
+		<nobr><select name="add_ip_pool">
+				{html_options values=$ippool_names output=$ippool_names}
+			    </select>
+	    {/addEditTD}
+        <input type=hidden name=ras_ip value="{$info.ras_ip}">
+    {/addEditTable}
+	</form>
+{/if}
+    {listTable title="RAS IPPools" cols_num=1}
+	{if not $is_editing and not $attr_editing and $can_change}
+	    {listTableHeaderIcon action="delete" close_tr=TRUE}
+	{/if}
+	{listTR type="header"}
+	    {listTD}
+		 IPPool Name
+	    {/listTD}
+	{/listTR}
+    {foreach from=$ras_ippools item=ras_ippool_name}
+	{listTR type="body"}
+		{listTD}
+		    {$ras_ippool_name}
+	    	{/listTD}
+		{if not $is_editing and not $attr_editing and $can_change}
+		    {listTD icon=TRUE}
+			<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip|escape:"url"}&del_ip_pool={$ras_ippool_name|escape:"url"}" {jsconfirm msg="Are you sure you want to delete IPPool `$ras_ippool_name`"}>{listTableBodyIcon action="delete" cycle_color="TRUE"}</a>
+		    {/listTD}
+		{/if}
+	{/listTR}
+	{/foreach}
+	{/listTable}
+<td align="center" valign="top">
+    
+    {listTable title="RAS Ports List" cols_num=4}
+	{if not $is_editing and not $attr_editing and $can_change}
+		{listTableHeaderIcon action="view"}
+	        {listTableHeaderIcon action="delete" close_tr=TRUE}
+	{/if}
+	{listTR type="header"}
+	    {listTD}
+		Port Name
+	    {/listTD}
+	    {listTD}
+		Type
+	    {/listTD}
+	    {listTD}
+		Phone
+	    {/listTD}
+	    {listTD}
+		Comment
+	    {/listTD}
+	{/listTR}
 		{foreach from=$ports item=port_info}
-		    <tr>
-			<td>
+		{listTR type="body"}
+			{listTD}
 			    {$port_info.port_name}
-			<td>
+			{/listTD}
+		        {listTD}
 			    {$port_info.type}
-			<td>
+			{/listTD}
+		        {listTD}
 			    {$port_info.phone}
-			<td>
+			{/listTD}
+			{listTD}
 			    {$port_info.comment}
-			{if not $is_editing and not $attr_editing and $can_change}
-			    <td>
-				<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip|escape:"url"}&del_port={$port_info.port_name|escape:"url"}" {jsconfirm msg="Are you sure you want to delete port `$port_info.port_name`"}>
-				    del
-				</a>
-
-			    <td>
+			{/listTD}
+    			{if not $is_editing and not $attr_editing and $can_change}
+			    {listTD icon=TRUE}
 				<a href="/IBSng/admin/ras/edit_port.php?ras_ip={$info.ras_ip|escape:"url"}&port_name={$port_info.port_name|escape:"url"}">
-				    edit
+				    {listTableBodyIcon action="view" cycle_color="TRUE"}
 				</a>
+			    {/listTD}
+			    {listTD icon=TRUE}
+				<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip|escape:"url"}&del_port={$port_info.port_name|escape:"url"}" {jsconfirm msg="Are you sure you want to delete port `$port_info.port_name`"}>
+				    {listTableBodyIcon action="delete"}
+				</a>
+			    {/listTD}
 			{/if}
+		{/listTR}
 		{/foreach}
-
-	    </table>
-    <tr>
-	<td>
-
-	    <table border=1>
-		<tr>
-		    <td colspan=2 align=center>
-			Ras IP Pools
-		<tr>
-		    <td align=center>
-			IP Pool Name
-	    
-		{foreach from=$ras_ippools item=ras_ippool_name}
-		    <tr>
-			<td>
-			    {$ras_ippool_name}
-			<td>
-			    {if not $is_editing and not $attr_editing and $can_change}
-				<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip|escape:"url"}&del_ip_pool={$ras_ippool_name|escape:"url"}">
-				    del
-				</a>
-			    {/if}
-		{/foreach}
-	    </table>
+        {/listTable}
 	    
 </table>
-
-
-<table>
-{if not $is_editing and not $attr_editing and $can_change}
-    <table>
-	<tr>
-	    <td>
-		<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit=1">
-		    Edit Ras Informations
-		</a>
-	<tr>
-	    <td>
-		<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit_attrs=1">
-		    Edit Ras Attributes
-		</a>
-
-	<tr>
-	    <td>
-		<a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&reset_attrs=1" {jsconfirm msg="Reset attributes of ras `$info.ras_ip` to default?"}>
-		    Reset Ras Attributes To Default
-		</a>
-
-	<tr>
-	    <td>
-		<a href="/IBSng/admin/ras/add_port.php?ras_ip={$info.ras_ip}">
-		    Add Port(s)
-		</a>
-	<tr>
-	    <td>
-			<form method=POST action="/IBSng/admin/ras/ras_info.php" name=del_port>
-				<input type=hidden name=ras_ip value="{$info.ras_ip}">
-		    Del Port(s): <input type=text name=del_port> {multistr form_name="del_port" input_name="del_port"}
-				<input type=submit value=del {jsconfirm msg="Are you sure?"}>
-			</form>
-
-	<tr>
-	    <td>
-				<form method=POST action="/IBSng/admin/ras/edit_port.php" name=edit_port>
-				<input type=hidden name=ras_ip value="{$info.ras_ip}">
-		    Edit Port(s): <input type=text name=port_name> {multistr form_name="edit_port" input_name="port_name"}
-				<input type=submit value=edit>
-				</form>
-
-	<tr>
-	    <td>
-
-		    <form method=POST action="/IBSng/admin/ras/ras_info.php">
-			<input type=hidden name=ras_ip value="{$info.ras_ip}">
-			Add IP pool To Ras: <select name="add_ip_pool">
-						{html_options values=$ippool_names output=$ippool_names}
-					    </select>
-				<input type=submit value=add>					    
-		    </form>
-
-    </table>
-{else}
-    <input type=submit name=submit>
+{if $is_editing or $attr_editing}
     </form>
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}" class="RightSide_links">
+	RAS <b>{$info.ras_ip}</b> Info
+    </a>
+{/addRelatedLink}
 {/if}
+{if !$is_editing}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit=1" class="RightSide_links">
+	Edit RAS Information
+    </a>
+{/addRelatedLink}
+{/if}
+{if !$attr_editing}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&edit_attrs=1" class="RightSide_links">
+	Edit RAS Attributes
+    </a>
+{/addRelatedLink}
+{/if}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_info.php?ras_ip={$info.ras_ip}&reset_attrs=1" {jsconfirm msg="Reset attributes of ras `$info.ras_ip` to default?"} class="RightSide_links">
+	Reset Ras Attributes 
+    </a>
+{/addRelatedLink}
+
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/add_port.php?ras_ip={$info.ras_ip}" class="RightSide_links">
+	Add Port
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/ras_list.php" class="RightSide_links">
+	RAS List
+    </a>
+{/addRelatedLink}
+{addRelatedLink}
+    <a href="/IBSng/admin/ras/add_new_ras.php" class="RightSide_links">
+	Add New RAS
+    </a>
+{/addRelatedLink}
+
+{setAboutPage title="RAS Information"}
+
+{/setAboutPage}
 
 {include file="admin_footer.tpl"}

@@ -3,7 +3,7 @@
 
 *}
 
-{include file="admin_header.tpl" title="IP Pools List"}
+{include file="admin_header.tpl" title="IP Pools List" selected="IPPool"}
 {include file="err_head.tpl"}
 
 {listTable title="IP Pool List" cols_num=4}

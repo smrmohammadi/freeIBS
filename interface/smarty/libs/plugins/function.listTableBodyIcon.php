@@ -11,7 +11,7 @@ function smarty_function_listTableBodyIcon($params,&$smarty)
 */
     
     $action=$params["action"];
-    if(!in_array($action,array("add","delete","edit","view")))
+    if(!in_array($action,array("add","delete","edit","view","active","deactive")))
 	return "";
     $cycle_color=(isset($params["cycle_color"]) and $params["cycle_color"]=="TRUE")?TRUE:FALSE;
     $color=getTRColor($cycle_color);

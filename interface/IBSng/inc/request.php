@@ -54,7 +54,7 @@ class Request
 	list($success,$ret_val)=$this->__check();
 	if($success)
 	    list($success,$ret_val)=$this->ibs_rpc->sendRequest($this->server_method,$this->params_arr);
-	return $this->createResponse($success,$msg);
+	return $this->createResponse($success,$ret_val);
     }
     
     
@@ -85,7 +85,7 @@ class Response
 	    $this->error=$ret_val;
     }
     
-    function isSuccessfull()
+    function isSuccessful()
     {/*	return True if request was successfull
     
     */

@@ -22,6 +22,10 @@
 		</table>
 		<!-- End List Title Table -->
 		</td>
+	<tr>
+	        <td colspan="30" class="Form_Content_Row_Space"></td>
+	</tr>
+
     <tr>
     {foreach from=$day_of_weeks key=index item=day_of_week}
     
@@ -31,7 +35,7 @@
 		<script language="javascript">
 		    dows.addByName("{$form_name}","{$day_of_week}");
 		</script></td>
-		<td class="Form_Content_Row_Left_light" style="width:75">
+		<td class="Form_Content_Row_Left_light" style="width:20">
 			{$day_of_week}</td>
 		<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/end_of_row_light.gif"></td>
     {/foreach}
@@ -42,6 +46,9 @@
 	    dows.setCheckAll("{$form_name}","checkall");
     </script>
 	<!-- List Foot -->
+	<tr>
+	        <td colspan="30" class="Form_Content_Row_Space"></td>
+	</tr>
 	<tr class="List_Foot_Line">
 		<td colspan=100></td>
 	</tr>

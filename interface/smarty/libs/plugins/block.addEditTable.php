@@ -12,6 +12,7 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 					     Can be on of "edit" "delete" "add" or "ok"
 					     default is "ok"
 
+    parameter color(string,optional): Set color of table header, default is red
 
 */
     if(!is_null($content))
@@ -28,6 +29,11 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 	    $colspans=4;
 	}
 
+	if(isset($params["color"]))
+	    $color=$params["color"];
+	else
+	    $color="red";
+
 	$action_icon="ok";
 	if(isset($params["action_icon"]) and in_array($params["action_icon"],array("edit","delete","add","ok")))
 	    $action_icon=$params["action_icon"];
@@ -42,9 +48,9 @@ function smarty_block_addEditTable($params,$content,&$smarty,&$repeat)
 		<!-- Form Title Table -->
 		<table border="0" cellspacing="0" cellpadding="0" class="Form_Title">
 			<tr>
-				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_red.gif"></td>
-				<td class="Form_Title">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
-				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_of_form_title_red.gif"></td>
+				<td class="Form_Title_Begin"><img border="0" src="/IBSng/images/begin_form_title_{$color}.gif"></td>
+				<td class="Form_Title_{$color}">	{$title} <img border="0" src="/IBSng/images/arrow_orange.gif"></td>
+				<td class="Form_Title_End"><img border="0" src="/IBSng/images/end_of_form_title_{$color}.gif"></td>
 			</tr>
 			</table>
 		<!-- End Form Title Table  -->
@@ -61,18 +67,19 @@ END;
 		<td colspan="{$colspans}">
 			<table border="0" cellspacing="0" cellpadding="0" class="Form_Foot">
 				<tr>
-					<td class="Form_Foot_Begin_Line"></td>
+					<td class="Form_Foot_Begin_Line_{$color}"></td>
 					<td rowspan="2" class="Form_Foot_End"><img border="0" src="/IBSng/images/end_of_line_bottom_of_table.gif"></td>
 					<td rowspan="2" class="Form_Foot_Buttons"><input type=image src="/IBSng/images/{$action_icon}.gif"></td>
 				</tr>
 				<tr>
-					<td class="Form_Foot_Below_Line"></td>
+					<td class="Form_Foot_Below_Line_{$color}"></td>
 				</tr>
 			</table>
 			<!-- End Form Foot Table -->
 		</td>
 	</tr>
 </table>
+<br>
 END;
     return $header.$content.$footer;    
     }

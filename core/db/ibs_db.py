@@ -53,7 +53,7 @@ class ibs_db: #abstract parent class for all db implementions. Children must imp
         self.pgConn=None
 
     
-    def get(self,table,condition,from_=0,to=-1,orderBy="",rows=[]):
+    def get(self,table,condition="true",from_=0,to=-1,orderBy="",rows=[]):
         query="select "
         if rows==[]:
             query+="*"

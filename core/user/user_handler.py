@@ -34,29 +34,28 @@ class UserHandler(handler.Handler):
 ##########################################################
     def getUserInfo(self,request):
 	"""
-	    return user information in a dic of {"basic_info":{basic_user_info},"attrs":{user_attributes}}
-	    if requester is admin, he can specify user_id or normal_username
+	    return user information in a list of dics in format
+	    [{"basic_info":{basic_user_info},"attrs":{user_attributes}},{"basic_info":{basic_user_info},"attrs":{user_attributes}},...]
+	    if requester is admin, he can specify user_id or normal_username, user_id or normal_username can be multi strings
 	    if requirter is user, no argument will be parsed and auth_name is used
 	"""
 	if request.hasAuthType(request.ADMIN):
 	    if request.has_key("user_id"):
-	    	loaded_user=user_main.getUserPool().getUserByUserID(to_int(request["user_id"]))
+		loaded_users=user_main.getActionManager().getLoadedUsersByUserID(request["user_id"])
 	    elif request.has_key("normal_username"):
-		loaded_user=user_main.getUserPool().getUserByNormalUsername(to_int(request["user_id"]))
+		loaded_users=user_main.getActionManager().getLoadedUsersByNormalUsername(request["normal_username"])
 	    else:
-		raise HandlerException(errorText("GENERAL","INCOMPLETE_REQUEST")%"user_id")
+		raise request.raiseIncompleteRequest("user_id")
 
-	    request.getAuthNameObj().canAccessUser(loaded_user)
+	    admin_obj=request.getAuthNameObj()
+	    map(admin_obj.canAccessUser,loaded_users)
 	    
 	elif request.hasAuthType(request.NORMAL_USER):
-	    loaded_user=request.getAuthNameObj()
+	    loaded_users=[request.getAuthNameObj()]
+	else:
+	    raise request.raiseIncompleteRequest("auth_type")
 	
-	return self.__getUserInfoFromLoadedUser(loaded_user)
-	
-    def __getUserInfoFromLoadedUser(self,loaded_user):
-	return {"basic_info":loaded_user.getBasicUser.getInfo(),
-		"attrs":loaded_user.getUserAttrs().getAllAttributes()
-	       }	
+	return user_main.getActionManager().getUserInfosFromLoadedUsers(loaded_users)
 ############################################################
 
 

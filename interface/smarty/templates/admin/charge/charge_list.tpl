@@ -3,7 +3,7 @@
     $charge_infos: array of associative arrays containing charge infos
 *}
 
-{include file="admin_header.tpl" title="Charge List"}
+{include file="admin_header.tpl" title="Charge List" selected="Charge"}
 {include file="err_head.tpl"}
 
 {listTable title="Charge List" cols_num=4}
