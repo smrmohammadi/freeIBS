@@ -1,4 +1,17 @@
+"""
+select user_id from users where group_id=4 or group_id=5 
+intersect 
+select user_id from normal_users where username like 'a%' 
+intersect 
+
+    (select user_id,count(user_id) from users_attrs where (attr_name='charge_id' and (attr_value='2' or attr_value='3')) or (attr_name='rel_exp_date' and attr_value='2') group by user_id
+    union 
+    select users_attrs.user_id,count(users_attrs.user_id) from users,users_attrs,group_attrs,groups where users.group_id=groups.group_id and not exists
+    (select attr_name from users_attrs where users_attrs.user_id=users.user_id and users_attrs.attr_name='charge_id' or attr_name='rel_exp_date') 
+    and group_attrs.attr_name='charge_id' and group_attrs.attr_value='2' );
+"""
 from core.lib.general import *
+
 
 class Condition:
     def __init__(self,cond_dic):
@@ -11,17 +24,22 @@ class Condition:
 	return self.cond_dic.has_key(key)
 
 class SearchTable:
-    def __init__(self):
-	self.__root_group=SearchUserGroup("and")
+    def __init__(self,table_name):
+	self._root_group=SearchUserGroup("and")
+	self.table_name=table_name
     
     def addGroup(self,group):
-	return self.__root_group.addGroup(group)
+	return self._root_group.addGroup(group)
     
     def addGroups(self,groups):
 	return map(self.addGroup,groups)
 
+    def getRootGroup(self):
+	return self._root_group
 
-############################# some helpers
+    def getTableName(self):
+	return self.table_name
+    ############################# some helpers
     def getParsedValue(self,search_helper,dic_key,value_parser_method):
 	value=search_helper.getCondValue(dic_key)
 	if type(value)==types.StringType:
@@ -29,49 +47,17 @@ class SearchTable:
 	if value_parser_method!=None:
 	    value=map(lambda val:apply(value_parser_method,val),value)
 
+    def createColGroup(self,col_name,value,op):
+	return "%s %s %s"%(col_name,dbText(value),op)
 
-class SearchUsersTable(SearchTable):
-    def __init__(self):
-	SerachTable.__init__(self)
+    def searchOnConds(self,search_helper,cond_key,attr_db_name,value_parser_method,op):
+	values=self.getParsedValue(search_helper,cond_key,value_parser_method)
+	self.search(attr_db_name,values,op)
 
-    def exactSearch(self,search_helper,cond_key,db_col_name,value_parser_method=None):
-	"""
-	    do the exact search for one attribute.
-	    cond_key(str): key of attribute in conditions that passed us from interface
-	    db_col_name(str): name of attribute in database 
-	    value_parser_method(callable): call this method on value and use the returned value in query
-					   not that the returned value will go through dbText
-	"""
-	if search_helper.hasCondFor(dic_key):
-	    values=self.getParsedValue(search_helper,dic_key,value_parser_method)
-	    group=SearchUserGroup("or")
-	    groups=map(lambda value:group.addGroup("%s = %s"%(db_col_name,dbtext(value))),values)
-	    self.addGroups(groups)
-
-class SearchNormalUsersTable(SearchTable):
-    def __init__(self):
-	SerachTable.__init__(self)
-
-class SearchVoIPUsersTable(SearchTable):
-    def __init__(self):
-	SerachTable.__init__(self)
-
-
-
-class SearchAttrsTable(SearchTable):
-    def __init__(self):
-	SerachTable.__init__(self)
-    
-    def exactSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
-	"""
-	    do the exact search for one attribute.
-	    dic_key(str): key of attribute in conditions that passed us from interface
-	    attr_db_name(str): name of attribute in database attr_name field
-	    value_parser_method(callable): call this method on value and use the returned value in query
-					   not that the returned value will go through dbText
-	"""
-	if search_helper.hasCondFor(dic_key):
-	    self.searchOnConds(search_helper,dic_key,attr_db_name,value_parser_method,"=")
+    def search(self,db_name,value,op):
+	group=SearchUserGroup("or")
+	groups=map(lambda value:group.addGroup(self.createColGroup(db_col_name,dbText(value),op)),values)
+	self.addGroups(groups)
 
     def ltgtSearch(self,cond_key,cond_op_key.attr_db_name,value_parser_method=None):
 	"""
@@ -84,49 +70,125 @@ class SearchAttrsTable(SearchTable):
 			value_parser_method,
 			search_helper.getCondValue(cond_op_key)
 		       )
-	    
 
-    def searchOnConds(self,search_helper,dic_key,attr_db_name,value_parser_method,op):
-	values=self.getParsedValue(search_helper,dic_key,value_parser_method)
-	self.serach(attr_db_name,values,op)
+    def exactSearch(self,search_helper,cond_key,db_col_name,value_parser_method=None):
+	"""
+	    do the exact search for one attribute.
+	    cond_key(str): key of attribute in conditions that passed us from interface
+	    db_col_name(str): name of attribute in database 
+	    value_parser_method(callable): call this method on value and use the returned value in query
+					   not that the returned value will go through dbText
+	"""
+	if search_helper.hasCondFor(cond_key):
+	    self.searchOnConds(search_helper,cond_key,db_col_name,value_parser_method,"=")
 
-
-    def createAttrGroup(self,attr_name,attr_value,op):
+    def likeStrSearch(self,search_helper,cond_key,cond_op_key,value_parser_method=None):
 	"""
 	"""
-	group=SearchUserGroup("and")
-	group.addGroup("attr_name = %s"%dbtext(attr_name))
-	group.addGroup("attr_value %s %s"%(op,dbText(value)))
-	return group
+	if search_helper.hasCondFor(cond_key):
+	    op=search_helper.getCondValue(cond_op_key)
+	    values=self.getParsedValue(search_helper,cond_key,value_parser_method)
+	    (op,values)=self.__applyLikeStrSearch(values,op)
+	    self.search(db_col_name,values,op)
 
-class SearchUserAttrsTable(SearchAttrsTable):
+    def __applyLikeStrSearch(self,values,op):
+	if op in ("like","ilike"):
+	    method=lambda x:"%"+`x`+"%"
+	elif op == "starts_with":
+	    method=lambda x:"%"+`x`
+	    op="ilike"
+	elif op == "equals":
+	    method=None
+	    op="="
+	else:
+    	    raise GeneralException(errorText("USER_ACTIONS","INVALID_OPERATOR")%op)
+	return (op,map(method,values))
+	
+    def createQuery(self):
+	if not self.getRootGroup().isEmpty():
+	    query="select user_id from %s where %s"%(self.getTableName(),self.getRootGroup().getConditionalClause())
+
+class SearchUsersTable(SearchTable):
     def __init__(self):
-	SerachAttrsTable.__init__(self)
+	SerachTable.__init__(self,"users")
 
-    def search(self,attr_db_name,values,op):
-	"""
-	"""
-	group=SearchUserGroup("or")
-	groups=map(lambda value:group.addGroup(self.attrEqualsGroup(attr_db_name,value,op)),values)
-	self.addGroups(groups)
-
-class SearchGroupAttrsTable(SearchAttrsTable):
+class SearchNormalUsersTable(SearchTable):
     def __init__(self):
-	SerachAttrsTable.__init__(self)
+	SerachTable.__init__(self,"normal_users")
+
+class SearchVoIPUsersTable(SearchTable):
+    def __init__(self):
+	SerachTable.__init__(self,"voip_users")
+
+class SearchAttrsTable(SearchTable):
+    def __init__(self,table_name):
+	SerachTable.__init__(self,table_name)
 	self.attrs=[]
-
-    def addAttr(self,attr):
-	self.attrs.append(attr)
+    
+    def exactSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
+	"""
+	    do the exact search for one attribute.
+	    dic_key(str): key of attribute in conditions that passed us from interface
+	    attr_db_name(str): name of attribute in database attr_name field
+	    value_parser_method(callable): call this method on value and use the returned value in query
+					   not that the returned value will go through dbText
+	"""
+	if search_helper.hasCondFor(dic_key):
+	    self.searchOnConds(search_helper,dic_key,attr_db_name,value_parser_method,"=")
 
     def search(self,attr_db_name,values,op):
 	"""
 	"""
 	self.addAttr(attr_db_name)
+
 	group=SearchUserGroup("or")
-	groups=map(lambda value:group.addGroup(self.attrEqualsGroup(attr_db_name,value,op)),values)
+	groups=map(lambda value:group.addGroup(self.createAttrGroup(attr_db_name,value,op)),values)
 	self.addGroups(groups)
 
+    def createAttrGroup(self,attr_name,attr_values,op):
+	"""
+	    attr_values(list or iterable object): list of values
+	"""
+	group=SearchUserGroup("and")
+	group.addGroup("%s.attr_name = %s"%(self.getTableName(),dbtext(attr_name))
+	sub_group=SearchUserGroup("or")
+	map(lambda value:sub_group.addGroup("%s.attr_value %s %s"%(self.getTableName(),op,dbText(value))),attr_values)
+	group.addGroup(sub_group)
+	return group
 
+    def addAttr(self,attr):
+	self.attrs.append(attr)
+
+    def getAttrs(self):
+	return self.attrs
+
+class SearchUserAttrsTable(SearchAttrsTable):
+    def __init__(self):
+	SerachAttrsTable.__init__(self,"user_attrs")
+
+    def createQuery(self):
+	if not self.getRootGroup().isEmpty():
+	    return "select user_id,count(user_id) from user_attrs where %s group by user_id"%(self.getRootGroup().getConditionalClause())
+
+class SearchGroupAttrsTable(SearchAttrsTable):
+    def __init__(self):
+	SerachAttrsTable.__init__(self,"group_attrs")
+
+    def createQuery(self):
+	if not self.getRootGroup().isEmpty():
+	    attr_not_in_user=self.__createNotInUserAttrsClause()
+	    return "select user_attrs.user_id,count(user_attrs.user_id) from users,user_attrs,groups,group_attrs 
+		    users.group_id = groups.group_id and users.user_id = user_attrs.user_id and 
+		    groups.group_id = group_attrs.group_id and
+	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and %s)
+		    and %s group by user_attrs.user_id
+		   "%(attr_not_in_user,self.getRootGroup().getConditionalClause())
+
+    def __createNotInUserAttrsClause(self):
+	group=SearchUserGroup("or")
+	map(lambda attr_name:group.addGroup("attr_name = %s"%dbText(attr_name)),self.getAttrs())
+	return group.getConditionalClause()
+    
 class SearchUserHelper:
     def __init__(self,conds):
 	self.conds=conds
@@ -151,8 +213,6 @@ class SearchUserHelper:
 
     def getTable(self,table):
 	return self.tables[table]
-    
-    
     
 class SearchUserGroup:
     def __init__(self,op=""):
@@ -182,8 +242,16 @@ class SearchUserGroup:
 	str_groups=map(self.__getConditionStr,self.__groups)
 	return " (%s) "%(" %s "%self.__operator).join(str_groups)
     
+    def isEmpty(self):
+	return len(self.__groups)==0
+
     def __getConditionStr(self,group_obj):
 	if isinstance(group_obj,SearchUserGroup):
 	    return group_obj.getConditionalClause()
 	else:
 	    return group_obj
+
+
+def checkltgtOperator(op):
+    if op not in ("=",">","<",">=","<="):
+        raise GeneralException(errorText("USER_ACTIONS","INVALID_OPERATOR")%op)

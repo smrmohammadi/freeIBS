@@ -86,7 +86,7 @@ class RelExpAttrSearcher(AttrSearcher):
 	    rel_date_obj=RelativeDate(search_helper.getCondValue("rel_exp_date"),
 				      search_helper.getCondValue("rel_exp_date_unit"))
 	    for table in self.getUserAndGroupAttrsTable():
-		
+		table.search("rel_exp_date",rel_date_obj.getDBDate(),search_helper.getCondValue("rel_exp_date_op"))
 
 class RelExpAttrHolder(AttrHolder):
     def __init__(self,rel_exp_hours):

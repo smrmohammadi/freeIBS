@@ -96,8 +96,21 @@ class NormalUserAttrUpdater(AttrUpdater):
 	return ibs_query
 	
 
+class NorlamUserAttrSearcher(AttrSearcher):
+    def run(self):
+	normal_table=self.getSearchHelper().getTable("normal_users")
+	normal_table.likeStrSearch(self.getSearchHelper(),
+			           "normal_username",
+		    		   "normal_username_op",
+			           MultiStr
+				  )
+
 class NormalUserAttrHandler(attribute.AttributeHandler):
     def __init__(self):
 	attribute.AttributeHandler.__init__(self,attr_handler_name)
-	self.registerAttrUpdaterClass(NormalUserAttrUpdater,["normal_username","normal_password","normal_generate_password","normal_generate_password_len","normal_save_usernames"])
-
+	self.registerAttrUpdaterClass(NormalUserAttrUpdater,
+				      ["normal_username",
+				      "normal_password",
+				      "normal_generate_password",
+				      "normal_generate_password_len",
+				      "normal_save_usernames"])
