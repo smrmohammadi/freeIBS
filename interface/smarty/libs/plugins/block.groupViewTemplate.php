@@ -4,7 +4,7 @@ function smarty_block_groupViewTemplate($params,$content,&$smarty,&$repeat)
 {
 /*
     return html codes that are necassary for group view template start and ends
-    parameter edit_tpl_name(string,required): tpl file relative url that should be shown 
+    parameter edit_tpl_name(string,required): tpl file name in plugins/group/edit template directory.
 */
     if(!is_null($content))
     {

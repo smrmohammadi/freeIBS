@@ -21,5 +21,7 @@
 <br>
 {include file="plugins/group/view/exp_date.tpl"}
 <br>
+{include file="plugins/group/view/multi_login.tpl"}
+<br>
 
 {include file="admin_footer.tpl"}

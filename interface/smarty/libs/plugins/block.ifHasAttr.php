@@ -14,13 +14,11 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
     if(is_null($content))
     {
 	if(hasAttr($params,$smarty))
-	{
 	    $repeat=TRUE;
-	}
 	else
 	{
 	    $repeat=FALSE;
-	    print "<center>-------------</center>";    
+	    print "<center>---------------";    
 	}
     }
     else
@@ -41,3 +39,4 @@ function getAttrsArray(&$params,&$smarty)
     else if ($params["object"]=="group")
         return $smarty->get_assigned_value("group_attrs");
 }
+?>

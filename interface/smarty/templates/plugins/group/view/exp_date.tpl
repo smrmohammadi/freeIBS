@@ -5,8 +5,9 @@
     {/groupInfoTD}
     {groupInfoTD type="right"}
 		{ifHasAttr object="group" var_name="has_rel_exp"}
-		    {$rel_exp_date} {$rel_exp_date_unit}
+		    {$group_attrs.rel_exp_date} {$group_attrs.rel_exp_date_unit} 
 		{/ifHasAttr}
+		{helpicon subject="relative expiration date" category="user"}		
     {/groupInfoTD}
 
   {/groupInfoTable}
