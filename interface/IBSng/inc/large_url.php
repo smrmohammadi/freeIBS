@@ -14,7 +14,7 @@ function largeUrlSave($request_key,$value,$max_size=1024)
 	return "{$request_key}__large_id={$id}";
     }
     else
-	return "{$request_key}={$values}";
+	return "{$request_key}={$value}";
 }
 
 

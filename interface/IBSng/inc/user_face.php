@@ -6,7 +6,7 @@ require_once(INTERFACE_ROOT."IBSng/admin/user/user_info_funcs.php");
 
 function redirectToUserInfo($user_id)
 {
-    $redirect_str="/IBSng/admin/user/user_info.php?".largeUrlSave("user_id_multi",$user_id,1);
+    $redirect_str="/IBSng/admin/user/user_info.php?".largeUrlSave("user_id_multi",$user_id);
     redirect($redirect_str);
 }
 

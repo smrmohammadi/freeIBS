@@ -166,7 +166,7 @@ class UserActions:
 	"""
 	return db_main.getHandle().seqNextVal("users_user_id_seq")
 ######################################################
-    def changeCredit(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment):
+    def changeCredit(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment,loaded_users):
 	"""
 	    change credit of user(s) with user_id in "user_ids"
 	    user_ids(iterable object, list or multi_str): user_ids that credit will be changed
@@ -174,8 +174,9 @@ class UserActions:
 	    changer_admin_name(string): username of admin that initiate the change. He should have enough deposit
 	    remote_address(string): changer client ip address 
 	    credit_change_comment(string): comment that will be stored in credit change log
+	    loaded_users(LoadedUser instance): list of loaded users of "user_ids"
 	"""
-	self.__changeCreditCheckInput(user_ids,credit,changer_admin_name,remote_address,credit_change_comment)
+	self.__changeCreditCheckInput(user_ids,credit,changer_admin_name,remote_address,credit_change_comment,loaded_users)
 	admin_consumed_credit=credit*len(user_ids)
 	ibs_query=IBSQuery()
     	ibs_query+=admin_main.getActionManager().consumeDeposit(changer_admin_name,admin_consumed_credit)
@@ -190,15 +191,21 @@ class UserActions:
 	    raise
 	self.__broadcastChange(user_ids)
 
-
-    def __changeCreditCheckInput(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment):
+    def __changeCreditCheckInput(self,user_ids,credit,changer_admin_name,remote_address,credit_change_comment,loaded_users):
 	if not isFloat(credit):
 	    raise GeneralException(errorText("USER_ACTIONS","CREDIT_NOT_FLOAT"))
+
 	admin_main.getLoader().checkAdminName(changer_admin_name)
+
 	if not iplib.checkIPAddr(remote_address):
 	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)
+
 	if len(user_ids)==0:
 	    raise GeneralException(errorText("USER_ACTIONS","INVALID_USER_COUNT")%0)
+
+	for loaded_user in loaded_users:
+	    if credit<0 and loaded_user.getBasicUser().getCredit()+credit<0:
+		raise GeneralException(errorText("USER_ACTIONS","CAN_NOT_NEGATE_CREDIT")%(loaded_user.getUserID(),loaded_user.getBasicUser().getCredit()))
 	    
     def __changeCreditQuery(self,user_ids,credit):
 	where_clause=" or ".join(map(lambda user_id:"user_id = %s"%user_id,user_ids))

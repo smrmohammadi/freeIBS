@@ -27,7 +27,7 @@ function intShowChangeCreditFace(&$smarty,$user_id)
 function intSetErrors(&$smarty,$err)
 {
     $err_keys=$err->getErrorKeys();
-    $smarty->set_field_errs(array("credit_err"=>array("CREDIT_NOT_FLOAT","INVALID_FLOAT_VALUE")),$err_keys);
+    $smarty->set_field_errs(array("credit_err"=>array("CREDIT_NOT_FLOAT","INVALID_FLOAT_VALUE","CAN_NOT_NEGATE_CREDIT")),$err_keys);
 }
 
 ?>

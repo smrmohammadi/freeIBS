@@ -131,7 +131,8 @@ class UserHandler(handler.Handler):
 							 to_float(request["credit"],"credit"),
 							 requester.getUsername(),
 							 request.getRemoteAddr(),
-							 request["credit_comment"])
+							 request["credit_comment"],
+							 loaded_users)
 
     def __canChangeCredit(self,loaded_user,requester):
 	requester.canDo("CHANGE USER CREDIT",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())

@@ -2,14 +2,16 @@ from core.ras.ras import GeneralUpdateRas
 from core.ras import ras_main
 from core import defs
 from core.ibs_exceptions import *
-import os,time
 from core.lib.snmp import Snmp
+import os,time,re
 
 def init():
     ras_main.getFactory().register(CiscoRas,"Cisco")
 
 class CiscoRas(GeneralUpdateRas):
-    type_attrs={"cisco_rsh_command":"%scisco/rsh -lroot"%defs.IBS_ADDONS,"cisco_update_accounting_interval":1,"cisco_snmp_community":"public","cisco_update_inout_with_snmp":1,"cisco_kill_with_snmp":0,"cisco_snmp_version":"2c","cisco_snmp_timeout":10,"cisco_snmp_retries":3}
+    type_attrs={"cisco_rsh_command":"%scisco/rsh -lroot"%defs.IBS_ADDONS,"cisco_update_accounting_interval":1,"cisco_snmp_community":"public","cisco_update_inout_with_snmp":1,"csco_snmp_version":"2c","cisco_snmp_timeout":10,"cisco_snmp_retries":3}
+
+    async_port_match=re.compile("(Async[0-9/])")
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
@@ -28,6 +30,11 @@ class CiscoRas(GeneralUpdateRas):
 		    self.getAttribute("cisco_snmp_retries"),
 		    161,
 		    self.getAttribute("cisco_snmp_version"))
+
+
+    def __parseAsyncPort(self,port):
+    	return self.async_port_match.match(port).groups()[0]
+
     ############################################
     def __rcmd(self,command):
 	"""
@@ -66,6 +73,7 @@ class CiscoRas(GeneralUpdateRas):
 
     def __killUserOnPort(self,port):
 	if port.startswith("Async"):
+	    port=self.__parseAsyncPort(port)
 	    self.__rcmd("clear line %s"%port[5:])
 	elif port.startswith("Serial"):
 	    self.__rcmd("clear interface %s"%port)
@@ -122,12 +130,15 @@ class CiscoRas(GeneralUpdateRas):
 	status_type=ras_msg.getRequestAttr("Acct-Status-Type")[0]
 	ras_msg["unique_id"]="port"
 	if status_type=="Start":
-	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
+	    ras_msg.setInAttrs({"User-Name":"username","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id"})
+	    ras_msg["port"]=self.__getPortFromRadiusPacket(ras_msg.getRequestPacket())
 	    ras_msg["start_accounting"]=True
 	    ras_msg["update_attrs"]=["remote_ip","start_accounting"]
 	    ras_msg.setAction("INTERNET_UPDATE")
 	elif status_type=="Stop":
-	    ras_msg.setInAttrs({"User-Name":"username","NAS-Port":"port","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})
+	    ras_msg.setInAttrs({"User-Name":"username","Framed-IP-Address":"remote_ip","Acct-Session-Id":"session_id","Acct-Output-Octets":"in_bytes","Acct-Input-Octets":"out_bytes"})
+	    ras_msg["port"]=self.__getPortFromRadiusPacket(ras_msg.getRequestPacket())
+	    self.__updateInOnlines(ras_msg.getRequestPacket())
 	    ras_msg.setAction("INTERNET_STOP")
 	elif status_type=="Alive":
 	    self.__updateInOnlines(ras_msg.getRequestPacket())
@@ -152,7 +163,7 @@ class CiscoRas(GeneralUpdateRas):
 	    self.onlines["in_bytes"]=update_pkt["Acct-Output-Octets"]
 	    self.onlines["out_bytes"]=update_pkt["Acct-Input-Octets"]
 	else:
-	    self.toLog("Received Alive packet for user %s, while he's not in my online list"%update_pkt["User-Name"])
+	    self.toLog("Received Alive/Logout packet for user %s, while he's not in my online list"%update_pkt["User-Name"])
 
 ####################################
     def _reload(self):

@@ -37,7 +37,7 @@ GENERAL_ERRORS={
 USER_ACTIONS_ERRORS={
     "INVALID_MULTI_LOGIN":"Invalid Multi Login Value",
     "CREDIT_NOT_FLOAT":"Credit must be a float number",
-    "CREDIT_MUST_BE_POSTIVE":"Credit must be positive number",
+    "CREDIT_MUST_BE_POSITIVE":"Credit must be positive number",
     "INVALID_CREDIT_ACTION":"Invalid credit change action %s",
     "BAD_NORMAL_USERNAME":"Bad characters in username",
     "BAD_PASSWORD":"Bad characters in password",
@@ -55,8 +55,8 @@ USER_ACTIONS_ERRORS={
     "INVALID_RADIUS_ATTRIBUTE":"Radius Attributes %s is not in radius dictionary",
     "PERSISTENT_LAN_MAC_EXISTS":"Persistent Lan %s already exists",
     "PLAN_MAC_COUNT_NOT_MATCH":"Number of Mac Addresses count isn't equal to updating users count. Updating %s number of users while there are %s macs",
-    "RAS_IS_NOT_PERSISTENT_LAN":"Ras %s is not Persistent Lan"
-    
+    "RAS_IS_NOT_PERSISTENT_LAN":"Ras %s is not Persistent Lan",
+    "CAN_NOT_NEGATE_CREDIT":"Can not negate credit of user %s, current credit is %s"
 }
 
 USER_ERRORS={
@@ -81,7 +81,6 @@ USER_LOGIN_ERRORS={
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
     "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
     "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
-
     "DAY_TIME_USAGE":"Day usage time limit exceeded",
     "DAY_TRANSFER_USAGE":"Day usage transfer limit exceeded"
 
