@@ -7,8 +7,6 @@ require_once(IBSINC."attr_parser.php");
 
 needAuthType(ADMIN_AUTH_TYPE);
 $smarty=new IBSSmarty();
-$smarty->assign("is_editing",FALSE);
-
 
 if(isInRequest("group_name"))
     intGroupInfo($smarty,$_REQUEST["group_name"]);

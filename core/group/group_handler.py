@@ -66,7 +66,7 @@ class GroupHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("group_id","group_name","comment","owner_name")
 	request.getAuthNameObj().canDo("CHANGE GROUP",request["group_name"])
-	return group_main.getActionManager().updateGroup(to_int(request["group_id"],"group id"),request["group_name"],request["comment"],request["owner_id"])
+	return group_main.getActionManager().updateGroup(to_int(request["group_id"],"group id"),request["group_name"],request["comment"],request["owner_name"])
 
 
     def updateGroupAttrs(self,request):
