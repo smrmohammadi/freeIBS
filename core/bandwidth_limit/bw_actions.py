@@ -6,7 +6,7 @@ from core.lib.multi_strs import MultiStr
 from core.db import db_main,ibs_db
 from core.bandwidth_limit.node import Node
 from core.charge import charge_main
-from core.lib import ip
+from core.lib import iplib
 
 
 class BWActions:
@@ -426,7 +426,7 @@ class BWActions:
 	self.__bwStaticIPCheckIP(ip_addr)
 
     def __bwStaticIPCheckIP(self,ip_addr):
-	if not ip.checkIPAddr(ip_addr):
+	if not iplib.checkIPAddr(ip_addr):
 	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)
 	self.__checkIPAddrExistence(ip_addr)
 	

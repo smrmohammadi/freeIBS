@@ -88,14 +88,14 @@ class OnlineUsers:
 		if user_obj==None:
 		    user_obj=self.__loadUserObj(loaded_user,"Normal")
 	        user_obj.login(ras_msg)
-		self.internetAuthenticateSuccessfull(user_obj,ras_msg)
+		self.__authenticateSuccessfull(user_obj,ras_msg)
 	    except:
 		loaded_user.setOnlineFlag(False)
 		raise
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
 	    
-    def internetAuthenticateSuccessfull(self,user_obj,ras_msg):
+    def __authenticateSuccessfull(self,user_obj,ras_msg):
 	self.__addToOnlines(user_obj)
 	if ras_msg.hasAttr("start_accounting"):
 	    self.recalcNextUserEvent(user_obj.getUserID(),user_obj.instances>1)
@@ -110,18 +110,23 @@ class OnlineUsers:
 	        return
 	    instance=user_obj.getInstanceFromRasMsg(ras_msg)
 	    if instance==None:
-		raise LoginException(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()))
+		toLog(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()))
+		return
 
 	    global_unique_id=user_obj.getGlobalUniqueID(user_obj.instances)
 	    user_obj.logout(instance,ras_msg)
+	    self.__logoutRecalcEvent(user_obj,global_unique_id)
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())
+
+
+    def __logoutRecalcEvent(self,user_obj,global_unique_id):
 	    if user_obj.instances==0:
 		self.__removeFromOnlines(user_obj,global_unique_id)
 		self.__removePrevUserEvent(user_obj.getUserID())
-		loaded_user.setOnlineFlag(False)
+		user_obj.getLoadedUser().setOnlineFlag(False)
 	    else:
 		self.recalcNextUserEvent(user_obj.getUserID(),True)
-	finally:
-	    self.loading_user.loadingEnd(loaded_user.getUserID())
     
 ############################################
     def recalcNextUserEvent(self,user_id,remove_prev_event=False):
@@ -158,4 +163,36 @@ class OnlineUsers:
 	for instance in kill_dic:
 	    user_obj.setKillReason(instance,kill_dic[instance])
 	    user_obj.getTypeObj().killInstance(instance)
-		
+
+#########################################################
+    def persistentLanAuthenticate(self,ras_msg):
+	loaded_user=user_main.getUserPool().getUserByID(ras_msg["user_id"],True)
+	self.loading_user.loadingStart(loaded_user.getUserID())
+	try:
+	    user_obj=self.getUserObj(loaded_user.getUserID())
+	    if user_obj==None:
+	        user_obj=self.__loadUserObj(loaded_user,"Normal")
+	    user_obj.login(ras_msg)
+	    self.__authenticateSuccessfull(user_obj,ras_msg)
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())
+
+
+    def persistentLanStop(self,ras_msg):
+	loaded_user=user_main.getUserPool().getUserByID(ras_msg["user_id"])
+	self.loading_user.loadingStart(loaded_user.getUserID())
+	try:
+	    user_obj=self.getUserObj(loaded_user.getUserID())
+	    if user_obj==None:
+		toLog("Got persistent lan stop for user %s, but he's not online"%ras_msg["user_id"],LOG_DEBUG)
+	        return
+	    instance=user_obj.getInstanceFromRasMsg(ras_msg)
+	    if instance==None:
+		toLog(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()))
+		return
+
+	    global_unique_id=user_obj.getGlobalUniqueID(user_obj.instances)
+	    user_obj.logout(instance,ras_msg)
+	    self.__logoutRecalcEvent(user_obj,global_unique_id)
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())

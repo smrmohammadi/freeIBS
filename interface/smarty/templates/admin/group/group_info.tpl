@@ -28,6 +28,11 @@
 <br>
 {include file="plugins/group/view/normal_charge.tpl"}
 <br>
+{include file="plugins/group/view/ippool.tpl"}
+<br>
+{include file="plugins/group/view/radius_attrs.tpl"}
+<br>
+
 
 {attrTableFoot action_icon="edit" table_width="280"}
 {/attrTableFoot}

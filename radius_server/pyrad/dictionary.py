@@ -125,6 +125,8 @@ class Dictionary:
 	def __getitem__(self, key):
 		return self.attributes[key]
 
+	def has_key(self, key):
+		return self.attributes.has_key(key)
 
 	def __ParseAttribute(self, state, tokens):
 		if not len(tokens) in [4,5]:

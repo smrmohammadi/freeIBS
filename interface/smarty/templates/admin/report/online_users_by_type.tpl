@@ -3,10 +3,21 @@
 
 {include file="admin_header.tpl" title="Online Users" selected="Online Users"} 
 {include file="err_head.tpl"} 
+<iframe name=msg id=msg border=0 FRAMEBORDER=0 SCROLLING=NO height=50 valign=top></iframe>
+{literal}
+    <script language=javascript>
+	function killUser(user_id,username,ras_ip,unique_id_val)
+	{
+	    document.getElementById("msg").src="/IBSng/admin/user/kill_user.php?user_id="+user_id+"&username="+username+"&ras_ip="+ras_ip+"&unique_id_val="+unique_id_val;
+	}
+    </script>
+{/literal}
 
 {include file="refresh_header.tpl" title="Online Users"}
 
 {listTable title="Internet Online Users" cols_num=9}
+    {listTableHeaderIcon action="kick"}
+    {listTableHeaderIcon action="details" close_tr=TRUE}
     {listTR type="header"}
 	{listTD}
 	    {sortableHeader name="user_id"} 
@@ -103,10 +114,16 @@
 		{$info_dic.owner_name}
 	    {/listTD}
 
-	    {listTD extra="onClick='event.cancelBubble=true;'"}
+	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'"}
+		    <a style="text-decoration:none" href="javascript: killUser('{$info_dic.user_id}','{$info_dic.normal_username}','{$info_dic.ras_ip}','{$info_dic.unique_id_val}');" {jsconfirm}>
+			{listTableBodyIcon action="kick" cycle_color="TRUE"}
+		    </a>
+	    {/listTD}
+
+	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'"}
 		    
 		<a onClick="showReportLayer('{$info_dic.user_id}',this); return false;" href="#">
-		    Details
+		    {listTableBodyIcon action="details" cycle_color="TRUE"}
 		</a>
 		{reportDetailLayer name=`$info_dic.user_id` title="Report Details"}
 		    <table>

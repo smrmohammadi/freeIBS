@@ -3,7 +3,7 @@ function smarty_function_listTableBodyIcon($params,&$smarty)
 {/*     return a string, an image that will show the action
 	return an empty string if action argument is not valid
 	parameter action(string,required): action that will be showed in header
-					   options: "add","delete","edit","view", "details", "active", "deactive"
+					   options: "add","delete","edit","view", "details", "active", "deactive", "kick"
 	parameter close_tr(boolean,optional): optionally add an </tr> at the end. Useful when 
 					      it's the last icon in row
 	parameter cycle_color(boolean,optional): if set to "TRUE", call getTRColor with true argument so new
@@ -11,7 +11,7 @@ function smarty_function_listTableBodyIcon($params,&$smarty)
 */
     
     $action=$params["action"];
-    if(!in_array($action,array("add","delete","edit","view","active","deactive","details")))
+    if(!in_array($action,array("add","delete","edit","view","active","deactive","details","kick")))
 	return "";
     $cycle_color=(isset($params["cycle_color"]) and $params["cycle_color"]=="TRUE")?TRUE:FALSE;
     $color=getTRColor($cycle_color);

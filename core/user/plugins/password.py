@@ -26,9 +26,9 @@ class PasswordUserPlugin(user_plugin.UserPlugin):
 	    if not ras_msg.getRequestPacket().checkMSChap2Password(self.user_obj.getUserAttrs()["normal_username"],\
 								   self.user_obj.getUserAttrs()["normal_password"]):
 		self.__raiseIncorrectPassword()
-	else:
-	    toLog("Unknown Password checking method",LOG_DEBUG)
-	    self.__raiseIncorrectPassword()
+#	else:
+#	    toLog("Unknown Password checking method",LOG_DEBUG)
+#	    self.__raiseIncorrectPassword()
 
     def __raiseIncorrectPassword(self):
 	raise LoginException(errorText("USER_LOGIN","WRONG_PASSWORD"))

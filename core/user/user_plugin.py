@@ -91,7 +91,7 @@ class AttrCheckUserPlugin(BaseUserPlugin):
 	pass
     
     def s_canStayOnline(self):
-	pass
+	return self.createCanStayOnlineResult()
 
     def _reload(self):
 	self._setHasAttr(self.has_attr_name)

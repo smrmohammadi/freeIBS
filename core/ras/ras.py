@@ -2,12 +2,13 @@ from core.event import periodic_events
 from core.ras.msgs import RasMsg
 from core.ibs_exceptions import *
 from core.ippool import ippool_main
+from core.lib.sort import *
+from core.ras import ras_main
 
 PORT_TYPES=["Internet","Voice-Origination","Voice-Termination"]
 
 class Ras:
-    default_attributes={"online_check":1,"update_inout_bytes_interval":10,"update_users_interval":60,"online_check_reliable":0,
-			"online_check_valid_ports":0}
+    default_attributes={"online_check":1,"online_check_reliable":0}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
     	"""
@@ -18,8 +19,7 @@ class Ras:
 	    ippools(list): list of IPpool ids that this ras uses
 	    attributes(dic): a dictionary of key=>values that show ras specific attributes
 			     attributes are diffrent for various rases. for each type, 
-			     we have a type_default_attributes that are default values for each type,
-			     and default_attributes that are 
+			     we have a type_default_attributes that are default values for each type
 	    type_default_attributes(dic): default attributes for ras type
 	"""
 	self.ras_ip=ras_ip
@@ -30,6 +30,9 @@ class Ras:
 	self.ippools=ippools
 	self.attributes=attributes
 	self.type_default_attributes=type_default_attributes
+	
+	self.handle_reload=False #this flag tells if ras should be reloaded by recreating the ras object
+				 #or ras would handle this by it's own _reload method
 
     def getRasID(self):
 	return self.ras_id
@@ -60,22 +63,23 @@ class Ras:
     
     def hasAttribute(self,attr_name):
 	"""
-	    return 1 if this ras, has it's own attribute "attr_name" and else 0
+	    return True if this ras, has it's own attribute "attr_name" and else False
 	    we won't search type_defaults or ras_defaults for attributes
 	"""
 	return self.attributes.has_key(attr_name)
 
     def getAllAttributes(self):
 	"""
-	    return a dic of all attributes, including ras self attributes, type attributes and default attributes
+	    return a sorted list of all attributes, including ras self attributes, type attributes and default attributes
+	    format is [(attr_name,attr_value)
 	"""
 	all_attrs={}
-	for attrs in [self.attributes,self.type_default_attributes,self.default_attributes]:
-	    for attr_name in attrs:
-		if not all_attrs.has_key(attr_name):
-		    all_attrs[attr_name]=attrs[attr_name]
-	
-	return all_attrs
+	all_attrs.update(self.default_attributes)
+	all_attrs.update(self.type_default_attributes)
+	all_attrs.update(self.attributes)
+	sorted_dic=SortedDic(all_attrs)
+	sorted_dic.sortByKey(False)
+	return sorted_dic.getList()
 		
     def getAttribute(self,attr_name):
 	if self.attributes.has_key(attr_name):
@@ -87,6 +91,14 @@ class Ras:
 	else:
 	    return None
 
+    def getInfo(self):
+	return {"ras_ip":self.getRasIP(),
+		"ras_id":self.getRasID(),
+		"radius_secret":self.getRadiusSecret(),
+		"ras_type":self.getType(),
+		"port":self.getPorts(),
+		"attrs":self.getSelfAttributes()}
+
     def _isOnline(self,user_msg):
 	"""
 	    check if user is online on ras, with condition in "user_msg"
@@ -97,7 +109,6 @@ class Ras:
 	    return True
 	
 	return self.isOnline(user_msg)
-
 
     def _handleRadAuthPacket(self,request,reply):
 	"""
@@ -130,16 +141,16 @@ class Ras:
 
     def _applyIPpool(self,ras_msg):
 	reply=ras_msg.getReplyPacket()
+	if len(self.ippools)==0 or ras_msg==None:
+	    return
+
 	if reply.has_key("Framed-IP-Address"):
 	    return
 	
-	if len(self.ippools)==0:
-	    return
 	
 	for ippool_id in self.ippools:
 	    try:
-		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).getUsableIP()
-		reply["Framed-IP-Address"]=ip
+		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).setIPInPacket(reply)
 		update_msg=ras_msg.createNew(None,None,self)
 		update_msg.setAction("INTERNET_UPDATE")
 		update_msg["update_attrs"]=["ippool_id","ippool_assigned_ip"]
@@ -155,7 +166,7 @@ class Ras:
 
 #################
 #
-# Methods that ras implementions should override
+# Methods that ras implementions MAY override
 #
 #################
     def handleRadAuthPacket(self,ras_msg):
@@ -201,17 +212,66 @@ class Ras:
 	    user_msg has an attribute action, that shows the action ("apply" or "remove") that should be taken
 	"""
 	return True
+    
+    def dispatch(self,user_msg):
+	"""
+	    This method is called when action is not one of known and standard actions.
+	    This is useful when user methods know one ras supports a non-standard action that others don't.
+	    if ras can't interpret the action, it should call self._raiseUnknownActionException(user_msg)
+	"""
+	self._raiseUnknownActionException(user_msg)
+	
+    def _raiseUnknownActionException(self,user_msg):
+	raise IBSException("Action not %s supported by ras %s"%(user_msg.getAction(),self.getRasIP()))
 
+
+    def deActivated(self):
+	"""
+	    called when ras is deactivated, and after ras deactivated in database.
+	"""
+	pass
+    
+    def unloaded(self):
+	"""
+	    called when ras object is unloaded, it should do the cleanups
+	"""
+	pass
+    
+    def _reload(self):
+	"""
+	    reload ras_obj only if self.handle_reload==True
+	"""
+	(ras_info,ras_attrs,ports,ippools)=ras_main.getLoader().getRasInfo(self.getRasID())
+	if self.ras_ip!=ras_info["ras_ip"]:
+	    ras_main.getLoader().unKeepObj(self)
+	    ras_ip_changed=True
+	else:
+	    ras_ip_changed=False
+
+	self.ras_ip=ras_info["ras_ip"]
+	self.ras_id=ras_info["ras_id"]
+	self.ras_type=ras_info["ras_type"]
+	self.radius_secret=ras_info["radius_secret"]
+	self.ports=ports
+	self.ippools=ippools
+	self.attributes=ras_attrs
+	self._delEvent()
+	self._registerEvent()
+	
+	if ras_ip_changed:
+	    ras_main.getLoader().keepObj(self)
+    
 class GeneralUpdateRas(Ras):
     """
 	This class has an update method, that will be called for update_inout_bytes intervals,
 	"UpdateInOutBytes" is the only method that will be called periodicly
     """
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
+	type_default_attributes["update_inout_bytes_interval"]=10
 	Ras.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
-	self.__registerEvents()
+	self._registerEvent()
 
-    def __registerEvents(self):
+    def _registerEvent(self):
 	class UpdateInOutEvent(periodic_events.PeriodicEvent):
 	    def __init__(my_self):
 		periodic_events.PeriodicEvent.__init__(my_self,"%s updateinout"%self.ras_ip,self.getAttribute("update_inout_bytes_interval"),[],0)
@@ -219,10 +279,20 @@ class GeneralUpdateRas(Ras):
 	    def run(my_self):
 		self.updateInOutBytes()
 	
-	periodic_events.getManager().register(UpdateInOutEvent())
+	self.__update_inout_event=UpdateInOutEvent()
+	periodic_events.getManager().register(self.__update_inout_event)
     
     def updateInOutBytes(self):
 	pass
+
+    def _delEvent(self):
+	periodic_events.getManager().unRegister(self.__update_inout_event)
+
+    def unloaded(self):
+	"""
+	    children should call this method if it has been overrided
+	"""
+	self._delEvent()
 
 class UpdateUsersRas(GeneralUpdateRas):
     """
@@ -230,10 +300,11 @@ class UpdateUsersRas(GeneralUpdateRas):
 	will be called in "update_users" interval
     """
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
+	type_default_attributes["update_users_interval"]=60
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
-	self.__registerEvents(self)
+	self._registerEvent(self)
 
-    def __registerEvents(self):
+    def _registerEvent(self):
 	class UpdateUserListEvent(periodic_events.PeriodicEvent):
 	    def __init__(my_self):
 		periodic_events.PeriodicEvent("%s update userlist"%self.ras_ip,self.getAttribute("update_users_interval"),[],0)
@@ -242,8 +313,14 @@ class UpdateUsersRas(GeneralUpdateRas):
 		self.updateUserList()
 
 	if self.getAttribute("online_check"):
-	    periodic_events.getManager().register(UpdateUserListEvent())
+	    self.__update_userlist_event=UpdateUserListEvent()
+	    periodic_events.getManager().register(self.__update_userlist_event)
 
     def updateUserList(self):
 	pass
     
+    def _delEvent(self):
+	GeneralUpdateRas._delEvent(self)
+	if self.getAttribute("online_check"):
+	    periodic_events.getManager().unRegister(self.__update_userlist_event)
+	    

@@ -24,6 +24,14 @@ class RasActions:
 	    it's useful for checking for inactive rases, as they aren't in memory
 	"""
 	return db_main.getHandle().getCount("ras","ras_ip=%s"%dbText(ras_ip))
+
+    def __reloadRas(self,ras_obj,unload=False):
+	if ras_obj.handle_reload:
+	    ras_obj._reload()
+	else:
+	    if unload:
+		ras_main.getLoader().unloadRas(ras_obj.getRasID())
+	    ras_main.getLoader().loadRas(ras_obj.getRasID())
 #########################################
     def getInActiveRases(self):
 	"""
@@ -102,8 +110,7 @@ class RasActions:
 	"""
 	self.__updateRasCheckInput(ras_id,ras_ip,ras_type,radius_secret)
 	self.__updateRasDB(ras_id,ras_ip,ras_type,radius_secret)
-	ras_main.getLoader().unloadRas(ras_id)
-	ras_main.getLoader().loadRas(ras_id)
+	self.__reloadRas(ras_main.getLoader()[ras_id],True)
 	
     def __updateRasCheckInput(self,ras_id,ras_ip,ras_type,radius_secret):
 	ras_obj=ras_main.getLoader()[ras_id]
@@ -142,6 +149,7 @@ class RasActions:
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
 	self.__checkRasInCharges(ras_obj)
 	self.__deActiveRasDB(ras_obj)
+	ras_obj.deActivated()
 	ras_main.getLoader().unloadRas(ras_obj.getRasID())
 
     def __deActiveRasCheckInput(self,ras_ip):
@@ -190,7 +198,7 @@ class RasActions:
 	self.__addPortCheckInput(ras_ip,ports,phones,_type,comments)
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
 	self.__addPortDB(ras_obj,ports,phones,_type,comments)
-	ras_main.getLoader().loadRas(ras_obj.getRasID())
+	self.__reloadRas(ras_obj)
 
     def __addPortCheckInput(self,ras_ip,port_names,phones,_type,comments):
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
@@ -226,7 +234,7 @@ class RasActions:
 	self.__delPortCheckInput(ras_ip,port_names)
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
 	self.__delPortsDB(ras_obj,port_names)
-	ras_main.getLoader().loadRas(ras_obj.getRasID())
+	self.__reloadRas(ras_obj)
 
 	
     def __delPortCheckInput(self,ras_ip,port_names):
@@ -250,7 +258,7 @@ class RasActions:
 	self.__updatePortCheckInput(ras_ip,port_names,phones,_type,comments)
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
 	self.__updatePortDB(ras_obj,port_names,phones,_type,comments)
-	ras_main.getLoader().loadRas(ras_obj.getRasID())
+	self.__reloadRas(ras_obj)
 
     def __updatePortCheckInput(self,ras_ip,port_names,phones,_type,comments):
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
@@ -283,23 +291,21 @@ class RasActions:
 	self.__updateAttributeCheckInput(ras_ip,attrs)
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)	
 	self.__updateAttributeDB(ras_obj,attrs)
-	ras_main.getLoader().loadRas(ras_obj.getRasID())
+	self.__reloadRas(ras_obj)
 
     def __updateAttributeCheckInput(self,ras_ip,attrs):
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
-	all_attrs=ras_obj.getAllAttributes()
 	for attr_name in attrs:
-	    if attr_name not in all_attrs :
+	    if ras_obj.getAttribute(attr_name)==None:
 		raise GeneralException(errorText("RAS","RAS_DONT_HAVE_ATTR")%attr_name)
 
-	    if type(all_attrs[attr_name]) == types.IntType:
+	    if type(ras_obj.getAttribute(attr_name)) == types.IntType:
 		attrs[attr_name]=to_int(attrs[attr_name],"%s Attribute Value"%attr_name)
 
     def __updateAttributeDB(self,ras_obj,attrs):
-	all_attrs=ras_obj.getAllAttributes()
 	query=""
 	for attr_name in attrs:
-	    if attrs[attr_name]!=all_attrs[attr_name]:
+	    if attrs[attr_name]!=ras_obj.getAttribute(attr_name):
 		if ras_obj.hasAttribute(attr_name):
 		    query+=self.__updateAttributeQuery(ras_obj.getRasID(),attr_name,attrs[attr_name])
 		else:
@@ -326,7 +332,7 @@ class RasActions:
 	self.__delAttributesCheckInput(ras_ip)
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
 	self.__delAttributesDB(ras_obj)
-	ras_main.getLoader().loadRas(ras_obj.getRasID())    
+	self.__reloadRas(ras_obj)
 
     def __delAttributesCheckInput(self,ras_ip):
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
@@ -345,7 +351,7 @@ class RasActions:
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__addIPpoolToRasDB(ras_obj.getRasID(),ippool_obj.getIPpoolID())
-	ras_main.getLoader().loadRas(ras_obj.getRasID())    
+	self.__reloadRas(ras_obj)
 	
     def __addIPpoolToRasCheckInput(self,ras_ip,ippool_name):
         ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
@@ -368,7 +374,8 @@ class RasActions:
 	ras_obj=ras_main.getLoader().getRasByIP(ras_ip)
 	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
 	self.__delIPpoolFromRasDB(ras_obj.getRasID(),ippool_obj.getIPpoolID())
-	ras_main.getLoader().loadRas(ras_obj.getRasID())    
+	self.__reloadRas(ras_obj)
+
 	
     def __delIPpoolFromRasCheckInput(self,ras_ip,ippool_name):
         ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)

@@ -8,7 +8,7 @@ def init():
     ras_main.getFactory().register(PPPDRas,"pppd")
 
 class PPPDRas(GeneralUpdateRas):
-    type_attrs={"pppd_kill_port_command":"%s/pppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%s/pppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%s/pppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%s/pppd/remove_bw_limit"%defs.IBS_ADDONS}
+    type_attrs={"pppd_kill_port_command":"%spppd/kill"%defs.IBS_ADDONS,"pppd_list_users_command":"%spppd/list_users"%defs.IBS_ADDONS,"pppd_apply_bandwidth_limit":"%spppd/apply_bw_limit"%defs.IBS_ADDONS,"pppd_remove_bandwidth_limit":"%spppd/remove_bw_limit"%defs.IBS_ADDONS}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
@@ -53,7 +53,7 @@ class PPPDRas(GeneralUpdateRas):
 		if len(sp)!=4:
 		    toLog("PPPd getOnlines: Can't line %s"%line,LOG_ERROR)
 		    continue
-		online_list[int(sp[0])]={"username":None,"in_bytes":long(sp[2]),"out_bytes":long(sp[3])}
+		online_list[sp[0]]={"username":None,"in_bytes":long(sp[2]),"out_bytes":long(sp[3])}
 	except:
 	    logException(LOG_ERROR)
 	return online_list

@@ -11,21 +11,21 @@ def init():
 
     loadPlugins(RAS_IMPLEMENTIONS)
     
+    from core.ras.ras_actions import RasActions
+    global ras_actions
+    ras_actions=RasActions()
+
+    from core.ras.user_msg_dispatcher import UserMsgDispatcher
+    global user_msg_dispatcher
+    user_msg_dispatcher=UserMsgDispatcher()
+
     from core.ras.ras_loader import RasLoader
     global ras_loader
     ras_loader=RasLoader()
     ras_loader.loadAllRases()
 
-    from core.ras.ras_actions import RasActions
-    global ras_actions
-    ras_actions=RasActions()
-
     from core.ras.ras_handler import RasHandler
     handlers_manager.getManager().registerHandler(RasHandler())
-    
-    from core.ras.user_msg_dispatcher import UserMsgDispatcher
-    global user_msg_dispatcher
-    user_msg_dispatcher=UserMsgDispatcher()
 
     
 def getFactory():

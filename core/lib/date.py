@@ -49,7 +49,7 @@ class RelativeDate:
 	    return "Hours"
 	elif date%(3600*24) or date<(3600*24*30):
 	    return "Days"
-	elif date%(3600*24*30):
+	elif date%(3600*24*30) or date<(3600*24*30*365):
 	    return "Months"
 	else:
 	    return "Years"

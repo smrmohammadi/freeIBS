@@ -1,10 +1,12 @@
 from core.threadpool import thread_main
 from core.event import event
 from core.ibs_exceptions import *
+from core import main
 
 def init():
     global pe_manager
     pe_manager=PeriodicEventsManager()
+    main.registerPostInitMethod(postInit)
 
 def postInit():
     getManager().postInit()
@@ -55,6 +57,8 @@ class PeriodicEvent:
 class PeriodicEventsManager:
     def __init__(self):
 	self.events=[]
+	self.__initialized=False
+	self.lock=threading.Lock()
 
     def register(self,periodic_event):
 	"""
@@ -63,18 +67,36 @@ class PeriodicEventsManager:
 	"""
 	if not isinstance(periodic_event,PeriodicEvent):
 	    raise IBSException("PeriodicEventManager.register needs an PeriodicEvent Instance")
-	self.events.append(periodic_event)
+	self.lock.acquire()
+	try:
+	    self.events.append(periodic_event)
+	    if self.__initialized:
+		self.__setNextEvent(-1)
+	finally:
+	    self.lock.release()
 
+    ##########################
+    def unRegister(self,periodic_event):
+	try:
+	    idx=self.events.index(periodic_event)
+	    self.events[idx]=None
+	except ValueError:
+	    logException(LOG_ERROR,"periodicEvents.unRegister Invalid periodic_event %s"%periodic_event)
     
+    ##########################
     def postInit(self):
 	"""
 	    this function will be called, after initialization of all other modules
 	"""
 	self.__setStartupEvents()
-	
+	self.__initialized=True
+
+    ##########################	
     def runEvent(self,_index,*args):
 	try:
 	    ev=self.events[_index]
+	    if ev==None:
+		return
 	except:
 	    logException(LOG_ERROR,"periodicEvents.runEvent Invalid index %s"%_index)
 	else:
@@ -98,3 +120,5 @@ class PeriodicEventsManager:
     def __setNextEvent(self,_index):
 	ev=self.events[_index]
 	event.addEvent(ev.interval,self.runEvent,[_index]+ev.args)
+
+	

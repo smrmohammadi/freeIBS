@@ -11,11 +11,13 @@ from core.ibs_exceptions import *
 from core.event	import event
 from core.lib import ibs_states
 from core.lib.time_lib import *
+from core import main
 
 def init():
     global lowload,midnight
     lowload=DailyEvents("lowload","LOWLOAD_JOBS",4,30)
     midnight=DailyEvents("midnight","MIDNIGHT_JOBS",0,30)
+    main.registerPostInitMethod(postInit)
 
 def postInit():
     lowload.checkLastRun()

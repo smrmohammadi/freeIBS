@@ -103,23 +103,23 @@ Ras Info
         <input type=hidden name=attr_editing_done value=1>
 	<input type=hidden name=ras_ip value="{$info.ras_ip}">
 	{addEditTable title="Attributes" table_width="480"}
-		{foreach from=$attrs key=attr_name item=attr_value}
+		{foreach from=$attrs item=attr_tuple}
 		    	{addEditTD type="left"}
-			    {$attr_name}
+			    {$attr_tuple[0]}
 			{/addEditTD}
 		        {addEditTD type="right"}
-			    <input class="text" type=text name="attr__{$attr_name}" value="{$attr_value}">
+			    <input class="text" type=text name="attr__{$attr_tuple[0]}" value="{$attr_tuple[1]}">
 			{/addEditTD}    
 		{/foreach}
 	{/addEditTable}
     {else}		    
 	{viewTable title="Attributes" table_width="480"}
-		{foreach from=$attrs key=attr_name item=attr_value}
+		{foreach from=$attrs item=attr_tuple}
 		    	{addEditTD type="left"}
-			    {$attr_name}
+			    {$attr_tuple[0]}
 			{/addEditTD}
 		        {addEditTD type="right"}
-			    {$attr_value}
+			    {$attr_tuple[1]}
 			{/addEditTD}    
 		{/foreach}
 	{/viewTable}

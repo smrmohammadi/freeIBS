@@ -36,8 +36,6 @@ def init():
     from core.server import server
     server.init()    
 
-    import core.ras.ras_main
-    core.ras.ras_main.init()
 
     import core.admin.admin_main
     core.admin.admin_main.init()
@@ -69,17 +67,28 @@ def init():
     import core.bandwidth_limit.bw_main
     core.bandwidth_limit.bw_main.init()
 
+    import core.ras.ras_main
+    core.ras.ras_main.init()
+
     import radius_server.rad_server
     radius_server.rad_server.init()
     
-    core.event.daily_events.postInit()
-    core.event.periodic_events.postInit()
+    runPostInits()
 
     server.startServer()    
     unSetNoLoginFlag()
     ibs_exceptions.toLog("IBS successfully started.",ibs_exceptions.LOG_DEBUG)
     sys.excepthook=sys_except_hook
     
+############################################
+post_init_methods=[]
+
+def runPostInits():
+    for method in post_init_methods:
+	apply(method,[])
+
+def registerPostInitMethod(method):
+    post_init_methods.append(method)
 
 #######################
 def mainThreadShutdown(): 

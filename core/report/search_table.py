@@ -129,7 +129,8 @@ class SearchTable:
 class SearchAttrsTable(SearchTable):
     def __init__(self,table_name):
 	SearchTable.__init__(self,table_name)
-	self.attrs=[]
+	self.getRootGroup().setOperator("or")
+	self.attrs={}
 
     def hasAttrSearch(self,search_helper,dic_key,attr_db_name,value_parser_method=None):
 	"""
@@ -150,26 +151,29 @@ class SearchAttrsTable(SearchTable):
 	if search_helper.hasCondFor(dic_key):
 	    self.searchOnConds(search_helper,dic_key,attr_db_name,value_parser_method,"=")
 
-    def search(self,attr_db_name,values,op):
+    def search(self,attr_db_name,values,op,cast_to=""):
 	"""
 	"""
-	self.addAttr(attr_db_name)
-	group=self.createAttrGroup(attr_db_name,values,op)
+	group=self.createAttrGroup(attr_db_name,values,op,cast_to)
+	self.addAttr(attr_db_name,group)
 	self.addGroup(group)
 
-    def createAttrGroup(self,attr_name,attr_values,op):
+    def createAttrGroup(self,attr_name,attr_values,op,cast_to=""):
 	"""
 	    attr_values(list or iterable object): list of values
 	"""
 	group=SearchGroup("and")
 	group.addGroup("%s.attr_name = %s"%(self.getTableName(),dbText(attr_name)))
 	sub_group=SearchGroup("or")
-	map(lambda value:sub_group.addGroup("%s.attr_value %s %s"%(self.getTableName(),op,dbText(value))),attr_values)
+	attr_value="%s.attr_value"%self.getTableName()
+	if cast_to!="":
+	    attr_value="cast(%s as %s)"%(attr_value,cast_to)
+	map(lambda value:sub_group.addGroup("%s %s %s"%(attr_value,op,dbText(value))),attr_values)
 	group.addGroup(sub_group)
 	return group
-
-    def addAttr(self,attr):
-	self.attrs.append(attr)
+    
+    def addAttr(self,attr,group_obj):
+	self.attrs[attr]=group_obj
 
     def getAttrs(self):
 	return self.attrs

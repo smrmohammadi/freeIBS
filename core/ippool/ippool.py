@@ -34,6 +34,17 @@ class IPPool:
 		"used":self.used
 		}
 
+    def setIPInPacket(self,packet):
+	"""
+	    set a new ip address in packet, and return the assigned ip
+	    may raise IPpoolFullException
+	"""
+	if packet!=None:
+	    ip=self.getUsableIP()
+	    packet["Framed-IP-Address"]=ip
+    	    return ip
+
+
     def getUsableIP(self):
 	"""
 	    return a free ip of our pool and add it to used list.

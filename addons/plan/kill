@@ -1,0 +1,7 @@
+#!/bin/bash
+#$1 is ras ip 
+#$2 is user mac address
+#$3 is user ip address with optionally a mask
+
+iptables -D FORWARD -m mac --mac-source $2 -s $3 -j ACCEPT
+iptables -D FORWARD -d $3 -j ACCEPT

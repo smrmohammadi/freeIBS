@@ -34,11 +34,12 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromCheckBoxRequest("owner_name_","owner_name");
     $helper->addToCondsFromRequest(TRUE,"normal_username","normal_username_op");
     $helper->addToCondsFromRequest(TRUE,"rel_exp_date","rel_exp_date_unit","rel_exp_date_op");
+    $helper->addToCondsFromRequest(TRUE,"abs_exp_date","abs_exp_date_unit","abs_exp_date_op");
     $helper->addToCondsFromRequest(TRUE,"user_id");
     $helper->addToCondsFromRequest(TRUE,"credit","credit_op");
     $helper->addToCondsFromRequest(TRUE,"lock");
     $helper->addToCondsFromRequest(TRUE,"lock_reason");
-
+    $helper->addToCondsFromRequest(TRUE,"ippool");
 }
 
 

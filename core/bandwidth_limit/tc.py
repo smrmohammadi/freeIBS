@@ -45,7 +45,7 @@ class TC:
     def __parseCounters(self,output):
         groups=self.counters_pattern.findall(output)
 	dic={}
-	    
+
 	for _tuple in groups:
 	    if _tuple[4]=="":
 		rate=0

@@ -42,8 +42,9 @@ class UserLoader:
 	    return complete user attributes containing voip and normal user attributes
 	"""
 	attrs=self.__fetchUserAttrs(user_id)
-	attrs.update(self.__fetchNormalUserAttrsByUserID(user_id))	
-	attrs.update(self.__fetchVoipUserAttrsByUserID(user_id))	
+	attrs.update(self.__fetchNormalUserAttrsByUserID(user_id))
+	attrs.update(self.__fetchVoipUserAttrsByUserID(user_id))
+	attrs.update(self.__fetchPersistentLanAttrs(user_id))
 	return attrs
 
     def getBasicUser(self,user_id):
@@ -120,9 +121,6 @@ class UserLoader:
 	    return normal_attrs
 	else:
 	    return None
-	
-
-
 
     def __fetchVoipUserAttrsByUserID(self,user_id):
 	"""
@@ -135,7 +133,6 @@ class UserLoader:
 	    voip_attrs["voip_username"]=voip_db_attrs[0]["voip_username"]
 	return voip_attrs
 
-
     def __fetchUserAttrs(self,user_id):
 	"""
 	    return a dictionary of user attributes in format {attr_name:attr_value}
@@ -146,5 +143,13 @@ class UserLoader:
 	    user_attrs[user_dic["attr_name"]]=user_dic["attr_value"]
 	return user_attrs
 
-
-
+    def __fetchPersistentLanAttrs(self,user_id):
+	"""
+	    return a dictionary of persistent_lan_users table attributes in format {attr_name:attr_value}
+	"""
+	plan_attrs={}
+	plan_db_attrs=db_main.getHandle().get("persistent_lan_users","user_id=%s"%user_id)
+	if len(plan_db_attrs)==1:
+	    for attr_name in ["persistent_lan_ip","persistent_lan_mac","persistent_lan_ras_id"]:
+		plan_attrs[attr_name]=plan_db_attrs[0][attr_name]
+	return plan_attrs

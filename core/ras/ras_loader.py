@@ -69,12 +69,23 @@ class RasLoader:
 	"""
 	    load ras with id "ras_id" and keep it in the loader object
 	"""
+	ras_obj=self.loadRasObj(ras_id)
+	self.keepObj(ras_obj)
+
+    def loadRasObj(self,ras_id):
+	"""
+	    load ras with id "ras_id" and return the object
+	"""
+	(ras_info,ras_attrs,ports,ippools)=self.getRasInfo(ras_id)
+	ras_obj=self.__createRasObj(ras_info,ras_attrs,ports,ippools)
+	return ras_obj
+
+    def getRasInfo(self,ras_id):
 	ras_info=self.__getRasInfoDB(ras_id)
 	ras_attrs=self.__getRasAttrs(ras_id)
 	ports=self.__getRasPorts(ras_id)
 	ippools=self.__getRasIPpools(ras_id)
-	ras_obj=self.__createRasObj(ras_info,ras_attrs,ports,ippools)
-	self.__keepObj(ras_obj)
+	return (ras_info,ras_attrs,ports,ippools)
 
     def unloadRas(self,ras_id):
 	"""
@@ -82,10 +93,8 @@ class RasLoader:
 	    useful when the ras is deleted
 	"""
 	ras_obj=self.getRasByID(ras_id)
-	del(self.rases_id[ras_id])
-	del(self.rases_ip[ras_obj.getRasIP()])
-	del(self.radius_remote_hosts[ras_obj.getRasIP()])
-
+	ras_obj.unloaded()
+	self.unKeepObj(ras_obj)
     
     def getRadiusRemoteHosts(self):
 	return self.radius_remote_hosts
@@ -156,10 +165,16 @@ class RasLoader:
 	return ras_main.getFactory().getClassFor(ras_info["ras_type"])(ras_info["ras_ip"],ras_info["ras_id"],
 						ras_info["ras_type"],ras_info["radius_secret"],ports,ippools,ras_attrs)
 
-    def __keepObj(self,ras_obj):
+    def keepObj(self,ras_obj):
 	"""
 	    keep "ras_obj" into self, by adding them to internal dics
 	"""
 	self.rases_ip[ras_obj.getRasIP()]=ras_obj
 	self.rases_id[ras_obj.getRasID()]=ras_obj
 	self.radius_remote_hosts[ras_obj.getRasIP()]=RemoteHost(ras_obj.getRasIP(),ras_obj.getRadiusSecret(),ras_obj.getRasIP())
+
+    def unKeepObj(self,ras_obj):
+	del(self.rases_id[ras_obj.getRasID()])
+	del(self.rases_ip[ras_obj.getRasIP()])
+	del(self.radius_remote_hosts[ras_obj.getRasIP()])
+	

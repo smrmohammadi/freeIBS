@@ -35,6 +35,9 @@ class AttrUpdaterContainer:
 	self.callOnAll("getQuery",[ibs_query,src,action],dic_args)
 	return ibs_query
 
+    def postUpdate(self,src,action):
+	self.callOnAll("postUpdate",[src,action],{})
+
     def callOnAll(self,method_name,args,dargs):
 	"""
 	    call "method_name" of all attr_updaters, with argument "args" and "dargs"
@@ -82,11 +85,17 @@ class AttrUpdater:
 	    arg_dic are extra arguments, that maybe necessary for checkings.
 	    arg_dic contents differs on diffrent actions
 	    IMPORTANT WARNING: early checkings should be done in class initializer
-			       this method will be called after we reserved our user IDs
-			       so raising an exception here means that reserved IDs would be lost
+			       this method will be called after we load users and initialize all plugins
 	"""
 	pass
 
+
+    def postUpdate(self,src,action):
+	"""
+	    this method is called after update/delete is commited to database successfully and broadcast change
+	    is called
+	"""
+	pass
 
     def getQuery(self,ibs_query,src,action,**args):
 	"""

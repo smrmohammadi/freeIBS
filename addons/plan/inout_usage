@@ -1,0 +1,39 @@
+#!/usr/bin/python
+#print output in format MAC_ADDRESS IN_BYTES OUT_BYTES
+import os
+
+
+
+def getOutput():
+    fd=os.popen("iptables -nL FORWARD -v -x","r") 
+    lines=fd.readlines()
+    fd.close()
+    return lines[2:]
+
+
+def parse(lines):
+    """
+	we assumed that login script always put user send rule before recieve rule
+    """
+    ips={}
+    for line in lines:
+	sp=line.strip().split()
+	if len(sp)==11:
+	    ips[sp[7]]={"mac":sp[10],"out_bytes":sp[1],"out_pkts":sp[0]}
+	elif len(sp)==9 and ips.has_key(sp[8]):
+	    ips[sp[8]]["in_bytes"]=sp[1]
+	    ips[sp[8]]["in_pkts"]=sp[0]
+    return ips
+
+def printOut(ips):
+    for ip in ips:
+	info=ips[ip]
+	print "%s %s %s"%(info["mac"],info["in_bytes"],info["out_bytes"])
+
+def main():
+    lines=getOutput()
+    ips=parse(lines)
+    printOut(ips)
+
+
+main()

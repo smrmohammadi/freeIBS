@@ -65,6 +65,16 @@ class DelUser extends Request
     }
 }
 
+class KillUser extends Request
+{
+    function KillUser($user_id,$ras_ip,$unique_id_val)
+    {
+	parent::Request("user.killUser",array("user_id"=>$user_id,
+					      "ras_ip"=>$ras_ip,
+					      "unique_id_val"=>$unique_id_val));
+    }    
+}
+
 function getUsersInfoByUserID(&$smarty,$user_ids)
 {/*return a list of user_infos of users with id in $user_ids
  */ 

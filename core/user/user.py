@@ -11,7 +11,7 @@ class User:
     """
 	Base User Class, for online users
     """
-    remove_ras_attrs=["pap_password","chap_password","ms_chap_response","ms_chap2_response"]
+    remove_ras_attrs=["pap_password","chap_password","ms_chap_response","ms_chap2_response","start_accounting"]
 
     def __init__(self, loaded_user, _type):
 	"""
@@ -136,6 +136,7 @@ class User:
 	    instance_info["successful_auth"]=False
 	    self.setKillReason(self.instances,str(e))
 	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
+	    self.instances-=1
 	    raise
 	instance_info["successful_auth"]=True
 	

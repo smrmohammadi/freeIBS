@@ -92,6 +92,8 @@ class GroupActions:
 	ibs_query.runQuery()
 	
 	group_main.getLoader().loadGroupByName(group_name)
+	self.__broadcastChange()
+	self.__callPostUpdates(changed_attr_updaters,deleted_attr_updaters)
 
     def __getChangedQuery(self,ibs_query,group_obj,changed_attr_updaters,admin_obj):
 	"""
@@ -111,6 +113,15 @@ class GroupActions:
 	return deleted_attr_updaters.getQuery(ibs_query,"group","delete",{"group_obj":group_obj,
 									 "admin_obj":admin_obj
 									 })
+    def __callPostUpdates(self,changed_attr_updaters,deleted_attr_updaters):
+	changed_attr_updaters.postUpdate("group","change")
+	deleted_attr_updaters.postUpdate("group","delete")
+
+    def __broadcastChange(self):
+	"""
+	    TODO:XXX reload all users with this group
+	"""
+	pass
 
     ########################################
 

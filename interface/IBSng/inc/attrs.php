@@ -68,6 +68,24 @@ function normalChargePluginUpdate(&$update_helper)
 	$update_helper->addToUpdateAttrs("normal_charge",$_REQUEST["normal_charge"]);
 }
 
+//**************************************************** IPpool
+function IPpoolPluginUpdate(&$update_helper)
+{
+    if(!isInRequest("has_ippool"))
+	$update_helper->addToDelAttrs("ippool");
+    else
+	$update_helper->addToUpdateAttrs("ippool",$_REQUEST["ippool"]);
+}
+
+//*************************************************** Radius Attrs
+function radiusAttrsPluginUpdate(&$update_helper)
+{
+    if(!isInRequest("has_radius_attrs"))
+	$update_helper->addToDelAttrs("radius_attrs");
+    else
+	$update_helper->addToUpdateAttrs("radius_attrs",$_REQUEST["radius_attrs"]);
+}
+
 //************************************* Group Name
 function groupNamePluginUpdate(&$update_helper)
 {
@@ -115,7 +133,24 @@ function lockPluginUpdate(&$update_helper)
 {
     if(isInRequest("lock"))
 	$update_helper->addToUpdateAttrs("lock",nl2br($_REQUEST["lock"]));
+    else
+	$update_helper->addToDelAttrs("lock");
 }
+
+//**************************************************
+function persistentLanPluginUpdate(&$update_helper)
+{
+    if(isInRequest("has_plan"))
+    {
+	$update_helper->addToUpdateAttrs("persistent_lan_mac",$_REQUEST["persistent_lan_mac"]);
+	$update_helper->addToUpdateAttrs("persistent_lan_ip",$_REQUEST["persistent_lan_ip"]);
+	$update_helper->addToUpdateAttrs("persistent_lan_ras_ip",$_REQUEST["persistent_lan_ras_ip"]);
+    }
+    else
+	$update_helper->addToDelAttrs("persistent_lan_mac");
+
+}
+
 
 //************************** UNUSED
 function relExpParser(&$parsed_arr,&$smarty,&$attrs)

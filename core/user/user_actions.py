@@ -8,6 +8,7 @@ from core.admin import admin_main
 from core.lib import password_lib,iplib,report_lib
 from core.group import group_main
 from core.user import user_main
+from core.ras import ras_main
 import re
 
 class UserActions:
@@ -72,29 +73,6 @@ class UserActions:
 						      (user_id,dbText(attr_name))
 					)
 
-    def insertNormalUserAttrsQuery(self,user_id,normal_username,normal_password):
-	"""
-	    insert user normal attributes in "normal_users" table
-	"""
-	return ibs_db.createInsertQuery("normal_users",{"normal_username":dbText(normal_username),
-							"normal_password":dbText(normal_password),
-							"user_id":user_id}
-					)
-
-    def updateNormalUserAttrsQuery(self,user_id,normal_username,normal_password):
-	"""
-	    update user normal attributes in "normal_users" table
-	"""
-	return ibs_db.createUpdateQuery("normal_users",{"normal_username":dbText(normal_username),
-							"normal_password":dbText(normal_password),
-							},"user_id=%s"%user_id
-					)
-
-    def deleteNormalUserAttrsQuery(self,user_id):
-	"""
-	    delete user normal attributes from "normal_users" table
-	"""
-	return ibs_db.createDeleteQuery("normal_users","user_id=%s"%user_id)
 
 ######################################################
     def _checkNormalUsernameChars(self,username):
@@ -241,6 +219,7 @@ class UserActions:
 	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_attr_updaters)
 	ibs_query.runQuery()
 	self.__broadcastChange(users.keys())
+	self.__callPostUpdates(changed_attr_updaters,deleted_attr_updaters)
 
     def __updateUserAttrsCheckInput(self,loaded_users,admin_obj,attrs,to_del_attrs):
 	pass #nothing to check here for now, everything is checked or will be checked
@@ -262,6 +241,10 @@ class UserActions:
 	return deleted_attr_updaters.getQuery(ibs_query,"user","delete",{"users":users,
 							                 "admin_obj":admin_obj})
 
+    def __callPostUpdates(self,changed_attr_updaters,deleted_attr_updaters):
+	changed_attr_updaters.postUpdate("user","change")
+	deleted_attr_updaters.postUpdate("user","delete")
+
     def __broadcastChange(self,user_ids):
 	"""
 	    broadcast that users with id in "users" has been change
@@ -269,8 +252,6 @@ class UserActions:
 	"""
 	userChanged=user_main.getUserPool().userChanged
 	map(userChanged,user_ids)
-
-
 #########################################################
     def getUserInfosFromLoadedUsers(self,loaded_users,date_type):
 	"""
@@ -297,7 +278,7 @@ class UserActions:
 	if len(normal_username)==0:
 	    return []
 	where_clause=" or ".join(map(lambda username:"normal_username=%s"%dbText(username),normal_username))
-	users_db=db_main.getHandle().get("normal_users",where_clause)
+	users_db=db_main.getHandle().get("normal_users",where_clause,0,-1,"",["normal_username"])
 	return [m["normal_username"] for m in users_db]
 
 ##########################################################
@@ -403,6 +384,27 @@ class UserActions:
 					 0,-1,("user_id",True),["user_id"])
 		
 	return map(lambda dic:dic["user_id"],user_ids)
+#################################################################
+    def getPersistentLanUsers(self,ras_id):
+	"""
+	    return a list of dics, containin
+	"""
+	return db_main.getHandle().get("persistent_lan_users","persistent_lan_ras_id=%s"%ras_id)
+
+##########################################################
+    def planMacExists(self,mac):
+	"""
+	    check if mac currently exists in plan_macs
+	    mac(iterable object can be multistr or list): mac that will be checked
+	    return a list of exists macs
+	    NOTE: This is not thread safe 
+	    XXX: test & check where_clause length
+	"""
+	if len(mac)==0:
+	    return []
+	where_clause=" or ".join(map(lambda m:"persistent_lan_mac=%s"%dbText(m),mac))
+	users_db=db_main.getHandle().get("persistent_lan_users",where_clause,0,-1,"",["persistent_lan_mac"])
+	return [m["persistent_lan_mac"] for m in users_db]
 
 ##################################################################
     def killUser(self,user_id,ras_ip,unique_id_val):
@@ -412,7 +414,7 @@ class UserActions:
 	ras_id=ras_main.getLoader().getRasByIP(ras_ip).getRasID()
 	user_obj=user_main.getOnline().getUserObjByUniqueID(ras_id,unique_id_val)
 	if user_obj==None or user_obj.getUserID()!=user_id:
-	    raise GeneralException(errorText("GENERAL","NOT_ONLINE"%(user_id,ras_ip,unique_id_val)))
+	    raise GeneralException(errorText("GENERAL","NOT_ONLINE")%(user_id,ras_ip,unique_id_val))
 	instance=user_obj.getInstanceFromUniqueID(ras_id,unique_id_val)
-	user_obj.getUserType().killInstance(instance)
-	
+	user_obj.getTypeObj().killInstance(instance)
+####################################################################

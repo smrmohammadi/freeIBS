@@ -126,6 +126,13 @@ create table normal_users (
     normal_password text
 );
 
+create table persistent_lan_users (
+    user_id integer references users,
+    persistent_lan_mac macaddr primary key,
+    persistent_lan_ip cidr,
+    persistent_lan_ras_id integer references ras
+);
+
 create sequence add_user_save_id_seq;
 
 create table add_user_saves(
@@ -151,23 +158,6 @@ create table voip_users (
 
 create sequence users_user_id_seq;
 
---    dayusage integer default 0,
---    daylimit integer default -1,
---    mail_quota_kbytes integer default 0,
---    has_email bool default 'f',
---    multi_login integer default -1,
---    rel_exp_date integer default -1,
---    first_login timestamp without time zone default null,
---    abs_exp_date timestamp without time zone not null,
---    has_normal bool,
---    has_voip bool,
---    has_mail bool,
---    name  text,
---    tel text ,
---    comment text ,
---    email_address text ,
---    charge id
-
 create table user_attrs (
     user_id integer references users,
     attr_name text,
@@ -189,8 +179,6 @@ create table ibs_states(
 );
 
 -- *********************** LOGS
-
-
 create table credit_change (
     credit_change_id bigint primary key,
     admin_id integer,
@@ -209,9 +197,6 @@ create table credit_change_userid (
 
 create index credit_change_userid_index on credit_change_userid (user_id);
 create sequence credit_change_id;
-
-
-
 
 create table connection_log (
     connection_log_id bigint primary key,
@@ -325,6 +310,20 @@ create table charge_rule_day_of_weeks (
     day_of_week integer
 );
 
+-- *********************
+create table voip_charge_rule_charge_lists (
+    charge_list_id integer primary key,
+    name text,
+    comment text
+);
+
+create table voip_charge_rule_countries (
+    charge_list_id integer references voip_charge_rule_charge_lists,
+    prefix text,
+    name text,
+    cpm numeric(12,2),
+    billing_type smallint
+);
 
 -- ********************* TO BE CHECKED!
 create table admin_deposit_log(

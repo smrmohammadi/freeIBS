@@ -22,9 +22,9 @@ function smarty_block_userInfoTD($params,$content,&$smarty,&$repeat)
 		<td class="Form_Content_Row_Left_textarea_userinfo" colspan="2" valign="Top">
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="Form_Content_Row_Begin"><img border="0" src="begin_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_Begin"><img border="0" src="/IBSng/images/row/begin_of_row_{$color}.gif"></td>
 				<td class="Form_Content_Row_Left_Textarea_Td_{$color}"><nobr>{$content}</nobr></td>
-				<td class="Form_Content_Row_End"><img border="0" src="end_of_row_{$color}.gif"></td>
+				<td class="Form_Content_Row_End"><img border="0" src="/IBSng/images/row/end_of_row_{$color}.gif"></td>
 			</tr>
 		</table>
 		</td>

@@ -35,6 +35,10 @@ class SearchNormalUsersTable(UserSearchTable):
     def __init__(self):
 	UserSearchTable.__init__(self,"normal_users")
 
+class SearchPLanUsersTable(UserSearchTable):
+    def __init__(self):
+	UserSearchTable.__init__(self,"persistent_lan_users")
+
 class SearchVoIPUsersTable(UserSearchTable):
     def __init__(self):
 	UserSearchTable.__init__(self,"voip_users")
@@ -45,7 +49,7 @@ class SearchUserAttrsTable(SearchAttrsTable):
 
     def createQuery(self):
 	if not self.getRootGroup().isEmpty():
-	    return "select user_attrs.user_id,count(user_attrs.user_id) from user_attrs where %s group by user_id"%\
+	    return "select user_attrs.user_id from user_attrs where %s"%\
 		    (self.getRootGroup().getConditionalClause())
 
 class SearchGroupAttrsTable(SearchAttrsTable):
@@ -53,19 +57,31 @@ class SearchGroupAttrsTable(SearchAttrsTable):
 	SearchAttrsTable.__init__(self,"group_attrs")
 
     def createQuery(self):
-	if not self.getRootGroup().isEmpty():
-	    attr_not_in_user=self.__createNotInUserAttrsClause()
-	    return "select users.user_id,count(users.user_id) from users,groups,group_attrs \
+	attrs=self.getAttrs()
+	if len(attrs):
+	    queries=[]
+	    for attr_name in attrs:
+		queries.append("select users.user_id from users,groups,group_attrs \
 		    where users.group_id = groups.group_id and \
 		    groups.group_id = group_attrs.group_id and \
-	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and %s) \
-		    and %s group by users.user_id "% \
-		    (attr_not_in_user,self.getRootGroup().getConditionalClause())
+	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and attr_name=%s) \
+		    and %s"%(dbText(attr_name),attrs[attr_name].getConditionalClause()))
+	
+	    return " union all ".join(queries)
 
-    def __createNotInUserAttrsClause(self):
-	group=SearchGroup("or")
-	map(lambda attr_name:group.addGroup("attr_name = %s"%dbText(attr_name)),self.getAttrs())
-	return group.getConditionalClause()
+#	if not self.getRootGroup().isEmpty():
+#	    attr_not_in_user=self.__createNotInUserAttrsClause()
+#	    return "select users.user_id from users,groups,group_attrs \
+#		    where users.group_id = groups.group_id and \
+#		    groups.group_id = group_attrs.group_id and \
+#	    	    not exists (select attr_name from user_attrs where user_attrs.user_id = users.user_id and %s) \
+#		    and %s"% \
+#		    (attr_not_in_user,self.getRootGroup().getConditionalClause())
+
+#    def __createNotInUserAttrsClause(self):
+#	group=SearchGroup("or")
+#	map(lambda attr_name:group.addGroup("attr_name = %s"%dbText(attr_name)),self.getAttrs())
+#	return group.getConditionalClause()
     
 
 class SearchUserHelper(SearchHelper):
@@ -74,6 +90,7 @@ class SearchUserHelper(SearchHelper):
     		    {"users":SearchUsersTable(),
 		     "user_attrs":SearchUserAttrsTable(),
 		     "normal_users":SearchNormalUsersTable(),
+		     "persistent_lan_users":SearchPLanUsersTable(),
 		     "voip_users":SearchVoIPUsersTable(),
 		     "group_attrs":SearchGroupAttrsTable()
 		    })
@@ -101,7 +118,7 @@ class SearchUserHelper(SearchHelper):
 
     def __createAttrsQuery(self,user_attrs,group_attrs):
 	if user_attrs!= None and group_attrs!=None:
-	    sub_query="select count(user_id) as count,user_id from (%s union %s) as all_attrs group by user_id"%(user_attrs,group_attrs)
+	    sub_query="select count(user_id) as count,user_id from (%s union all %s) as all_attrs group by user_id"%(user_attrs,group_attrs)
 	elif user_attrs!=None:
 	    sub_query="select count(user_id) as count,user_id from (%s) as all_attrs group by user_id"%(user_attrs)
 	elif group_attrs!=None:

@@ -67,7 +67,7 @@ class AbsExpAttrSearcher(AttrSearcher):
 	    date_obj=AbsDateWithUnit(search_helper.getCondValue("abs_exp_date"),
 				      search_helper.getCondValue("abs_exp_date_unit"))
 	    for table in self.getUserAndGroupAttrsTable():
-		table.search("abs_exp_date",(date_obj.getDate("gregorian"),),search_helper.getCondValue("abs_exp_date_op"))
+		table.search("abs_exp_date",(date_obj.getDate("epoch"),),search_helper.getCondValue("abs_exp_date_op"),"integer")
 
 class AbsExpAttrHolder(AttrHolder):
     def __init__(self,abs_exp_date):

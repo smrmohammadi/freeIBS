@@ -21,6 +21,7 @@
 	{include file="plugins/search/owner.tpl"}
     {/tabContent}
     {tabContent tab_name="ExpDates"}
+        {include file="plugins/search/abs_exp_date.tpl"}
         {include file="plugins/search/rel_exp_date.tpl"}
     {/tabContent}
 
@@ -31,6 +32,7 @@
     {tabContent tab_name="Misc"}
 	{include file="plugins/search/credit.tpl"}
 	{include file="plugins/search/multi_login.tpl"}
+	{include file="plugins/search/ippool.tpl"}
     {/tabContent}
     <tr><td colspan=20>	
         {include file="report_foot.tpl"}

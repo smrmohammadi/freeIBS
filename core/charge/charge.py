@@ -197,7 +197,7 @@ class ChargeWithRules(Charge):
 
 
     def calcInstanceCreditUsage(self,user_obj,instance):
-#	toLog("Instace:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
+#	toLog("Instance:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
 	return user_obj.charge_info.credit_prev_usage_instance[instance-1] + self.calcInstanceRuleCreditUsage(user_obj,instance)
 
     def calcCreditUsage(self,user_obj):

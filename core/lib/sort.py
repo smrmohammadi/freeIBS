@@ -66,7 +66,7 @@ class SortedDic:
 	self.sortByPostText("[0]",desc)
 	
     def sortByPostText(self,post_text,desc):
-	self.sorted_list.sortByPostText(port_text,desc)    
+	self.sorted_list.sortByPostText(post_text,desc)    
 
     def getList(self):
 	"""
@@ -76,10 +76,6 @@ class SortedDic:
 
 ####NOT CHECKED
 	
-    
-def dicSort(dic,postListText,preText="",desc=0):
-    return sortList(dic2list(dic),postListText,preText,desc)
-
 def sortListWithHash(list,order_by,order_by_hash,default,desc):
     """
 	sort "list" by "order_by" using "order_by_hash" to determine index or "postText"

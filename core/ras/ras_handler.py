@@ -46,12 +46,7 @@ class RasHandler(handler.Handler):
 	creator_obj.canDo("GET RAS INFORMATION")
     	request.checkArgs("ras_ip")
 	ras_obj=ras_main.getLoader().getRasByIP(request["ras_ip"])
-	return {"ras_ip":ras_obj.getRasIP(),
-		"ras_id":ras_obj.getRasID(),
-		"radius_secret":ras_obj.getRadiusSecret(),
-		"ras_type":ras_obj.getType(),
-		"port":ras_obj.getPorts(),
-		"attrs":ras_obj.getSelfAttributes()}
+	return ras_obj.getInfo()
 
     def getActiveRasIPs(self,request):
 	request.needAuthType(request.ADMIN)

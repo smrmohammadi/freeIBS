@@ -18,11 +18,13 @@ def init():
     toLog("Initializing IBS Radius Server",LOG_DEBUG)
     global ibs_dic
     ibs_dic=dictionary.Dictionary("%s/radius_server/dictionary"%defs.IBS_ROOT)
-    
     srv=IBSRadiusServer(dict=ibs_dic,addresses=defs.RADIUS_SERVER_BIND_IP,authport=defs.RADIUS_SERVER_AUTH_PORT,acctport=defs.RADIUS_SERVER_ACCT_PORT)
     srv.hosts=ras_main.getLoader().getRadiusRemoteHosts()
     thread_main.runThread(srv.Run,[],"radius")
     radius_server_started=True
+
+def getDictionary():
+    return ibs_dic
 
 def shutdown():
     if not radius_server_started:

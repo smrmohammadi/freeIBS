@@ -3,7 +3,7 @@ import sys
 
 class CanStayOnlineResult:
     MIN_REMAINING_TIME=5
-    DEBUG=True
+    DEBUG=False
     
     def __init__(self):
 	self.remaining_time=sys.maxint

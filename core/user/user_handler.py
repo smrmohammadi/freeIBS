@@ -18,6 +18,7 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("changeCredit")
 	self.registerHandlerMethod("searchUser")
 	self.registerHandlerMethod("delUser")
+	self.registerHandlerMethod("killUser")
 
 		
     def addNewUsers(self,request):
@@ -113,7 +114,7 @@ class UserHandler(handler.Handler):
 	if len(bad_usernames)!=0:
 	    ret[errorText("USER_ACTIONS","BAD_NORMAL_USERNAME",False)]=bad_usernames
 	if len(exist_usernames)!=0:
-	    ret[errorText("USER_ACTIONS","NORMAL_USERNAME_EXISTS",False)]=exist_usernames
+	    ret[errorText("USER_ACTIONS","NORMAL_USERNAME_EXISTS",False)%""]=exist_usernames
 	return ret
 ############################################################
     def changeCredit(self,request):

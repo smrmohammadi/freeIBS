@@ -29,7 +29,9 @@ GENERAL_ERRORS={
     "FROM_VALUE_INVALID":"Invalid From value %s",
     "TO_VALUE_INVALID":"Invalid To value %s",
     "ATTR_NOT_FOUND":"Attribute %s not found",
-    "INVALID_ORDER_BY":"Invalid Order By value %s"
+    "INVALID_ORDER_BY":"Invalid Order By value %s",
+    "INVALID_MAC_ADDRESS":"Mac Address %s is invalid"
+    
 }
 
 USER_ACTIONS_ERRORS={
@@ -46,11 +48,15 @@ USER_ACTIONS_ERRORS={
     "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
     "INVALID_PASSWORD_LENGTH":"Invalid password length %s",
     "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
-    "NORMAL_USERNAME_EXISTS":"Normal username already exists",
+    "NORMAL_USERNAME_EXISTS":"Normal username %s already exists",
     "INVALID_OPERATOR":"Invalid operator %s",
     "DELETE_USER_IS_ONLINE":"Can't delete user with id %s, because he is online",
-    "INVALID_ABS_EXP_DATE":"Absolute Expiration Date is Invalid: %s"
-
+    "INVALID_ABS_EXP_DATE":"Absolute Expiration Date is Invalid: %s",
+    "INVALID_RADIUS_ATTRIBUTE":"Radius Attributes %s is not in radius dictionary",
+    "PERSISTENT_LAN_MAC_EXISTS":"Persistent Lan %s already exists",
+    "PLAN_MAC_COUNT_NOT_MATCH":"Number of Mac Addresses count isn't equal to updating users count. Updating %s number of users while there are %s macs",
+    "RAS_IS_NOT_PERSISTENT_LAN":"Ras %s is not Persistent Lan"
+    
 }
 
 USER_ERRORS={

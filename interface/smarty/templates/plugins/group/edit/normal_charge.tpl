@@ -30,16 +30,3 @@
 {/if}
 </script>
 
-
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_list.php" class="RightSide_links">
-	Group List
-    </a>
-{/addRelatedLink}
-
-{addRelatedLink}
-    <a href="/IBSng/admin/group/group_info.php?group_name={$group_name}" class="RightSide_links">
-	{$group_name} Group Info
-    </a>
-{/addRelatedLink}
-
