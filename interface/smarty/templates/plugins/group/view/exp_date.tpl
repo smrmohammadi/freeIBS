@@ -1,4 +1,4 @@
-{groupViewTemplate edit_tpl_name="/plugins/group/edit/exp_date.tpl"}
+{groupViewTemplate edit_tpl_name="exp_date.tpl"}
   {groupInfoTable title="Expiration Date"}
     {groupInfoTD type="left"}
 	    Relative Expiration Date 

@@ -5,9 +5,10 @@ function DomContainer()
 
 */
     this.objs=new Array();
-    this.dependent_objs=new Array();
+    this.dependent_objs=Array();
     this.set_on_select=Array(); /*array of arrays*/
     this.set_on_unselect=Array(); /*array of arrays*/
+    this.__selected="";
     
     this.setAttribute=setAttribute;
     this.__addObj=__addObj;
@@ -15,6 +16,7 @@ function DomContainer()
     this.setOnSelect=setOnSelect;
     this.setOnUnSelect=setOnUnSelect;
     this.select=select;
+    this.toggle=toggle;
     this.__getObjByID=__getObjByID;
     this.__setSelectedAttrs=__setSelectedAttrs;
     this.__setUnselectedsAttrs=__setUnselectedsAttrs;
@@ -61,8 +63,17 @@ function DomContainer()
     }
     
     
+    function toggle(id)
+    {/*toggle of element, useful for on/off situations*/
+	if(this.__selected==id)
+	    this.select("dummy_id");
+	else
+	    this.select(id);
+    }
+    
     function select(id)
     {/* select of elements */
+	this.__selected=id;
 	this.__setSelectedAttrs(id);
 	this.__setUnselectedsAttrs(id);
     }
@@ -81,6 +92,9 @@ function DomContainer()
     {
 
 	arr=this.__getObjByID(id);
+	if(!arr)
+	    return;
+	    
 	obj=arr[0];
 	dependents=arr[1];
 	for (attr_index in this.set_on_select)

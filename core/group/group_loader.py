@@ -66,6 +66,14 @@ class GroupLoader:
 	group_ids=self.__getAllGroupIDs()
 	map(self.loadGroup,group_ids)
 
+    def unloadGroup(self,group_id):
+	"""
+	    unload group with id "group_id"
+	"""
+	group_obj=self.getGroupByID(group_id)
+	del(self.groups_name[group_obj.getGroupName()])
+	del(self.groups_id[group_id])
+
     def __getAllGroupIDs(self):
 	group_ids=db_main.getHandle().get("groups","true",0,-1,"",["group_id"])
 	return [m["group_id"] for m in group_ids]

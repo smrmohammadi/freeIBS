@@ -1,4 +1,4 @@
-{groupViewTemplate edit_tpl_name="/plugins/group/edit/multi_login.tpl"}
+{groupViewTemplate edit_tpl_name="multi_login.tpl"}
   {groupInfoTable title="Multi Login"}
     {groupInfoTD type="left"}
 	    Multi Login

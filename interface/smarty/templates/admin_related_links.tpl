@@ -9,7 +9,7 @@
 	</tr>
 	<tr>
 		<td width="32" background="/IBSng/images/anti_alias_bacground_left.gif"><img border="0" src="/IBSng/images/hide.gif" width="32" height="66"></td>
-		<td width="139" class="RightSide_Color_light">
+		<td width="139" class="RightSide_Color_light" valign="top">
 		<!-- Related Links -->
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
@@ -35,7 +35,7 @@
 	</tr>
 	<tr>
 		<td width="32" align="center" background="/IBSng/images/anti_alias_bacground_left.gif">	<img border="0" src="/IBSng/images/shortcuts_and_links.gif" width="14" height="120"></td>
-		<td width="139" valign="top" class="RightSide_Color_light">
+		<td width="139" valign="top" class="RightSide_Color_light" valign="top">
 		<!-- Shortcuts & Links -->
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>

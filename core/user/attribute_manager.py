@@ -4,35 +4,46 @@ from core.user.info_holder import InfoHolderContainer
 
 class AttributeManager:
     def __init__(self):
-	self.attr_handlers={}
+	self.change_attr_handlers={}
+	self.delete_attr_handlers={}
 
-    def registerHandler(self,handler_obj,attr_list):
+    def registerHandler(self,handler_obj,change_attr_list,delete_attr_list):
 	"""
 	    handler_obj(AttributeHandler instance): Attribute Handler that generate an info holder
-	    attr_list(list of strs): list of attributes
+	    change_attr_list(list of strs): list of attributes for change action
+	    delete_attr_list(list of strs): list of attributes for delete action
 	    register a attr_handler, that will be called when we encounter an attribute in attr_list
 	"""
-	for attr in attr_list:
-	    if self.attr_handlers.has_key(attr):
+	for attr in change_attr_list:
+	    if self.change_attr_handlers.has_key(attr):
 		raise IBSException(errorText("USER","DUPLICATE_ATTR_REGISTRATION")%attr)
-	    self.attr_handlers[attr]=handler_obj
+	    self.change_attr_handlers[attr]=handler_obj
 
-    def __getAttrHandler(self,attr_name):
+	for attr in delete_attr_list:
+	    if self.delete_attr_handlers.has_key(attr):
+		raise IBSException(errorText("USER","DUPLICATE_ATTR_REGISTRATION")%attr)
+	    self.delete_attr_handlers[attr]=handler_obj
+
+    def __getAttrHandler(self,attr_name,action):
 	try:
-	    return self.attr_handlers[attr_name]
+	    if action=="change":
+		return self.change_attr_handlers[attr_name]
+	    elif action=="delete":
+		return self.delete_attr_handlers[attr_name]
 	except KeyError:
 	    raise GeneralException(errorText("USER","UNREGISTERED_ATTRIBUTE")%attr_name)
 	
-    def getInfoHolders(self,attrs_dic):
+    def getInfoHolders(self,attrs,action):
 	"""
-	    attrs_list(dic): dic of all attributes in format name:value
+	    attrs(dic or list): dic of all attributes in format name:value
+	    action(string): should be "change" ro "delete"
 	    return a list of info handlers or raise an exception on error
 	"""
 	info_holders=InfoHolderContainer()
-        for attr_name in attrs_dic:
-	    handler=self.__getAttrHandler(attr_name)
+        for attr_name in attrs:
+	    handler=self.__getAttrHandler(attr_name,action)
 	    if not info_holders.hasName(handler.getInfoHolderName()):
-	        info_holders.addNew(handler.getInfoHolder(attr_name,attrs_dic))
+	        info_holders.addNew(handler.getInfoHolder(attr_name,attrs,action))
 
 	return info_holders
     

@@ -51,25 +51,26 @@ class GroupActions:
 	self.__updateGroupCheckInput(group_id,group_name,comment,owner_name)
 	admin_obj=admin_main.getLoader().getAdminByName(owner_name)
 	self.__updateGroupDB(group_id,group_name,comment,admin_obj.getAdminID())
-	group_main.getLoader().loadGroupByName(group_name)
+	group_main.getLoader().unloadGroup(group_id)
+	group_main.getLoader().loadGroup(group_id)
 	
     def __updateGroupCheckInput(self,group_id,group_name,comment,owner_name):
 	group_obj=group_main.getLoader().getGroupByID(group_id)
-	if group_obj.getName()!=group_name:
+	if group_obj.getGroupName()!=group_name:
 	    if group_main.getLoader().groupNameExists(group_name):
-		raise GeneralException(errorText("GROUP","GROUP_NAME_TAKEN")%self.group_name)	
+		raise GeneralException(errorText("GROUPS","GROUP_NAME_TAKEN")%group_name)	
 
-	    if not isNameValid(self.group_name):
-	        raise GeneralException(errorText("GROUP","GROUP_NAME_INVALID")%self.group_name)
+	    if not isValidName(group_name):
+	        raise GeneralException(errorText("GROUPS","GROUP_NAME_INVALID")%group_name)
 
 	admin_main.getLoader().checkAdminName(owner_name)
     
     def __updateGroupDB(self,group_id,group_name,comment,owner_id):
-	db_main.transactionQuery(self.__updateGroupQuery(group_id,group_name,comment,owner_id))
+	db_main.getHandle().transactionQuery(self.__updateGroupQuery(group_id,group_name,comment,owner_id))
 
     def __updateGroupQuery(self,group_id,group_name,comment,owner_id):
-	return ibs_db.createInsertQuery("groups",{"group_name":group_name,
-						  "comment":comment,
+	return ibs_db.createUpdateQuery("groups",{"group_name":dbText(group_name),
+						  "comment":dbText(comment),
 						  "owner_id":owner_id
 						 },"group_id=%s"%group_id)
 
@@ -79,14 +80,14 @@ class GroupActions:
 	    update group attributes
 	    attrs(dic): a dic of attributes in format attr_name=>attr_value that tell "I want these attributes
 			have these values", so attrs may contain only a portion of attributes and not all of them
-	    to_del_attrs(dic): dic of attributes that should be deleted from group
+	    to_del_attrs(list): list of attributes that should be deleted from group
 	"""    
 	group_obj=group_main.getLoader().getGroupByName(group_name)
-	changed_info_holders=user_main.getAttributeManager().getInfoHolders(attrs)
-	deleted_info_holders=user_main.getAttributeManager().getInfoHolders(to_del_attrs)
+	changed_info_holders=user_main.getAttributeManager().getInfoHolders(attrs,"change")
+	deleted_info_holders=user_main.getAttributeManager().getInfoHolders(to_del_attrs,"delete")
 	ibs_query=IBSQuery()
-	ibs_query=self.__getChangedQuery(ibs_query,group_obj,changed_info_holders)
-	ibs_query=self.__getDeletedQuery(ibs_query,group_obj,deleted_info_holders)
+	self.__getChangedQuery(ibs_query,group_obj,changed_info_holders)
+	self.__getDeletedQuery(ibs_query,group_obj,deleted_info_holders)
 	ibs_query.runQuery()
 	
 	group_main.getLoader().loadGroupByName(group_name)

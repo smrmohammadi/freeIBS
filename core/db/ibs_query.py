@@ -39,3 +39,7 @@ class IBSQuery:
 	    return list of queries
 	"""
 	return self.__queries
+
+    def printQueries(self):
+	print "IBSQuery queries:%s"%str(self.__queries)
+	

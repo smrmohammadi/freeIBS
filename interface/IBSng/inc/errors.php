@@ -2,7 +2,8 @@
 
 $ERRORS=array("INVALID_ERROR"=>"Invalid/Unknown error",
 	      "ACCESS_DENIED"=>"Access Denied",
-	      "INVALID_INPUT"=>"Invalid Input"
+	      "INVALID_INPUT"=>"Invalid Input",
+	      "INCOMPLETE_REQUEST"=>"INCOMPLETE REQUEST"
 	    );
 
 

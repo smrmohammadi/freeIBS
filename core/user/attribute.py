@@ -6,27 +6,33 @@ class AttributeHandler:
 	"""
 	self.info_holder_name=info_holder_name
 
-    def registerInfoHandlerClass(self,info_handler_class,attr_list):
+    def registerInfoHandlerClass(self,info_handler_class,change_attr_list):
 	"""
 	    register "info_handler_class" 
-	    info_handler_class initializer will be called with values of "attr_list" as arguments
+	    info_handler_class changeInit method will be called with values of "change_attr_list" as arguments
 	    if you use this method --DONT-- override method getInfoHolder
 	"""
 	self.info_handler_class=info_handler_class
-	self.info_handler_arg_attrs=attr_list
+	self.info_handler_change_arg_attrs=change_attr_list
 
     def getInfoHolderName(self):
 	return self.info_holder_name
 
-    def getInfoHolder(self,attr_name,attrs):
+    def getInfoHolder(self,attr_name,attrs,action):
 	"""
 	    attr_name(string): attribute name we encountered and we want info handler for this attribute
 			       and all other relevant attributes
-	    attrs(dic): dic of attributes
+	    attrs(dic or list): dic of attributes for "change" action, and list of attribute for "delete"
+	    action(string): should be "change" ro "delete"
 	"""
-        arg_list=map(lambda x:attrs[x],self.info_handler_arg_attrs)
-	return apply(self.info_handler_class,arg_list)
 	
+	info_holder=self.info_handler_class()
+	if action=="change":
+	    arg_list=map(lambda x:attrs[x],self.info_handler_change_arg_attrs)
+	    apply(info_holder.changeInit,arg_list)
+	else:
+	    info_holder.deleteInit()
+	return info_holder
     
 class UserAttributes:
     def __init__(self,attributes,group_id):

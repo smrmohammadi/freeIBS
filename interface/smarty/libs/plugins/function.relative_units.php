@@ -1,19 +1,20 @@
 <?php
 function smarty_function_relative_units($params,&$smarty)
 {/* parameter name(string,required): html select name
-    parameter default(string,optional): variable string that if exists in smarty object it will be set as 
-					drop down default
+    parameter default(string,optional): String that will be drop down default if set
+    parameter id(string,optional): set optional dom ID
     return string of html select code for relative units.
 */
-    
-    if(isset($params["default"]) and $smarty->is_assigned($params["default"]))
-	$default=$smarty->get_assigned_value($params["default"]);
-    else
-	$default="";
 
     require_once $smarty->_get_plugin_filepath('function', 'html_options');
-	
     $rel_units=array("Hours","Days","Months","Years");
-    return smarty_function_html_options(array("selected"=>$default,"output"=>$rel_units,"values"=>$rel_units,"name"=>$params["name"]),$smarty);
+    $select_arr=array("selected"=>$default,"output"=>$rel_units,"values"=>$rel_units,"name"=>$params["name"]);
+    if(isset($params["id"]))
+	$select_arr["id"]=$params["id"];
+    
+    if(isset($params["default"]))
+	$select_arr["selected"]=$params["default"];
+
+    return smarty_function_html_options($select_arr,$smarty);
 }
 ?>

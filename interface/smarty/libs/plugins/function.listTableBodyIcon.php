@@ -18,7 +18,7 @@ function smarty_function_listTableBodyIcon($params,&$smarty)
     $link="/IBSng/images/list_body_{$action}_{$color}.gif";
     
     return <<<EOF
-			<img border="0" src="{$link}" width="25" height="20">
+<img border="0" src="{$link}" width="25" height="20" title="{$action}">
 EOF;
 }
 ?>

@@ -1,4 +1,4 @@
-{groupViewTemplate edit_tpl_name="/plugins/group/edit/group_info.tpl"}
+{groupViewTemplate edit_tpl_name="group_info.tpl"}
   {groupInfoTable title="Group Informations"}
     {groupInfoTD type="left"}
 		Group ID

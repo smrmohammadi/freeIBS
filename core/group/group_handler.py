@@ -3,6 +3,7 @@ from core.group import group_main
 from core.admin import admin_main
 from core.ibs_exceptions import *
 from core.errors import errorText
+from core.lib.general import *
 
 class GroupHandler(handler.Handler):
     def __init__(self):
@@ -80,5 +81,8 @@ class GroupHandler(handler.Handler):
 	request.needAuthType(request.ADMIN)
 	request.checkArgs("group_name","attrs","to_del_attrs")
 	request.getAuthNameObj().canDo("CHANGE GROUP",request["group_name"])
-	return group_main.getActionManager().updateGroupAttrs(request["group_name"],request["attrs"],request["to_del_attrs"])
+	to_del_attrs=request["to_del_attrs"]
+	if type(to_del_attrs)==types.DictType:
+	    to_del_attrs=to_del_attrs.values()
+	return group_main.getActionManager().updateGroupAttrs(request["group_name"],request["attrs"],to_del_attrs)
 	

@@ -1,7 +1,8 @@
 {include file="admin_header.tpl" title="Add New Admin" selected="Add Admin"}
 {include file="err_head.tpl"}
 
-<form method=POST action="/IBSng/admin/plugins/edit/group_info.php">
+{editTemplate target="group" target_id=$group_name update_method="groupInfo" edit_tpl_name="group_info.tpl"}
+<input type="hidden" name="group_id" value="{$group_id}">
 {addEditTable title="Group Information"}
     {addEditTD type="left"}
 	Group ID
@@ -16,7 +17,7 @@
     {/addEditTD}
 
     {addEditTD type="right"}
-	<input type=text name="group_name" value="{$group_name}">
+	<input class=text type=text name="group_name" value="{$group_name}">
     {/addEditTD}
 
     {addEditTD type="left"}
@@ -38,9 +39,9 @@
     {/addEditTD}
 
     {addEditTD type="right" comment=TRUE}
-	<textarea name=comment>{$comment}</textarea>
+	<textarea name=comment class=text>{$comment|strip}</textarea>
     {/addEditTD}
-
-    
+{/addEditTable}
+{/editTemplate}
 
 {include file="admin_footer.tpl"}

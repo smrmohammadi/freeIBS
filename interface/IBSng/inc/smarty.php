@@ -18,6 +18,7 @@ class IBSSmarty extends Smarty
 
 	$this->setIBSDefinedVars();
 	$this->setAuthVars();
+//	$this->register_outputfilter("stripPostFilter");
    }
 
     function setAuthVars()
@@ -91,6 +92,14 @@ class IBSSmarty extends Smarty
     }
 
 
+}
+
+function stripPostFilter($tpl_source,&$smarty)
+{
+    $search=array("/[\n\t\r]/","/>\s+</","/\s{2,}/");
+    $replace=array("","><","");
+    $tpl_source=preg_replace($search,$replace,$tpl_source);
+    return $tpl_source;
 }
 
 ?>

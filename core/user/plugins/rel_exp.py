@@ -9,7 +9,7 @@ info_holder_name="rel exp date"
 
 def init():
     user_main.getUserPluginManager().register("rel_exp_date",RelExpDate)
-    user_main.getAttributeManager().registerHandler(RelExpDateAttrHandler(),["rel_exp_date","rel_exp_date_unit"])
+    user_main.getAttributeManager().registerHandler(RelExpDateAttrHandler(),["rel_exp_date","rel_exp_date_unit"],["rel_exp_date"])
 
 class RelExpDate(user_plugin.UserPlugin):#XXX TO CHECK
     def __init__(self,user_obj):
@@ -59,8 +59,10 @@ class RelExpDate(user_plugin.UserPlugin):#XXX TO CHECK
 	    return (next_event,{})
 
 class RelExpInfoHolder(InfoHolder):
-    def __init__(self,rel_exp_date,rel_exp_date_unit):
+    def __init__(self):
 	InfoHolder.__init__(self,info_holder_name)
+	
+    def changeInit(self,rel_exp_date,rel_exp_date_unit):
 	self.rel_exp_date=rel_exp_date
 	self.rel_exp_date_unit=rel_exp_date_unit
 	self.rel_date_obj=RelativeDate(rel_exp_date,rel_exp_date_unit)
@@ -71,6 +73,9 @@ class RelExpInfoHolder(InfoHolder):
 	    raise GeneralException(errorText("USER_ACTIONS","INVALID_REL_EXP_DATE"))
 
 	self.useGenerateQuery({"rel_exp_date":self.rel_date_obj.getDBDate()})
+
+    def deleteInit(self):
+	self.useGenerateQuery(["rel_exp_date"])
 
 
 class RelExpDateAttrHandler(attribute.AttributeHandler):

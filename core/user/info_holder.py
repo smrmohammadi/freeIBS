@@ -31,9 +31,7 @@ class InfoHolderContainer:
 	    action(str): "change" or "delete"
 	    
 	"""
-	query_list=self.callOnAll("getQuery",[src,action],dic_args)
-	for query in ret_list:
-	    ibs_query+=query
+	self.callOnAll("getQuery",[ibs_query,src,action],dic_args)
 	return ibs_query
 
     def callOnAll(self,method_name,args,dargs):
@@ -56,6 +54,22 @@ class InfoHolder:
 	self.name=name
 	self.query_funcs={}
 	self.query_attrs={}
+
+
+    def changeInit(self,*args):
+	"""
+	    should be overide by child classes
+	    called with attributes as arguments changeInit(self,attr1,attr2,...).. when we want to change
+	    arguments
+	"""
+	pass
+
+    def deleteInit(self):
+	"""
+	    should be overide by child classes
+	    called when we want to delete attributes
+	"""
+	pass
 
     def getName(self):
 	return self.name
@@ -136,16 +150,14 @@ class InfoHolder:
 		return self.__changeGroupAttr(ibs_query,args["info_holder_attrs"],args["group_obj"])
 
     def __changeGroupAttr(self,ibs_query,attrs,group_obj):
-	ibs_query=""
 	for attr_name in attrs:
 	    if group_obj.hasAttr(attr_name):
 		ibs_query+=group_main.getActionManager().updateGroupAttrQuery(group_obj.getGroupID(),attr_name,attrs[attr_name])
 	    else:
 		ibs_query+=group_main.getActionManager().insertGroupAttrQuery(group_obj.getGroupID(),attr_name,attrs[attr_name])
-	return query
+	return ibs_query
 
     def __deleteGroupAttr(self,ibs_query,attrs,group_obj):
-	ibs_query=""
 	for attr_name in attrs:
 		ibs_query+=group_main.getActionManager().deleteGroupAttrQuery(group_obj.getGroupID(),attr_name)
     	return ibs_query

@@ -12,7 +12,7 @@ function smarty_block_listTable($params,$content,&$smarty,&$repeat)
     {
 	$title=isset($params["title"])?$params["title"]:"";
 	$header=<<<END
-<table border="0" width="400" class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0">
+<table border="0"  class="List_Main" cellspacing="1" bordercolor="#FFFFFF" cellpadding="0">
 	<tr>
 		<td colspan="{$params["cols_num"]}" valign="bottom">
 		<!-- List Title Table -->
@@ -33,7 +33,7 @@ END;
 	$footer=<<<END
 	<!-- List Foot -->
 	<tr class="List_Foot_Line">
-		<td colspan=8></td>
+		<td colspan=100></td>
 	</tr>
 	<!-- End List Foot-->
 </table>

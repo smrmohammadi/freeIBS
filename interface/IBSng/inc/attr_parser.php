@@ -26,5 +26,15 @@ function callAttrParsers(&$smarty,&$attrs)
         return $parsed_array;
 }
 
+function assignToParsedIfExists(&$parsed_arr,&$attrs,$attr_name)
+{/*assign attribute(s) to parsed_arr if they exists in attrs array.
+   else add it with null value
+   This function is useful when you want to assign them simply without any processings
+ */
+    if(isset($attrs[$attr_name]))
+	$parsed_arr[$attr_name]=$attrs[$attr_name];
+    else
+	$parsed_arr[$attr_name]=null;
+}
 
 ?>

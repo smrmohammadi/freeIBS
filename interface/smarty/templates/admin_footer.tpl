@@ -1,5 +1,5 @@
 		</td>
-		<td width="180" align="center">		
+		<td width="180" align="center" valign="top">		
 		    {include file="admin_right_sidebar.tpl"}
 		</td>
 	</tr>

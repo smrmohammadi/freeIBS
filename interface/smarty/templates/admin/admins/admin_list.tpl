@@ -6,40 +6,40 @@
 {listTable title="Admin List" cols_num=4}
 	{listTableHeaderIcon action="view" close_tr=TRUE}
 	{listTR type="header"}
-	    <td>
+	    {listTD}
 		ID
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		Username
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		Name
-	    </td>
-	    <td>
+	    {/listTD}
+	    {listTD}
 		Deposit
-	    </td>
+	    {/listTD}
 	{/listTR}
 
 		
 	{section name=index loop=$admin_infos}
 	    {listTR type="body"}
-		<td>
+		{listTD}
 		    {$admin_infos[index].admin_id}
-		</td>
-		<td>
+    		{/listTD}
+		{listTD}
 		    {$admin_infos[index].username}
-		</td>
-		<td>
+    		{/listTD}
+		{listTD}
 		    {$admin_infos[index].name}
-		</td>
-		<td>
+    		{/listTD}
+		{listTD}
 		    {$admin_infos[index].deposit}
-		</td>
-		<td>
-		    <a href="/IBSng/admin/admins/admin_info.php?admin_username={$admin_infos[index].username|escape:"url"}">
-			{listTableBodyIcon action="view"}
-		    </a>
-		</td>
+    		{/listTD}
+		
+		{listTD icon=TRUE}
+		    <a style="text-decoration:none" href="/IBSng/admin/admins/admin_info.php?admin_username={$admin_infos[index].username|escape:"url"}">{listTableBodyIcon action="view" cycle_color="TRUE"}</a>
+    		{/listTD}
+		
 	    {/listTR}
 	{/section}
 {/listTable}
@@ -57,6 +57,5 @@
 {setAboutPage title="Admin List"}
 A list of all admins are shown here.
 {/setAboutPage}
-
 
 {include file="admin_footer.tpl"}

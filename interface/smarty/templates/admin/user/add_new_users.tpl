@@ -13,7 +13,7 @@
 {include file="err_head.tpl"}
 
 <form method=POST>
-	{addEditTable title="Add New Users"}
+	{addEditTable title="Add New Users" table_width="320"}
 	{addEditTD type="left" err="count_err"}
 	    Count
 	{/addEditTD}

@@ -9,7 +9,7 @@ table.Main_Page {
 	direction:ltr;
 	alignment:center;
 	text_alignment:center;
-	height:76%;
+	height:74.4%;
 	width:100%
 }
 
@@ -64,7 +64,12 @@ Table.Header_Submenu{
 	direction:ltr ;
 	background-color:#FFAA00 
 }
-td.Header_Line_Between_Submenus{ 
+td.Header_Line_Between_Submenus{
+	font-family: Tahoma; 
+	font-size: 7pt; 
+	color: #222222; 
+	font-weight:bold; 
+	height:18;
 	text-align:center;
 	width:10
 }
@@ -155,7 +160,7 @@ td.Page_Footer_Line{
 td.Page_Footer{ 
 	font-family: Tahoma; 
 	font-size: 7pt; 
-	color: #000000; 
+	color: #353535; 
 	font-weight:bold; 
 	height:23;
 	direction:ltr ;
@@ -175,7 +180,7 @@ a:visited.Footer_Link{
 }
 
 a:hover.Footer_Link{ 
-    color: red;
+    color: #CC6600;
     text-decoration:none
 }
 
@@ -645,25 +650,47 @@ table.List_Main {
 /*    Classes:  					*/
 /*		1.tr.List_Row_LightColor		*/
 /*		2.tr.List_Row_DarkColor			*/
-/*		3.tr.List_Foot_Line			*/
+/*		3.tr.List_col_Body_Icon			*/
+/*		4.tr.List_Col				*/
+/*		5.tr.List_Foot_Line			*/
 /*------------------------------------------------------*/
 
 tr.list_Row_LightColor{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #0000000; 
+	color: #353535; 
 	direction:ltr ;
 	background-color:#ECECEC;
-	Text-align:center
+	Text-align:center;
+	height:20;
 }
 tr.List_Row_DarkColor{ 
 	font-family: Tahoma; 
 	font-size: 8pt; 
-	color: #000000; 
+	color: #353535; 
 	direction:ltr ;
 	background-color:#D9D9D9;
-	Text-align:center
+	Text-align:center;
+	height:20;
+
 }
+
+td.List_col_Body_Icon{ 
+	font-size: 8pt; 
+	direction:ltr ;
+	background-color:#FFFFFF;
+	Text-align:center;
+	height:20;
+	padding-left:0px;
+	padding-right:0px
+}
+
+td.List_Col{ 
+	padding-left:3px;
+	padding-right:3px
+}
+
+
 tr.List_Foot_Line{ 
 	height:3;
 	background-color:#9A1111
@@ -737,7 +764,11 @@ td.List_Title_Icon{
 	width:19;
 	direction:ltr;
 	background-color:#FFFFFF;
-	text-alignment:center
+	text-alignment:center;
+	padding-left:0px;
+	padding-right:0px
+
+	
 }
 
 /*----------------------------------------------------*/
@@ -748,12 +779,23 @@ td.List_Title_Icon{
 /*----------------------------------------------------*/
 
 input.text{
-	border:1px solid #d6d6d6; 
+	border:1px solid #c0c0c0; 
+	font-weight:bold; 
 	font-size: 8pt;
 	font-family:Tahoma;
 	color: #800000;
 	height:18px;
 	width:110px
+}
+
+input.small_text{
+	border:1px solid #c0c0c0; 
+	font-weight:bold; 
+	font-size: 8pt;
+	font-family:Tahoma;
+	color: #800000;
+	height:18px;
+	width:30px
 }
 
 input.Num{
@@ -773,12 +815,13 @@ input.Num{
 /*   	1.'general'				      */									  
 /*----------------------------------------------------*/
 select       { 
-	border:1px solid #000000; 
-	padding:1px; 
+	border:1px solid #c0c0c0; 
+	padding:0px; 
 	font-family: Tahoma; 
-	font-size: 8pt; 
-	color:#000000; 
-	background-color:#FFFFFF
+	font-size: 7pt; 
+	color:#353535; 
+	background-color:#FFFFFF;
+	font-weight:bold
 }
 
 /*----------------------------------------------------*/
@@ -787,7 +830,7 @@ select       {
 /*   	1.text			                      */									  
 /*----------------------------------------------------*/
 textarea.text { 
-	border:1px solid #d6d6d6; 
+	border:1px solid #c0c0c0; 
 	direction: ltr; 
 	textalign: left; 
 	font-family:Tahoma; 
@@ -814,7 +857,7 @@ td.error_messages{
 }
 
 
-/*----------------------------------------------------*/
+/*--------------------------------------------------------*/
 /*  Right Side Bar					  */
 /*   Classes:						  */									  
 /*   	1.td.RightSide_Color_dark	                  */									  
@@ -825,7 +868,9 @@ td.error_messages{
 /*   	6.a:link.RightSide_Links	                  */
 /*   	7.a:visited.RightSide_Links			  */
 /*   	8.a:hover.RightSide_Links			  */
-/*----------------------------------------------------*/
+/*   	9.td.RightSide_about_title			  */
+/*   	10.td.RightSide_about_body			  */
+/*--------------------------------------------------------*/
 
 td.RightSide_Color_dark{ 
 	background-color:#DFDDDD
@@ -870,4 +915,21 @@ a:visited.RightSide_Links{
 a:hover.RightSide_Links{ 
     color: #CC6600
 }
+td.RightSide_about_title{
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #990000; 
+	font-weight:bold; 
+	height:20;
+	direction:ltr ;
+	Text-align:left
 
+}
+
+td.RightSide_about_body{
+	font-family: Tahoma; 
+	font-size: 8pt; 
+	color: #353535;
+	direction:ltr ;
+	Text-align:left
+}

@@ -28,23 +28,13 @@
 	<tr>
 		<td colspan="2" width="320" height="24">
 		<!-- Links Button -->
-		<table border="0" width="320" cellspacing="0" cellpadding="0">
+		<table border="0" width="320" cellspacing="0" height="24" cellpadding="0">
 			<tr>
-				<td>
-				    {menuIcon name="user"}	
-				</td>
-				<td>
-				    {menuIcon name="group"}
-				</td>
-				<td>
-				    {menuIcon name="report"}
-				</td>
-				<td>
-				    {menuIcon name="admin"}	
-				</td>
-				<td>
-				    {menuIcon name="setting"}	
-				</td>
+				<td>{menuIcon name="user"}</td>
+				<td>{menuIcon name="group"}</td>
+				<td>{menuIcon name="report"}</td>
+				<td>{menuIcon name="admin"}</td>
+				<td>{menuIcon name="setting"}</td>
 			</tr>
 		</table>
 		<!-- End Links Button -->
@@ -53,9 +43,8 @@
 	<tr>
 		<td align="right" colspan="4" class="Header_Submenu">
 			<table align="right" border="0" cellspacing="0" cellpadding="0" class="Header_Submenu">
-				<tr>
-					{secondLvlMenu}
-					<td width=10></td>
+				<tr>{secondLvlMenu}
+				<td width=10></td>
 				</tr>
 			</table>
 		</td>
@@ -77,7 +66,7 @@
 		<td class="Page_Header_Line"></td>
 	</tr>
 	<tr>
-		<td class="Page_Header_Info">{$smarty.now|date_format:"%A, %B %e, %Y"}</font></b></td>
+		<td class="Page_Header_Info">{$smarty.now|date_format:"%A, %B %e, %Y"}&nbsp;&nbsp;</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="Page_Top_Space"></td>

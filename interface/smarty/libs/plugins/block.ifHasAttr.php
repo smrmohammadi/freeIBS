@@ -8,7 +8,7 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
 
     parameter object(string,required): can be "user" or "group"
     parameter var_name(string,required): variable name that will be checked that if exists
-					 and set !== FALSE , we suppose we have the attribute 
+					 and set !== FALSE and is not null , we suppose we have the attribute 
 
 */
     if(is_null($content))
@@ -29,7 +29,7 @@ function smarty_block_ifHasAttr($params,$content,&$smarty,&$repeat)
 function hasAttr(&$params,&$smarty)
 {
 	$attrs=getAttrsArray($params,$smarty);
-	return (isset($attrs[$params["var_name"]]) and $attrs[$params["var_name"]]!==FALSE);
+	return (isset($attrs[$params["var_name"]]) and $attrs[$params["var_name"]]!==FALSE and !is_null($attrs[$params["var_name"]]));
 }
 
 function getAttrsArray(&$params,&$smarty)

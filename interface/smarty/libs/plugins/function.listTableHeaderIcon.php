@@ -21,9 +21,9 @@ function smarty_function_listTableHeaderIcon($params,&$smarty)
 	$link.="view.gif";
     	
     return <<<EOF
-                <td Rowspan=2 class="List_Title_Icon" >
-		    <img border="0" src="{$link}">
-		</td>	
+                
+		<td Rowspan=2 class="List_Title_Icon">
+		<img border="0" src="{$link}" title="{$action}"></td>	
 	    {$close_tr}
 EOF;
 }
