@@ -7,7 +7,7 @@
     {/addEditTD}
     {addEditTD type="right" comment=TRUE}
 		{ifHasAttr object="user" var_name="lock" alternate="No"}
-		    Yes, Reason: {$user_attrs.lock} 
+		    Yes, Reason: {$user_attrs.lock|nl2br} 
 		{/ifHasAttr} 
 		{helpicon subject="lock" category="user"}
     {/addEditTD}

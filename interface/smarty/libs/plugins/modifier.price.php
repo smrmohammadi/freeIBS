@@ -12,7 +12,7 @@ function smarty_modifier_price($string)
 	$str="";
 	while(strlen($int_part)>3)
 	{
-	    $part=substr($int_part,strlen($int_part)-4,3);
+	    $part=substr($int_part,strlen($int_part)-3,3);
 	    $int_part=substr($int_part,0,strlen($int_part)-3);
 	    $str=",{$part}{$str}";
 	}

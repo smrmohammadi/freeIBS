@@ -1,12 +1,12 @@
 {* Add/Edit Interface
-    interface_name: new ippool_name
+    interface_name: new interface name
     comment: comment!
     
     Success: client will be redirected to the new interface information page
     Failure: this page is shown again with error message at top of the page
 
 *}
-{include file="admin_header.tpl" title="`$action_title` New Interface" selected="Bandwidth"}
+{include file="admin_header.tpl" title="`$action_title` Interface" selected="Bandwidth"}
 {include file="err_head.tpl"}
 
 <form method=POST action="add_interface.php">

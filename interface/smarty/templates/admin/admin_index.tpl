@@ -88,6 +88,9 @@
 		    {menuTR}
 			<a href="/IBSng/admin/bw/interface_list.php" class="page_menu">Bandwidth Managment</a>
 		    {/menuTR}
+		    {menuTR}
+			<a href="/IBSng/admin/bw/interface_list.php" class="page_menu">VoIP Tariff</a>
+		    {/menuTR}
 		{/viewTable}
 	</td>
     </tr>

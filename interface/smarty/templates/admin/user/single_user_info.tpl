@@ -21,6 +21,8 @@
     <br>
     {include file="plugins/user/view/lock.tpl"}
     <br>
+    {include file="plugins/user/view/comment.tpl"}
+    <br>
     {include file="plugins/user/view/exp_date.tpl"}
     <br>
     {include file="plugins/user/view/multi_login.tpl"}

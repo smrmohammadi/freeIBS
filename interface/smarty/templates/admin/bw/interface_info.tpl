@@ -1,10 +1,5 @@
-{* Add New Interface
-    interface_name: new ippool_name
-    comment: comment!
-    
-    Success: client will be redirected to the new interface information page
-    Failure: this page is shown again with error message at top of the page
-
+{* Interface Info
+    $tree: html code of tree
 *}
 {include file="admin_header.tpl" title="Interface `$interface_name` Info" selected="Bandwidth"}
 {include file="err_head.tpl"}
