@@ -1,0 +1,167 @@
+from core.ibs_exceptions import *
+from core.errors import errorText
+from core.lib.general import *
+from core.db import db_main,ibs_db
+from core.ippool import ippool_main
+from core.lib import ip,multi_strs
+
+class IPpoolActions:
+    def addNewPool(self,ippool_name,comment):
+	"""
+	    add a new ip pool
+	    ippool_name(string): name of new ip pool
+	    comment(string): comment about new ippool
+	"""
+	self.__addNewPoolCheckInput(ippool_name,comment)
+	ippool_id=self.__getNewIPpoolID()
+	self.__insertPoolDB(ippool_id,ippool_name,comment)
+	ippool_main.getLoader().loadIPpoolByID(ippool_id)
+	return ippool_id
+
+    def __addNewPoolCheckInput(self,ippool_name,comment):
+	if not isValidName(ippool_name):
+	    raise GeneralException(errorText("IPPOOL","BAD_IP_POOL_NAME")%ippool_name)
+	
+	if ippool_main.getLoader().ippoolNameExists(ippool_name):
+	    raise GeneralException(errorText("IPPOOL","IP_POOL_NAME_ALREADY_EXISTS")%ippool_name)
+	
+    def __getNewIPpoolID(self):
+	"""
+	    return a new unique ip pool id
+	"""
+	return db_main.getHandle().seqNextVal("ippool_id_seq")
+
+    def __insertPoolDB(self,ippool_id,ippool_name,comment):
+	db_main.getHandle().transactionQuery(self.__insertPoolQuery(ippool_id,ippool_name,comment))
+
+    def __insertPoolQuery(self,ippool_id,ippool_name,comment):
+	return ibs_db.createInsertQuery("ippool",{"ippool_id":ippool_id,
+						  "ippool_name":dbText(ippool_name),
+						  "ippool_comment":dbText(comment)
+						 })
+########################################################
+    def updatePool(self,ippool_id,ippool_name,comment):
+	self.__updatePoolCheckInput(ippool_id,ippool_name,comment)
+	self.__updatePoolDB(ippool_id,ippool_name,comment)
+	ippool_main.getLoader().unloadIPpoolByID(ippool_name)
+	ippool_main.getLoader().loadIPpoolByID(ippool_name)
+	
+    def __updatePoolCheckInput(self,ippool_id,ippool_name,comment):
+	ippool_main.getLoader().checkIPpoolID(ippool_id)
+
+	ippool_obj=ippool_main.getLoader().getIPpoolByID(ippool_id)
+	if ippool_obj.getIPpoolName()!=ippool_name:
+	    if not isValidName(ippool_name):
+		raise GeneralException(errorText("IPPOOL","BAD_IP_POOL_NAME")%ippool_name)
+	
+	    if ippool_main.getLoader().ippoolNameExists(ippool_name):
+		raise GeneralException(errorText("IPPOOL","IP_POOL_NAME_ALREADY_EXISTS")%ippool_name)
+
+    def __updatePoolDB(self,ippool_id,ippool_name,comment):
+	db_main.getHandle().transactionQuery(self.__updatePoolQuery(ippool_id,ippool_name,comment))
+
+    def __updatePoolQuery(self,ippool_id,ippool_name,comment):
+	ibs_db.createUpdateQuery("ippool",{"ippool_name":dbText(ippool_name),
+					   "comment":dbText(comment)},
+					   "ippool_id=%s"%ippool_id)
+#########################################################
+    def deletePool(self,ippool_name):
+	"""
+	    delete a pool using it's "ippool_name"
+	    WARNING: currently we don't check if ip pool is used in any ras or user
+		     it's user duty to check it and remove that
+		     if a pool is used but not defined, it should be ignored with a error message in log files
+	"""	
+	self.__deletePoolCheckInput(ippool_name)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	self.__deletePoolDB(ippool_obj.getIPpoolID())
+	ippool_main.getLoader().unloadIPPoolByID(ippool_obj.getIPpoolID())
+    
+    def __deletePoolCheckInput(self,ippool_name):
+	ippool_main.getLoader().checkIPpoolName(ippool_name)
+	
+    def __deletePoolDB(self,ippool_id):
+	query=self.__deletePoolIPsQuery(ippool_id)
+	query+=self.__deletePoolQuery(ippool_id)	
+	db_main.getHandle().transactionQuery(query)
+    
+    def __deletePoolQuery(self,ippool_id):
+	ibs_db.createDeleteQuery("ippool","ippool_id=%s"%ippool_id)
+	
+    def __deletePoolIPsQuery(self,ippool_id):
+	ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s"%ippool_id)
+
+###########################################################
+    def addIPtoPool(self,ippool_name,ip):
+	"""
+	    add new "ip" to ippool with name "ippool_name"
+	    ip(str): can be a multi string of multiple ips
+	"""
+	ips=multi_strs.MultiStr(ip)
+
+	self.__addIPtoPoolCheckInput(ippool_name,ips)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	self.__addIPtoPoolDB(ippool_obj.getIPpoolID(),ips)
+	ippool_main.getLoader().loadIPpoolByID(ippool_obj.getIPpoolID())
+
+    def __addIPtoPoolCheckInput(self,ippool_name,ips):
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	map(self.__checkIPAddr,ips)
+
+	def checkIPAvailabilityInPool(self,ip):
+	    if ippool_obj.hasIP(ip):
+	        raise GeneralException(errorText("IPPOOL","IP_ALREADY_IN_POOL")%ip)
+
+	map(checkIPAvailabilityInPool,ips)
+
+	
+    def __checkIPAddr(self,ip):
+	"""
+	    check if "ip" is valid, raise an exception if not
+	"""
+	if not ip.checkIPAddrWithoutMask(ip):
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip)
+
+
+    def __addIPtoPoolDB(self,ippool_id,ips):
+	query=ibs_query.IBSQuery()
+	for ip in ips:
+	    query+=self.__addIPToPoolQuery(ippool_id,ip)
+	query.runQuery()
+    
+    def __addIPToPoolQuery(self,ippool_id,ip):
+	return ibs_db.createInsertQuery("ippool_ips",{"ippool_id":ippool_id,
+						      "ip":dbText(ip)})
+
+
+##########################################################
+    def delIPfromPool(self,ippool_name,ip):
+	"""
+	    delete "ip" from ippool with name "ippool_name"
+	    ip(str): can be a multi string of multiple ips
+	"""
+	ips=multi_strs.MultiStr(ip)
+	self.__delIPfromPoolCheckInput(ippool_name,ips)
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	self.__delIPfromPoolDB(ippool_obj.getIPpoolID(),ips)
+	ippool_main.getLoader().loadIPpoolByID(ippool_obj.getIPpoolID())
+
+    def __delIPfromPoolCheckInput(self,ippool_name,ips):
+	ippool_obj=ippool_main.getLoader().getIPpoolByName(ippool_name)
+	map(self.__checkIPAddr,ips)
+
+	def checkIPExistencyInPool(self,ip):
+	    if not ippool_obj.hasIP(ip):
+	        raise GeneralException(errorText("IPPOOL","IP_NOT_IN_POOL")%ip)
+
+	map(checkIPExistencyInPool,ips)
+
+    def __delIPfromPoolDB(self,ippool_id,ips):
+	query=ibs_query.IBSQuery()
+	for ip in ips:
+	    query+=self.__delIPfromPoolQuery(ippool_id,ip)
+	query.runQuery()
+    
+    def __delIPfromPoolQuery(self,ippool_id,ip):
+	return ibs_db.createDeleteQuery("ippool_ips","ippool_id=%s and ip=%s"%(ippool_id,ip))
+

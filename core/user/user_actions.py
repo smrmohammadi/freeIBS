@@ -1,0 +1,245 @@
+from core.ibs_exceptions import *
+from core.lib.general import *
+from core.charge import charge_main
+from core.db import ibs_db,db_main
+from core.db.ibs_query import IBSQuery
+from core.errors import errorText
+from core.admin import admin_main
+from core.lib import password_lib,ip
+from core.group import group_main
+from core.lib.multi_strs import MultiStr
+import re
+
+class UserActions:
+    CREDIT_CHANGE_ACTIONS={"ADD_USER":1}
+
+    def insertUserAttrQuery(self,user_id,attr_name,attr_value):
+	"""
+	    XXX:change to use stored procedures
+	"""
+	return ibs_db.createInsertQuery("user_attrs",{"user_id":user_id,
+						      "attr_name":dbText(attr_name),
+						      "attr_value":dbText(attr_value)}
+					)
+
+    def updateUserAttrQuery(self,user_id,attr_name,attr_value):
+	"""
+	    XXX:change to use stored procedures
+	"""
+	return ibs_db.createInsertQuery("user_attrs",{"attr_value":dbText(attr_value)}
+						    ,"attr_name=%s and user_id=%s"%
+						    (dbText(attr_name),user_id)
+					)
+
+    def deleteUserAttrQuery(self,user_id,attr_name):
+	"""
+	    XXX:change to use stored procedures
+	"""
+	return ibs_db.createDeleteQuery("user_attrs","user_id=%s and attr_name=%s"%
+						      (user_id,dbText(attr_name))
+					)
+
+    def insertNormalUserAttrsQuery(self,user_id,normal_username,normal_password):
+	"""
+	    insert user normal attributes in "normal_users" table
+	"""
+	return ibs_db.createInsertQuery("normal_users",{"normal_username":normal_username,
+							"normal_password":normal_password,
+							"user_id=%s":user_id}
+					)
+
+    def updateNormalUserAttrsQuery(self,user_id,normal_username,normal_password):
+	"""
+	    update user normal attributes in "normal_users" table
+	"""
+	return ibs_db.createUpdateQuery("normal_users",{"normal_username":normal_username,
+							"normal_password":normal_password,
+							},"user_id=%s"%user_id
+					)
+
+    def deleteNormalUserAttrsQuery(self,user_id):
+	"""
+	    delete user normal attributes from "normal_users" table
+	"""
+	return ibs_db.createDeleteQuery("normal_users","user_id=%s"%user_id)
+
+######################################################
+    def checkNormalUsernameChars(self,username):
+	if not len(username) or username[0] not in string.letters:
+	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
+
+        if re.search("[^A-Za-z0-9_]",username) != None:
+	    raise GeneralException(errorText("BAD_USERNAME","USER_ACTIONS"))
+	
+
+#####################################################3
+    def logCreditChangeQuery(self,action,admin_id,user_ids,per_user_credit,admin_credit,remote_address,comment):
+	"""
+	    XXX: TO BE MOVED IN SEPERATE FILE    
+	
+	    log credit change to credit_change table
+	    action(string): action that credit changed in, should be referenced by self.CREDIT_CHANGE_ACTIONS
+			    WARNING: Always use self.CREDIT_CHANGE_ACTIONS members for action
+	    admin_id(integer): Admin issueing the credit change for user
+	    user_ids(list of integers): user ids that credit being changed
+	    per_user_credit(float): credit change for each of users
+	    admin_credit(float): credit admin spent, equals to count of users * per_user_credit
+	    remote_address(str): remote ip of admin while changing credit
+	    comment(str): comment of credit change
+	"""
+	change_id=self.__getNewCreditChangeID()
+
+	query=ibs_db.createInsertQuery("credit_change",{"credit_change_id":change_id,
+							"action":action,
+							"admin_id":admin_id,
+							"per_user_credit":per_user_credit,
+							"admin_credit":admin_credit,
+							"remote_addr":dbText(remote_address),
+							"comment":dbText(comment)
+							})
+	
+	def insertToCreditChangeUserID(user_id):
+	    return ibs_db.createInsertQuery("credit_change_userid",{"user_id":user_id,
+								    "credit_change_id":change_id})
+	query+="".join(map(insertToCreditChangeUserID,user_ids))
+	return query
+
+    def __getNewCreditChangeID(self):
+	"""
+	    return a new unique credit change id
+	"""
+    	return db_main.getHandle().seqNextVal("credit_change_id")
+
+    def __creditChangeCheckInput(self,remote_address,credit_change_comment):
+	"""
+	    check credit changed related inputs and raise exception on errors
+	"""
+	if ip.checkIPAddrWithoutMask(remote_address)==0:
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_address)
+
+####################################################
+    def addNewUsers(self,_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment):
+	self.__addNewUsersCheckInput(_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment)
+	admin_consumed_credit=credit*_count
+	ibs_query=IBSQuery()
+	ibs_query+=admin_main.getActionManager().consumeDeposit(creator_name,admin_consumed_credit)
+	try:
+	    user_ids=self.addNewUsersQuery(_count,credit,owner_name,group_name,ibs_query)
+	    creator_admin_obj=admin_main.getLoader().getAdminByName(creator_name)
+    	    ibs_query+=self.logCreditChangeQuery(self.CREDIT_CHANGE_ACTIONS["ADD_USER"],creator_admin_obj.getAdminID(),user_ids,credit,\
+					admin_consumed_credit,remote_address,credit_change_comment)
+	    ibs_query.runQuery()
+	    return user_ids
+	except:
+	    admin_main.getActionManager().consumeDeposit(creator_name,-1*admin_consumed_credit,False) #readd deposit to admin
+	    raise
+
+
+    def __addNewUsersCheckInput(self,_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment):
+	if not isInt(_count) or _count<=0:
+	    raise GeneralException(errorText("USER_ACTIONS","INVALID_USER_COUNT")%_count)
+	
+	if not isFloat(credit):
+	    raise GeneralException(errorText("USER_ACTIONS","CREDIT_NOT_FLOAT"))
+
+	if credit<0:
+	    raise GeneralException(errorText("USER_ACTIONS","CREDIT_MUST_BE_POSITIVE"))
+	
+	admin_main.getLoader().checkAdminName(owner_name)
+	admin_main.getLoader().checkAdminName(creator_name)
+	group_main.getLoader().checkGroupName(group_name)
+
+	self.__creditChangeCheckInput(remote_address,credit_change_comment)
+
+    def addNewUsersQuery(self,_count,credit,owner_name,group_name,ibs_query):
+	"""
+	    _count(integer): count of users
+	    owner_name(string): name of owner admin
+	    credit(integer or empty string): amount of credit users will have, if credit is an empty string, group initial_credit
+		is used, or an exception is raised if there's no initial_credit for user
+	    group_name(string): name of group string
+	    ibs_query(IBSQuery instance): IBSQuery instance we'll add query to
+	    
+	    return a list of user ids of newly added users
+	"""
+
+	owner_admin_obj=admin_main.getLoader().getAdminByName(owner_name)
+	group_obj=group_main.getLoader().getGroupByName(group_name)
+	user_ids=self.__generateUserIDs(_count)
+	self.__insertBasicUsersQueries(_count,user_ids,credit,owner_admin_obj.getAdminID(),group_obj.getGroupID(),ibs_query)
+	return user_ids
+
+    def __insertBasicUsersQueries(self,_count,user_ids,credit,owner_id,group_id,ibs_query):
+	"""
+	    add query to ibs_query for inserting "_count" of users with user ids in "user_ids" into users table
+	"""
+	for user_id in user_ids:
+	    ibs_query+=self.__insertBasicUserQuery(user_id,credit,owner_id,group_id)
+
+    
+    def __insertBasicUserQuery(self,user_id,credit,owner_id,group_id):
+	"""
+	    XXX : Change this function to use SQL Stored Procedures
+	"""
+	return ibs_db.createInsertQuery("users",{"user_id":user_id,
+						 "credit":credit,
+						 "owner_id":owner_id,
+						 "group_id":group_id})
+	
+    def __generateUserIDs(self,_count):
+	"""
+	    generate "_count" number of user ids and return them in a list
+	    _count(integer): count of user ids that will be generated
+	"""
+	return map(lambda x:self.__getNewUserID(),range(_count))
+	
+    def __getNewUserID(self):
+	"""
+	    return a new unique user_id from
+	"""
+	return db_main.getHandle().seqNextVal("users_user_id_seq")
+
+######################################################
+    def updateUserAttrs(self,user_id,admin_obj,attrs,to_del_attrs):
+	user_ids=MultiStr(user_id)
+	self.__updateUserAttrsCheckInput(user_ids,admin_obj,attrs,to_del_attrs)
+	changed_info_holders=user_main.getAttributeManager().getInfoHolders(attrs)
+	deleted_info_holders=user_main.getAttributeManager().getInfoHolders(to_del_attrs)
+	users=self.__getUsers(user_ids)
+	ibs_query=IBSQuery()
+	ibs_query=self.__getChangedQuery(ibs_query,users,admin_obj,changed_info_holders)
+	ibs_query=self.__getDeletedQuery(ibs_query,users,admin_obj,deleted_info_holders)
+	ibs_query.runQuery()
+	self.__broadcastChange(users)
+
+    def __getUsers(self,user_ids):
+	"""
+	    return a dic of user_attribute dictionaries in format
+	    {user_id:LoadedUser}
+	"""
+	users={}
+	for user_id in user_ids:
+	    user_id=to_int(user_id,"user_id")
+	    users_attrs[user_id]=user_main.getUserPool().getUserByID(user_id)
+	return users
+    
+    def __updateUserAttrsCheckInput(self,user_ids,admin_obj,attrs,to_del_attrs):
+	pass #nothing to check here for now, everything is checked or will be checked
+	
+    
+    def __getChangedQuery(self,ibs_query,users,admin_obj,changed_info_holders):
+	return changed_info_holders.getQuery("user","change",{"users":users,
+							      "admin_obj":admin_obj})
+	
+    
+    def __getDeletedQuery(ibs_query,users,admin_obj,deleted_info_holders):
+	return deleted_info_holders.getQuery("user","delete",{"users":users,
+							      "admin_obj":admin_obj})
+
+    def __broadcastChange(self,users):
+	"""
+	    broadcast that users with id in "users" has been change
+	    normally user_pool should be told to refresh the user
+	"""
+	userChanged=user_main.getUserPool().userChanged
+	map(userChanged,users.keys())

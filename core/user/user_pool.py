@@ -1,0 +1,230 @@
+"""
+XXX TODO: Make getUserByNormalUsername and similars efficent without two query of same table
+
+"""
+
+from core.user import user_main
+from core.ibs_exceptions import *
+import threading
+
+class ReleaseCandidates:
+    """
+	this class keep loaded users and can be queried to release a user and tells the user id of user
+	    that should be released
+	users will be kept in a sorted list that will be act as a lifo queue
+	
+	NOTE: we're keeping LoadedUser instance of online users in the same list as others
+	      if we see one of them, we add them to the end of list. This makes life easy(TM) but
+	      maybe inefficient if USER_POOL_SIZE is small.
+	      so please keep USER_POOL_SIZE 10x factor of your online users
+    """
+    def __init__(self):
+	"""
+	    initialize the internal list	    
+	"""
+	self.__release_candidates=[] #sorted list of release candidate users sorted 
+	self.lock=threading.RLock()
+
+    def addUser(self,loaded_user):
+	"""
+	    add a new user to queue
+	    loaded_user(LoadedUser instance)
+	"""
+	self.lock.acquire()
+	try:
+	    self.__release_candidates.append(user_id)
+	finally:
+	    self.lock.release()
+	
+    def getCandidate(self):
+	"""
+	    get a candidate to release.
+	    return LoadedUser instance(deleted from our queue already) or 
+	    None value if no user can be released at this time (Shows that USER_POOL_SIZE is small!)
+	"""
+	self.lock.acquire()
+	try:
+	    loaded_user=None
+	    try:
+	        loaded_user=self.__release_candidates.pop(0)
+	    except IndexError: #empty list BadThingHappened(TM)
+		toLog("User Pool is full and we can't release anyone!!! Please increase USER_POOL_SIZE in defs ASAP!",LOG_ERROR&LOG_DEBUG)
+		return None
+	
+	    return loaded_user
+	finally:
+	    self.lock.release()
+
+class LoadingUser:
+	"""
+	    This class prevent from double parallel load of a same user
+	    second loader will sleep until first on finishes
+	"""
+	def __init__(self):
+	    self.lock=threading.Lock()
+	    self.__loading=[] #currently loading users, to prevent from 
+	    self.__locks={}
+	
+	def __in__(self,obj):
+	    return obj in self.__loading
+	
+	def loadingStart(self,user):
+	    """
+		called when we start loading a user
+		caller may sleep here until load of previous instance of user finishes
+	    """
+	    evt=None
+	    self.lock.acquire()
+	    try:
+		if user in self.__loading:
+    		    evt=threading.Event()
+		    evt.clear()
+
+		    if not self.__locks.has_key(user):
+			self.__locks[user]=[evt]
+		    else:
+			self.__locks[user].append(evt)
+	    finally:
+		self.lock.release()
+
+	    if evt!=None:
+		evt.wait()
+	    
+	def loadingEnd(self,user):
+	    """
+		called when we end loading a user
+		this method wake waiter of user if any
+	    """
+	    evt=None
+	    self.lock.acquire()
+	    try:
+		if self.__locks.has_key(user):
+		    evt=self.__locks[user].pop(0)
+		    if len(self.__locks[user])==0:
+			del(self.__locks[user])
+		    
+	    finally:
+		self.lock.release()
+	
+	    if evt!=None:
+		evt.set()
+
+class UserPool:
+    """
+	XXX MISSING: Normal And VoIP mapping to user_ids in memory!
+    """
+    def __init__(self):
+	self.__pool_by_id={} #this is reference pool. All users should be here
+	self.__pool_len=0
+	self.loading_users=LoadingUser()
+	self.rel_candidate=ReleaseCandidates()
+	self.lock=threading.RLock()
+
+    def __isInPoolByID(self,user_id):
+	"""
+	    check if user with id "user_id" is in pool return LoadedUser instance if 
+	    it's in pool or None if it isn't
+	"""
+	self.lock.acquire()
+	try:
+	    if self.__pool_by_id.has_key(user_id):
+		return self.__pool_by_id[user_id]
+	    return None
+	finally:
+	    self.lock.release()
+
+    def __saveInPool(self,loaded_user):
+	"""
+	    Save LoadedUser instance into pool
+	"""
+	self.__checkPoolSize()
+
+    def __addToPool(self,loaded_user):
+    	self.lock.acquire()
+        try:
+	    self.__pool[loaded_user.getUserID()]=loaded_user
+	finally:
+	    self.lock.release()
+
+    def __checkPoolSize(self):
+	"""
+	    check pool size and release a user if we are more then defs.USER_POOL_SIZE
+	"""
+	self.__pool_len+=1
+	if self.__pool_len>defs.USER_POOL_SIZE:
+	    self.__releaseOneUser()
+
+    def __releaseOneUser(self):
+	"""
+	    release a user from pool, if possible
+	"""
+	loaded_user_obj=self.rel_candidate.getCandidate()
+        if loaded_user_obj!=None:
+	    self.lock.acquire()
+	    try:
+	        if loaded_user_obj.isOnline() or loaded_user_obj.getUserID() in self.loading_users:
+			self.__releaseOneUser()
+		        self.rel_candidates.addUser(loaded_user)
+		else:
+			self.__delFromPool(loaded_user_obj.getUserID())
+	    finally:
+	        self.lock.release()
+
+    def __delFromPool(self,user_id):
+	"""
+	    delete user with id "user_id" from pool
+	"""
+	self.lock.acquire()
+	try:
+	    self.__pool_len-=1
+	    del(self.__pool[loaded_user_obj.getUserID()])
+	finally:
+	    self.lock.release()
+
+
+    def __loadUserByID(self,user_id):
+	"""
+	    load user into memory using user id and return a LoadedUser instance
+	    also put user in pool
+	"""	
+	loaded_user=user_main.getUserLoader().getLoadedUserByUserID(user_id)
+	self.__saveInPool(loaded_user)
+	return loaded_user
+
+
+################################
+    def getUserByID(self,user_id,online_flag=False):
+	"""
+	    return a LoadedUser instance of user with id "user_id"
+	"""
+	self.loading_users.loadingStart(user_id)
+	try:
+	    loaded_user=self.__isInPoolByID(user_id)
+	    if loaded_user==None:
+		loaded_user=self.__loadUserByID(user_id)
+	    
+	    if online_flag: #it should be done here, because we don't want to release this user while he's trying to log in
+		loaded_user.setOnlineFlag(True)
+	finally:
+	    self.loading_users.loadingEnd(user_id)
+	
+#################################
+    def getUserByNormalUsername(self,username):
+	pass	
+
+#################################
+    def userChanged(self,user_id):
+	"""
+	    called when attributes or information of user with id "user_id" changed
+	"""
+	self.loading_users.loadingStart(user_id)
+	try:
+	    loaded_user=self.__isInPool(user_id)
+	    if loaded_user!=None:
+	        if loaded_instance.isOnline():
+		    loaded_instance.reload()
+	        else:
+	    	    self.__delFromPool(user_id)
+	finally:
+	    self.loading_users.loadingEnd(user_id)
+
