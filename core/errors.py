@@ -207,9 +207,6 @@ def errorText(event,error,add_error_key=True):
 		   
 	err_str=error_map[event][error]
 
-	else:
-	    raise GeneralException(GENERAL_ERRORS["NO_ERROR_TEXT"])
-
 	if add_error_key:
 	    err_str="%s|%s"%(error,err_str)
 	return err_str
