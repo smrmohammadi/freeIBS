@@ -1,5 +1,6 @@
 from core.errors import errorText
 from core.ibs_exceptions import *
+from core.lib.general import *
 from core.db import db_main
 from core.user.loaded_user import LoadedUser
 from core.user.basic_user import BasicUser

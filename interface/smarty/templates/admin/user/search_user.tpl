@@ -28,14 +28,14 @@
     <input type=hidden name=search value=1>
     <input type=hidden name=page value=1>
     <input type=submit value=search>
-</form> 
 
-{if $show_results}
-<p>
-<a name="show_results"></a>
-{include file="admin/user/user_list.tpl"}
-{reportPages total_results=$result_count }
-{/if}
+    {if $show_results}
+	<p>
+	<a name="show_results"></a>
+	{include file="admin/user/user_list.tpl"}
+	{reportPages total_results=$result_count }
+    {/if}
+</form> 
 
 {addRelatedLink}
     <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">

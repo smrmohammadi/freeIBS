@@ -218,7 +218,7 @@ class UserActions:
 	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
 	
 #######################################################
-    def getLoadedUsersByUsername(self,normal_usernames):
+    def getLoadedUsersByNormalUsername(self,normal_usernames):
 	"""
 	    return a list of LoadedUser instances for users with normal_usernames "normal_usernames"
 	"""

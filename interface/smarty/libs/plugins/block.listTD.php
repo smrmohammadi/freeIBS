@@ -7,6 +7,7 @@ function smarty_block_listTD($params,$content,&$smarty,&$repeat)
     
     if(!is_null($content))
     {
+	$extra=isset($params["extra"])?$params["extra"]:"";
 	if(isset($params["icon"]) and $params["icon"]=="TRUE"){
 	    $style="List_col_Body_Icon";
 	    $valign="Top";
@@ -17,7 +18,7 @@ function smarty_block_listTD($params,$content,&$smarty,&$repeat)
 	    }
 	
 	return <<<END
-    <td class="{$style}" valign="{$valign}">{$content}</td>
+    <td class="{$style}" valign="{$valign}" {$extra}>{$content}</td>
 END;
 
     }

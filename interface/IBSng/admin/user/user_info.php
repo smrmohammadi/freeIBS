@@ -18,7 +18,8 @@ else if (isInRequest("normal_username"))
     intShowSingleUserInfo($smarty,null,$_REQUEST["normal_username"]);
 else if (isInRequest("user_id_multi"))
     intShowMultiUserInfo($smarty,$_REQUEST["user_id_multi"]);
-else if (isInRequest("normal_username_multi")){}
+else if (isInRequest("normal_username_multi"))
+    intShowMultiNormalUserInfo($smarty,$_REQUEST["normal_username_multi"]);
 else
     intShowSingleUserInfoInput($smarty);
 
@@ -31,6 +32,15 @@ function intShowMultiUserInfo(&$smarty,$user_id)
 	redirectToUserSearch("user_id={$user_id}");
 }
 //********************************************
+function intShowMultiNormalUserInfo(&$smarty,$normal_username)
+{
+    if(!isMultiString($normal_username))
+	intShowSingleUserInfo($smarty,null,$normal_username);
+    else
+	redirectToUserSearch("normal_username={$normal_username}&normal_username_op=equals");
+}
+//********************************************
+
 function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
 {
     $resp=intSetSingleUserInfo($smarty,$user_id,$normal_username);

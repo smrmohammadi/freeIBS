@@ -12,7 +12,7 @@ function smarty_function_reportToShowCheckBox($params,&$smarty)
     require_once($smarty->_get_plugin_filepath('function', 'checkBoxValue'));
     $checked=smarty_function_checkBoxValue($params,$smarty);
     return <<<END
-    <input type=checkbox name={$params["name"]} {$checked}}> 
+    <input type=checkbox name={$params["name"]} {$checked}> 
     {$params["output"]}
 END;
 }

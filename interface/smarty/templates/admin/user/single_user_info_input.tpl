@@ -7,7 +7,7 @@
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=user_id_multi class=text value="{ifisinrequest name="user_id"}">
+	    <input type=text name=user_id_multi class=text value="{ifisinrequest name="user_id_multi"}">
 	    {multistr form_name="user_info" input_name="user_id_multi"}
 	{/addEditTD}
 		
@@ -21,7 +21,7 @@
 	{/addEditTD}
 
 	{addEditTD type="right"}
-	    <input type=text name=normal_username_multi class=text value="{ifisinrequest name="normal_username"}">
+	    <input type=text name=normal_username_multi class=text value="{ifisinrequest name="normal_username_multi"}">
 	    {multistr form_name="user_info" input_name="normal_username_multi"}
 	{/addEditTD}
 		

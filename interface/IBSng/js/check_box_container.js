@@ -37,6 +37,8 @@ function CheckBoxContainer(name)
     {/*
 	return True if all check boxes in container is checked now
     */	
+	if (this.check_box_objs.length==0)
+	    return false;
 	for (index in this.check_box_objs)
 	    if (this.check_box_objs[index].checked==false)
 		return false;	    
@@ -98,8 +100,6 @@ function CheckBoxContainer(name)
 
 function checkAllOnClick(evt)
 {
-//    alert(dows);
-//    alert(a);
     if (evt && evt.target)
 	evt.target.container.reverse();
     if (window.event && window.event.srcElement)
@@ -112,6 +112,4 @@ function checkBoxOnClick(evt)
         evt.target.container.updateCheckAll();
     if (window.event && window.event.srcElement)
 	window.event.srcElement.container.updateCheckAll();
-
-
 }

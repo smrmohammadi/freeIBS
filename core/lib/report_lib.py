@@ -8,6 +8,6 @@ def checkFromTo(_from,to):
 	if not isInt(to) or to<0 or to>1024*1024*50:
 	    raise GeneralException(errorText("GENERAL","TO_VALUE_INVALID")%to)
 	
-	if _from>to or to-_from>1024:
+	if _from>to or to-_from>3000:
 	    raise GeneralException(errorText("GENERAL","TO_VALUE_INVALID")%to)
 	

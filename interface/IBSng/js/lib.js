@@ -52,3 +52,20 @@ function showUserAddCheckWindow(user_type,current_username)
     username=eval("document.user_edit."+user_type+"_username");
     open("/IBSng/admin/user/check_user_for_add.php?image=f&username="+username.value+"&type="+user_type+"&current_username="+current_username,"user_check","width=500,height=300,scrollbars=yes,alwaysRaised=yes,dependent=yes");
 }
+
+function changeTRColor(obj,color)
+{
+    if(color==null)
+    {
+    	if(obj.original_color)
+    	    obj.style.backgroundColor=obj.original_color;
+    }
+    else
+    {
+	if(window.getComputedStyle)
+	    obj.original_color=window.getComputedStyle(obj,null).backgroundColor;
+	else if (obj.currentStyle)
+	    obj.original_color=obj.currentStyle.backgroundColor;
+    	obj.style.backgroundColor=color;
+    }
+}
