@@ -74,17 +74,6 @@ class UserActions:
 					)
 
 
-######################################################
-    def _checkNormalUsernameChars(self,username):
-	if not len(username) or username[0] not in string.letters:
-	    return False
-        if re.search("[^A-Za-z0-9_\-\.]",username) != None:
-	    return False
-	return True
-	    
-    def checkNormalUsernameChars(self,username):
-        if not self._checkNormalUsernameChars(username):
-	    raise GeneralException(errorText("USER_ACTIONS","BAD_NORMAL_USERNAME"))
 ####################################################
     def addNewUsers(self,_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment):
 	self.__addNewUsersCheckInput(_count,credit,owner_name,creator_name,group_name,remote_address,credit_change_comment)
@@ -274,21 +263,6 @@ class UserActions:
 	return user_infos
 
 ##########################################################
-    def normalUsernameExists(self,normal_username):
-	"""
-	    check if normal_username currently exists
-	    normal_username(iterable object can be multistr or list): username that will be checked
-	    return a list of exists usernames
-	    NOTE: This is not thread safe 
-	    XXX: test & check where_clause length
-	"""
-	if len(normal_username)==0:
-	    return []
-	where_clause=" or ".join(map(lambda username:"normal_username=%s"%dbText(username),normal_username))
-	users_db=db_main.getHandle().get("normal_users",where_clause,0,-1,"",["normal_username"])
-	return [m["normal_username"] for m in users_db]
-
-##########################################################
     def searchUsers(self,conds,_from,to,order_by,desc,admin_obj):
 	"""
 	    search in users based on conditions in "conds" and return user_ids result from "_from" to "to"
@@ -347,18 +321,18 @@ class UserActions:
 	for loaded_user in loaded_users:
 	    if loaded_user.isOnline():
 	        raise GeneralException(errorText("USER_ACTIONS","DELETE_USER_IS_ONLINE")%loaded_user.getUserID())
-	    total_credit+=max(0,loaded_user.getBasicUser().getCredit())
+	    total_credit += max( 0 , loaded_user.getBasicUser().getCredit() )
 	return total_credit
 
     def __delUserQuery(self,ibs_query,user_ids,del_connections):
 	user_id_conds=" or ".join(map(lambda user_id:"user_id=%s"%user_id,user_ids))
-	ibs_query+=self.__delUserAttrsQuery(user_id_conds)
-	ibs_query+=self.__delUserNormalAttrsQuery(user_id_conds)
-	ibs_query+=self.__delUserPLanAttrsQuery(user_id_conds)
-	ibs_query+=self.__delUserVoIPAttrsQuery(user_id_conds)
-	ibs_query+=self.__delUserFromUsersTableQuery(user_id_conds)
+	ibs_query += self.__delUserAttrsQuery(user_id_conds)
+	ibs_query += self.__delUserNormalAttrsQuery(user_id_conds)
+	ibs_query += self.__delUserPLanAttrsQuery(user_id_conds)
+	ibs_query += self.__delUserVoIPAttrsQuery(user_id_conds)
+	ibs_query += self.__delUserFromUsersTableQuery(user_id_conds)
 	if del_connections:
-	    ibs_query+=user_main.getConnectionLogManager().deleteConnectionLogsForUsersQuery(user_ids)
+	    ibs_query += user_main.getConnectionLogManager().deleteConnectionLogsForUsersQuery(user_ids)
 
     def __delUserAttrsQuery(self,user_id_conds):
 	"""
@@ -401,21 +375,6 @@ class UserActions:
 	    return a list of dics, containin
 	"""
 	return db_main.getHandle().get("persistent_lan_users","persistent_lan_ras_id=%s"%ras_id)
-
-##########################################################
-    def planMacExists(self,mac):
-	"""
-	    check if mac currently exists in plan_macs
-	    mac(iterable object can be multistr or list): mac that will be checked
-	    return a list of exists macs
-	    NOTE: This is not thread safe 
-	    XXX: test & check where_clause length
-	"""
-	if len(mac)==0:
-	    return []
-	where_clause=" or ".join(map(lambda m:"persistent_lan_mac=%s"%dbText(m),mac))
-	users_db=db_main.getHandle().get("persistent_lan_users",where_clause,0,-1,"",["persistent_lan_mac"])
-	return [m["persistent_lan_mac"] for m in users_db]
 
 ##################################################################
     def killUser(self,user_id,ras_ip,unique_id_val):

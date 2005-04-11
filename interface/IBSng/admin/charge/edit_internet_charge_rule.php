@@ -4,6 +4,7 @@ require_once(IBSINC."ras_face.php");
 require_once(IBSINC."charge_face.php");
 require_once(IBSINC."charge.php");
 require_once(IBSINC."bw_face.php");
+require_once("charge_rule_funcs.php");
 
 needAuthType(ADMIN_AUTH_TYPE);
 
@@ -49,43 +50,6 @@ function intEditInternetRule(&$smarty,$charge_name,$charge_rule_id)
     interface($smarty,$charge_name);
 }
 
-function intGetRuleInfo($charge_name,$charge_rule_id)
-{
-    $list_rules_req=new ListChargeRules($charge_name);
-    list($success,$rules)=$list_rules_req->send();
-    if(!$success)
-	return array(FALSE,$rules);
-    foreach($rules as $rule)
-	if ($rule["rule_id"]==$charge_rule_id)
-	    return array(TRUE,$rule);
-
-    redirectToChargeList("Invalid Rule ID");
-}
-
-function intSetRuleInfo(&$smarty,$rule_info)
-{
-    $smarty->assign_array($rule_info);
-    intSetDayOfWeeksParams($smarty,$rule_info);
-    intSetRasParams($smarty,$rule_info);
-    $smarty->assign("tx_leaf_selected",requestVal("tx_leaf_name",$rule_info["bw_tx_leaf_name"]));
-    $smarty->assign("rx_leaf_selected",requestVal("rx_leaf_name",$rule_info["bw_rx_leaf_name"]));
-
-}
-
-function intSetDayOfWeeksParams(&$smarty,$rule_info)
-{
-    foreach($rule_info["day_of_weeks"] as $dow)
-	$smarty->assign($dow,"checked");
-}
-
-function intSetRasParams(&$smarty,$rule_info)
-{
-    $smarty->assign("ras_selected",requestVal("ras",$rule_info["ras"]));
-    if($rule_info["ras"]!="_ALL_")
-	foreach ($rule_info["ports"] as $port_name)
-		$smarty->assign("{$rule_info["ras"]}_{$port_name}","checked");
-}
-
 function interface(&$smarty,$charge_name)
 {
     intSetDayOfWeeks($smarty);
@@ -99,6 +63,9 @@ function intAssignValues(&$smarty,$charge_name)
     $smarty->assign("charge_name",$charge_name);
     $smarty->assign("check_all_days",FALSE);
     $smarty->assign("is_editing",TRUE);
+    $smarty->assign("tx_leaf_selected",requestVal("tx_leaf_name",$smarty->get_assigned_value("bw_tx_leaf_name")));
+    $smarty->assign("rx_leaf_selected",requestVal("rx_leaf_name",$smarty->get_assigned_value("bw_tx_leaf_name")));
+
     intAssignBwLeafNames($smarty);
 }
 
@@ -110,7 +77,9 @@ function intSetFieldErrors(&$smarty,$err_keys)
 				  "cpm_err"=>array("CPM_NOT_NUMERIC","CPM_NOT_POSITIVE"),
 				  "cpk_err"=>array("CPK_NOT_NUMERIC","CPK_NOT_POSITIVE"),
 				  "assumed_kps_err"=>array("ASSUMED_KPS_NOT_INTEGER","ASSUMED_KPS_NOT_POSITIVE"),
-				  "bw_limit_err"=>array("BANDWIDTH_LIMIT_NOT_INTEGER","BANDWIDTH_LIMIT_NOT_POSITIVE")
+				  "bw_limit_err"=>array("BANDWIDTH_LIMIT_NOT_INTEGER","BANDWIDTH_LIMIT_NOT_POSITIVE"),
+				  "rx_leaf_err"=>array("BW_LEAF_NAMES_SHOULD_BOTH_SET","INVALID_LEAF_NAME"),
+				  "tx_leaf_err"=>array("BW_LEAF_NAMES_SHOULD_BOTH_SET","INVALID_LEAF_NAME")
 				  ),$err_keys);
 
 }

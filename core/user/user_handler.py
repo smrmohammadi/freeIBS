@@ -14,7 +14,6 @@ class UserHandler(handler.Handler):
 	self.registerHandlerMethod("addNewUsers")
 	self.registerHandlerMethod("getUserInfo")
 	self.registerHandlerMethod("updateUserAttrs")
-	self.registerHandlerMethod("checkNormalUsernameForAdd")
 	self.registerHandlerMethod("changeCredit")
 	self.registerHandlerMethod("searchUser")
 	self.registerHandlerMethod("delUser")
@@ -55,6 +54,8 @@ class UserHandler(handler.Handler):
 		loaded_users=user_main.getActionManager().getLoadedUsersByUserID(MultiStr(request["user_id"]))
 	    elif request.has_key("normal_username"):
 		loaded_users=user_main.getActionManager().getLoadedUsersByNormalUsername(MultiStr(request["normal_username"]))
+	    elif request.has_key("voip_username"):
+		loaded_users=user_main.getActionManager().getLoadedUsersByVoipUsername(MultiStr(request["voip_username"]))
 	    else:
 		raise request.raiseIncompleteRequest("user_id")
 
@@ -89,33 +90,6 @@ class UserHandler(handler.Handler):
 							    request["attrs"],
 							    to_del_attrs
 							    )
-############################################################
-    def checkNormalUsernameForAdd(self,request):
-	"""
-	    check if normal_username multi str arg is exists, and doesn't contain invalid characters
-	    current_username shows current usernames, so we don't run into situation that we print an error
-	    for username that belongs to this username
-	"""
-	request.needAuthType(request.ADMIN)
-	request.checkArgs("normal_username","current_username")
-	request.getAuthNameObj().canDo("CHANGE NORMAL USER ATTRIBUTES")
-	usernames=self.__filterCurrentUsernames(request)
-	bad_usernames=filter(lambda username: not user_main.getActionManager()._checkNormalUsernameChars(username),usernames)
-	exist_usernames=user_main.getActionManager().normalUsernameExists(usernames)
-	return self.__createCheckAddReturnDic(bad_usernames,exist_usernames)
-
-    def __filterCurrentUsernames(self,request):
-	username=MultiStr(request["normal_username"])
-	current_username=MultiStr(request["current_username"])
-	return filter(lambda username: username not in current_username,username)
-
-    def __createCheckAddReturnDic(self,bad_usernames,exist_usernames):
-	ret={}
-	if len(bad_usernames)!=0:
-	    ret[errorText("USER_ACTIONS","BAD_NORMAL_USERNAME",False)]=bad_usernames
-	if len(exist_usernames)!=0:
-	    ret[errorText("USER_ACTIONS","NORMAL_USERNAME_EXISTS",False)%""]=exist_usernames
-	return ret
 ############################################################
     def changeCredit(self,request):
 	"""

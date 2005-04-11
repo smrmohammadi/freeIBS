@@ -2,6 +2,7 @@ from core.user import user_plugin,user_main,attribute
 from core.charge import charge_main
 from core.errors import *
 from core.ibs_exceptions import *
+import time
 
 def init():
     user_main.getUserPluginManager().register("charge",ChargeUserPlugin,6)
@@ -14,7 +15,9 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	try:
 	    if user_obj.isNormalUser():
 	    	self.charge_id=int(user_obj.getUserAttrs()["normal_charge"])
-	    
+	    elif user_obj.isVoIPUser():
+		self.charge_id=int(user_obj.getUserAttrs()["voip_charge"])
+	    	    
 	except GeneralException:
 	    self.charge_defined=False
 	    
@@ -35,7 +38,9 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	self.charge_initialized+=1
 	
     def __startAccounting(self,ras_msg):
-	self.charge_obj.startAccounting(self.user_obj,self.user_obj.getInstanceFromRasMsg(ras_msg))
+	instance=self.user_obj.getInstanceFromRasMsg(ras_msg)
+	self.charge_obj.startAccounting(self.user_obj,instance)
+	self.user_obj.getInstanceInfo(instance)["start_accounting"]=time.time()
 
     def update(self,ras_msg):
 	if ras_msg.hasAttr("start_accounting"):
@@ -51,12 +56,12 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	if self.charge_initialized:
 	    return self.charge_obj.checkLimits(self.user_obj)
 
-    def calcCreditUsage(self):
+    def calcCreditUsage(self,round_result):
 	if self.charge_initialized:
-	    return self.charge_obj.calcCreditUsage(self.user_obj)
+	    return self.charge_obj.calcCreditUsage(self.user_obj,round_result)
 	return 0
 
-    def calcInstanceCreditUsage(self,instance):
+    def calcInstanceCreditUsage(self,instance,round_result):
 	if instance<=self.charge_initialized:
-    	    return self.charge_obj.calcInstanceCreditUsage(self.user_obj,instance)
+    	    return self.charge_obj.calcInstanceCreditUsage(self.user_obj,instance,round_result)
 	return 0

@@ -29,7 +29,7 @@ class InternetCharge(ChargeWithRules):
 	    try:
 		effective_rule = self.getEffectiveRule(user_obj,_index+1)
 	    except LoginException,e:
-		result.addInstanceToKill(instance,str(e))
+		result.addInstanceToKill(_index+1,str(e))
 		continue
 	    
 	    if cur_rule != effective_rule:
@@ -72,14 +72,11 @@ class InternetCharge(ChargeWithRules):
 	    result.newRemainingTime(min(remained_time,earliest_rule_end,next_more_applicable,seconds_from_morning))
 	return result
 	
-    def calcInstanceRuleCreditUsage(self,user_obj,instance):
+    def calcInstanceRuleCreditUsage(self,user_obj,instance,round_result):
 	"""
 	    calculate and return amount of credit that this instance of user consumed
 	    during --EFFECTIVE-- rule only
 	"""
-	if not user_obj.charge_info.accounting_started[instance-1]:
-	    return 0
-	
 	now=time.time()
 	effective_rule=user_obj.charge_info.effective_rules[instance-1]
 	in_out=user_obj.getTypeObj().getInOutBytes(instance)

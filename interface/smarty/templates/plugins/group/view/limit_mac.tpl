@@ -1,4 +1,4 @@
-{viewTable title="Radius Attrs" nofoot="TRUE"}
+{viewTable title="Limit Mac Address" nofoot="TRUE"}
     {addEditTD type="left" comment=TRUE}
 	{strip}
 	    {if $can_change}{editCheckBox edit_tpl_name="limit_mac"}{/if}

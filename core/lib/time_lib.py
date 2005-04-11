@@ -12,11 +12,14 @@ def cur_day_of_week():
     
 
 ###############################
-def secondsFromMorning():
+def secondsFromMorning(_time=0):
     """
 	return number of seconds from 00:00:00 of today
     """
-    tm=time.localtime()
+    if _time:
+	tm=time.localtime(_time)
+    else:
+	tm=time.localtime()
     return tm[3]*3600+tm[4]*60+tm[5] # now , elapsed seconds from 00:00:00 of today
 
 
@@ -92,7 +95,7 @@ def dbTimeToList(dbTime):
     
     try:
 	ret=list(time.strptime(dbTime[:dot],"%Y-%m-%d %H:%M:%S"))
-	ret[8]=0
+	ret[8]=-1
 	return ret
     except:
 	raise GeneralException("Invalid dbTime: " + str(dbTime))

@@ -148,7 +148,8 @@
     {/foreach}
 {/listTable}
 {if $can_change}
-    <input type=submit value="delete" {jsconfirm}>
+    <input type=image src="/IBSng/images/icon/delete.gif" {jsconfirm}>
+    <input type=hidden name="delete" value="delete">
 {/if}
 </form>
 

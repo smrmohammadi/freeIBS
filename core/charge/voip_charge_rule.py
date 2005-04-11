@@ -1,12 +1,12 @@
 from core.charge.charge_rule import ChargeRule
+from core.charge.voip_tariff import tariff_main
+import time
 
-class VoipChargeRule(ChargeRule): #XXX
-    def __init__(self,rule_id,charge_obj,time_limit,day_of_week,start,end,country_list_id,formula,ras_id,ports):
+class VoipChargeRule(ChargeRule): 
+    def __init__(self,rule_id,charge_obj,day_of_week,start,end,tariff_id,ras_id,ports):
 	"""
 	    rule_id (integer) : unique id of this rule
 
-	    time_limit (integer): time limit for this rule, if set to -1 it's unlimit, if zero or positive user can be online 
-			maximum of time_limit
 
 	    day_of_week (integer): Day Of Week of this rule 
 
@@ -14,9 +14,7 @@ class VoipChargeRule(ChargeRule): #XXX
 
 	    end (integer):        Rule end Time, seconds from 00:00:00
 	    
-	    country_list_id (integer): country list which we try to find cpm from
-	    
-	    formula (text): formula that apply to country list cpm, to calculate rule cpm
+	    tariff_id (integer): tariff list which we try to find cpm from
 	    
 	    ras_id (integer):	ras id, this rule will apply to users that login on this ras_id , if set to None, if there wasn't
 			any exact match for user, this rule will be used
@@ -25,17 +23,13 @@ class VoipChargeRule(ChargeRule): #XXX
 			and port not matched, the total result is not match and we look for another rule or wildcard rule(None)
 			if Ports is an empty array, it'll be used for all not matched users
 	"""
-	ChargeRule.__init__(self,rule_id,charge_obj,time_limit,day_of_week,start,end,ras_id,ports)
-	self.transfer_limit=transfer_limit
-	self.bandwidth_limit=bandwidth_limit
-	self.assumed_kps=assumed_kps
-	self.cpm=cpm
-	self.cpk=cpk
+	ChargeRule.__init__(self,rule_id,charge_obj,day_of_week,start,end,ras_id,ports)
+	self.tariff_id=tariff_id
 
     def __str__(self):
 	return "VoIP Charge Rule with id %s belongs to charge %s"%(self.rule_id,self.charge_obj.getName())
 
-
+    ######################################
     def start(self,user_obj,instance):
 	"""
 	    called when this rule starts for user_obj
@@ -44,12 +38,15 @@ class VoipChargeRule(ChargeRule): #XXX
 	    instance (integer): instance number of user 
 	"""
 	ChargeRule.start(self,user_obj,instance)
-	user_obj.charge_info.rule_start_inout[instance-1]=user_obj.getInOutBytes(instance)
+	if user_obj.charge_info.remaining_free_seconds[instance-1]==-1:#we're the first rule of this instance
+	    prefix_obj=self.getPrefixObj(user_obj,instance)
+	    user_obj.charge_info.remaining_free_seconds[instance-1]=prefix_obj.getFreeSeconds()
+	    instance_info=user_obj.getInstanceInfo(instance)
+	    instance_info["min_duration"]=prefix_obj.getMinDuration()
+	    instance_info["attrs"]["prefix_name"]=prefix_obj.getPrefixName()
 
-	if self.bandwidth_limit>=0:
-	    bandwidth_limit.applyLimitOnUser(user_obj,instance,self.bandwidth_limit)
 
-
+    #####################################
     def end(self,user_obj,instance):
 	"""
 	    called when this rule ends for user_obj	
@@ -58,26 +55,35 @@ class VoipChargeRule(ChargeRule): #XXX
 	    instance (integer): instance number of user 	    
 	"""
 	ChargeRule.end(self,user_obj,instance)
-	if self.bandwidth_limit>=0:
-	    bandwidth_limit.removeLimitOnUser(user_obj,instance)
+	rule_duration=time.time() - user_obj.charge_info.rule_start[instance-1]
+	if rule_duration>user_obj.charge_info.remaining_free_seconds[instance-1]:
+	    user_obj.charge_info.remaining_free_seconds[instance-1]=0
+	else:
+	    user_obj.charge_info.remaining_free_seconds[instance-1]-=rule_duration
 
-	inout_usage=self.calcRuleInOutUsage(user_obj,instance)
-	user_obj.charge_info.rule_prev_inout_usage[self][0]+=inout_usage[0]
-	user_obj.charge_info.rule_prev_inout_usage[self][1]+=inout_usage[1]
+    #####################################
+    def getTariffObj(self):
+	return tariff_main.getLoader().getTariffByID(self.tariff_id)
+	
+    #####################################
+    def getPrefixObj(self,user_obj,instance):
+	return self.getTariffObj().getPrefixByID(user_obj.charge_info.prefix_id[instance-1])
 
+    #####################################
+    def hasPrefixFor(self,called_number):
+	"""
+	    return True if this rule has prefix for "called_number"
+	"""
+	return self.getTariffObj.findPrefix(called_number)!=None
 
-    def calcRuleInOutUsage(self,user_obj,instance):
-	"""
-	    returns (in_bytes,out_bytes) usage for this instance of user during this rule
-	    assuming this rule is the effective rule for this instance
-	"""
-	cur_in_out=user_obj.getInOutBytes(instance)
-	return (cur_in_out[0]-user_obj.rule_start_inout[0],cur_in_out[1]-user_obj.rule_start_inout[1])
+    ######################################
+    def anytimeAppliable(self,user_obj,instance):
+	return ChargeRule.anytimeAppliable() and self.hasPrefixFor(user_obj.getTypeObj().getCalledNumber(instance))
 
-    def calcRuleTransferUsage(self,user_obj,instance):
-	"""
-	    return amount of user transfer in bytes
-	"""
-	cur_rule_inout=self.calcRuleInOutUsage(self,user_obj,instance)
-	return cur_rule_inout[0]+cur_rule_inout[1]
-    
+    ######################################
+    def getInfo(self):
+	dic=ChargeRule.getInfo(self)
+	dic["type"]="VoIP"
+	dic["tariff_id"]=self.tariff_id
+	dic["tariff_name"]=self.getTariffObj().getTariffName()
+	return dic

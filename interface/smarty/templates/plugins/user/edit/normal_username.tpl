@@ -39,7 +39,7 @@
     {/addEditTD}
 
     {addEditTD type="left" id="password_char_tr"}
-	Password Include
+	Password Includes
     {/addEditTD}
 
     {addEditTD type="right"}

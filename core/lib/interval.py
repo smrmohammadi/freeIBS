@@ -5,6 +5,7 @@ import time
 class Interval:
     """
 	This class represent time intervals in multiple day of weeks
+	intervals can't cross days
     """
 
     def __init__(self,day_of_week_container,start,end):
@@ -23,9 +24,9 @@ class Interval:
 	    comparing is done, by comparing start_time of interval
 	"""
 	if isinstance(other,Interval):
-	    return self.start<other.start
+	    return self.start<=other.start
 	else:
-	    return self.getStartSeconds()<other
+	    return self.getStartSeconds()<=other
 
 
     def __gt__(self,other):
@@ -38,18 +39,32 @@ class Interval:
 	else:
 	    return self.getEndSeconds()>other
     
-    def containsToday(self):
-	return self.__getTodayOfWeek() in self.dow_container
-    
-    def __getTodayOfWeek(self):
+    def containsDay(self,_time):
 	"""
-	    return integer representation of today of week
+	    return True if current interval contains day of _time
+	    _time(long): seconds from epoch
 	"""
-	return time.localtime()[6]
+        return self.__getDayOfWeek(_time) in self.dow_container
+
+    def __getDayOfWeek(self,_time):
+	"""
+	    return integer representation of day of week
+	"""
+	return time.localtime(_time)[6]
     
     def containsNow(self):
-	now=secondsFromMorning()
-	return self.containsToday() and self>now and self<now #don't panic interval greater than is checked with start, and less that is checked with end time
+	"""
+	    return True if this interval contains now
+	"""
+	return self.containsTime(time.time())
+
+    def containsTime(self,_time):
+	"""
+	    return True if this interval contains _time. Both Day, and Interval in day is checked
+	    _time(long): seconds from morning
+	"""
+	secs=secondsFromMorning(_time)
+	return self.containsDay(_time) and self>secs and self<secs #don't panic interval greater than is checked with start, and less that is checked with end time
 
     def getStartSeconds(self):
 	"""

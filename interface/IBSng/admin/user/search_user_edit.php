@@ -44,6 +44,10 @@ function changeUserCredit(&$smarty,$user_ids)
 
 function searchUserEdit(&$smarty,$user_ids)
 {
+    foreach($_REQUEST as $key=>$value) //reset request, so it won't conflict with edit tpls
+	if (!preg_match("/^show__.+$/",$key))
+	    unset($_REQUEST[$key]);
+	
     intEditUser($smarty,join(",",$user_ids));
 }
 

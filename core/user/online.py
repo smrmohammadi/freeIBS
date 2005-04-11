@@ -266,6 +266,37 @@ class OnlineUsers:
 	    self.__logoutRecalcEvent(user_obj,global_unique_id)
 	finally:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
+#########################################################
+    def voipAuthenticate(self,ras_msg):
+	loaded_user=user_main.getUserPool().getUserByID(ras_msg["voip_username"])
+	self.loading_user.loadingStart(loaded_user.getUserID())
+	try:
+	    user_obj=None
+	    try:
+	        user_obj=self.getUserObj(loaded_user.getUserID())
+		if user_obj==None:
+		    user_obj=self.__loadUserObj(loaded_user,"VoIP")
+	        user_obj.login(ras_msg)
+		self.__authenticateSuccessfull(user_obj,ras_msg)
+
+	    except:
+		if user_obj!=None and user_obj.instances==0:
+	    	    loaded_user.setOnlineFlag(False)
+		raise
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())
+
+
+
+
+
+
+
+
+
+
+
+	    
 
 class OnlineCheckPeriodicEvent(periodic_events.PeriodicEvent):
     def __init__(self):
@@ -273,4 +304,7 @@ class OnlineCheckPeriodicEvent(periodic_events.PeriodicEvent):
 
     def run(self):
 	user_main.getOnline().checkOnlines()
+
+
+
 	

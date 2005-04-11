@@ -68,6 +68,16 @@ function normalChargePluginUpdate(&$update_helper)
 	$update_helper->addToUpdateAttrs("normal_charge",$_REQUEST["normal_charge"]);
 }
 
+//**************************************************** VoIP Charge
+
+function voipChargePluginUpdate(&$update_helper)
+{
+    if(!isInRequest("has_voip_charge"))
+	$update_helper->addToDelAttrs("voip_charge");
+    else
+	$update_helper->addToUpdateAttrs("voip_charge",$_REQUEST["voip_charge"]);
+}
+
 //**************************************************** IPpool
 function IPpoolPluginUpdate(&$update_helper)
 {
@@ -99,7 +109,7 @@ function ownerNamePluginUpdate(&$update_helper)
     if(isInRequest("owner_name"))
 	$update_helper->addToUpdateAttrs("owner_name",$_REQUEST["owner_name"]);
 }
-//*************************************
+//************************************* Normal Username
 function normalAttrsPluginUpdate(&$update_helper)
 {
     if(isInRequest("has_normal_username"))
@@ -128,7 +138,36 @@ function normalAttrsPluginUpdate(&$update_helper)
     else
 	$update_helper->addToDelAttrs("normal_username");
 }
-//**************************************************
+//************************************* VoIP Username
+function voipAttrsPluginUpdate(&$update_helper)
+{
+    if(isInRequest("has_voip_username"))
+    {
+	$update_helper->addToUpdateAttrs("voip_username",$_REQUEST["voip_username"]);
+	$update_helper->addToUpdateAttrs("voip_save_usernames",isInRequest("voip_save_user_add"));
+	if(isInRequest("voip_generate_password"))
+	{
+	    $update_helper->addToUpdateAttrs("voip_password","");
+	    $generate_password=0;
+	    if(isInRequest("voip_password_character"))
+		$generate_password+=1;
+	    if(isInRequest("voip_password_digit"))
+		$generate_password+=2;
+	
+	    $update_helper->addToUpdateAttrs("voip_generate_password",$generate_password);
+	    $update_helper->addToUpdateAttrs("voip_generate_password_len",$_REQUEST["voip_password_len"]);
+	}
+	else
+	{
+	    $update_helper->addToUpdateAttrs("voip_generate_password",0);
+	    $update_helper->addToUpdateAttrs("voip_generate_password_len",0);
+	    $update_helper->addToUpdateAttrs("voip_password",$_REQUEST["voip_password"]);
+	}
+    }
+    else
+	$update_helper->addToDelAttrs("voip_username");
+}
+//************************************************** Lock
 function lockPluginUpdate(&$update_helper)
 {
     if(isInRequest("lock"))
@@ -137,7 +176,7 @@ function lockPluginUpdate(&$update_helper)
 	$update_helper->addToDelAttrs("lock");
 }
 
-//**************************************************
+//************************************************** Persistent Lan
 function persistentLanPluginUpdate(&$update_helper)
 {
     if(isInRequest("has_plan"))
@@ -150,7 +189,8 @@ function persistentLanPluginUpdate(&$update_helper)
 	$update_helper->addToDelAttrs("persistent_lan_mac");
 
 }
-//***************************************************
+
+//*************************************************** Comment
 function commentPluginUpdate(&$update_helper)
 {
     if(isInRequest("comment"))
@@ -159,7 +199,7 @@ function commentPluginUpdate(&$update_helper)
 	$update_helper->addToDelAttrs("comment");
 }
 
-//***************************************************
+//*************************************************** Limit Mac
 function limitMacPluginUpdate(&$update_helper)
 {
     if(isInRequest("limit_mac"))

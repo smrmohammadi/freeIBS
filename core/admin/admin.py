@@ -226,3 +226,14 @@ class Admin:
 	else:
 	    self.canDo("CHANGE NORMAL USER ATTRIBUTES",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 
+    def canChangeVoIPAttrs(self,loaded_user):
+	"""
+	    raise an PermissionException if admin can not change voip attributes of user loaded in "loaded_user"
+	    if loaded_user is None, it will check if admin have enough permissions, useful for checking group attribute chnges
+	    Admin should have CHANGE_VOIP_USER_ATTRS permission to be able to change users
+	"""
+	if loaded_user==None:
+	    self.canDo("CHANGE NORMAL VOIP ATTRIBUTES",None,None)
+	else:
+	    self.canDo("CHANGE NORMAL VOIP ATTRIBUTES",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
+

@@ -28,6 +28,16 @@ function checkNormalUser($username,$current_username,$ret_image)
 	returnText($resp);
 }
 
+function checkVoIPUser($username,$current_username,$ret_image)
+{
+    $req=new CheckVoIPUsernameForAdd($username,$current_username);
+    $resp=$req->sendAndRecv();
+    if($ret_image)
+	returnImage($resp);
+    else
+	returnText($resp);
+}
+
 function returnText($resp)
 {
     $smarty=new IBSSmarty();

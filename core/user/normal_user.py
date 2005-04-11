@@ -1,15 +1,14 @@
 from core.charge import charge_main
 from core.threadpool import thread_main
-from core.user import user_main
+from core.user import user_main,user_type
 from core.lib.time_lib import *
 from core.ibs_exceptions import *
 from core.errors import errorText
+from core.db import ibs_query
 import time
 import copy
 
-class NormalUser:
-    def __init__(self,user_obj):
-	self.user_obj=user_obj
+class NormalUser(user_type.UserType):
 #############################################
     def isPersistentLanClient(self,instance):
 	return self.user_obj.getUserAttrs().hasAttr("persistent_lan") and self.user_obj.getUserAttrs()["persistent_lan"]
@@ -44,8 +43,14 @@ class NormalUser:
 	return self.charge_obj
 
 ##############################################
-    def logout(self,instance,ras_msg,used_credit):
-	return self.logToConnectionLog(instance,used_credit)
+    def logout(self,instance,ras_msg):
+	used_credit=0
+	query=ibs_query.IBSQuery()
+	if self.user_obj.getInstanceInfo(instance)["successful_auth"]:
+	    used_credit=self.user_obj.charge.calcInstanceCreditUsage(instance,True)
+	    query+=self.user_obj.commit(used_credit)
+    
+	return query+self.logToConnectionLog(instance,used_credit)
 
 ##############################################
     def logToConnectionLog(self,instance,used_credit):

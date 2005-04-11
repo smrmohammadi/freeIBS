@@ -2,15 +2,14 @@ from core.admin.admin_perm import *
 from core.admin import perm_loader
 
 def init():
-    perm_loader.getLoader().registerPerm("CHANGE NORMAL USER ATTRIBUTES",ChangeNormalUserAttrs)
+    perm_loader.getLoader().registerPerm("CHANGE VOIP USER ATTRIBUTES",ChangeNormalUserAttrs)
 
 class ChangeNormalUserAttrs (AllRestrictedSingleValuePermission,UserCatPermission,Permission):
     def init(self):
-	self.setDescription("""	Can Change Normal User Attributes
-		This Permission Allows admins to add,change or delete users normal attributes
-		such as normal username, normal password and normal charge rule
-		Normal attributes are commonly used for dialup users
-		Related Permissions: ADD NEW USER, CHANGE USER OWNER, CHANGE USER ATTRIBUTES, CHANGE VOIP USER ATTRIBUTES
+	self.setDescription("""	Can Change VoIP User Attributes
+		This Permission Allows admins to add,change or delete users voip attributes
+		such as voip username, voip password and voip charge rule
+		Related Permissions: ADD NEW USER, CHANGE USER OWNER, CHANGE USER ATTRIBUTES, CHANGE NORMAL USER ATTRIBUTES
 	       """)
 	self.addAffectedPage("User->Edit Attributes")
 	self.addDependency("CHANGE USER ATTRIBUTES")

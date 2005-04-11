@@ -9,7 +9,7 @@ function smarty_block_layerTR($params,$content,&$smarty)
     if(!is_null($content))
     {
     	    $cycle_color=(isset($params["cycle_color"]) and $params["cycle_color"]=="TRUE")?True:False;
-	    $color=getTRColor($cycle_color);
+	    $color=getTRColor($cycle_color,"layer_last_color");
 	    return <<<END
 		    <tr class='Layer_Row_{$color}Color'>
 			{$content}

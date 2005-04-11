@@ -10,20 +10,47 @@ class UserCharge:
 	self.credit_prev_usage_instance=[] #previous usage of currently online instances
 	self.effective_rules=[]
 	self.rule_start=[]
-	self.rule_start_inout=[]
-	self.accounting_started=[]
+	self.accounting_started=[] #has accounting started? keep start time in seconds from epoch here
+
 
     def login(self,effective_rule,instance):
     	self.effective_rules.append(effective_rule)
 	self.rule_start.append(time.time())
-	self.rule_start_inout.append([0,0])
 	self.credit_prev_usage_instance.append(0)
-	self.accounting_started.append(False)
+	self.accounting_started.append(0)
 
     def logout(self,instance):
 	_index=instance-1
 	del(self.effective_rules[_index])
 	del(self.rule_start[_index])
-	del(self.rule_start_inout[_index])
 	del(self.credit_prev_usage_instance[_index])
 	del(self.accounting_started[_index])
+
+class InternetUserCharge(UserCharge):
+    def __init__(self):
+	UserCharge.__init__(self)
+	self.rule_start_inout=[]
+
+    def login(self,effective_rule,instance):
+	UserCharge.login(self,effective_rule,instance)
+	self.rule_start_inout.append([0,0])
+
+    def logout(self,instance):
+	UserCharge.logout(self,instance)
+	del(self.rule_start_inout[instance-1])
+	
+class VoIPUserCharge(UserCharge):
+    def __init__(self):
+	UserCharge.__init__(self)
+	self.prefix_id=[]
+	self.remaining_free_seconds=[]
+
+    def login(self,effective_rule,instance):
+	UserCharge.login(self,effective_rule,instance)
+	self.prefix_id.append(0)
+	self.remaining_free_seconds.append(-1)
+
+    def logout(self,instance):
+	UserCharge.logout(self,instance)
+	del(self.prefix_id[instance-1])
+	del(self.remaining_free_seconds[instance-1])

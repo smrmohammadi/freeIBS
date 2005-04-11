@@ -1,3 +1,21 @@
+Current Feature List:
+
+VPN using Poptop
+Persistent Lan
+Cisco Ras For Dialup
+Hierarchichal Bandwidth manager
+Traffic and time based accounting
+Simultaneous Logins
+Limit Mac Address
+MS-CHAP MS-CHAP-v2 MPPE support
+Extensive Reporting
+Plugin Based Attributes
+Jalali/Gregorian Dates
+Permission Based Admins
+
+
+Wish List:
+
 Accounting based on mac address
 Caller ID Based Authentication
 Dialup/E1
@@ -63,13 +81,6 @@ Core:
     ippool o ras o user o online o charge o plugin interface
     online handlers
     pppd ras
-
-NEXT TODO
-        user_list 
-	admin delete
-	admin change deposit
-	bandwidth manager
-	rel_exp_date fix
 
 Interface:
     Admin Login				DONE

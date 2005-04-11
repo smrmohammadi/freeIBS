@@ -26,7 +26,7 @@ Bandwidth manager:
     Define your tree, use them in normal charge rules and you're done.
     
 Problems:
-    Curreny PLan scripts, add rules to iptables FORWARD chain.  You shouldn't save this rules for startup
+    Current PLan scripts, add rules to iptables FORWARD chain.  You shouldn't save this rules for startup
     and you shouldn't restart IBSng while there are plan users. If you do so, flush FORWARD chain to primary
     state before starting IBSng.
     

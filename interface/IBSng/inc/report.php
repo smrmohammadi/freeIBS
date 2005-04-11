@@ -77,8 +77,12 @@ class ReportHelper
 
 class ReportCollector
 {
-    function ReportCollector()
-    {
+    function ReportCollector($unset_from_request=FALSE)
+    {/*
+	$unset_from_request: Delete Condition that has been collected from request.
+		    This is essential for situations where request keys would cause conflict in next page
+    */
+	$this->unset_from_request=$unset_from_request;	
 	$this->conds=array();
     }
 
@@ -97,6 +101,9 @@ class ReportCollector
     function __addFromRequest($request_key)
     {
 	$this->addToConds($request_key,$_REQUEST[$request_key]);
+
+	if($this->unset_from_request)
+	    unset($_REQUEST[$request_key]);
     }
 
     function addToCondsIfNotEq($name,$value)
@@ -104,8 +111,7 @@ class ReportCollector
 	add $name from request to conds, if $name value is not equal $value
     */
 	if(isInRequest($name) and $_REQUEST[$name]!=$value)
-	    $this->addToConds($name,$_REQUEST[$name]);
-	
+	    $this->__addFromRequest($name);
     }
 
     function addToCondsFromRequest($not_empty=TRUE)

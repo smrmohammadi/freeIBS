@@ -1,6 +1,11 @@
 IBS is a billing system for ISPs. 
 IBS Next Generation (IBSng) is a total rewrite of IBS to create modular and maintanable code.
 
+-- Still in cvs
+If you're upgrading from older versions of IBSng, make sure you enter these sql queries in IBSng database
+
+#psql -U ibs IBSng </usr/local/IBSng/db/from_alpha-2005-02-28_upgrade.sql
+
 -- IBSng-alpha-2005-02-28
    This is first alpha release of IBSng. This version supports PPPD, Persistent Lan and Cisco Ras.
    Main Features of this release are:

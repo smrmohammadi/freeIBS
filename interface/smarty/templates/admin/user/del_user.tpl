@@ -1,4 +1,4 @@
-{include file="admin_header.tpl" title="Change Credit" selected="User Information"}
+{include file="admin_header.tpl" title="Delete User" selected="User Information"}
 {include file="err_head.tpl"}
 {headerMsg var_name="delete_successful"}
     User(s) Deleted Successfully

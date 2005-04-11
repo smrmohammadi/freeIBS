@@ -27,7 +27,7 @@
 	{/addEditTD}
 	{addEditTD type="right"}
 	    <select name=charge_type>
-	    {html_options output=$charge_types values=$charge_types default=$charge_type}
+		{html_options output=$charge_types values=$charge_types selected=$charge_type}
 	    </select>
 	    {helpicon subject="charge type" category="charge"}
 	{/addEditTD}

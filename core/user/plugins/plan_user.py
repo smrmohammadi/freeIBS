@@ -9,7 +9,7 @@ from core.lib.multi_strs import MultiStr
 from core.lib.password_lib import Password,getPasswords
 from core.lib import iplib,maclib
 from core.ras import ras_main,msgs
-from core.db import ibs_db
+from core.db import ibs_db,db_main
 import itertools,string
 
 attr_handler_name="plan user"
@@ -38,6 +38,7 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
     def deleteInit(self):
 	self.registerQuery("user","delete",self.deleteQuery,[])
 
+#######################################
     def checkInput(self,src,action,dargs):
 	map(dargs["admin_obj"].canChangeNormalAttrs,dargs["users"].itervalues())
     
@@ -78,6 +79,7 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
 	self.__checkMac()
 	self.__checkMacExistence(self.mac,users)
 
+########################################################
     def changeQuery(self,ibs_query,src,action,**args):
 	admin_obj=args["admin_obj"]
 	users=args["users"]
@@ -112,6 +114,7 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
 
 	return ibs_query
 
+################################################
     def deleteQuery(self,ibs_query,src,action,**args):
 	users=args["users"]
 
@@ -122,21 +125,7 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
 	        self.deleted_users.append((user_id,loaded_user.getUserAttrs()["persistent_lan_mac"],loaded_user.getUserAttrs()["persistent_lan_ras_id"]))
 	return ibs_query
 
-    def __deletePlanUserAttrsQuery(self,user_id):
-	return ibs_db.createDeleteQuery("persistent_lan_users","user_id=%s"%user_id)
-
-    def __updatePlanUserAttrsQuery(self,user_id,mac,ip,ras_id):
-	return ibs_db.createUpdateQuery("persistent_lan_users",{"persistent_lan_mac":dbText(mac),
-								"persistent_lan_ip":dbText(ip),
-								"persistent_lan_ras_id":ras_id},
-								"user_id=%s"%user_id)
-								
-    def __insertPlanUserAttrsQuery(self,user_id,mac,ip,ras_id):
-	return ibs_db.createInsertQuery("persistent_lan_users",{"persistent_lan_mac":dbText(mac),
-								"persistent_lan_ip":dbText(ip),
-								"persistent_lan_ras_id":ras_id,
-								"user_id":user_id})
-
+###############################################
     def postUpdate(self,src,action):
 	for user_id,mac,ras_id in self.deleted_users:
 	    user_msg=self.__createRemoveUserMsg(user_id,mac,ras_id)
@@ -171,6 +160,40 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
 	user_msg["user_id"]=user_id
 	user_msg["ras_id"]=ras_id
 	return user_msg
+
+#########################################################
+    def __deletePlanUserAttrsQuery(self,user_id):
+	return ibs_db.createDeleteQuery("persistent_lan_users","user_id=%s"%user_id)
+
+    def __updatePlanUserAttrsQuery(self,user_id,mac,ip,ras_id):
+	return ibs_db.createUpdateQuery("persistent_lan_users",{"persistent_lan_mac":dbText(mac),
+								"persistent_lan_ip":dbText(ip),
+								"persistent_lan_ras_id":ras_id},
+								"user_id=%s"%user_id)
+								
+    def __insertPlanUserAttrsQuery(self,user_id,mac,ip,ras_id):
+	return ibs_db.createInsertQuery("persistent_lan_users",{"persistent_lan_mac":dbText(mac),
+								"persistent_lan_ip":dbText(ip),
+								"persistent_lan_ras_id":ras_id,
+								"user_id":user_id})
+
+##########################################################
+    def planMacExists(self,mac):
+	"""
+	    check if mac currently exists in plan_macs
+	    mac(iterable object can be multistr or list): mac that will be checked
+	    return a list of exists macs
+	    NOTE: This is not thread safe 
+	    XXX: test & check where_clause length
+	"""
+	if len(mac)==0:
+	    return []
+	where_clause=" or ".join(map(lambda m:"persistent_lan_mac=%s"%dbText(m),mac))
+	users_db=db_main.getHandle().get("persistent_lan_users",where_clause,0,-1,"",["persistent_lan_mac"])
+	return [m["persistent_lan_mac"] for m in users_db]
+
+
+
 
 class PersistentLanUserAttrSearcher(AttrSearcher):
     def run(self):

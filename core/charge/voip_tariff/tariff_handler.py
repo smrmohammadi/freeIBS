@@ -80,7 +80,7 @@ class TariffHandler(handler.Handler):
 
     def listTariffs(self,request):
 	"""
-	    return a list of tariff infos in format [{"tariff_name":,"tariff_id":,"comment"}]
+	    return a list of tariff infos in format [{"tariff_name":,"tariff_id":,"comment":}]
 	    note that prefixes aren't included
 	"""
 	request.needAuthType(request.ADMIN)

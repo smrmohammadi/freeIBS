@@ -125,4 +125,36 @@ class DelCharge extends Request
     }
 }
 
+class AddVoIPChargeRule extends Request
+{
+    function AddVoIPChargeRule($charge_name,$rule_start,$rule_end,$tariff_name,$ras,$ports,$dows)
+    {
+	parent::Request("charge.addVoIPChargeRule",array("charge_name"=>$charge_name,
+							     "rule_start"=>$rule_start,
+							     "rule_end"=>$rule_end,
+							     "tariff_name"=>$tariff_name,
+							     "ras"=>$ras,
+							     "ports"=>$ports,
+							     "dows"=>$dows
+							     ));
+    }
+}
+
+class UpdateVoIPChargeRule extends Request
+{
+    function UpdateVoIPChargeRule($charge_name,$charge_rule_id,$rule_start,$rule_end,$tariff_name,$ras,$ports,$dows)
+    {
+	parent::Request("charge.updateVoIPChargeRule",array("charge_name"=>$charge_name,
+							     "charge_rule_id"=>$charge_rule_id,
+							     "rule_start"=>$rule_start,
+							     "rule_end"=>$rule_end,
+							     "tariff_name"=>$tariff_name,
+							     "ras"=>$ras,
+							     "ports"=>$ports,
+							     "dows"=>$dows
+							     ));
+    }
+}
+
+
 ?>

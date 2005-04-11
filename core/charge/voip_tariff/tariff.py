@@ -18,13 +18,15 @@ class Tariff:
 	    self.prefixes_code[prefix.getPrefixCode()]=prefix
 	    self.prefixes_id[prefix.getPrefixID()]=prefix
     
+    ###################################
     def getTariffID(self):
 	return self.tariff_id
 	
     def getTariffName(self):
 	return self.tariff_name
 
-    def getPrefixCode(self,code):
+    ###################################
+    def getPrefixByCode(self,code):
 	try:
 	    return self.prefixes_code[code]
 	except KeyError:
@@ -33,6 +35,7 @@ class Tariff:
     def hasPrefixCode(self,code):
 	return self.prefixes_code.has_key(code)
     
+    ###################################
     def getPrefixByID(self,_id):
 	try:
 	    return self.prefixes_id[_id]
@@ -42,6 +45,7 @@ class Tariff:
     def hasPrefixID(self,_id):
 	return self.prefixes_id.has_key(_id)
 
+    ####################################
     def getInfo(self,include_prefixes=False):
 	info={"tariff_id":self.getTariffID(),
 	      "tariff_name":self.getTariffName(),
@@ -57,7 +61,26 @@ class Tariff:
 	sorted=SortedList(prefixes)
 	sorted.sortByPostText("['prefix_name']",False)
 	return sorted.getList()
-
+    #####################################
+    def findPrefix(self,called_number):
+	"""
+	    find and return Prefix Object for called_number. Prefix is selected using longest match algorithm.
+	    return None if called_number has no defined prefix
+	    XXX: using sequential search!
+	"""
+	longest_len=0
+	longest_code=""
+	for code in self.prefixes_code.iterkeys():
+	    if called_number.startswith(code) and len(code)>longest_len:
+		longest_len=len(code)
+		longest_code=code
+    
+	if longest_len:
+	    return self.getPrefixByCode(longest_code)
+	else:
+	    return None
+	    
+	
 class Prefix:
     def __init__(self,prefix_id,prefix_code,prefix_name,cpm,free_seconds,min_duration,round_to):
 	"""
@@ -91,7 +114,7 @@ class Prefix:
     def getFreeSeconds(self):
 	return self.free_seconds
 
-    def getDuration(self):
+    def getMinDuration(self):
 	return self.min_duration
 
     def getRoundTo(self):
@@ -103,6 +126,6 @@ class Prefix:
 		"prefix_name":self.getPrefixName(),
 		"cpm":self.getCPM(),
 		"free_seconds":self.getFreeSeconds(),
-		"min_duration":self.getDuration(),
+		"min_duration":self.getMinDuration(),
 		"round_to":self.getRoundTo()
 		}

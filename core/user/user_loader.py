@@ -131,6 +131,7 @@ class UserLoader:
 	voip_db_attrs=db_main.getHandle().get("voip_users","user_id=%s"%user_id)
 	if len(voip_db_attrs)==1:
 	    voip_attrs["voip_username"]=voip_db_attrs[0]["voip_username"]
+	    voip_attrs["voip_password"]=voip_db_attrs[0]["voip_password"]
 	return voip_attrs
 
     def __fetchUserAttrs(self,user_id):

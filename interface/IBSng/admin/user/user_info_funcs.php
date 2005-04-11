@@ -24,10 +24,18 @@ function intShowMultiNormalUserInfo(&$smarty,$normal_username)
 	redirectToUserSearch("normal_username={$normal_username}&normal_username_op=equals");
 }
 //********************************************
-
-function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null)
+function intShowMultiVoIPUserInfo(&$smarty,$voip_username)
 {
-    $resp=intSetSingleUserInfo($smarty,$user_id,$normal_username);
+    if(!isMultiString($voip_username))
+	intShowSingleUserInfo($smarty,null,null,$voip_username);
+    else
+	redirectToUserSearch("voip_username={$voip_username}&voip_username_op=equals");
+}
+//********************************************
+
+function intShowSingleUserInfo(&$smarty,$user_id,$normal_username=null,$voip_username=null)
+{
+    $resp=intSetSingleUserInfo($smarty,$user_id,$normal_username,$voip_username);
     if($resp->isSuccessful())
     {
         intShowSingleUserInfoAssignValues($smarty,$user_id,array_values($resp->getResult()));
@@ -54,7 +62,5 @@ function intShowSingleUserInfoInput(&$smarty)
 {
     $smarty->display("admin/user/single_user_info_input.tpl");
 }
-
-
 
 ?>

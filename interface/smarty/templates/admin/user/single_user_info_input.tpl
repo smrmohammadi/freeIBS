@@ -28,6 +28,20 @@
     {/addEditTable}
 </form>
 
+<form method=POST action="/IBSng/admin/user/user_info.php" name="user_info_voip">
+    {addEditTable title="Normal Username"}
+	{addEditTD type="left"}
+	    VoIP Username
+	{/addEditTD}
+
+	{addEditTD type="right"}
+	    <input type=text name=voip_username_multi class=text value="{ifisinrequest name="voip_username_multi"}">
+	    {multistr form_name="user_info_voip" input_name="voip_username_multi"}
+	{/addEditTD}
+		
+    {/addEditTable}
+</form>
+
 {addRelatedLink}
     <a href="/IBSng/admin/user/search_user.php" class="RightSide_links">
 	Seach User 

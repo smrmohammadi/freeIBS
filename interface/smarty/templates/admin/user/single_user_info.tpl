@@ -17,6 +17,8 @@
     <br>
     {include file="plugins/user/view/normal_username.tpl"}
     <br>
+    {include file="plugins/user/view/voip_username.tpl"}
+    <br>
     {include file="plugins/user/view/persistent_lan.tpl"}
     <br>
     {include file="plugins/user/view/lock.tpl"}
@@ -28,6 +30,8 @@
     {include file="plugins/user/view/multi_login.tpl"}
     <br>
     {include file="plugins/user/view/normal_charge.tpl"}
+    <br>
+    {include file="plugins/user/view/voip_charge.tpl"}
     <br>
     {include file="plugins/user/view/ippool.tpl"}
     <br>

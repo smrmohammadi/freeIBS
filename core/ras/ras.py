@@ -150,15 +150,15 @@ class Ras:
 	for ippool_id in self.ippools:
 	    try:
 		ip=ippool_main.getLoader().getIPpoolByID(ippool_id).setIPInPacket(reply)
-		update_msg=ras_msg.createNew(None,None,self)
-		update_msg.setAction("INTERNET_UPDATE")
-		update_msg["update_attrs"]=["ippool_id","ippool_assigned_ip"]
-		update_msg["ippool_id"]=ippool_id
-		update_msg["ippool_assigned_ip"]=ip
-		update_msg.send()
-		break
 	    except IPpoolFullException:
-		pass
+		continue
+	    update_msg=ras_msg.createNew(None,None,self)
+	    update_msg.setAction("INTERNET_UPDATE")
+	    update_msg["update_attrs"]=["ippool_id","ippool_assigned_ip"]
+	    update_msg["ippool_id"]=ippool_id
+	    update_msg["ippool_assigned_ip"]=ip
+	    update_msg.send()
+	    break
 	else:
 	    self.toLog("All IP Pools are full",LOG_ERROR)
 

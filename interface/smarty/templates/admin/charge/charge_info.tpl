@@ -128,7 +128,7 @@
 {if $charge_type eq "Internet"}
 	{include file="admin/charge/internet_charge_rule_list.tpl"}
     {else}
-    
+	{include file="admin/charge/voip_charge_rule_list.tpl"}
 {/if}
 
 {if !$is_editing and  $can_change}
@@ -138,9 +138,16 @@
         </a>
     {/addRelatedLink}
     {addRelatedLink}
-        <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}" class="RightSide_links">
+	{if $charge_type eq "Internet"}
+    	    <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}" class="RightSide_links">
         	Add Internet Charge Rule
-        </a>
+    	    </a>
+	{else}
+    	    <a href="/IBSng/admin/charge/{if $charge_type eq "Internet"}add_internet_charge_rule{else}add_voip_charge_rule{/if}.php?charge_name={$charge_name|escape:"url"}" class="RightSide_links">
+        	Add VoIP Charge Rule
+    	    </a>
+	{/if}
+
     {/addRelatedLink}
 
     {addRelatedLink}

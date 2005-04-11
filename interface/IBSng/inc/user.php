@@ -16,12 +16,14 @@ class AddNewUsers extends Request
 
 class GetUserInfo extends Request
 {
-    function GetUserInfo($user_id=null,$normal_username=null)
+    function GetUserInfo($user_id=null,$normal_username=null,$voip_username=null)
     {
 	if (!is_null($user_id))
 	    $request=array("user_id"=>$user_id);
 	else if (!is_null($normal_username))
 	    $request=array("normal_username"=>$normal_username);
+	else if (!is_null($voip_username))
+	    $request=array("voipl_username"=>$voip_username);
 	parent::Request("user.getUserInfo",$request);
     }
 }
@@ -40,7 +42,16 @@ class CheckNormalUsernameForAdd extends Request
 {
     function CheckNormalUsernameForAdd($username,$current_username)
     {
-	parent::Request("user.checkNormalUsernameForAdd",array("normal_username"=>$username,
+	parent::Request("normal_user.checkNormalUsernameForAdd",array("normal_username"=>$username,
+							       "current_username"=>$current_username));
+    }
+}
+
+class CheckVoIPUsernameForAdd extends Request
+{
+    function CheckVoIPUsernameForAdd($username,$current_username)
+    {
+	parent::Request("voip_user.checkVoIPUsernameForAdd",array("voip_username"=>$username,
 							       "current_username"=>$current_username));
     }
 }

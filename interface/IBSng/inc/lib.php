@@ -109,24 +109,26 @@ function unEscapeIP($ip)
 }
 
 
-function getTRColor($swap=FALSE)
+function getTRColor($swap=FALSE,$var_name="tr_last_color")
 {/*
     get TR color, Used in smarty plugins
     TR colors are either "light" or "dark"
-    argument $swap tells if color needs to be swapped and we need a new color, normally this
+
+    $swap tells if color needs to be swapped and we need a new color, normally this
     is done for new TR
+
+    $var_name tells what should be the color state variable name
 */
-    global $tr_last_color;
-    if(!isset($tr_last_color))
-	$tr_last_color="light";
+    if(!isset($GLOBALS[$var_name]))
+	$GLOBALS[$var_name]="light";
     else if($swap)
     {
-	if($tr_last_color=="light")
-	    $tr_last_color="dark";
+	if($GLOBALS[$var_name]=="light")
+	    $GLOBALS[$var_name]="dark";
 	else
-	    $tr_last_color="light";
+	    $GLOBALS[$var_name]="light";
     }
-    return $tr_last_color;
+    return $GLOBALS[$var_name];
 }
 
 function convertRequestToUrl($ignore_list=array())

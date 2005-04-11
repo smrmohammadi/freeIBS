@@ -38,6 +38,10 @@ class NormalChargeAttrUpdater(AttrUpdater):
 	if hasattr(self,"charge_name"):
 	    dargs["admin_obj"].canUseCharge(self.charge_name)
 
+	    charge_obj=charge_main.getLoader().getChargeByName(self.charge_name)
+	    if not charge_obj.isInternetCharge():
+		raise GeneralException(errorText("USER_ACTIONS","INTERNET_CHARGE_EXPECTED")%charge_obj.getType())
+
 
 class NormalChargeAttrSearcher(AttrSearcher):
     def run(self):

@@ -184,13 +184,13 @@ def toLog(_str,log_file,debug_level=0,add_stack=0):
     if debug_level>defs.DEBUG_LEVEL: 
 	return
 
-    if log_file&LOG_ERROR:
+    if log_file & LOG_ERROR:
         error_log_handle.write(_str,add_stack)
-    elif log_file&LOG_RADIUS:
+    elif log_file & LOG_RADIUS:
 	radius_log_handle.write(_str,add_stack)
-    elif log_file&LOG_SERVER:
+    elif log_file & LOG_SERVER:
 	server_log_handle.write(_str,add_stack)
-    elif log_file&LOG_QUERY:
+    elif log_file & LOG_QUERY:
 	query_log_handle.write(_str,add_stack)
     else:
 	debug_log_handle.write(_str,add_stack)

@@ -16,6 +16,8 @@ else if (isInRequest("user_id_multi"))
     intShowMultiUserInfo($smarty,$_REQUEST["user_id_multi"]);
 else if (isInRequest("normal_username_multi"))
     intShowMultiNormalUserInfo($smarty,$_REQUEST["normal_username_multi"]);
+else if (isInRequest("voip_username_multi"))
+    intShowMultiVoIPUserInfo($smarty,$_REQUEST["voip_username_multi"]);
 else
     intShowSingleUserInfoInput($smarty);
 

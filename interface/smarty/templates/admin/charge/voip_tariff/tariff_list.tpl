@@ -42,7 +42,7 @@
 {/listTable}
 
 {addRelatedLink}
-    <a href="/IBSng/admin/charge/voip_tariff/add_tariff.php" class="RightSide_links">
+    <a href="/IBSng/admin/charge/voip_tariff/add_edit_tariff.php" class="RightSide_links">
 	Add New Tariff
     </a>
 {/addRelatedLink}

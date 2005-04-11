@@ -93,7 +93,7 @@ class ChargeRule:
 	    user_obj (User.User instance): object of user that this rule change for	    
 	    instance (integer): instance number of user 	    
 	"""
-	user_obj.charge_info.credit_prev_usage_instance[instance-1]+=self.charge_obj.calcInstanceRuleCreditUsage(user_obj,instance)
+	user_obj.charge_info.credit_prev_usage_instance[instance-1]+=self.charge_obj.calcInstanceRuleCreditUsage(user_obj,instance,False)
 
     def hasOverlap(self,new_charge_rule):
 	"""
@@ -124,12 +124,12 @@ class ChargeRule:
 	"""
 	return time.time()-user_obj.charge_info.rule_start[instance-1]
 
-    def appliable(self,user_obj,instance):
+    def appliable(self,user_obj,instance,_time):
 	"""
-	    return False if this rule is not applicable
+	    return False if this rule is not applicable for _time and user_obh
 	    otherwise returns applicability amount of this rule
 	"""
-	if not self.interval.containsNow():
+	if not self.interval.containsTime(_time):
 	    return False
 	return self.anytimeAppliable(user_obj, instance)
 	

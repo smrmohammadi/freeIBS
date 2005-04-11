@@ -122,19 +122,20 @@ create table users (
 
 create table normal_users (
     user_id integer references users,
-    normal_username text primary key, 
+    normal_username text unique, 
     normal_password text
 );
 
 create table persistent_lan_users (
     user_id integer references users,
-    persistent_lan_mac macaddr primary key,
+    persistent_lan_mac macaddr unique,
     persistent_lan_ip cidr,
     persistent_lan_ras_id integer references ras
 );
+create index persistent_lan_ras_id_index on persistent_lan_users (persistent_lan_ras_id);
+
 
 create sequence add_user_save_id_seq;
-
 create table add_user_saves(
     add_user_save_id integer primary key,
     add_date	timestamp without time zone default CURRENT_TIMESTAMP,
@@ -152,18 +153,18 @@ create table add_user_save_details(
 
 create table voip_users (
     user_id bigint references users,
-    voip_username text primary key, 
+    voip_username text unique, 
     voip_password text
 );
 
-create sequence users_user_id_seq;
+
 
 create table user_attrs (
     user_id integer references users,
     attr_name text,
     attr_value text
 );
-
+create sequence users_user_id_seq;
 create index user_attrs_user_id_index on user_attrs(user_id);
 -- ************************ CONFIGURATION
 

@@ -74,7 +74,8 @@ class IPPool:
 	    except ValueError:
 		toLog("Trying to free ip %s from pool %s while it's not in used list!"%(self.getIPpoolName(),ip),LOG_ERROR)
 		raise GeneralException(errorText("IPPOOL","IP_NOT_IN_USED_POOL")%(ip,self.getIPpoolName()))
-		self.free.append(ip)
+
+	    self.free.append(ip)
 	finally:
 	    self.lock.release()
 	

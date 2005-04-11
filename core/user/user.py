@@ -84,11 +84,11 @@ class User:
 		return instance
     	return None
 ##################################################
-    def calcCurrentCredit(self):
-	return self.initial_credit - self.charge.calcCreditUsage()
+    def calcCurrentCredit(self,round_result=True):
+	return self.initial_credit - self.charge.calcCreditUsage(round_result)
 
-    def calcInstanceCreditUsage(self,instance):
-	return self.charge.calcInstanceCreditUsage(instance)
+    def calcInstanceCreditUsage(self,instance,round_result=True):
+	return self.charge.calcInstanceCreditUsage(instance,round_result)
 ##################################################
     def createUserMsg(self,instance,action):
 	"""
@@ -118,7 +118,7 @@ class User:
 	cattrs=attrs.copy()
 	for attr_name in self.remove_ras_attrs:
 	    if cattrs.has_key(attr_name):
-		del(cattrs[attr_name])
+    		del(cattrs[attr_name])
 	return cattrs
 ##################################################
     def login(self,ras_msg):
@@ -153,10 +153,7 @@ class User:
 	    that not changed for logout
 	"""
 	self.getInstanceInfo(instance)["logout_ras_msg"]=ras_msg
-	used_credit=self.charge.calcInstanceCreditUsage(instance)
-	query=self.getTypeObj().logout(instance,ras_msg,used_credit)
-	if self.getInstanceInfo(instance)["successful_auth"]:
-	    query+=self.commit(used_credit)
+	query=self.getTypeObj().logout(instance,ras_msg)
 	query.runQuery()
 	user_main.getUserPluginManager().callHooks("USER_LOGOUT",self,[instance,ras_msg])
 	self.instances-=1

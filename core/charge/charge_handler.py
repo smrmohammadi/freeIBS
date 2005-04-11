@@ -12,10 +12,12 @@ class ChargeHandler(handler.Handler):
 	self.registerHandlerMethod("getChargeInfo")
 	self.registerHandlerMethod("updateCharge")
 	self.registerHandlerMethod("addInternetChargeRule")
-	self.registerHandlerMethod("listChargeRules")
 	self.registerHandlerMethod("updateInternetChargeRule")
+	self.registerHandlerMethod("listChargeRules")
 	self.registerHandlerMethod("delChargeRule")
 	self.registerHandlerMethod("delCharge")
+	self.registerHandlerMethod("addVoIPChargeRule")
+	self.registerHandlerMethod("updateVoIPChargeRule")
 
 
 	
@@ -41,7 +43,7 @@ class ChargeHandler(handler.Handler):
 	charge_names=charge_main.getLoader().getAllChargeNames()
 
 	def filter_func(charge_name):
-	    if request.has_key("type") and charge_main.getLoader().getChargeByName(charge_name).getType()!=request["type"]:
+	    if request.has_key("charge_type") and charge_main.getLoader().getChargeByName(charge_name).getType()!=request["charge_type"]:
 		return False
 	    return requester.canUseCharge(charge_name) 
 	    
@@ -76,7 +78,7 @@ class ChargeHandler(handler.Handler):
 
 	return charge_main.getActionManager().addInternetChargeRule(request["charge_name"],
 			request["rule_start"],request["rule_end"],
-			request["dows"].values(),request["cpm"],request["cpk"],request["assumed_kps"],
+			request.fixList("dows"),request["cpm"],request["cpk"],request["assumed_kps"],
 			request["bandwidth_limit_kbytes"],request["tx_leaf_name"],request["rx_leaf_name"],ras,ports)
 
     def updateInternetChargeRule(self,request):
@@ -89,7 +91,7 @@ class ChargeHandler(handler.Handler):
 
 	return charge_main.getActionManager().updateInternetChargeRule(request["charge_name"],
 			request["charge_rule_id"],request["rule_start"],request["rule_end"],
-			request["dows"].values(),request["cpm"],request["cpk"],request["assumed_kps"],
+			request.fixList("dows"),request["cpm"],request["cpk"],request["assumed_kps"],
 			request["bandwidth_limit_kbytes"],request["tx_leaf_name"],request["rx_leaf_name"],ras,ports)
 
 
@@ -128,4 +130,24 @@ class ChargeHandler(handler.Handler):
 	request.checkArgs("charge_name")
 	request.getAuthNameObj().canDo("CHANGE CHARGE")
 	charge_main.getActionManager().delCharge(request["charge_name"])
+
+    def addVoIPChargeRule(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("charge_name","rule_start","rule_end","tariff_name","ras","ports","dows")
+	request.getAuthNameObj().canDo("CHANGE CHARGE")
+	(ras,ports)=self.__checkRasAndPortWildcards(request)
+
+	return charge_main.getActionManager().addVoIPChargeRule(request["charge_name"],
+			request["rule_start"],request["rule_end"],
+			request.fixList("dows"),request["tariff_name"],ras,ports)
+
+    def updateVoIPChargeRule(self,request):
+	request.needAuthType(request.ADMIN)
+	request.checkArgs("charge_name","charge_rule_id","rule_start","rule_end","tariff_name",
+			  "ras","ports","dows")
+	request.getAuthNameObj().canDo("CHANGE CHARGE")
+	(ras,ports)=self.__checkRasAndPortWildcards(request)
+	return charge_main.getActionManager().updateVoIPChargeRule(request["charge_name"],
+			request["charge_rule_id"],request["rule_start"],request["rule_end"],
+			request.fixList("dows"),request["tariff_name"],ras,ports)
 	

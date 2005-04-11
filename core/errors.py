@@ -39,16 +39,19 @@ USER_ACTIONS_ERRORS={
     "CREDIT_NOT_FLOAT":"Credit must be a float number",
     "CREDIT_MUST_BE_POSITIVE":"Credit must be positive number",
     "INVALID_CREDIT_ACTION":"Invalid credit change action %s",
-    "BAD_NORMAL_USERNAME":"Bad characters in username",
+    "BAD_NORMAL_USERNAME":"Bad characters in username %s",
+    "BAD_VOIP_USERNAME":"Bad characters in username %s",
     "BAD_PASSWORD":"Bad characters in password",
     "BAD_EMAIL":"Invalid email address %s",
     "INVALID_REL_EXP_DATE":"Relative Expiration Date is Invalid",
     "INVALID_USER_COUNT":"Invalid count of users %s",
     "COUNT_NOT_INTEGER":"User count should be positive integer",
-    "NORMAL_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
+    "NORMAL_USER_COUNT_NOT_MATCH":"Normal Usernames count isn't equal to updating users count. Updating %s number of users while there are %s normal usernames",
+    "VOIP_USER_COUNT_NOT_MATCH":"Voip Usernames count isn't equal to updating users count. Updating %s number of users while there are %s voip usernames",
     "INVALID_PASSWORD_LENGTH":"Invalid password length %s",
     "ACCESS_TO_SAVED_USER_LIST_DENIED":"You don't have access to saved username/password list",
-    "NORMAL_USERNAME_EXISTS":"Normal username %s already exists",
+    "NORMAL_USERNAME_EXISTS":"Normal username(s) %s already exist",
+    "VOIP_USERNAME_EXISTS":"VoIP username(s) %s already exist",
     "INVALID_OPERATOR":"Invalid operator %s",
     "DELETE_USER_IS_ONLINE":"Can't delete user with id %s, because he is online",
     "INVALID_ABS_EXP_DATE":"Absolute Expiration Date is Invalid: %s",
@@ -56,7 +59,10 @@ USER_ACTIONS_ERRORS={
     "PERSISTENT_LAN_MAC_EXISTS":"Persistent Lan %s already exists",
     "PLAN_MAC_COUNT_NOT_MATCH":"Number of Mac Addresses count isn't equal to updating users count. Updating %s number of users while there are %s macs",
     "RAS_IS_NOT_PERSISTENT_LAN":"Ras %s is not Persistent Lan",
-    "CAN_NOT_NEGATE_CREDIT":"Can not negate credit of user %s, current credit is %s"
+    "CAN_NOT_NEGATE_CREDIT":"Can not negate credit of user %s, current credit is %s",
+    "VOIP_CHARGE_EXPECTED":"VoIP Charge Expected, but found charge with type %s",
+    "INTERNET_CHARGE_EXPECTED":"Internet Charge Expected, but found charge with type %s",
+    "DUPLICATE_USERNAME":"Duplicate Username %s"
 }
 
 USER_ERRORS={
@@ -81,7 +87,9 @@ USER_LOGIN_ERRORS={
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
     "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
     "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
-    "LOGIN_FROM_THIS_MAC_DENIED":"You can't login from this mac address"
+    "LOGIN_FROM_THIS_MAC_DENIED":"You can't login from this mac address",
+    "RAS_DOESNT_ALLOW_MULTILOGIN":"Ras doesn't allow multi login",
+    "NO_PREFIX_FOUND":"Called Number has no defined prefix"
 }
 
 ADMIN_LOGIN_ERRORS={
@@ -283,3 +291,20 @@ def errorText(event,error,add_error_key=True):
 	logException(LOG_ERROR,"errorText: can't find error for %s,%s"%(event,error))
 	raise GeneralException(GENERAL_ERRORS["NO_ERROR_TEXT"])
 
+def getErrorKey(str_error):
+    """
+	return key of error in "str_error" or empty string if str_error has no key
+    """
+    try:
+        return str_error[:str_error.index("|")]
+    except ValueError:
+        return ""
+
+def getErrorText(str_error):
+    """
+	return text of error in "str_error". Error Key is deleted from returning string
+    """
+    try:
+        return str_error[str_error.index("|")+1:]
+    except ValueError:
+        return str_error

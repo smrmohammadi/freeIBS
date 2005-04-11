@@ -25,4 +25,22 @@ function intSetTariffInfo(&$smarty,$tariff_name,$include_prefixes=True)
 	$resp->setErrorInSmarty($smarty);
 }
 
+function intAssignTariffNames(&$smarty)
+{/*assign name of all voip tariff names, in an array with name "tariff_names"
+*/
+    $req=new ListTariffs();
+    $resp=$req->sendAndRecv();
+    if($resp->isSuccessful())
+    {
+	$tariff_names=array();
+	foreach($resp->getResult() as $arr)
+	    $tariff_names[]=$arr["tariff_name"];
+	$smarty->assign_by_ref("tariff_names",$tariff_names);
+    }
+    else
+    {
+	$resp->setErrorInSmarty($smarty);
+	$smarty->assign("tariff_names",array());
+    }
+}
 ?>

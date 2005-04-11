@@ -4,7 +4,7 @@ from core.lib.time_lib import *
 from core import defs
 from core.errors import errorText
 from core.db import db_main
-from core.charge.user_charge import UserCharge
+from core.charge.user_charge import *
 from core.admin import admin_main
 from core.ibs_exceptions import *
 from core.errors import errorText
@@ -79,7 +79,7 @@ class Charge:
 	"""
 	    call to notify accounting of user should be started
 	"""
-	user_obj.charge_info.accounting_started[instance-1]=True
+	user_obj.charge_info.accounting_started[instance-1]=time.time()
 	
 
     def logout(self,user_obj,instance): 
@@ -87,13 +87,6 @@ class Charge:
     	    called when logout event of user occures or when the user login was not successful
 	"""
 	pass
-
-
-    def calcCurrentCredit(self,usrObj):
-	"""
-	    Calculate Current credit of user and return it
-	"""
-	return usrObj.initial_credit
 
 
     def checkLimits(self,user_obj):
@@ -138,7 +131,10 @@ class ChargeWithRules(Charge):
 	    if user_obj.initial_credit<=0:
 		raise LoginException(errorText("USER_LOGIN","CREDIT_FINISHED",False))
 
-	    user_obj.charge_info=UserCharge()
+	    if user_obj.isNormalUser():
+		user_obj.charge_info=InternetUserCharge()
+	    else:
+		user_obj.charge_info=VoIPUserCharge()
 
 	effective_rule=self.getEffectiveRule(user_obj,user_obj.instances)
 	user_obj.charge_info.login(effective_rule,user_obj.instances)
@@ -160,12 +156,19 @@ class ChargeWithRules(Charge):
 	    user_obj (User.User instance):
 	    instance(integer): instance of user which we want rule for
 	"""
+	return self._getEffectiveRuleForTime(user_obj,instance,time.time())
+
+    def _getEffectiveRuleForTime(self,user_obj,instance,_time):
+	"""
+	    return applicable rule for _time
+	    _time(int): epoch time in seconds
+	"""	
 	max_priority=-1
 	max_applicable_rule=None
 	
 	for rule_id in self.rules:
 	    rule=self.rules[rule_id]
-	    if rule.priority > max_priority and rule.appliable(user_obj,instance):
+	    if rule.priority > max_priority and rule.appliable(user_obj,instance,_time):
 		max_priority=rule.priority
 		max_applicable_rule=rule
 		
@@ -182,15 +185,24 @@ class ChargeWithRules(Charge):
 	    instance(integer): instance of user which we want rule for
 	    
 	"""
+	cur_rule=user_obj.charge_info.effective_rules[instance-1]
+	return self._getNextMoreApplicableRuleForTime(user_obj, instance, cur_rule, time.time())
+
+    def _getNextMoreApplicableRuleForTime(self,user_obj, instance, cur_rule, _time):
+	"""
+	    return next more applicable rule or None when there's no next more applicable rule
+	    
+	    user_obj (User.User instance):
+	    instance(integer): instance of user which we want rule for
+	    _time(long): seconds from epoch
+	"""
 	
 	earliest_more_applicable_rule = None
-	cur_rule=user_obj.charge_info.effective_rules[instance-1]
-
-	now=secondsFromMorning()
+	secs=secondsFromMorning(_time)
 	
 	for rule_id in self.rules:
 	    rule=self.rules[rule_id]
-	    if rule.interval.containsToday() and rule.interval > now:
+	    if rule.interval.containsDay(_time) and rule.interval > secs:
 		if rule.priority>cur_rule.priority and rule.anytimeAppliable(user_obj,instance):
 		    if earliest_more_applicable_rule==None or earliest_more_applicable_rule.interval > rule.interval:
 			earliest_more_applicable_rule=rule
@@ -198,14 +210,21 @@ class ChargeWithRules(Charge):
 	return earliest_more_applicable_rule
 
 
-    def calcInstanceCreditUsage(self,user_obj,instance):
+    def calcInstanceCreditUsage(self,user_obj,instance,round_result):
+	if not user_obj.charge_info.accounting_started[instance-1]:
+	    return 0
 #	toLog("user_obj.Instances:%s Instance:%s user_obj.charge_info.credit_prev_usage_instance:%s"%(user_obj.instances,instance,user_obj.charge_info.credit_prev_usage_instance),LOG_DEBUG)
-	return user_obj.charge_info.credit_prev_usage_instance[instance-1] + self.calcInstanceRuleCreditUsage(user_obj,instance)
+	return user_obj.charge_info.credit_prev_usage_instance[instance-1] + self.calcInstanceRuleCreditUsage(user_obj,instance,round_result)
 
-    def calcCreditUsage(self,user_obj):
+    def calcCreditUsage(self,user_obj,round_result):
+	"""
+	    return credit usage amount of user_obj.
+	    round_result(boolean): Should we round the result with tariff/rule attributes. Rounded result is 
+				   useful for showing and saving while the real amount is needed for calculations
+	"""
 	credit_used=0
 	for _index in range(user_obj.instances):
-	    credit_used+=self.calcInstanceCreditUsage(user_obj,_index+1)
+	    credit_used+=self.calcInstanceCreditUsage(user_obj,_index+1,round_result)
 	return credit_used + user_obj.charge_info.credit_prev_usage
 	
 
@@ -247,5 +266,5 @@ class ChargeWithRules(Charge):
     def checkLimits(self,user_obj):
 	pass
 
-    def calcInstanceRuleCreditUsage(self,user_obj,instance):
+    def calcInstanceRuleCreditUsage(self,user_obj,instance,round_result):
 	pass

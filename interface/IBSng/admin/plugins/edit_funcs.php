@@ -85,6 +85,7 @@ function editUserAssignValues(&$smarty,$user_id,$edit_tpls,$edit_tpl_files)
 	$smarty->assign("user_attrs",array());
 	$smarty->assign("group_attrs",array());
     }
+//    var_dump($smarty);
 }
 
 function showEditUserInterface(&$smarty)
