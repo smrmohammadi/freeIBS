@@ -31,6 +31,7 @@ function intSetConditions(&$smarty,&$helper)
     $helper->addToCondsFromCheckBoxRequest("group_name_","group_name");
     $helper->addToCondsFromRequest(TRUE,"multi_login","multi_login_op");
     $helper->addToCondsFromRequest(TRUE,"normal_username","normal_username_op");
+    $helper->addToCondsFromRequest(TRUE,"voip_username","voip_username_op");
     $helper->addToCondsFromCheckBoxRequest("owner_name_","owner_name");
     $helper->addToCondsFromRequest(TRUE,"normal_username","normal_username_op");
     $helper->addToCondsFromRequest(TRUE,"rel_exp_date","rel_exp_date_unit","rel_exp_date_op");

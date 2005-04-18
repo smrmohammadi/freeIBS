@@ -15,6 +15,16 @@ attr_handler_name="voip user"
 def init():
     user_main.getAttributeManager().registerHandler(VoIPUserAttrHandler(),["voip_username","voip_password","voip_generate_password","voip_generate_password_len","voip_save_usernames"],["voip_username"],[])
     handlers_manager.getManager().registerHandler(VoIPUserHandler())
+    user_main.getUserPluginManager().register("voip_user_plugin",VoIPUser)
+
+
+
+
+class VoIPUser(user_plugin.UserPlugin): 
+    def update(self,ras_msg):
+	if "called_ip" in ras_msg["update_attrs"]:
+	    instance=self.user_obj.getInstanceFromRasMsg(ras_msg)
+	    self.user_obj.getInstanceInfo(instance)["attrs"]["called_ip"]=ras_msg["called_ip"]
 
 
 
@@ -136,11 +146,11 @@ class VoIPUserAttrUpdater(AttrUpdater):
 	    loaded_user = users[user_id]
 	    if loaded_user.hasAttr("voip_username"):
 	    	null_queries += self.updateVoIPUserAttrsToNullQuery(user_id)
-		ibs_query += self.updateVoIPUserAttrsQuery(user_id,
+		real_queries += self.updateVoIPUserAttrsQuery(user_id,
 							   self.usernames[i],
 							   self.passwords[i].getPassword())
 	    else:
-		ibs_query += self.insertVoIPUserAttrsQuery(user_id,
+		real_queries += self.insertVoIPUserAttrsQuery(user_id,
 							   self.usernames[i],
 							   self.passwords[i].getPassword())
 	    i += 1

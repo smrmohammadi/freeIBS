@@ -26,6 +26,16 @@ class UserLoader:
 	    raise GeneralException(errorText("USER","NORMAL_USERNAME_DOESNT_EXISTS")%normal_username)
 	else:
 	    return normal_attrs["user_id"]
+
+    def voipUsername2UserID(self,voip_username):
+	"""
+	    return user_id of user with voip username "voip_username"
+	"""
+	voip_attrs=self.__fetchVoIPUserAttrsByVoIPUsername(voip_username)
+	if voip_attrs==None:
+	    raise GeneralException(errorText("USER","VOIP_USERNAME_DOESNT_EXISTS")%voip_username)
+	else:
+	    return voip_attrs["user_id"]
 	
 	
     def getLoadedUserByUserID(self,user_id):
@@ -43,7 +53,7 @@ class UserLoader:
 	"""
 	attrs=self.__fetchUserAttrs(user_id)
 	attrs.update(self.__fetchNormalUserAttrsByUserID(user_id))
-	attrs.update(self.__fetchVoipUserAttrsByUserID(user_id))
+	attrs.update(self.__fetchVoIPUserAttrsByUserID(user_id))
 	attrs.update(self.__fetchPersistentLanAttrs(user_id))
 	return attrs
 
@@ -122,7 +132,7 @@ class UserLoader:
 	else:
 	    return None
 
-    def __fetchVoipUserAttrsByUserID(self,user_id):
+    def __fetchVoIPUserAttrsByUserID(self,user_id):
 	"""
 	    fetch voip user info from "voip_users" table, using user_id of user
 	    return a dic of attributes in format {attr_name:attr_value}
@@ -133,6 +143,24 @@ class UserLoader:
 	    voip_attrs["voip_username"]=voip_db_attrs[0]["voip_username"]
 	    voip_attrs["voip_password"]=voip_db_attrs[0]["voip_password"]
 	return voip_attrs
+
+
+    def __fetchVoIPUserAttrsByVoIPUsername(self,voip_username):
+	"""
+	    fetch voip user info from "voip_users" table, using voip username of user
+	    return a dic of attributes in format {attr_name:attr_value} or None if voip_username
+	    doesn't exists
+	"""
+	voip_attrs={}
+	voip_db_attrs=db_main.getHandle().get("voip_users","voip_username=%s"%dbText(voip_username))
+	if len(voip_db_attrs)==1:
+	    voip_attrs["user_id"]=voip_db_attrs[0]["user_id"]
+	    voip_attrs["voip_username"]=voip_db_attrs[0]["voip_username"]
+	    voip_attrs["voip_password"]=voip_db_attrs[0]["voip_password"]
+	    return voip_attrs
+	else:
+	    return None
+
 
     def __fetchUserAttrs(self,user_id):
 	"""

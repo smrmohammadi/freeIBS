@@ -49,7 +49,7 @@ class PersistentLanUserAttrUpdater(AttrUpdater):
 	
 	macs=filter(macNotChanged,itertools.izip(macs,users.itervalues()))
 
-	exists=user_main.getActionManager().planMacExists([m[0] for m in macs])
+	exists=self.planMacExists([m[0] for m in macs])
 	if len(exists):
 	    raise GeneralException(errorText("USER_ACTIONS","PERSISTENT_LAN_MAC_EXISTS")%",".join(exists))
 

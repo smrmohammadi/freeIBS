@@ -29,7 +29,7 @@
 </form>
 
 <form method=POST action="/IBSng/admin/user/user_info.php" name="user_info_voip">
-    {addEditTable title="Normal Username"}
+    {addEditTable title="VoIP Username"}
 	{addEditTD type="left"}
 	    VoIP Username
 	{/addEditTD}

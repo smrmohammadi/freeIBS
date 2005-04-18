@@ -20,3 +20,14 @@ GENERAL
     5. Develop Code!
 
 
+TECHNICAL
+
+1. Can IBSng interface run in php 5?
+    No, because of some naming conflicts.
+    It's matter of renaming some of functions.
+
+2. I can't See User Search when I select high RPPs.
+    First Check that it isn't php memory limitation,
+    Raise memory_limit in php.ini (40M should be enough). 
+    User Search Page is slow on large lists because of smarty and php slowness. Many
+    If conditions inside templates causes user search to be cpu intensive.

@@ -23,7 +23,7 @@ class GetUserInfo extends Request
 	else if (!is_null($normal_username))
 	    $request=array("normal_username"=>$normal_username);
 	else if (!is_null($voip_username))
-	    $request=array("voipl_username"=>$voip_username);
+	    $request=array("voip_username"=>$voip_username);
 	parent::Request("user.getUserInfo",$request);
     }
 }

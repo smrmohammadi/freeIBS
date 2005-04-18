@@ -8,7 +8,6 @@ require_once(IBSINC."request.php");
 require_once(IBSINC."smarty.php");
 require_once(IBSINC."lib.php");
 
-
 //var_dump(ini_set("magic_quotes_gpc","0"));
 //print_r($_REQUEST);
 session_init();

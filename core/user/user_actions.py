@@ -45,6 +45,14 @@ class UserActions:
 	loaded_users=self.getLoadedUsersByUsername(normal_username)
 	return self.getUserInfosFromLoadedUsers(loaded_users,date_type)
 
+#######################################################
+    def getLoadedUsersByVoIPUsername(self,voip_usernames):
+	"""
+	    return a list of LoadedUser instances for users with voip_usernames "voip_usernames"
+	"""
+	loaded_users=map(user_main.getUserPool().getUserByVoIPUsername,voip_usernames)
+	return loaded_users
+
 ########################################################
 
     def insertUserAttrQuery(self,user_id,attr_name,attr_value):

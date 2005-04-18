@@ -145,8 +145,9 @@ class ChargeWithRules(Charge):
 
     def logout(self,user_obj,instance):
 	Charge.logout(self,user_obj,instance)
-	user_obj.charge_info.credit_prev_usage+=user_obj.calcInstanceCreditUsage(instance)
-	user_obj.charge_info.effective_rules[instance-1].end(user_obj,instance)
+	if user_obj.charge_info.accounting_started[instance-1]:
+	    user_obj.charge_info.credit_prev_usage+=user_obj.calcInstanceCreditUsage(instance)
+	    user_obj.charge_info.effective_rules[instance-1].end(user_obj,instance)
 	user_obj.charge_info.logout(instance)
 
     def getEffectiveRule(self,user_obj,instance):

@@ -27,6 +27,12 @@
 	    Normal Username
 	{/listTD}
     {/if}
+
+    {if isInRequest("show__voip_username")}
+	{listTD}
+	    VoIP Username
+	{/listTD}
+    {/if}
     
     {if isInRequest("show__credit")}
 	{listTD}
@@ -76,6 +82,12 @@
 	{/listTD}
     {/if}
 
+    {if isInRequest("show__voip_charge")}
+	{listTD}
+	    Normal Charge
+	{/listTD}
+    {/if}
+
     {if isInRequest("show__lock")}
 	{listTD}
 	    Locked
@@ -101,6 +113,10 @@
 	
 	    {if isInRequest("show__normal_username")}
 	    	{searchUserTD attr_name="normal_username" user_id=$user_id attr_type="attrs"}{/searchUserTD}
+	    {/if}
+
+	    {if isInRequest("show__voip_username")}
+	    	{searchUserTD attr_name="voip_username" user_id=$user_id attr_type="attrs"}{/searchUserTD}
 	    {/if}
     
 	    {if isInRequest("show__credit")}
@@ -133,6 +149,10 @@
 
 	    {if isInRequest("show__normal_charge")}
 	    	{searchUserTD attr_name="normal_charge" user_id=$user_id attr_type="attrs"}{/searchUserTD}
+	    {/if}
+
+	    {if isInRequest("show__voip_charge")}
+	    	{searchUserTD attr_name="voip_charge" user_id=$user_id attr_type="attrs"}{/searchUserTD}
 	    {/if}
 
 	    {if isInRequest("show__lock")}

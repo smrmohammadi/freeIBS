@@ -16,6 +16,11 @@ class UserType:
     def getOnlineReportDic(self,instance):
 	return {}
 
+    def getLoginTime(self,instance):
+	"""
+	    return login time of instance in epoch
+	"""
+	pass
     
 
 

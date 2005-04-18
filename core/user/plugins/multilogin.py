@@ -14,7 +14,8 @@ class MultiLogin(user_plugin.UserPlugin):
     def __init__(self,user_obj):
 	user_plugin.UserPlugin.__init__(self,user_obj)
 	self.__setMultiLogin()
-	self.multilogin_allowed=True
+	self.multilogin_allowed=[] #does instances allow multi login?
+
 
 
     def __setMultiLogin(self):
@@ -26,12 +27,17 @@ class MultiLogin(user_plugin.UserPlugin):
 	if self.user_obj.instances>self.multi_login:
 	    raise LoginException(errorText("USER_LOGIN","MAX_CONCURRENT"))
 
-	if ras_msg.hasAttr("multi_login") and not ras_msg["multi_login"]:
-	    self.multilogin_allowed=False
+	if ras_msg.hasAttr("multi_login"):
+	    self.multilogin_allowed.append(ras_msg["multi_login"])
+	else:
+	    self.multilogin_allowed.append(True)
 	
-	if not self.multilogin_allowed and self.user_obj.instances>1:
+	if False in self.multilogin_allowed and self.user_obj.instances>1:
 	    raise LoginException(errorText("USER_LOGIN","RAS_DOESNT_ALLOW_MULTILOGIN"))
 
+    def logout(self,instance,ras_msg):
+	if len(self.multilogin_allowed)>=instance:
+	    del(self.multilogin_allowed[instance-1])
 
     def _reload(self):
 	self.__setMultiLogin()

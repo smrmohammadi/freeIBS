@@ -270,5 +270,5 @@ class TariffActions:
 	db_main.getHandle().transactionQuery(self.__delPrefixQuery(tariff_id,prefix_codes))
 
     def __delPrefixQuery(self,tariff_id,prefix_codes):
-	return ibs_db.createDeleteQuery("tariff_prefix_list","%s"%" or ".join(map(lambda code:"prefix_code=%s"%code,prefix_codes)))
+	return ibs_db.createDeleteQuery("tariff_prefix_list","%s"%" or ".join(map(lambda code:"prefix_code=%s"%dbText(code),prefix_codes)))
     ################################################

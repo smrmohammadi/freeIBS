@@ -38,8 +38,9 @@ class VoipChargeRule(ChargeRule):
 	    instance (integer): instance number of user 
 	"""
 	ChargeRule.start(self,user_obj,instance)
+	prefix_obj=self.getPrefixObj(user_obj,instance,False)
+	user_obj.charge_info.prefix_id[instance-1]=prefix_obj.getPrefixID()
 	if user_obj.charge_info.remaining_free_seconds[instance-1]==-1:#we're the first rule of this instance
-	    prefix_obj=self.getPrefixObj(user_obj,instance)
 	    user_obj.charge_info.remaining_free_seconds[instance-1]=prefix_obj.getFreeSeconds()
 	    instance_info=user_obj.getInstanceInfo(instance)
 	    instance_info["min_duration"]=prefix_obj.getMinDuration()
@@ -66,19 +67,27 @@ class VoipChargeRule(ChargeRule):
 	return tariff_main.getLoader().getTariffByID(self.tariff_id)
 	
     #####################################
-    def getPrefixObj(self,user_obj,instance):
-	return self.getTariffObj().getPrefixByID(user_obj.charge_info.prefix_id[instance-1])
+    def getPrefixObj(self,user_obj,instance,cur_rule=True):
+	"""
+	    return prefix_obj for "instance" of  "user_obj"
+	    cur_rule tells if we are the current rule for user
+	"""
+	if cur_rule:
+	    return self.getTariffObj().getPrefixByID(user_obj.charge_info.prefix_id[instance-1])
+	else:
+	    return self.getTariffObj().findPrefix( \
+					user_obj.getTypeObj().getCalledNumber(instance))
 
     #####################################
     def hasPrefixFor(self,called_number):
 	"""
 	    return True if this rule has prefix for "called_number"
 	"""
-	return self.getTariffObj.findPrefix(called_number)!=None
+	return self.getTariffObj().findPrefix(called_number)!=None
 
     ######################################
     def anytimeAppliable(self,user_obj,instance):
-	return ChargeRule.anytimeAppliable() and self.hasPrefixFor(user_obj.getTypeObj().getCalledNumber(instance))
+	return ChargeRule.anytimeAppliable(self,user_obj,instance) and self.hasPrefixFor(user_obj.getTypeObj().getCalledNumber(instance))
 
     ######################################
     def getInfo(self):

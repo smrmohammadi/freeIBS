@@ -16,7 +16,10 @@ class IPpoolUserPlugin(user_plugin.UserPlugin):
 	user_plugin.UserPlugin.__init__(self,user_obj)
  
     def login(self,ras_msg):
-	if self.user_obj.getUserAttrs().hasAttr("ippool"):
+	if self.user_obj.getUserAttrs().hasAttr("ippool") and \
+	   self.user_obj.isNormalUser() and \
+	   not self.user_obj.getUserType().isPersistentLanClient(self.user_obj.instances):
+	   
 	    ippool_id=int(self.user_obj.getUserAttrs()["ippool"])
 	    ip=None
 	    try:

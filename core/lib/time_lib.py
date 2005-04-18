@@ -1,7 +1,7 @@
 from core.lib.general import *
 from core.errors import errorText
 from core.ibs_exceptions import *
-import time
+import time,re
 
 def dbTimeFromEpoch(epoch_time):
     return time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(epoch_time))
@@ -10,7 +10,6 @@ def dbTimeFromEpoch(epoch_time):
 def cur_day_of_week():
     return time.localtime()[6]
     
-
 ###############################
 def secondsFromMorning(_time=0):
     """
@@ -20,7 +19,7 @@ def secondsFromMorning(_time=0):
 	tm=time.localtime(_time)
     else:
 	tm=time.localtime()
-    return tm[3]*3600+tm[4]*60+tm[5] # now , elapsed seconds from 00:00:00 of today
+    return tm[3]*3600+tm[4]*60+tm[5] # elapsed seconds from 00:00:00 of today
 
 
 #################################
@@ -53,7 +52,7 @@ class Time:
 	time_str=self.__completeTime(time_str)
 	(hour,minute,second)=map(int,time_str.split(":"))
 	if hour>24 or hour<0 or minute>60 or minute<0 or second>60 or second<0:
-    	    raise GeneralException(errorText("GENERAL","TIME_OUT_OF_RANGE",0))
+    	    raise GeneralException(errorText("GENERAL","TIME_OUT_OF_RANGE"))
 	return (time_str,hour,minute,second)
 
     def __completeTime(self,time_str):
@@ -66,7 +65,7 @@ class Time:
 	elif re.match("^[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$",time_str):
     	    pass
 	else:
-    	    raise GeneralException(errorText("GENERAL","INVALID_TIME_STRING",0)%time_str)
+    	    raise GeneralException(errorText("GENERAL","INVALID_TIME_STRING")%time_str)
 
 	return time_str
 
@@ -75,6 +74,27 @@ class Time:
 
     def getFormattedTime(self):
 	return self.formatted_time
+
+
+############################################
+radius_time_parse_pattern=re.compile("(\d+:\d+:\d+)\.\d+ (\w+ \w+ \w+ \d+ \d+)")
+def getEpochFromRadiusTime(rad_time):
+    """
+	return epoch from radius time eg. 04:34:58.000 IRDT Thu Apr 14 2005
+    """
+
+    match_obj = radius_time_parse_pattern.match(rad_time)
+    if match_obj == None:
+        raise IBSError(errorText("GENERAL","INVALID_RADIUS_TIME")%rad_time)
+
+    (_time,date) = match_obj.groups()
+    
+    #daylight saving is auto detemined
+    time_tuple = time.strptime("%s %s" % (_time,date), "%H:%M:%S %Z %a %b %d %Y" ) 
+    
+    
+    return time.mktime( time_tuple )
+    
 
 #************************** NOT TESTED
 

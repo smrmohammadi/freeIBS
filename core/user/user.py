@@ -2,7 +2,7 @@ from core.ibs_exceptions import *
 from core.lib.general import *
 from core.errors import errorText
 from core.db import db_main,ibs_db
-from core.user import normal_user,user_main
+from core.user import normal_user,voip_user,user_main
 from core.ras.msgs import UserMsg
 import operator
 
@@ -11,7 +11,7 @@ class User:
     """
 	Base User Class, for online users
     """
-    remove_ras_attrs=["pap_password","chap_password","ms_chap_response","ms_chap2_response","start_accounting"]
+    remove_ras_attrs=["pap_password","chap_password","ms_chap_response","ms_chap2_response","start_accounting","multi_login","voip_chap_password"]
 
     def __init__(self, loaded_user, _type):
 	"""
@@ -30,6 +30,8 @@ class User:
     def __loadTypeObj(self,_type):
 	if _type=="Normal":
 	    return normal_user.NormalUser(self)
+	if _type=="VoIP":
+	    return voip_user.VoIPUser(self)
 
     def __setInitialVariables(self):
 	self.__setInitialCredit()
@@ -57,6 +59,9 @@ class User:
     
     def isNormalUser(self):
 	return self.getType()=="Normal"
+
+    def isVoIPUser(self):
+	return self.getType()=="VoIP"
 
 ###################################################
     def getInstanceInfo(self,instance):
@@ -140,8 +145,7 @@ class User:
 	        self.setKillReason(self.instances,e.getErrorText())
 	    else:
 		self.setKillReason(self.instances,str(e))
-#	    self.getTypeObj().logToConnectionLog(self.instances,0).runQuery()
-#	    self.instances-=1
+#	    logException(LOG_DEBUG)
 	    self.logout(self.instances,ras_msg)
 	    raise
 	instance_info["successful_auth"]=True

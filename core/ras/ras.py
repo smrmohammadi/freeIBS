@@ -264,30 +264,33 @@ class Ras:
     
 class GeneralUpdateRas(Ras):
     """
-	This class has an update method, that will be called for update_inout_bytes intervals,
-	"UpdateInOutBytes" is the only method that will be called periodicly
+	This class has an update method, that will be called for general_update_interval intervals,
+	"generalUpdate" is the only method that will be called periodicly
     """
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
-	type_default_attributes["update_inout_bytes_interval"]=10
+	type_default_attributes["general_update_interval"]=10
 	Ras.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
 	self._registerEvent()
 
     def _registerEvent(self):
-	class UpdateInOutEvent(periodic_events.PeriodicEvent):
+	class GeneralUpdateEvent(periodic_events.PeriodicEvent):
 	    def __init__(my_self):
-		periodic_events.PeriodicEvent.__init__(my_self,"%s updateinout"%self.ras_ip,self.getAttribute("update_inout_bytes_interval"),[],0)
+		periodic_events.PeriodicEvent.__init__(my_self,"%s general_update"%self.ras_ip,self.getAttribute("general_update_interval"),[],0)
 
 	    def run(my_self):
-		self.updateInOutBytes()
+		self.generalUpdate()
 	
-	self.__update_inout_event=UpdateInOutEvent()
-	periodic_events.getManager().register(self.__update_inout_event)
+	self.__general_update_event=GeneralUpdateEvent()
+	periodic_events.getManager().register(self.__general_update_event)
     
+    def generalUpdate(self):
+	return self.updateInOutBytes()
+
     def updateInOutBytes(self):
 	pass
 
     def _delEvent(self):
-	periodic_events.getManager().unRegister(self.__update_inout_event)
+	periodic_events.getManager().unRegister(self.__general_update_event)
 
     def unloaded(self):
 	"""

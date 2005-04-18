@@ -186,6 +186,15 @@ class UserPool:
 	return self.getUserByID(user_id,online_flag)
 
 #################################
+    def getUserByVoIPUsername(self,voip_username,online_flag=False):
+	"""
+	    XXX: current implemention can be optimized by not querying normal_users table twice
+	    return a LoadedUser instance of user with voip username "voip_username"
+	"""
+	user_id=user_main.getUserLoader().voipUsername2UserID(voip_username)
+	return self.getUserByID(user_id,online_flag)
+
+#################################
     def userChanged(self,user_id):
 	"""
 	    called when attributes or information of user with id "user_id" changed
@@ -203,7 +212,7 @@ class UserPool:
 	    self.loading_users.loadingEnd(user_id)
 
     def __reloadOnlineUser(self,loaded_user):
-	new_loaded_user=self.__loadUserByID(loaded_user.getUserID())
+	new_loaded_user=user_main.getUserLoader().getLoadedUserByUserID(loaded_user.getUserID())
 	loaded_user._reload(new_loaded_user)
 	user_main.getOnline().reloadUser(loaded_user.getUserID())
 	

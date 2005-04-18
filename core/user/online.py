@@ -184,8 +184,12 @@ class OnlineUsers:
 	    user_obj=None
 	    try:
 	        user_obj=self.getUserObj(loaded_user.getUserID())
+
 		if user_obj==None:
 		    user_obj=self.__loadUserObj(loaded_user,"Normal")
+		elif not user_obj.isNormalUser():
+		    raise GeneralException(errorText("USER_LOGIN","CANT_USE_MORE_THAN_ONE_SERVICE"))
+		    
 	        user_obj.login(ras_msg)
 		self.__authenticateSuccessfull(user_obj,ras_msg)
 	    except:
@@ -239,6 +243,9 @@ class OnlineUsers:
 	        user_obj=self.getUserObj(loaded_user.getUserID())
 		if user_obj==None:
 	    	    user_obj=self.__loadUserObj(loaded_user,"Normal")
+		elif not user_obj.isNormalUser():
+		    raise GeneralException(errorText("USER_LOGIN","CANT_USE_MORE_THAN_ONE_SERVICE"))
+		    
 	        user_obj.login(ras_msg)
 		self.__authenticateSuccessfull(user_obj,ras_msg)
 	    except:
@@ -268,7 +275,7 @@ class OnlineUsers:
 	    self.loading_user.loadingEnd(loaded_user.getUserID())
 #########################################################
     def voipAuthenticate(self,ras_msg):
-	loaded_user=user_main.getUserPool().getUserByID(ras_msg["voip_username"])
+	loaded_user=user_main.getUserPool().getUserByVoIPUsername(ras_msg["voip_username"])
 	self.loading_user.loadingStart(loaded_user.getUserID())
 	try:
 	    user_obj=None
@@ -276,6 +283,9 @@ class OnlineUsers:
 	        user_obj=self.getUserObj(loaded_user.getUserID())
 		if user_obj==None:
 		    user_obj=self.__loadUserObj(loaded_user,"VoIP")
+		elif not user_obj.isVoIPUser():
+		    raise GeneralException(errorText("USER_LOGIN","CANT_USE_MORE_THAN_ONE_SERVICE"))
+
 	        user_obj.login(ras_msg)
 		self.__authenticateSuccessfull(user_obj,ras_msg)
 
@@ -288,16 +298,25 @@ class OnlineUsers:
 
 
 
+    def voipStop(self,ras_msg):
+	loaded_user=user_main.getUserPool().getUserByVoIPUsername(ras_msg["voip_username"])
+	self.loading_user.loadingStart(loaded_user.getUserID())
+	try:
+	    user_obj=self.getUserObj(loaded_user.getUserID())
+	    if user_obj==None:
+		toLog("Got VoIP stop for user %s, but he's not online"%ras_msg["voip_username"],LOG_DEBUG)
+	        return
+	    instance=user_obj.getInstanceFromRasMsg(ras_msg)
+	    if instance==None:
+		toLog(errorText("USER","CANT_FIND_INSTANCE")%(loaded_user.getUserID(),ras_msg.getRasID(),ras_msg.getUniqueIDValue()),LOG_DEBUG)
+		return
 
-
-
-
-
-
-
-
-	    
-
+	    global_unique_id=user_obj.getGlobalUniqueID(user_obj.instances)
+	    user_obj.logout(instance,ras_msg)
+	    self.__logoutRecalcEvent(user_obj,global_unique_id)
+	finally:
+	    self.loading_user.loadingEnd(loaded_user.getUserID())
+	
 class OnlineCheckPeriodicEvent(periodic_events.PeriodicEvent):
     def __init__(self):
 	periodic_events.PeriodicEvent.__init__(self,"Online Check",defs.CHECK_ONLINE_INTERVAL,[],0)

@@ -56,7 +56,7 @@ class CanStayOnlineResult:
 	"""
 	if self.DEBUG:
 	    print "New Remaining time: %s"%new_remaining_time
-	self.remaining_time=min(self.remaining_time,new_remaining_time)
+	self.remaining_time=min(self.remaining_time,max(new_remaining_time,0))
     
     def addInstanceToKill(self,instance,kill_reason):
 	"""

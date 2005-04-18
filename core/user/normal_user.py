@@ -9,9 +9,13 @@ import time
 import copy
 
 class NormalUser(user_type.UserType):
+    def getLoginTime(self,instance):
+	return self.user_obj.getInstanceInfo(instance)["login_time"]
+
 #############################################
     def isPersistentLanClient(self,instance):
-	return self.user_obj.getUserAttrs().hasAttr("persistent_lan") and self.user_obj.getUserAttrs()["persistent_lan"]
+	return self.user_obj.getInstanceInfo(instance)["attrs"].has_key("persistent_lan") \
+	       and self.user_obj.getInstanceInfo(instance)["attrs"]["persistent_lan"]
 
 ##############################################
     def getInOutBytes(self,instance):
@@ -75,8 +79,8 @@ class NormalUser(user_type.UserType):
 
     def __filter(self,instance,attrs):
 	inout=self.getInOutBytes(instance)
-	attrs["t_in_bytes"]=inout[0]
-	attrs["t_out_bytes"]=inout[1]
+	attrs["bytes_in"]=inout[0]
+	attrs["bytes_out"]=inout[1]
 	return attrs
 ##############################################
     def getOnlineReportDic(self,instance):
@@ -85,5 +89,7 @@ class NormalUser(user_type.UserType):
 	    online users report
 	"""
 	(in_bytes,out_bytes)=self.getInOutBytes(instance)
-    	return {"in_bytes":in_bytes,"out_bytes":out_bytes,"normal_username":self.user_obj.getUserAttrs()["normal_username"]}
+    	return {"in_bytes":str(in_bytes),
+		"out_bytes":str(out_bytes),
+		"normal_username":self.user_obj.getUserAttrs()["normal_username"]}
 	

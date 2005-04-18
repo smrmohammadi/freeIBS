@@ -29,10 +29,13 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	if not self.charge_defined:
 	    raise GeneralException(errorText("USER_LOGIN","NO_CHARGE_DEFINED")%self.user_obj.getType())
 	self.__initCharge()
+
+	if ras_msg.hasAttr("called_number"):
+	    self.__setCalledNumber(ras_msg)
+
 	if ras_msg.hasAttr("start_accounting"):
 	    self.__startAccounting(ras_msg)
 
-	    
     def __initCharge(self):
 	self.charge_obj.initUser(self.user_obj)
 	self.charge_initialized+=1
@@ -42,7 +45,19 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	self.charge_obj.startAccounting(self.user_obj,instance)
 	self.user_obj.getInstanceInfo(instance)["start_accounting"]=time.time()
 
+    def __setCalledNumber(self,ras_msg):
+	instance=self.user_obj.getInstanceFromRasMsg(ras_msg)
+	self.user_obj.getInstanceInfo(instance)["attrs"]["called_number"]=ras_msg["called_number"]
+
+	if ras_msg.hasAttr("single_session_h323") and ras_msg["single_session_h323"]:
+	    ras_msg.getReplyPacket()["H323-credit-time"]=str(int(self.charge_obj.checkLimits(self.user_obj,True).getRemainingTime()))
+	    	
+
     def update(self,ras_msg):
+
+	if "called_number" in ras_msg["update_attrs"]:
+	    self.__setCalledNumber(ras_msg)
+
 	if ras_msg.hasAttr("start_accounting"):
 	    self.__startAccounting(ras_msg)
 	    return True

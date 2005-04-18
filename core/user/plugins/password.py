@@ -26,6 +26,12 @@ class PasswordUserPlugin(user_plugin.UserPlugin):
 	    if not ras_msg.getRequestPacket().checkMSChap2Password(self.user_obj.getUserAttrs()["normal_username"],\
 								   self.user_obj.getUserAttrs()["normal_password"]):
 		self.__raiseIncorrectPassword()
+
+	elif ras_msg.hasAttr("voip_chap_password"):
+	    if not ras_msg.getRequestPacket().checkChapPassword(self.user_obj.getUserAttrs()["voip_password"]):
+		self.__raiseIncorrectPassword()
+
+
 #	else:
 #	    toLog("Unknown Password checking method",LOG_DEBUG)
 #	    self.__raiseIncorrectPassword()

@@ -30,7 +30,8 @@ GENERAL_ERRORS={
     "TO_VALUE_INVALID":"Invalid To value %s",
     "ATTR_NOT_FOUND":"Attribute %s not found",
     "INVALID_ORDER_BY":"Invalid Order By value %s",
-    "INVALID_MAC_ADDRESS":"Mac Address %s is invalid"
+    "INVALID_MAC_ADDRESS":"Mac Address %s is invalid",
+    "INVALID_RADIUS_TIME":"Radius time %s is invalid"
     
 }
 
@@ -71,6 +72,7 @@ USER_ERRORS={
     "UNKNOWN_ATTRIBUTE_ACTION":"Unknown attribute action %s",
     "USERID_DOESNT_EXISTS":"User with user id %s does not exists",
     "NORMAL_USERNAME_DOESNT_EXISTS":"User with normal username %s does not exists",
+    "VOIP_USERNAME_DOESNT_EXISTS":"User with voip username %s does not exists",
     "ACCESS_TO_USER_DENIED":"You have not access to user id %s",
     "CANT_FIND_INSTANCE":"User %s is not online on %s %s",
     "USER_IN_BLACKLIST":"User ID %s is in load black list"
@@ -89,7 +91,8 @@ USER_LOGIN_ERRORS={
     "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
     "LOGIN_FROM_THIS_MAC_DENIED":"You can't login from this mac address",
     "RAS_DOESNT_ALLOW_MULTILOGIN":"Ras doesn't allow multi login",
-    "NO_PREFIX_FOUND":"Called Number has no defined prefix"
+    "NO_PREFIX_FOUND":"Called Number has no defined prefix",
+    "CANT_USE_MORE_THAN_ONE_SERVICE":"You can not use VoIP and Internet Services simultaneously"
 }
 
 ADMIN_LOGIN_ERRORS={

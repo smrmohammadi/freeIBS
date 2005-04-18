@@ -55,7 +55,7 @@ class UserHandler(handler.Handler):
 	    elif request.has_key("normal_username"):
 		loaded_users=user_main.getActionManager().getLoadedUsersByNormalUsername(MultiStr(request["normal_username"]))
 	    elif request.has_key("voip_username"):
-		loaded_users=user_main.getActionManager().getLoadedUsersByVoipUsername(MultiStr(request["voip_username"]))
+		loaded_users=user_main.getActionManager().getLoadedUsersByVoIPUsername(MultiStr(request["voip_username"]))
 	    else:
 		raise request.raiseIncompleteRequest("user_id")
 

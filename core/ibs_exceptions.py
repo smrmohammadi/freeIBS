@@ -70,12 +70,10 @@ class SnmpException (Exception):
 
 
 class IBSError(Exception):
-    pass
-
     def __init__(self,str_error):
 	self.str_error=str_error
-
-	if(defs.DEBUG_LEVEL>=defs.DEBUG_ALL):
+    
+    	if(defs.DEBUG_LEVEL>=defs.DEBUG_ALL):
 	    last_stack = traceback.extract_stack()[-2]
     	    toLog("%s: in (%s,%s,%s) : %s"%
 		(self.__class__.__name__,last_stack[0],last_stack[2],last_stack[1],str_error),LOG_DEBUG)

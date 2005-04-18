@@ -8,7 +8,10 @@ class RasMsgDispatcher:
 		    	  "INTERNET_STOP":self._internetStop,
 		          "INTERNET_UPDATE":self._internetUpdate,
 		          "PERSISTENT_LAN_AUTHENTICATE":self._planAuthenticate,
-		          "PERSISTENT_LAN_STOP":self._planStop
+		          "PERSISTENT_LAN_STOP":self._planStop,
+			  "VOIP_AUTHENTICATE":self._voipAuthenticate,
+			  "VOIP_STOP":self._voipStop,
+		          "VOIP_UPDATE":self._voipUpdate
 			 }
 
 	action=ras_msg.getAction()
@@ -39,3 +42,16 @@ class RasMsgDispatcher:
 
     def _planStop(self,ras_msg):
 	user_main.getOnline().persistentLanStop(ras_msg)
+
+    def _voipAuthenticate(self,ras_msg):
+	try:
+	    user_main.getOnline().voipAuthenticate(ras_msg)
+	    return True
+	except IBSError:
+	    return False
+	    
+    def _voipStop(self,ras_msg):
+	user_main.getOnline().voipStop(ras_msg)
+
+    def _voipUpdate(self,ras_msg):
+	user_main.getOnline().updateUser(ras_msg)

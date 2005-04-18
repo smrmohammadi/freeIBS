@@ -10,9 +10,9 @@ function redirectToUserInfo($user_id)
     redirect($redirect_str);
 }
 
-function intSetSingleUserInfo(&$smarty,$user_id,$normal_username=null)
+function intSetSingleUserInfo(&$smarty,$user_id,$normal_username=null,$voip_username=null)
 {
-    $user_info_req=new GetUserInfo($user_id,$normal_username);
+    $user_info_req=new GetUserInfo($user_id,$normal_username,$voip_username);
     $resp=$user_info_req->sendAndRecv();
     if($resp->isSuccessful())
     {

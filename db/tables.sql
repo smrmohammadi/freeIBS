@@ -320,7 +320,7 @@ create sequence voip_charge_rule_tariff_tariff_id_seq;
 create table tariff_prefix_list (
     tariff_id integer references voip_charge_rule_tariff,
     prefix_id integer primary key,
-    prefix_code text unique,
+    prefix_code text,
     prefix_name text,
     cpm numeric(12,2),
     free_seconds smallint,
@@ -328,6 +328,7 @@ create table tariff_prefix_list (
     round_to smallint
 );
 create sequence tariff_prefix_list_tariff_id_seq;
+create unique index prefix_name_index on tariff_prefix_list (tariff_id,prefix_code);
 
 
 create table voip_charge_rules (

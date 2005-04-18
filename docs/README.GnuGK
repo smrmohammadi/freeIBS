@@ -1,0 +1,9 @@
+It's currently only support RadAuth, and needs H.235 Tokens. Also login 
+from multiple usernames isn't support yet, while it's not impossible from design point.
+
+IBSng doesn't use update accounting packets from gnugk yet, but this may change
+in future.
+
+A sample configuration can be found via /usr/local/IBSng/addons/gnugk/gnugk.ini
+I've tested this with openphone and ohphone and it works.
+

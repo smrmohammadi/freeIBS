@@ -79,6 +79,8 @@ function showImageContents($img_file)
 	return;
     print fread ($fd, filesize ($img_file));
     fclose ($fd);
+//    redirect(IMAGES_ROOT."icon/".$img_file);
 }
+
 
 ?>

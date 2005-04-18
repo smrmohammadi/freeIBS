@@ -1,13 +1,21 @@
 from core.charge.charge import ChargeWithRules
+from core.ibs_exceptions import *
+from core.errors import errorText
+from core.user.can_stay_online_result import CanStayOnlineResult
+from core.lib.time_lib import *
 import time
+CHARGE_DEBUG=True
 
 class VoipCharge(ChargeWithRules): 
 
-    def checkLimits(self,user_obj):
+    def checkLimits(self,user_obj,before_start_accounting=False):
 	"""
 	    Check Limits and return a CanStayOnlineResult
 	    The remaining time returned is the time until one of instances should be killed
 	    This works for no-multilogin and multilogin rases
+	    
+	    before_start_accounting(boolean): for no-multilogin session, we want to know how much user can talk
+					      before the start accounting. So we should set this to True 
 	"""
 	result=CanStayOnlineResult()
 
@@ -20,11 +28,13 @@ class VoipCharge(ChargeWithRules):
 
 	playing={}
 	for instance in range(1,user_obj.instances+1):
-	    if user_obj.charge_info.accounting_started[instance-1]:
-		playing[instance]={"call_start_time":user_obj.getCallStartTime(instance)}
-		playing[instance]["call_start_rule"]=self._getEffectiveRuleForTime(user_obj,instance,plying[instance]["call_start_time"])
-		playing[instance]["call_start_prefix"]=playing[instance]["call_start_rule"].getPrefixObj(user_obj,instance)
+	    if before_start_accounting or user_obj.charge_info.accounting_started[instance-1]:
+		playing[instance]={"call_start_time":user_obj.getTypeObj().getCallStartTime(instance)}
+		playing[instance]["call_start_rule"]=self._getEffectiveRuleForTime(user_obj,instance,playing[instance]["call_start_time"])
+		playing[instance]["call_start_prefix"]=playing[instance]["call_start_rule"].getPrefixObj(user_obj,instance,not before_start_accounting)
 
+	if CHARGE_DEBUG:
+	    toLog("Playing Dic: %s"%playing, LOG_DEBUG)
 	#playing instances, those who have accounting started
     	
 	remaining_time=0
@@ -33,6 +43,7 @@ class VoipCharge(ChargeWithRules):
 	while not break_loop: #continue until one of instances should be killed
 			      #this works well on single login sessions, that we want to know when user should
 			      #be killed at start of session
+			      #for multi login users, we do the loop just once
 	    credit_usage_per_second=0
 	    credit_finish_time=defs.MAXLONG
 	    earliest_rule_end=defs.MAXLONG
@@ -40,6 +51,11 @@ class VoipCharge(ChargeWithRules):
 	    free_seconds_end=defs.MAXLONG #if user has free seconds remaining from first rule
 
 	    seconds_from_morning=secondsFromMorning(start)
+
+
+	    if CHARGE_DEBUG:
+		toLog("Loop Start: %s first_iter: %s remaining_time: %s"%(start,first_iter,remaining_time),LOG_DEBUG)
+
 
 	    for instance in playing.keys():
 
@@ -59,16 +75,16 @@ class VoipCharge(ChargeWithRules):
 		    if  cur_rule!= effective_rule:
 
 	    	        cur_rule.end(user_obj, instance)
-	    		effective_rule.start(user_obj,instane)
+	    		effective_rule.start(user_obj,instance)
 
-			user_obj.charge_info.effective_rules[instance] = effective_rule
+			user_obj.charge_info.effective_rules[instance-1] = effective_rule
 			
 		    
 		# if effective_rule ras or port are wildcards
 	        if effective_rule.priority < 3: 
 		    #check if a more applicable rule (ras or ports are specified) 
 	            #can be used before this rule ends
-		    next_more_applicable_rule=self._getNextMoreApplicableRuleForTime(user_obj,instance,start) 
+		    next_more_applicable_rule=self._getNextMoreApplicableRuleForTime(user_obj, instance, effective_rule, start) 
 		    if next_more_applicable_rule!=None:
 			next_more_applicable=min(next_more_applicable_rule.interval.getStartSeconds()-seconds_from_morning,next_more_applicable)
 			
@@ -76,23 +92,23 @@ class VoipCharge(ChargeWithRules):
 
 		#check free seconds
 		if start - playing[instance]["call_start_time"] < playing[instance]["call_start_prefix"].getFreeSeconds():
-		    free_seconds_end=min(free_seconds_end,playing[instance]["call_start_prefix"].getFreeSeconds() + playing[instance]["call_start_time"] )
+		    free_seconds_end=min(free_seconds_end,playing[instance]["call_start_prefix"].getFreeSeconds() - (start - playing[instance]["call_start_time"]) )
 		else:
-		    credit_usage_per_second += effective_rule.getPrefixObj(user_obj,instance).getCPM() / 60.0
+		    credit_usage_per_second += effective_rule.getPrefixObj(user_obj,instance,False).getCPM() / 60.0
 	    #end for
 	    
 	    if credit_usage_per_second:
-		credit_finish_time = start + credit / credit_usage_per_second
+		credit_finish_time = credit / credit_usage_per_second
 		
 	    next_event = min(earliest_rule_end,next_more_applicable,credit_finish_time,free_seconds_end)
 	
 	    #reduce the temp credit
 	    if credit_usage_per_second:
-		credit -= (next_event - start) * credit_usage_per_second
+		credit -= next_event * credit_usage_per_second
 		if credit <= 0:
 		    break_loop=True
 	
-	    remaining_time += next_event - start
+	    remaining_time += next_event
 	    # don't go for more than 1 week, who can talk for one week? ;)
 	    # this may happen if cpm is 0
 	    if remaining_time > 7 * 24 * 3600 : 
@@ -100,9 +116,23 @@ class VoipCharge(ChargeWithRules):
 
 	    first_iter=False
 
+	    start += next_event
+
+	    if CHARGE_DEBUG:
+		toLog("Loop End: credit: %s credit_usage_per: %s remaining_time: %s next_event: %s credit_finish_time: %s free_seconds_end: %s earliest_rule_end: %s next_more_applicable: %s seconds_from_morning: %s"% \
+		(credit,credit_usage_per_second,remaining_time,next_event,credit_finish_time,free_seconds_end,earliest_rule_end,next_more_applicable,seconds_from_morning) \
+		,LOG_DEBUG)
+	
+	    if not before_start_accounting:
+		break_loop=True
+
+    
 	#end while
-	result.newRemainingTime(remaining_time)
-	return result
+	if int(remaining_time) <= 0 and before_start_accounting:
+		raise GeneralException(errorText("USER_LOGIN","CREDIT_FINISHED"))
+	else:
+	    result.newRemainingTime(remaining_time)
+	    return result
 
 
     ###########################################################
@@ -117,7 +147,7 @@ class VoipCharge(ChargeWithRules):
 	if instance_info.has_key("lazy_charge") and not instance_info["lazy_charge"]:
 	    return self.calcInstanceCreditUsageFromStart(user_obj,instance,round_result)
 	else:
-	    return Charge.calcInstanceCreditUsage(self,user_obj,instance,round_result)
+	    return ChargeWithRules.calcInstanceCreditUsage(self,user_obj,instance,round_result)
 		
     def calcInstanceRuleCreditUsage(self,user_obj,instance,round_result):
 	"""
@@ -153,22 +183,26 @@ class VoipCharge(ChargeWithRules):
 	start_time = user_obj.getTypeObj().getCallStartTime(instance)
 	end_time = user_obj.getTypeObj().getCallEndTime(instance)
 	effective_rule = self._getEffectiveRuleForTime(user_obj,instance,start_time)
+	prefix_obj = effective_rule.getPrefixObj(user_obj,instance,False)
 
-	cur_time = start_time + effective_rule.getPrefixObj(user_obj,instance).getFreeSeconds() #current working time
+	cur_time = start_time + prefix_obj.getFreeSeconds() #current working time
 
 	credit_usage = 0
 	cpm = 0
-	
+
 	while cur_time < end_time:
     	    effective_rule = self._getEffectiveRuleForTime(user_obj,instance,cur_time)
-	    next_event = min(cur_time + effective_rule.intervel.getEndTime() - getSecondsFromMorning(cur_time),
+	    next_event = min(cur_time + effective_rule.interval.getEndSeconds() - secondsFromMorning(cur_time),
 			     end_time)
-	    cpm = effective_rule.effective_rule.getPrefixObj(user_obj,instance).getCPM()
+	    prefix_obj = effective_rule.getPrefixObj(user_obj,instance,False)
+	    cpm = prefix_obj.getCPM()
 	    if cpm > 0:
 		credit_usage += cpm * (next_event - cur_time) / 60.0
+	    
+	    cur_time = next_event
 	
 	if round_result: #cpm and effective_rule have their last value here
-	    round_to=effective_rule.getPrefixObj(user_obj,instance).getRoundTo()
+	    round_to=prefix_obj.getRoundTo()
 	    if round_to:
 		duration = end_time - start_time
 		credit_usage += cpm * (round_to - (duration % round_to)) / 60.0

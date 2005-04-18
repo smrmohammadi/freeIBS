@@ -1,4 +1,6 @@
 from core.lib.sort import SortedList
+from core.ibs_exceptions import *
+from core.errors import errorText
 
 class Tariff:
     def __init__(self,tariff_id,tariff_name,comment,prefixes):

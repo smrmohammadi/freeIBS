@@ -10,6 +10,7 @@
     {tabContent tab_name="Main"}
 	{include file="plugins/search/user_id.tpl"} 
 	{include file="plugins/search/normal_user.tpl"}
+	{include file="plugins/search/voip_user.tpl"}
 	{include file="plugins/search/credit.tpl"}
     {/tabContent}
     {tabContent tab_name="Group"}

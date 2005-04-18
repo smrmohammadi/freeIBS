@@ -24,9 +24,9 @@ def getFormattedOnlineUsers(date_type):
 	    		 "ras_ip":ras_main.getLoader().getRasByID(instance_info["ras_id"]).getRasIP(),
 			 "unique_id":instance_info["unique_id"],
 			 "unique_id_val":instance_info["unique_id_val"],
-			 "login_time":AbsDateFromEpoch(instance_info["login_time"]).getDate(date_type),
-			 "login_time_epoch":instance_info["login_time"],
-			 "duration_secs":time.time()-instance_info["login_time"],
+			 "login_time":AbsDateFromEpoch(user_obj.getTypeObj().getLoginTime(instance)).getDate(date_type),
+			 "login_time_epoch":user_obj.getTypeObj().getLoginTime(instance),
+			 "duration_secs":time.time()-user_obj.getTypeObj().getLoginTime(instance),
 			 "attrs":instance_info["attrs"],
 			 "owner_id":user_obj.getLoadedUser().getBasicUser().getOwnerObj().getAdminID(),
 			 "owner_name":user_obj.getLoadedUser().getBasicUser().getOwnerObj().getUsername(),
@@ -40,7 +40,7 @@ def getFormattedOnlineUsers(date_type):
     return onlines
 
 def sortOnlineUsers(onlines,sort_by,desc):
-    sort_by_list=["user_id","normal_username","login_time_epoch","duration_secs","in_bytes","out_bytes","ras_ip","owner_name","unique_id_val"]
+    sort_by_list=["user_id","normal_username","login_time_epoch","duration_secs","in_bytes","out_bytes","ras_ip","owner_name","unique_id_val","voip_username"]
     if sort_by not in sort_by_list:
 	sort_by="login_time_epoch"
     sorted_list=SortedList(onlines)
