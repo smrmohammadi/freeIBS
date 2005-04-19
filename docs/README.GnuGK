@@ -1,9 +1,15 @@
 It's currently only support RadAuth, and needs H.235 Tokens. Also login 
-from multiple usernames isn't support yet, while it's not impossible from design point.
+with multiple usernames isn't support yet, while it's not impossible from design point.
 
 IBSng doesn't use update accounting packets from gnugk yet, but this may change
 in future.
 
+IBSng supports both RRQ and ARQ authentication. on RRQ only username and password
+are checked. Login actually happens on ARQ. IBSng uses H323-credit-time radius attribute
+to inform gnugk about available call time of user.
+
 A sample configuration can be found via /usr/local/IBSng/addons/gnugk/gnugk.ini
-I've tested this with openphone and ohphone and it works.
+I've tested this with openphone and ohphone and gnugk 2.2.1 on linux.
+
+
 
