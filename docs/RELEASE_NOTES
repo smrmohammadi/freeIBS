@@ -1,6 +1,41 @@
 IBS is a billing system for ISPs. 
 IBS Next Generation (IBSng) is a total rewrite of IBS to create modular and maintanable code.
 
+
+-- IBSng-alpha-2005-04-27
+    Main Changes since last release are:
+	-GnuGK update accounting handling
+	    This workaround some problems with GnuGK keep stale users online
+	    And Also make GnuGK more reliable
+
+	-GnuGK Multiple login flag
+	    This can be set via ras attributes. But GnuGK doesn't allow multiplt registration
+	    from same account
+
+	-Admin Deposit Change
+
+	-Clear Functionality in online reports, for both VoIP and Internet Users.
+	    Clear differs from kick in fact that clear only deletes user from online list
+	    and doesn't deduct user credit usage. Kick tries to kick user from ras, and waits
+	    for stop event to arrive normally.
+	    The Clear icon isn't designed yet, and current icon is temporary.
+	    
+	-VoIP Charge Bug Fixes
+	    Users with time limitaions in charge rule were able to continue call in 
+	    Not-Defined times.
+
+	-Fix a bug in showing float numbers (Thanks to Stoyko Neychev)
+
+	-Fix multiple bugs in connection logs (Thanks to Stoyko Neychev)
+	
+NOTE: If you're upgrading from older versions of IBSng, make sure you enter these sql 
+      queries in IBSng database
+
+#psql -U ibs IBSng </usr/local/IBSng/db/from_alpha-2005-04-18_upgrade.sql
+
+    
+
+
 -- IBSng-alpha-2005-04-18
     Main Changes since last release are:
      -VoIP module and Charge

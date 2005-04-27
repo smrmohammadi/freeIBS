@@ -84,9 +84,20 @@ class UpdateAdminInfo extends Request
     {
 	$params_arr=array("admin_username"=>$admin_username,
 			  "name"=>$name,
-			  "comment"=>$comment
+			  "comment"=>removeCR($comment)
 			 );
 	parent::Request("admin.updateAdminInfo",$params_arr);
+    }
+}
+
+class ChangeDeposit extends Request
+{
+    function ChangeDeposit($admin_username,$deposit_change,$comment)
+    {
+	parent::Request("admin.changeDeposit",array("admin_username"=>$admin_username,
+						      "deposit_change"=>$deposit_change,
+						      "comment"=>$comment
+						      ));
     }
 }
 

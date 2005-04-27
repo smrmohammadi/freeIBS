@@ -6,7 +6,7 @@ from core.db import db_main
 
 
 def init():
-    global admin_loader,admin_actions
+    global admin_loader,admin_actions,deposit_change_log_actions
 
     import core.admin.perm_loader
     core.admin.perm_loader.init()
@@ -20,9 +20,13 @@ def init():
 
     import core.admin.perm_actions
     core.admin.perm_actions.init()
+
+    from core.admin.deposit_change_log import DepositChangeLogActions
+    deposit_change_log_actions=DepositChangeLogActions()
     
     from core.admin.admin_handler import AdminHandler
     handlers_manager.getManager().registerHandler(AdminHandler())
+
     from core.admin.perm_handler import PermHandler
     handlers_manager.getManager().registerHandler(PermHandler())
 
@@ -31,3 +35,6 @@ def getActionManager():
 
 def getLoader():
     return admin_loader
+
+def getDepositChangeLogActions():
+    return deposit_change_log_actions

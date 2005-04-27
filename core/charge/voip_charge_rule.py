@@ -27,7 +27,7 @@ class VoipChargeRule(ChargeRule):
 	self.tariff_id=tariff_id
 
     def __str__(self):
-	return "VoIP Charge Rule with id %s belongs to charge %s"%(self.rule_id,self.charge_obj.getName())
+	return "VoIP Charge Rule with id %s belongs to charge %s"%(self.rule_id,self.charge_obj.getChargeName())
 
     ######################################
     def start(self,user_obj,instance):
@@ -96,3 +96,4 @@ class VoipChargeRule(ChargeRule):
 	dic["tariff_id"]=self.tariff_id
 	dic["tariff_name"]=self.getTariffObj().getTariffName()
 	return dic
+	

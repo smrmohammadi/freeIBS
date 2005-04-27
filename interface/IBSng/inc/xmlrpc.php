@@ -25,7 +25,9 @@ class IBSxmlrpc
     */
 	$xml_rpc_msg=$this->__createXmlRpcMsg($server_method,$params_arr);
 	$response=$this->__sendXmlRpcRequest($xml_rpc_msg,$timeout);
-	return $this->__returnResponse($response);
+	$result=$this->__returnResponse($response);
+	unset($response);
+	return $result;
     }
 
     function __createXmlRpcMsg($server_method,$params_arr)

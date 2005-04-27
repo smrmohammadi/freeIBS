@@ -1,19 +1,20 @@
-from core.ras.ras import GeneralUpdateRas
+from core.ras.ras import UpdateUsersRas
 from core.ras.voip_ras import VoIPRas
 from core.ras import ras_main
 from core import defs
 from core.ibs_exceptions import *
 from core.user import user_main
-import os
+import os,time,copy
 
 def init():
     ras_main.getFactory().register(GnuGKRas,"GnuGk")
 
-class GnuGKRas(GeneralUpdateRas,VoIPRas):
-    type_attrs={}
+class GnuGKRas(UpdateUsersRas,VoIPRas):
+    type_attrs={"gnugk_multiple_login":0,"gnugk_acct_update_interval":60}
 
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes):
-	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
+	UpdateUsersRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,self.type_attrs)
+	self.onlines={} #conf-id=>last_update_time
 
 ####################################
     def killUser(self,user_msg):
@@ -22,19 +23,27 @@ class GnuGKRas(GeneralUpdateRas,VoIPRas):
 ####################################
     def getOnlines(self):
 	pass
-####################################
-    def updateOnlines(self):
-	pass	
 ####################################    
     def generalUpdate(self):
 	pass
+    
+    def updateUserList(self):
+	min_last_update=time.time()-self.getAttribute("gnugk_acct_update_interval")
+	for h323_conf_id in self.onlines.keys():
+	    if self.onlines[h323_conf_id]<min_last_update:
+		del(self.onlines[h323_conf_id])
 ####################################
     def isOnline(self,user_msg):
-	return True
+	return self.onlines.has_key(user_msg["h323_conf_id"])
+
+    def __updateOnlines(self,ras_msg):
+        self.onlines[self.getH323AttrValue("H323-conf-id",ras_msg.getRequestPacket())]=time.time()
+	
+
 ####################################
     def _handleRadAuthPacket(self,request,reply):
 	if request.has_key("H323-conf-id"): #ARQ, Authorization Request
-	    return GeneralUpdateRas._handleRadAuthPacket(self,request,reply)
+	    return UpdateUsersRas._handleRadAuthPacket(self,request,reply)
 	    
 	else: #RRQ, Authentication Request
 	    return self.__rrqAuth(request,reply)
@@ -75,8 +84,9 @@ class GnuGKRas(GeneralUpdateRas,VoIPRas):
 			    
 	ras_msg.setInAttrsIfExists({"Calling-Station-Id":"caller_id"})
 
-	ras_msg["multi_login"]=False
-	ras_msg["single_session_h323"]=True
+	if not self.getAttribute("gnugk_multiple_login"):
+	    ras_msg["multi_login"]=False
+	    ras_msg["single_session_h323"]=True
 
 	ras_msg.setAction("VOIP_AUTHENTICATE")
 
@@ -89,6 +99,7 @@ class GnuGKRas(GeneralUpdateRas,VoIPRas):
 	    ras_msg["called_ip"]=self.getH323AttrValue("H323-remote-address",ras_msg.getRequestPacket())
 	    ras_msg["start_accounting"]=True
 	    ras_msg["update_attrs"]=["start_accounting","called_ip"]
+	    self.__updateOnlines(ras_msg)
 	    ras_msg.setAction("VOIP_UPDATE")
 	    
 	elif status_type=="Stop":
@@ -106,7 +117,13 @@ class GnuGKRas(GeneralUpdateRas,VoIPRas):
 	    
 	    ras_msg.setAction("VOIP_STOP")
 	elif status_type=="Alive":
-	    pass
+	    self.__updateOnlines(ras_msg)
 	else:
 	    self.toLog("handleRadAcctPacket: invalid status_type %s"%status_type,LOG_ERROR)
-	
+######################################
+    def setSingleH323CreditTime(self,reply_pkt,credit_time):
+	"""
+	    set H323-credit-time in packet
+	"""
+	reply_pkt["H323-credit-time"]=str(int(credit_time))
+		

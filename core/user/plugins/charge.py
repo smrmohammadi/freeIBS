@@ -50,8 +50,10 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 	self.user_obj.getInstanceInfo(instance)["attrs"]["called_number"]=ras_msg["called_number"]
 
 	if ras_msg.hasAttr("single_session_h323") and ras_msg["single_session_h323"]:
-	    ras_msg.getReplyPacket()["H323-credit-time"]=str(int(self.charge_obj.checkLimits(self.user_obj,True).getRemainingTime()))
-	    	
+	    ras_msg.getRasObj().setSingleH323CreditTime(ras_msg.getReplyPacket(), \
+					self.charge_obj.checkLimits(self.user_obj,True).getRemainingTime())
+#	    ras_msg.getReplyPacket()["H323-credit-time"]=str(int(self.charge_obj.checkLimits(self.user_obj,True).getRemainingTime()))
+#	    print ras_msg.getReplyPacket()["H323-credit-time"]
 
     def update(self,ras_msg):
 
@@ -64,7 +66,8 @@ class ChargeUserPlugin(user_plugin.UserPlugin):
 
     def logout(self,instance,ras_msg):
 	if instance<=self.charge_initialized:
-	    self.charge_obj.logout(self.user_obj,instance)
+
+	    self.charge_obj.logout(self.user_obj,instance,self.user_obj.getInstanceInfo(instance)["no_commit"])
 	    self.charge_initialized-=1
 
     def canStayOnline(self):

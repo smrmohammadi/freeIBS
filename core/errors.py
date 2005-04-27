@@ -88,11 +88,13 @@ USER_LOGIN_ERRORS={
     "WRONG_PASSWORD":"Wrong password",
     "MAX_CONCURRENT":"Maximum number of concurrent logins reached",
     "USER_IP_NOT_AVAILABLE":"Client IP Address not available for user %s",
-    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximim check online fails reached",
+    "MAX_CHECK_ONLINE_FAILS_REACHED":"Maximum check online fails reached",
     "LOGIN_FROM_THIS_MAC_DENIED":"You can't login from this mac address",
     "RAS_DOESNT_ALLOW_MULTILOGIN":"Ras doesn't allow multi login",
     "NO_PREFIX_FOUND":"Called Number has no defined prefix",
-    "CANT_USE_MORE_THAN_ONE_SERVICE":"You can not use VoIP and Internet Services simultaneously"
+    "CANT_USE_MORE_THAN_ONE_SERVICE":"You can not use VoIP and Internet Services simultaneously",
+    "KILLED_BY_ADMIN":"Killed by admin %s",
+    "CLEARED_BY_ADMIN":"Cleared by admin %s"
 }
 
 ADMIN_LOGIN_ERRORS={
@@ -108,7 +110,9 @@ ADMIN_ERRORS={
     "ADMIN_USERNAME_TAKEN":"Admin Username %s is already taken",
     "BAD_USERNAME":"Admin Username %s contains illegal characters",
     "BAD_PASSWORD":"Admin Password contains illegal characters",
-    "NEGATIVE_DEPOSIT_NOT_ALLOWD":"You don't have enough deposit, you need %s more deposit"#needed deposit
+    "NEGATIVE_DEPOSIT_NOT_ALLOWD":"You don't have enough deposit, you need %s more deposit",#needed deposit
+    "DEPOSIT_SHOULD_BE_FLOAT":"Deposit change amount should be numeric"
+    
 }
 
 PERM_ERRORS={

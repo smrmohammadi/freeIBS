@@ -199,6 +199,18 @@ create table credit_change_userid (
 create index credit_change_userid_index on credit_change_userid (user_id);
 create sequence credit_change_id;
 
+create table admin_deposit_change(
+    admin_deposit_change_id integer primary key,    
+    admin_id integer ,
+    to_admin_id integer,
+    deposit_change numeric(12,2),
+    change_time timestamp without time zone default CURRENT_TIMESTAMP,
+    remote_addr inet,
+    comment text
+);
+create sequence admin_deposit_change_id;
+
+
 create table connection_log (
     connection_log_id bigint primary key,
     user_id integer,
@@ -220,6 +232,10 @@ create table connection_log_details (
 
 create index connection_log_details_userid_index on connection_log_details (connection_log_id);
 create sequence connection_log_id;
+
+
+
+
 -- *********************** BANDWIDTH MANAGER
 create table bw_interface (
     interface_id integer primary key,
@@ -335,8 +351,8 @@ create table voip_charge_rules (
     tariff_id integer references voip_charge_rule_tariff
 ) inherits (charge_rules);
 
--- ********************* TO BE CHECKED!
 create table admin_deposit_log(
+    
     admin_id integer,
     to_admin_id integer,
     credit numeric(12,2),

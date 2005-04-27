@@ -36,3 +36,16 @@ class VoIPRas:
 	"""
 	for rad_attr_name in attr_dic:
 	    ras_msg[attr_dic[rad_attr_name]]=self.getH323EpochTimeFromAttr(rad_attr_name,ras_msg.getRequestPacket())
+
+    def setSingleH323CreditTime(self,reply_pkt,credit_time):
+	"""
+	    set H323-Credit-Time or other attribute in reply_pkt
+	    this is only for rases that support pre-paid calling card type of auth	    
+	"""
+	pass
+
+    def setSingleH323CreditAmount(self,reply_pkt,credit_amount):
+	"""
+	"""
+	pass
+	    

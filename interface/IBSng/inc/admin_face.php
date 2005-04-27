@@ -7,6 +7,11 @@ function redirectToAdminList($msg="")
     redirect("/IBSng/admin/admins/admin_list.php?msg={$msg}");
 }
 
+function redirectToAdminInfo($admin_username)
+{
+    redirect("/IBSng/admin/admins/admin_info.php?admin_username={$admin_username}");
+}
+
 function getAdminNames(&$smarty)
 { /* return  admin names in  an array. Array is a number indexed.
      On error, return an empty array and a message is set in smarty object

@@ -50,10 +50,18 @@ class NormalUser(user_type.UserType):
     def logout(self,instance,ras_msg):
 	used_credit=0
 	query=ibs_query.IBSQuery()
-	if self.user_obj.getInstanceInfo(instance)["successful_auth"]:
+
+        no_commit=False #no commit flag
+        if ras_msg.hasAttr("no_commit") and ras_msg["no_commit"]:
+	    no_commit=True
+
+	if self.user_obj.getInstanceInfo(instance)["successful_auth"] and not no_commit:
 	    used_credit=self.user_obj.charge.calcInstanceCreditUsage(instance,True)
 	    query+=self.user_obj.commit(used_credit)
     
+	self.user_obj.getInstanceInfo(instance)["used_credit"]=used_credit
+	self.user_obj.getInstanceInfo(instance)["no_commit"]=no_commit
+	
 	return query+self.logToConnectionLog(instance,used_credit)
 
 ##############################################

@@ -32,15 +32,22 @@ class VoIPUser(user_type.UserType):
 	#setup call_start_time and call_end_time
 	self.__setTimes(ras_msg,instance_info)
     
-	if instance_info.has_key("min_duration") and self.getCallEndTime(instance) - self.getCallStartTime(instance) < instance_info["min_duration"]:
+        no_commit=False
+        if ras_msg.hasAttr("no_commit") and ras_msg["no_commit"]:
+	    no_commit=True
+    
+	if no_commit or instance_info.has_key("min_duration") and self.getCallEndTime(instance) - self.getCallStartTime(instance) < instance_info["min_duration"]:
 	    used_credit=0
 	    self.user_obj.setKillReason(instance,"Missed Call")
 	else:
 	    used_credit=self.user_obj.charge.calcInstanceCreditUsage(instance,True)
 
-	if instance_info["successful_auth"]:
+	if instance_info["successful_auth"] and not no_commit:
 	    query+=self.user_obj.commit(used_credit)
     
+	instance_info["used_credit"]=used_credit
+	instance_info["no_commit"]=no_commit
+
 	query+=self.logToConnectionLog(instance,used_credit)
 	return query
 

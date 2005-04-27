@@ -27,10 +27,18 @@ class db_pg (ibs_db):
 
     def transactionQuery(self,query):
 	ibs_db.transactionQuery(self,query)
-	if len(query)>8000:
-            raise ibs_exceptions.DBException("Can't execute large transaction: %s"%query)
-
-	return self.__transactionQuery("BEGIN; %s COMMIT;"%query)
+	query_len=len(query)
+	if query_len>4000:
+	    self.__transactionQuery("BEGIN;")
+	    sent=0
+	    while sent<query_len:
+		end=(sent+4000,query_len)[sent+4000>query_len]
+		while query[end-1]!=";": end+=1
+		self.__transactionQuery(query[sent:end])
+		sent=end
+	    self.__transactionQuery("COMMIT;")
+	else:
+	    return self.__transactionQuery("BEGIN; %s COMMIT;"%query)
     
     def __transactionQuery(self,command):
         try:

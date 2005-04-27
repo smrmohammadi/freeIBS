@@ -50,7 +50,7 @@ class Admin:
 	
     def setPerms(self,perms):
 	"""
-	    calls when loading an admin to set its perms
+    	    calls when loading an admin to set its perms
 	    perms is a dic of {perm_name:perm_obj}
 	"""
 	self.perms=perms
@@ -112,9 +112,15 @@ class Admin:
 	"""
 	    consume admin deposit in loaded instance
 	"""
+	return self.changeDeposit(credit*-1)
+    
+    def changeDeposit(self,deposit_change):
+	"""
+	    change deposit in amount of deposit_change
+	"""
 	self.deposit_lock.acquire()
 	try:
-	    self.deposit-=credit
+	    self.deposit+=deposit_change
 	finally:
 	    self.deposit_lock.release()
 	return self.deposit

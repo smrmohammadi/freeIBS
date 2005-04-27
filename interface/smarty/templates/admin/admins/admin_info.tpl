@@ -6,9 +6,11 @@
 
 {include file="err_head.tpl"}
 <center>
+
 {headerMsg var_name="update_success"}
     Admin Info Updates Successfully
 {/headerMsg}
+
 {if $is_editing}
     <form method=POST action="admin_info.php">
     <input type=hidden name=admin_username value={$username}>
@@ -53,7 +55,7 @@
 	    	    Comment
 	    {/addEditTD}
 	    {addEditTD type="right" comment="TRUE" double="TRUE"}
-		    <textarea class="text" name=comment>{$comment|strip}</textarea>
+		    <textarea class="text" name=comment>{$comment}</textarea>
 	    {/addEditTD}
 	{/addEditTable}
 </form>
@@ -99,10 +101,11 @@
 	    	    Comment
 	    {/addEditTD}
 	    {addEditTD type="right" comment="TRUE" double="TRUE"}
-		    {$comment|strip}
+		    {$comment|nl2br}
 	    {/addEditTD}
 	{/viewTable}
 {/if}
+
 {canDo perm_name="CHANGE USER INFO" username=$username}
 	{addRelatedLink}
     		<a class="RightSide_links" href="/IBSng/admin/admins/admin_info.php?edit=1&admin_username={$username}">    
@@ -110,6 +113,15 @@
 		</a>
 	{/addRelatedLink}
 {/canDo}
+
+{canDo perm_name="CHANGE ADMIN DEPOSIT" username=$username}
+	{addRelatedLink}
+    		<a class="RightSide_links" href="/IBSng/admin/admins/change_deposit.php?admin_username={$username}">    
+		    Change <b>{$username}</b> Deposit
+		</a>
+	{/addRelatedLink}
+{/canDo}
+
 {canDo perm_name="SEE ADMIN PERMISSIONS" username=$username}
 	{addRelatedLink}
     		<a class="RightSide_links" href="/IBSng/admin/admins/admin_perms_list.php?admin_username={$username}">    
@@ -125,11 +137,13 @@
 		</a>
 	{/addRelatedLink}
 {/canDo}
+
 {addRelatedLink}
     <a href="/IBSng/admin/admins/admin_list.php" class="RightSide_links">
 	Admin List
     </a>
 {/addRelatedLink}
+
 {setAboutPage title="Admin Information"}
 
 {/setAboutPage}

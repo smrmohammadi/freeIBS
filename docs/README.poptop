@@ -2,7 +2,7 @@ IBSng/Poptop Quick Install
 Please send corrections/updates to farshad@parspooyesh.com.
 
 I.
-Download ppp-2.4.3-3.src.rpm and pptpd-1.2.1.tar.gz from http://www.poptop.org/
+Download ppp-2.4.3-4.fc3.i386.rpm and pptpd-1.2.1.tar.gz from http://www.poptop.org/
 
 II. Compile poptop
 [farshad@farshad ~]$ ll pptpd-1.2.1.tar.gz
@@ -15,19 +15,9 @@ II. Compile poptop
 [farshad@farshad pptpd-1.2.1]$ sudo cp /usr/local/IBSng/addons/poptop/options.pptpd /etc/ppp
 [farshad@farshad pptpd-1.2.1]$ sudo /usr/local/sbin/pptpd
 
-III. Compile pppd
-[farshad@farshad ~]$ sudo rpm -ivh ppp-2.4.3-3.src.rpm
-[farshad@farshad ~]$ cd /usr/src/redhat/SPECS/
-[farshad@farshad SPECS]$ sudo rpmbuild -bb ppp.spec
-[farshad@farshad SPECS]$ cd ../RPMS/i386/
-[farshad@farshad i386]$ sudo rpm -Uvh ppp-2.4.3-3.fc3.i386.rpm
-[farshad@farshad i386]$ cd ../../BUILD/ppp-2.4.3/pppd/plugins/radius/
-[farshad@farshad radius]$ sudo cp -rf etc /usr/local/etc/radiusclient
-[farshad@farshad radius]$ su
-[root@farshad radius]# echo 'localhost my_rad_secret' >>/etc/radiusclient/servers
-
-then you should edit /usr/local/etc/radiusclient/dictionary and change the last line to
-INCLUDE /usr/local/etc/radiusclient/dictionary.microsoft
+III. Install pppd
+    Install PPPd RPM. You need radiusclient configuration directory in /etc/radiusclient, So may
+    need to install radiusclient too.
 
 IV. Add Ras
     Add a new ras, with type pppd in settings->ras. ras ip is 127.0.0.1 if poptop and ibs are on same machine.

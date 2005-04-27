@@ -143,10 +143,14 @@ class ChargeWithRules(Charge):
 	Charge.startAccounting(self,user_obj,instance)
 	user_obj.charge_info.effective_rules[instance-1].start(user_obj,user_obj.instances)
 
-    def logout(self,user_obj,instance):
+    def logout(self,user_obj,instance,no_commit):
+	"""
+	    no_commit(boolean): don't commit this user data, and just let him go offline
+	"""
 	Charge.logout(self,user_obj,instance)
 	if user_obj.charge_info.accounting_started[instance-1]:
-	    user_obj.charge_info.credit_prev_usage+=user_obj.calcInstanceCreditUsage(instance)
+	    if not no_commit:
+		user_obj.charge_info.credit_prev_usage += user_obj.getInstanceInfo(instance)["used_credit"]
 	    user_obj.charge_info.effective_rules[instance-1].end(user_obj,instance)
 	user_obj.charge_info.logout(instance)
 

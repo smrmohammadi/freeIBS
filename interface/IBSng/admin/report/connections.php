@@ -18,7 +18,7 @@ function intShowConnections(&$smarty)
 function intAssignVars(&$smarty)
 {
     $smarty->assign("services",array("internet","voip","All"));
-    $smarty->assign("services_default",requestVal("services","All"));
+    $smarty->assign("services_default",requestVal("service","All"));
     $smarty->assign("order_bys",array("user_id"=>"User ID",
 				      "credit_used"=>"Credit Used",
 				      "login_time"=>"Login Time",
@@ -76,8 +76,8 @@ function collectConditions()
 { 
     $collector=new ReportCollector();
     $collector->addToCondsFromRequest(TRUE,"user_ids");
-    $collector->addToCondsIfNotEq("services","All");
-    $collector->addToCondsIfNotEq("succesful","All");
+    $collector->addToCondsIfNotEq("service","All");
+    $collector->addToCondsIfNotEq("successful","All");
     $collector->addToCondsIfNotEq("owner","All");
 	
     $collector->addToCondsFromRequest(TRUE,"login_time_from","login_time_from_unit");

@@ -1,5 +1,6 @@
 {listTable title="VoIP Online Users" cols_num=10}
     {listTableHeaderIcon action="kick"}
+    {listTableHeaderIcon action="clear"}
     {listTableHeaderIcon action="details" close_tr=TRUE}
     {listTR type="header"}
 	{listTD}
@@ -110,8 +111,14 @@
 	    {/listTD}
 
 	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'"}
-		    <a style="text-decoration:none" href="javascript: killUser('{$info_dic.user_id}','{$info_dic.voip_username}','{$info_dic.ras_ip}','{$info_dic.unique_id_val}');" {jsconfirm}>
+		    <a style="text-decoration:none" href="javascript: killUser('{$info_dic.user_id}','{$info_dic.voip_username}','{$info_dic.ras_ip}','{$info_dic.unique_id_val}',true);" {jsconfirm}>
 			{listTableBodyIcon action="kick" cycle_color="TRUE"}
+		    </a>
+	    {/listTD}
+
+	    {listTD icon=TRUE extra="onClick='event.cancelBubble=true;'"}
+		    <a style="text-decoration:none" href="javascript: killUser('{$info_dic.user_id}','{$info_dic.voip_username}','{$info_dic.ras_ip}','{$info_dic.unique_id_val}',false);" {jsconfirm}>
+			{listTableBodyIcon action="clear" cycle_color="TRUE"}
 		    </a>
 	    {/listTD}
 

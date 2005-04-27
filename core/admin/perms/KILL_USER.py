@@ -11,5 +11,5 @@ class KillUser (AllRestrictedSingleValuePermission,UserCatPermission,Permission)
 		Admins with this permission can force disconnection users, via the link in online users page
 	       """)
 	self.addAffectedPage("Report->Online Users")
-	self.addDependency("GET USER INFORMATION")	
+	self.addDependency("SEE ONLINE USERS")	
 

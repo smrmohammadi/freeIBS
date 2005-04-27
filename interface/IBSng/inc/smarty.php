@@ -55,7 +55,10 @@ class IBSSmarty extends Smarty
     function assign_array($arr)
     {/*Assign members of $arr*/
 	foreach($arr as $key=>$value)
-	    $this->assign($key,$value);
+	    if(is_array($value))
+		$this->assign_by_ref($key,$arr[$key]);
+	    else
+	        $this->assign($key,$value);
     }
 
     function set_field_errs($vars_keys,$err_keys)

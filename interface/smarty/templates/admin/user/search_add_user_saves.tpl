@@ -151,7 +151,7 @@
 	    {/listTD}
 
 	    {listTD}
-		{$row.comment |truncate:60}
+		{$row.comment|truncate:60}
 	    {/listTD}
 
 	    {listTD}

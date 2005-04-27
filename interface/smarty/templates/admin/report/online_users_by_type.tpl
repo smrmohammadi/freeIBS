@@ -6,9 +6,15 @@
 <iframe name=msg id=msg border=0 FRAMEBORDER=0 SCROLLING=NO height=50 valign=top></iframe>
 {literal}
     <script language=javascript>
-	function killUser(user_id,username,ras_ip,unique_id_val)
+	function killUser(user_id,username,ras_ip,unique_id_val,kill)
 	{
-	    document.getElementById("msg").src="/IBSng/admin/user/kill_user.php?user_id="+user_id+"&username="+username+"&ras_ip="+ras_ip+"&unique_id_val="+unique_id_val;
+	    url = "/IBSng/admin/user/kill_user.php?user_id="+user_id+"&username="+username+"&ras_ip="+ras_ip+"&unique_id_val="+unique_id_val+"&";
+	    if(kill)
+		url += "kill=1";
+	    else
+		url += "clear=1";
+		
+	    document.getElementById("msg").src = url;
 	}
     </script>
 {/literal}

@@ -141,7 +141,9 @@ class OnlineUsers:
 		logException(LOG_ERROR)
 	    self.loading_user.loadingEnd(user_id)
 
-    def __forceLogoutUser(self,user_obj,instance,kill_reason):
+	
+################################################
+    def __forceLogoutUser(self,user_obj,instance,kill_reason,no_commit=False):
 	"""
 	    force logout "instance" of "user_obj"
 	    This is done by creating a fake ras_msg and send it to appropiate logout method
@@ -152,6 +154,10 @@ class OnlineUsers:
 	    toLog("Don't know how to force logout user %s instance %s"%(self.user_obj.getUserID(),instance),LOG_ERROR|LOG_DEBUG)
 	    return
 	user_obj.setKillReason(instance,kill_reason)
+	
+	if no_commit:
+	    ras_msg["no_commit"]=True
+	    
 	return apply(method,[ras_msg])
 
     def __createForceLogoutRasMsg(self,user_obj,instance):
@@ -175,7 +181,22 @@ class OnlineUsers:
 	    else:
 	        ras_msg.setAction("INTERNET_STOP")
 		return self.internetStop
-	
+
+	elif user_obj.isVoIPUser():
+	    ras_msg["voip_username"]=user_obj.getUserAttrs()["normal_username"]
+	    ras_msg.setAction("VOIP_STOP")
+	    return self.voipStop
+#############################################
+    def clearUser(self,user_obj,instance,kill_reason):
+	"""
+	    clear user from online, without deducting credit
+	"""
+	self.loading_user.loadingStart(user_obj.getUserID())
+	try:
+	    self.__forceLogoutUser(user_obj,instance,kill_reason,True)
+	finally:
+	    self.loading_user.loadingEnd(user_obj.getUserID())
+
 #############################################
     def internetAuthenticate(self,ras_msg):
 	loaded_user=user_main.getUserPool().getUserByNormalUsername(ras_msg["username"],True)

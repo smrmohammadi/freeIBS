@@ -23,7 +23,7 @@ escape_tags=re.compile("<(?!br( /){0,1}>)(.*?)>")
 def escapeStr(_str):
     _str=str(_str)
     _str=escape_slashes.sub(r'\\\1',_str)
-    _str=escape_tags.sub(r" - \1 - ",_str)
+    _str=escape_tags.sub(r" - \2 - ",_str)
     return _str
 
 def dbText(text):

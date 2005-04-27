@@ -12,6 +12,7 @@ class AdminHandler(handler.Handler):
 	self.registerHandlerMethod("changePassword")
 	self.registerHandlerMethod("getAllAdminUsernames")
 	self.registerHandlerMethod("updateAdminInfo")
+	self.registerHandlerMethod("changeDeposit")
 
     def addNewAdmin(self,request):
 	request.checkArgs("username","password","name","comment")
@@ -55,4 +56,14 @@ class AdminHandler(handler.Handler):
 	request.getAuthNameObj().canDo("CHANGE ADMIN INFO")
 	request.checkArgs("admin_username","name","comment")
 	return admin_main.getActionManager().updateInfo(request["admin_username"],request["name"],request["comment"])
+
+    def changeDeposit(self,request):
+	request.needAuthType(request.ADMIN)
+	request.getAuthNameObj().canDo("CHANGE ADMIN DEPOSIT")
+	request.checkArgs("admin_username","deposit_change","comment")
+	return admin_main.getActionManager().changeDeposit(request.getAuthNameObj().getUsername(),
+							   request["admin_username"],
+							   to_float(request["deposit_change"],"Deposit"),
+							   request["comment"],
+							   request.getRemoteAddr())
 	

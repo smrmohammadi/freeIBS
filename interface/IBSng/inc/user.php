@@ -78,11 +78,13 @@ class DelUser extends Request
 
 class KillUser extends Request
 {
-    function KillUser($user_id,$ras_ip,$unique_id_val)
+    function KillUser($user_id,$ras_ip,$unique_id_val,$kill)
     {
 	parent::Request("user.killUser",array("user_id"=>$user_id,
 					      "ras_ip"=>$ras_ip,
-					      "unique_id_val"=>$unique_id_val));
+					      "unique_id_val"=>$unique_id_val,
+					      "kill"=>$kill
+					      ));
     }    
 }
 

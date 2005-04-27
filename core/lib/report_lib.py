@@ -18,11 +18,13 @@ def fixConditionsDic(conds):
 	some implementions (ex. php) convert arrays to python dics instead of lists, this method fix em by
 	converting them to lists again
     """	
-    def fixDics(key):
+    for key in conds:
         val=conds[key]
-        if type(val)==types.DictType and map(str,range(len(val)))==val.keys():
-    	    conds[key]=val.values()
-    map(fixDics,conds)
+        if type(val)==types.DictType:
+	    val_keys=val.keys()
+	    val_keys.sort()
+	    if map(str,range(len(val)))==val_keys:
+    		conds[key]=val.values()
     return conds
 
     

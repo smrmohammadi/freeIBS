@@ -19,4 +19,3 @@ def shutdown():
 	getattr(server,"exit")()
     except:
 	pass
-    

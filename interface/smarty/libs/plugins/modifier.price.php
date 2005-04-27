@@ -1,4 +1,5 @@
 <?php
+define("FLOAT_PRECISION",2);
 function smarty_modifier_price($string)
 {	/*
 	    put , between each 3 digits, take care of 2 digits of floating point
@@ -8,7 +9,7 @@ function smarty_modifier_price($string)
 	$price*=$sign;
 	$int_price=floor($price);
 	$int_part="{$int_price}";
-	$float_part=round(($price-$int_price)*100);
+	$float_part=round(($price-$int_price)*pow(10,FLOAT_PRECISION));
 	$str="";
 	while(strlen($int_part)>3)
 	{
@@ -18,9 +19,18 @@ function smarty_modifier_price($string)
 	}
 	$str="{$int_part}{$str}";
 	if($float_part>0)
-	    $str.=".{$float_part}";
+	    $str.=".".leftPadZero($float_part,FLOAT_PRECISION);
 	if($sign==-1)
 	    $str="-{$str}";
 	return $str;
 }
+
+function leftPadZero($str,$len)
+{
+    $str="{$str}";
+    while (strlen($str)<$len)
+	$str="0".$str;
+    return $str;
+}
+
 ?>

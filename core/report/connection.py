@@ -4,6 +4,7 @@ from core.report.search_group import SearchGroup
 from core.lib.multi_strs import MultiStr
 from core.lib import report_lib
 from core.lib.date import AbsDate
+from core.lib.general import *
 from core.admin import admin_main
 from core.user import user_main
 from core.ras import ras_main
@@ -135,6 +136,7 @@ class ConnectionSearcher:
 	"""
 	    Apply conditions on tables, should check conditions here
 	"""
+	print self.search_helper.getConds()
 	con_table=self.search_helper.getTable("connection_log")
 	con_details_table=self.search_helper.getTable("connection_log_details")
 
@@ -142,15 +144,19 @@ class ConnectionSearcher:
 
 	con_table.ltgtSearch(self.search_helper,"credit_used","credit_used_op","credit_used")
     
-	con_table.dateSearch(self.search_helper,"login_time_from","login_time_from_unit",">=","login_time")
+	self.search_helper.setCondValue("login_time_from_op",">=")	
+	con_table.dateSearch(self.search_helper,"login_time_from","login_time_from_unit","login_time_from_op","login_time")
 
+	self.search_helper.setCondValue("login_time_to_op","<")	
 	con_table.dateSearch(self.search_helper,"login_time_to","login_time_to_unit","<","login_time")
 
+	self.search_helper.setCondValue("logout_time_from_op",">=")	
 	con_table.dateSearch(self.search_helper,"logout_time_from","login_time_from_unit",">=","logout_time")
 
+	self.search_helper.setCondValue("logout_time_to_op","<")	
 	con_table.dateSearch(self.search_helper,"logout_time_to","login_time_to_unit","<","logout_time")
 	
-	con_table.exactSearch(self.search_helper,"successful","successful",lambda bool:dbText(("t","f")[bool]))
+	con_table.exactSearch(self.search_helper,"successful","successful",lambda yesno:{"yes":"t","no":"f"}[yesno.lower()])
 
 	con_table.exactSearch(self.search_helper,"service","service",lambda _type:user_main.getConnectionLogManager().getTypeValue(_type))
 

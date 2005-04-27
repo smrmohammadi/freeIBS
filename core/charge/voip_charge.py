@@ -37,9 +37,9 @@ class VoipCharge(ChargeWithRules):
 	    toLog("Playing Dic: %s"%playing, LOG_DEBUG)
 	#playing instances, those who have accounting started
     	
-	remaining_time=0
-	first_iter=True #is this the first iteration? first iteration is important because it examines current state of user
-	break_loop=False
+	remaining_time = 0
+	first_iter = True #is this the first iteration? first iteration is important because it examines current state of user
+	break_loop = False
 	while not break_loop: #continue until one of instances should be killed
 			      #this works well on single login sessions, that we want to know when user should
 			      #be killed at start of session
@@ -52,6 +52,7 @@ class VoipCharge(ChargeWithRules):
 
 	    seconds_from_morning=secondsFromMorning(start)
 
+	    no_effective_rule=0 #number of instances without effective rule for this iteration
 
 	    if CHARGE_DEBUG:
 		toLog("Loop Start: %s first_iter: %s remaining_time: %s"%(start,first_iter,remaining_time),LOG_DEBUG)
@@ -59,9 +60,12 @@ class VoipCharge(ChargeWithRules):
 
 	    for instance in playing.keys():
 
+
 	        try:
 		    effective_rule = self._getEffectiveRuleForTime(user_obj,instance,start)
 	        except LoginException,e:
+		    no_effective_rule += 1
+		    
 		    if first_iter:
 			result.addInstanceToKill(instance,str(e))
 			del(playing[instance])
@@ -96,7 +100,11 @@ class VoipCharge(ChargeWithRules):
 		else:
 		    credit_usage_per_second += effective_rule.getPrefixObj(user_obj,instance,False).getCPM() / 60.0
 	    #end for
-	    
+
+	    #if all instances knocked out because of no effective rule
+	    if not len(playing) or no_effective_rule==len(playing): 
+		break
+
 	    if credit_usage_per_second:
 		credit_finish_time = credit / credit_usage_per_second
 		
@@ -112,9 +120,9 @@ class VoipCharge(ChargeWithRules):
 	    # don't go for more than 1 week, who can talk for one week? ;)
 	    # this may happen if cpm is 0
 	    if remaining_time > 7 * 24 * 3600 : 
-		break_loop=True
+		break_loop = True
 
-	    first_iter=False
+	    first_iter = False
 
 	    start += next_event
 
@@ -129,7 +137,7 @@ class VoipCharge(ChargeWithRules):
     
 	#end while
 	if int(remaining_time) <= 0 and before_start_accounting:
-		raise GeneralException(errorText("USER_LOGIN","CREDIT_FINISHED"))
+	    raise GeneralException(errorText("USER_LOGIN","CREDIT_FINISHED"))
 	else:
 	    result.newRemainingTime(remaining_time)
 	    return result
@@ -191,7 +199,10 @@ class VoipCharge(ChargeWithRules):
 	cpm = 0
 
 	while cur_time < end_time:
-    	    effective_rule = self._getEffectiveRuleForTime(user_obj,instance,cur_time)
+	    try:
+		effective_rule = self._getEffectiveRuleForTime(user_obj,instance,cur_time)
+	    except LoginException:
+		break
 	    next_event = min(cur_time + effective_rule.interval.getEndSeconds() - secondsFromMorning(cur_time),
 			     end_time)
 	    prefix_obj = effective_rule.getPrefixObj(user_obj,instance,False)

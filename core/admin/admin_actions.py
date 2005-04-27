@@ -6,6 +6,7 @@ from core.errors import errorText
 from core.db import db_main,ibs_db
 from core.lib.general import *
 from core.admin import admin_main
+from core.lib import iplib
 
 class AdminActions:
     def addNewAdmin(self,username,password,name,comment,creator_id):
@@ -118,7 +119,6 @@ class AdminActions:
 	self.__getAdminLoader().checkAdminName(admin_username)
 
     ######################
-    
     def consumeDeposit(self,admin_username,deposit,need_query=True):
 	"""
 	    consume "deposit" amount of deposit from admin with username "admin_username" and return 
@@ -147,4 +147,41 @@ class AdminActions:
 					"admin_id=%s"%admin_id)
 
 	
+    ##############################
+    def changeDeposit(self,changer_admin_name,admin_name,deposit_change,comment,remote_addr):
+	"""
+	    change deposit of admin "admin_name"
 	    
+	    changer_admin_name(str): name of admin, changing the deposit
+	    admin_name(str): name of admin that deposit changes
+	    deposit_change(int): amount of change
+	    comment(str):
+	    remote_addr(str): remote ip address of deposit changer
+	"""    	    
+	self.__changeDepositCheckInput(changer_admin_name,admin_name,deposit_change,comment,remote_addr)
+	changer_admin_obj=self.__getAdminLoader().getAdminByName(changer_admin_name)
+	admin_obj=self.__getAdminLoader().getAdminByName(admin_name)
+	query=""
+	query+=admin_main.getDepositChangeLogActions().logDepositChangeQuery(changer_admin_obj.getAdminID(),
+										 admin_obj.getAdminID(),
+										 deposit_change,
+										 comment,
+										 remote_addr)
+	query+=self.__changeDepositQuery(admin_obj.getAdminID(),deposit_change)
+	db_main.getHandle().transactionQuery(query)
+	admin_obj.changeDeposit(deposit_change)
+
+
+    def __changeDepositCheckInput(self,changer_admin_name,admin_name,deposit_change,comment,remote_addr):
+	self.__getAdminLoader().checkAdminName(changer_admin_name)
+	self.__getAdminLoader().checkAdminName(admin_name)
+	
+	if not isFloat(deposit_change):
+	    raise GeneralException(errorText("ADMIN","DEPOSIT_SHOULD_BE_FLOAT"))
+	
+	if not iplib.checkIPAddr(remote_addr):
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_addr)
+
+    
+    def __changeDepositQuery(self,admin_id,deposit_change):
+	return "update admins set deposit = deposit + %s where admin_id = %s ; "%(deposit_change,admin_id)

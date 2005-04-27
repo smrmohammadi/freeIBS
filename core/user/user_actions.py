@@ -195,7 +195,7 @@ class UserActions:
 	admin_main.getLoader().checkAdminName(changer_admin_name)
 
 	if not iplib.checkIPAddr(remote_address):
-	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%ip_addr)
+	    raise GeneralException(errorText("GENERAL","INVALID_IP_ADDRESS")%remote_address)
 
 	if len(user_ids)==0:
 	    raise GeneralException(errorText("USER_ACTIONS","INVALID_USER_COUNT")%0)
@@ -385,14 +385,22 @@ class UserActions:
 	return db_main.getHandle().get("persistent_lan_users","persistent_lan_ras_id=%s"%ras_id)
 
 ##################################################################
-    def killUser(self,user_id,ras_ip,unique_id_val):
+    def killUser(self,user_id,ras_ip,unique_id_val,kill,admin_name):
 	"""
 	    kill user on "ras_ip" and "unique_id_val" and check that user is "user_id"
+	    kill(boolean): either kill, or just clear the user from onlines
 	"""
 	ras_id=ras_main.getLoader().getRasByIP(ras_ip).getRasID()
 	user_obj=user_main.getOnline().getUserObjByUniqueID(ras_id,unique_id_val)
 	if user_obj==None or user_obj.getUserID()!=user_id:
 	    raise GeneralException(errorText("GENERAL","NOT_ONLINE")%(user_id,ras_ip,unique_id_val))
+
 	instance=user_obj.getInstanceFromUniqueID(ras_id,unique_id_val)
-	user_obj.getTypeObj().killInstance(instance)
+
+	if kill:
+	    user_obj.setKillReason(instance,errorText("USER_LOGIN","KILLED_BY_ADMIN",False)%admin_name)
+	    user_obj.getTypeObj().killInstance(instance)
+	else:
+	    user_main.getOnline().clearUser(user_obj,instance,errorText("USER_LOGIN","CLEARED_BY_ADMIN",False)%admin_name)
+	    
 ####################################################################

@@ -158,13 +158,22 @@ class UserHandler(handler.Handler):
 ##############################################################
     def killUser(self,request):
 	request.needAuthType(request.ADMIN)
-	request.checkArgs("user_id","ras_ip","unique_id_val")
+	request.checkArgs("user_id","ras_ip","unique_id_val","kill")
 	requester=request.getAuthNameObj()
 	user_id=to_int(request["user_id"],"user_id")
 	loaded_user=user_main.getUserPool().getUserByID(user_id)
-	self.__canKillUser(loaded_user,requester)
-	return user_main.getActionManager().killUser(user_id,request["ras_ip"],request["unique_id_val"])
+	if request["kill"]:
+	    self.__canKillUser(loaded_user,requester)
+	else:
+	    self.__canClearUser(loaded_user,requester)
+	return user_main.getActionManager().killUser(user_id,
+						     request["ras_ip"],
+						     request["unique_id_val"],
+						     request["kill"],requester.getUsername())
 
     def __canKillUser(self,loaded_user,requester):
 	requester.canDo("KILL USER",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
+
+    def __canClearUser(self,loaded_user,requester):
+	requester.canDo("CLEAR USER",loaded_user.getUserID(),loaded_user.getBasicUser().getOwnerObj().getAdminID())
 	

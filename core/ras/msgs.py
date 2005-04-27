@@ -57,6 +57,9 @@ class RasMsg(Msg):
     def getRasID(self):
 	return self.ras_obj.getRasID()
 
+    def getRasObj(self):
+	return self.ras_obj
+
     def createNew(self,request_pkt,reply_pkt,ras_obj):
 	"""
 	    create a new RasMsg with unique_id and unique_id_value attributes set

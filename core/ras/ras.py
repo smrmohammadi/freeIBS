@@ -137,7 +137,8 @@ class Ras:
 	"""
 	ras_msg=RasMsg(request,reply,self)
 	apply(method,[ras_msg])
-        return (ras_msg,ras_msg.send())
+	if ras_msg.getAction():
+	    return (ras_msg,ras_msg.send())
 
     def _applyIPpool(self,ras_msg):
 	reply=ras_msg.getReplyPacket()
@@ -311,12 +312,14 @@ class UpdateUsersRas(GeneralUpdateRas):
     def __init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes):
 	type_default_attributes["update_users_interval"]=60
 	GeneralUpdateRas.__init__(self,ras_ip,ras_id,ras_type,radius_secret,ports,ippools,attributes,type_default_attributes)
-	self._registerEvent(self)
+	self._registerEvent()
 
     def _registerEvent(self):
+	GeneralUpdateRas._registerEvent(self)
+	
 	class UpdateUserListEvent(periodic_events.PeriodicEvent):
 	    def __init__(my_self):
-		periodic_events.PeriodicEvent("%s update userlist"%self.getRasIP(),self.getAttribute("update_users_interval"),[],0)
+		periodic_events.PeriodicEvent.__init__(my_self,"%s update userlist"%self.getRasIP(),self.getAttribute("update_users_interval"),[],0)
 
 	    def run(my_self):
 		self.updateUserList()
