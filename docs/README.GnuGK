@@ -1,3 +1,4 @@
+
 It's currently only support RadAuth, and needs H.235 Tokens. Also login 
 with multiple usernames isn't support yet, while it's not impossible from design point.
 
@@ -17,3 +18,10 @@ GnuGK can't connect to it(either by it's destination is not known in GnuGk, or i
 will cause user to remain online. This is because GnuGK doesn't send any notification to IBSng
 that user couldn't start the call. By use of update accounting, IBSng now can detemine
 that user is not online, but it takes about 2 minutes on default configuration.
+
+
+
+
+
+
+Please send corrections/updates to farshad@parspooyesh.com.

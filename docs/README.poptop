@@ -24,8 +24,10 @@ IV. Add Ras
     And radius secret is "my_rad_secret"
 
 
-Note 1: IBSng supports pap/chap/ms-chap/mschap-v2 password authentication, and also 
+Note 1: Some sample configurations can be found in addons/poptop directory
+
+Note 2: IBSng supports pap/chap/ms-chap/mschap-v2 password authentication, and also 
 	supports MPPE with ms-chap and ms-chapv2.
         You can find kernel module for MPPE support on poptop download page.
 
-Note 2: You can Download a nice client freely at http://www.parspooyesh.com/download.php?product=ibsngdialer
+Note 3: You can Download a nice client freely at http://www.parspooyesh.com/download.php?product=ibsngdialer
