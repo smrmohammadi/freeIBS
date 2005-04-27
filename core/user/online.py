@@ -183,7 +183,7 @@ class OnlineUsers:
 		return self.internetStop
 
 	elif user_obj.isVoIPUser():
-	    ras_msg["voip_username"]=user_obj.getUserAttrs()["normal_username"]
+	    ras_msg["voip_username"]=user_obj.getUserAttrs()["voip_username"]
 	    ras_msg.setAction("VOIP_STOP")
 	    return self.voipStop
 #############################################
