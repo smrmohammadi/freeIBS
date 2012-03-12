@@ -16,12 +16,12 @@ def termSigHandler(signum,frame):
     
 def childWaitSigHandler(signum,frame):
     if signum==signal.SIGUSR1: #successfully started
-	print "IBSng started successfully!"
-	sys.exit(0)
+        print "IBSng started successfully!"
+        sys.exit(0)
     else:
-	print "IBSng Failed to start!"
-	sys.exit(1)
-	
+        print "IBSng Failed to start!"
+        sys.exit(1)
+        
 def handleUserDefinedSignals(handler):
     signal.signal(signal.SIGUSR1,handler)
     signal.signal(signal.SIGUSR2,handler)
@@ -42,30 +42,44 @@ def logToSysLog(err_text):
     syslog.syslog(syslog.LOG_ERR,err_text)
     syslog.closelog()
 
+def debug():
+    try:
+        mainThreadInitialize()
+    except:
+        print "Shutting down on error"
+        raise
+
+    print "Successfully initialized, entering event loop ..."
+    event.startLoop()
+            
+
 def start():
     handleUserDefinedSignals(childWaitSigHandler)
     print "forking ..."
     pid=os.fork()
     print "IBSng started with pid=%d"%pid
     if pid == 0:
-	try:
-	    try:
-		mainThreadInitialize()
-	        os.kill(os.getppid(),signal.SIGUSR1)
-	    except:
-		print "Shutting down on error"
-	        os.kill(os.getppid(),signal.SIGUSR2)
-		raise
-	except:
-	    err_text=ibs_exceptions.getExceptionText()
-	    print err_text
-	    logToSysLog(err_text)
-	    core.main.mainThreadShutdown()
+        try:
+            try:
+                mainThreadInitialize()
+                os.kill(os.getppid(),signal.SIGUSR1)
+            except:
+                print "Shutting down on error"
+                os.kill(os.getppid(),signal.SIGUSR2)
+                raise
+        except:
+            err_text=ibs_exceptions.getExceptionText()
+            print err_text
+            logToSysLog(err_text)
+            core.main.mainThreadShutdown()
 
-	print "Successfully initialized, entering event loop ..."
-	event.startLoop()
-	    
+        print "Successfully initialized, entering event loop ..."
+        event.startLoop()
+            
     else:
-	signal.pause()
+        signal.pause()
 
-start()
+if os.environ.get('IBSNG_MODE', None):
+    debug()
+else :
+    start()

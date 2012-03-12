@@ -1,0 +1,4 @@
+*.log
+*.py[c|o]
+*.swp
+db/defs.sql

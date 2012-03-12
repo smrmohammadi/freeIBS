@@ -3,6 +3,7 @@ import time
 import threading
 import defs
 import sys
+import os
 
 LOG_DEBUG=0
 LOG_ERROR=2
@@ -165,11 +166,12 @@ class Logger:
 
 def init():
     global debug_log_handle,error_log_handle,radius_log_handle,server_log_handle,query_log_handle
-    debug_log_handle=Logger("/var/log/IBSng/ibs_debug.log")
-    error_log_handle=Logger("/var/log/IBSng/ibs_error.log")
-    radius_log_handle=Logger("/var/log/IBSng/ibs_radius.log")
-    server_log_handle=Logger("/var/log/IBSng/ibs_server.log")
-    query_log_handle=Logger("/var/log/IBSng/ibs_queries.log")
+    log_dir = os.environ.get('IBSNG_LOG', None) or '/var/log/IBSng'
+    debug_log_handle=Logger("%s/ibs_debug.log" % log_dir)
+    error_log_handle=Logger("%s/ibs_error.log" % log_dir)
+    radius_log_handle=Logger("%s/ibs_radius.log" % log_dir)
+    server_log_handle=Logger("%s/ibs_server.log" % log_dir)
+    query_log_handle=Logger("%s/ibs_queries.log" % log_dir)
 
 def toLog(_str,log_file,debug_level=0,add_stack=0): 
     """

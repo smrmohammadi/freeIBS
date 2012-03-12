@@ -1,0 +1,11 @@
+user:
+    adduser ibs --disabled-password --no-create-home --quiet --system
+DB :
+    1. sudo su postgres
+    2. creatuser ibs #set as superuser
+    3. creatdb ibsng --owner=ibs
+    4. psql
+    5. \passwd ibs # default password is ibsdbpass
+Install for development:
+    1. . scripts/enable_dev_env.sh
+    2. scripts/setup.py
